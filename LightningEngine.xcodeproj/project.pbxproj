@@ -30,6 +30,7 @@
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
+		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -125,6 +126,8 @@
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		A94F4FA02B6DCCEF003488AE /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene2D.cpp; sourceTree = "<group>"; };
+		A978D8602B6E0F4200B9FF1B /* Scene2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene2D.h; sourceTree = "<group>"; };
 		A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
 		A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBuilder.h; sourceTree = "<group>"; };
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
@@ -375,6 +378,7 @@
 		A93023842B6CE4910099EB32 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A978D85E2B6E0F2400B9FF1B /* Scene2D */,
 				A93023852B6CE49E0099EB32 /* Editor */,
 			);
 			path = Source;
@@ -416,6 +420,15 @@
 				A93531E92B62172000347F4A /* MetalKit */,
 			);
 			name = "metal-cpp-extensions";
+			sourceTree = "<group>";
+		};
+		A978D85E2B6E0F2400B9FF1B /* Scene2D */ = {
+			isa = PBXGroup;
+			children = (
+				A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */,
+				A978D8602B6E0F4200B9FF1B /* Scene2D.h */,
+			);
+			path = Scene2D;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,6 +488,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */,
 				A93023882B6CE4D00099EB32 /* CEditor.cpp in Sources */,
 				A908D4152B6B520A00C845F2 /* imgui_impl_metal.mm in Sources */,
 				A908D4062B6B263500C845F2 /* imgui_tables.cpp in Sources */,
