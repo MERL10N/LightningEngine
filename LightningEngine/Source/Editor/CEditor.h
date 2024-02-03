@@ -1,0 +1,39 @@
+//
+//  Editor.h
+//  LightningEngine
+//
+//  Created by Kian Marvi on 2/2/24.
+//
+
+#ifndef Editor_h
+#define Editor_h
+
+#include <DesignPatterns/SingletonTemplate.h>
+#include <Metal/Metal.hpp>
+
+struct GLFWwindow;
+
+class CEditor : public CSingletonTemplate<CEditor>
+{
+    friend CSingletonTemplate<CEditor>;
+public:
+    bool Init(MTL::Device* device, GLFWwindow* window);
+    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder);
+    
+   // Setters
+    void SetClearColor(float value, int index);
+    
+
+   // Getters
+    float GetClearColor(int index) const;
+    
+    void Destroy();
+    
+private:
+    bool show_demo_window;
+    bool show_another_window;
+//    float clear_color[4] = {0.15f, 0.15f, 0.15f, 1.0f};
+    float clear_color[4] = {};
+};
+
+#endif /* Editor_h */
