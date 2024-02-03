@@ -124,6 +124,7 @@
 		A93531E92B62172000347F4A /* MetalKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalKit; path = "metal-cpp-extensions/MetalKit"; sourceTree = "<group>"; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		A94F4FA02B6DCCEF003488AE /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
 		A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBuilder.h; sourceTree = "<group>"; };
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
@@ -403,6 +404,7 @@
 				A93531DB2B61C8F200347F4A /* Mesh.h */,
 				A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */,
 				A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */,
+				A94F4FA02B6DCCEF003488AE /* Mesh.cpp */,
 			);
 			path = Primitives;
 			sourceTree = "<group>";

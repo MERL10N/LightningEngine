@@ -9,6 +9,7 @@
 #define Mesh_h
 
 #include <simd/simd.h>
+#include <Metal/Metal.hpp>
 
 using namespace simd;
 /**
@@ -25,7 +26,7 @@ struct Vertex
     Vertex()
     {
         position = float3();
-        normal = float3(0.0f, 0.0f, 1.0f);
+        normal = make_float3(0.0f, 0.0f, 1.0f);
         colour = float4(1.0);
         texCoord = float2();
     }
@@ -47,14 +48,15 @@ public:
         DRAW_MODE_LAST,
     };
 
-    unsigned vertexBuffer;
-    unsigned indexBuffer;
-    unsigned indexSize;
+    MTL::Device* device;
+    MTL::Buffer* vertexBuffer;
+    MTL::Buffer* indexBuffer;
+    NS::UInteger indexSize;
 
     DRAW_MODE mode;
 
     // Constructor
-    CMesh(void);
+    CMesh(MTL::Device* device);
     // Destructor
     ~CMesh(void);
     virtual void Render();
