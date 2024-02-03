@@ -28,7 +28,7 @@ bool CMetalApplication::init()
     // Initialise GLFW
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindow = glfwCreateWindow(1280, 720, "Metal Engine", nullptr, nullptr);
+    glfwWindow = glfwCreateWindow(1280, 720, "Lightning Engine", nullptr, nullptr);
     
     CEditor::GetInstance()->SetClearColor(0.15f, 0);
     CEditor::GetInstance()->SetClearColor(0.15f, 1);

@@ -1,7 +1,6 @@
 //
 //  mtl_engine.hpp
 //  MetalTutorial
-//
 
 #ifndef MetalApplication_h
 #define MetalApplication_h
