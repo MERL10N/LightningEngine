@@ -12,18 +12,36 @@ CMesh::CMesh(MTL::Device* device)
 : mode(DRAW_TRIANGLES)
 {
     this->device = device;
-    // vertexBuffer = device->newBuffer(vertices.data(), vertexBufferSize, MTL::ResourceStorageModeShared);
-//    indexBuffer = device->newBuffer(vertexIndices.data(), indexBufferSize, MTL::ResourceStorageModeShared);
+    /* vertexBuffer = device->newBuffer(vertices.data(), vertexBufferSize, MTL::ResourceStorageModeShared);
+       indexBuffer = device->newBuffer(vertexIndices.data(), indexBufferSize, MTL::ResourceStorageModeShared);
+     *?
 }
 
 CMesh::~CMesh(void)
 {
+    /*
     vertexBuffer->release();
     indexBuffer->release();
+     */
 }
 
-CMesh::Render()
+CMesh::Render(void)
 {
+    /*
+    switch (mode)
+    {
+        case: DRAW_LINES
+            renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeLine, NS::UInteger(0), NS::UInteger(0));
+            break;
+        case: DRAW_TRIANGLE_STRIP:
+            renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(6));
+            break;
+        default:
+            renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(6));
+            break;
+            
+    }
+     */
 }
 
 

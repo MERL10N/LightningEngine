@@ -109,10 +109,10 @@ MTL::RenderPipelineState* CShaderManager::getRenderPipelineState(const std::stri
 #else
 /**
  @brief Add a Scene to this Shader Manager
- @param A const std::string& variable which contains the name of the shader
- @param A const char* vertexPath variable which contains the path to the vertex shader file
- @param A const char* fragmentPath variable which contains the path to the fragment shader file
- @param A const char* geometryPath variable which contains the path to the geometry shader file
+ @param _name const std::string& variable which contains the name of the shader
+ @param vertexPath const char* vertexPath variable which contains the path to the vertex shader file
+ @param fragmentPath const char* fragmentPath variable which contains the path to the fragment shader file
+ @param geometryPath const char* geometryPath variable which contains the path to the geometry shader file
  */
 void CShaderManager::Add(	const std::string& _name, 
 							const char* vertexPath, 
@@ -145,7 +145,7 @@ void CShaderManager::Add(	const std::string& _name,
 
 /**
  @brief Remove a Shader from this Shader Manager
- @param  const std::string& variable which contains the name of the shader
+ @param  _name  std::string& variable which contains the name of the shader
  */
 void CShaderManager::Remove(const std::string& _name)
 {
@@ -175,7 +175,7 @@ void CShaderManager::Remove(const std::string& _name)
 
 /**
 @brief Use a Shader
-@param A const std::string& variable which contains the name of the shader
+@param _name  const std::string& variable which contains the name of the shader
 */
 void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* commandEncoder)
 {
@@ -202,7 +202,7 @@ void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* co
 
 /**
  @brief Check if a Scene exists in this Shader Manager
- @param A const std::string& variable which contains the name of the shader
+ @param _name const std::string& variable which contains the name of the shader
  @return true if the shader name exists in the map, else false
  */
 bool CShaderManager::Check(const std::string& _name)

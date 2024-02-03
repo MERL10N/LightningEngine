@@ -8,6 +8,19 @@
 #ifndef MeshBuilder_hpp
 #define MeshBuilder_hpp
 
-#include <stdio.h>
+#include "Mesh.h"
+
+// Generate a quad
+static CMesh* GenerateQuad( simd::float4 colour = simd::make_float4(1,1,1,1),
+                            float width = 1.0f,
+                            float height = 1.0f,
+                            bool bCentralisedOrigin = true);
+
+// Generate a quad at a specific position
+static CMesh* GenerateQuadWithPosition(simd::float4 colour = simd::make_float4(1,1,1,1),
+                                        const float x = 0.0f,
+                                        const float y = 0.0f,
+                                        const float width = 1.0f,
+                                        const float height = 1.0f);
 
 #endif /* MeshBuilder_hpp */
