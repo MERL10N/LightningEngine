@@ -58,8 +58,5 @@ private:
     MTL::Buffer* ArgumentBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
-    
-    float dt;
-    
 };
 #endif

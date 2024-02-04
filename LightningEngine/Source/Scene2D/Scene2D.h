@@ -15,12 +15,12 @@
 class CScene2D
 {
 public:
-    CScene2D();
+    CScene2D(MTL::Device* metalDevice);
     ~CScene2D();
     
     void createSquare();
     void PreRender();
-    void Render();
+    void Render(CA::MetalDrawable* metalDrawable);
     void PostRender();
 private:
     

@@ -11,14 +11,17 @@
 #include "VertexData.hpp"
 #include "CEditor.h"
 
-CScene2D::CScene2D()
+CScene2D::CScene2D(MTL::Device* metalDevice)
 {
+    
+    this->metalDevice = metalDevice;
+    
     // Detect if metal is supported on the target device
     metalDevice = MTL::CreateSystemDefaultDevice();
     
     // Initialise the shader
     CShaderManager::GetInstance()->Add("Square",
-                                       "LightningEngine/Shaders/square.metal",
+                                       "Shaders/square.metal",
                                        "vertexShader",
                                        "fragmentShader",
                                         metalDevice);
@@ -67,7 +70,7 @@ void CScene2D::createSquare()
 }
 
 
-void CScene2D::Render()
+void CScene2D::Render(CA::MetalDrawable* metalDrawable)
 {
     pPool = NS::AutoreleasePool::alloc()->init();
     metalCommandBuffer = metalCommandQueue->commandBuffer();

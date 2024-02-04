@@ -21,7 +21,6 @@
 
 bool CMetalApplication::init()
 {
-    dt = 0.f;
     // Detect if metal is supported on the target device
     metalDevice = MTL::CreateSystemDefaultDevice();
     
@@ -63,7 +62,7 @@ bool CMetalApplication::init()
 
     // Initialise the shader
     CShaderManager::GetInstance()->Add("Square",
-                                       "LightningEngine/Shaders/square.metal",
+                                       "Shaders/square.metal",
                                        "vertexShader",
                                        "fragmentShader",
                                         metalDevice);
