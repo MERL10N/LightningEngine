@@ -1,9 +1,6 @@
-//
 //  GLFWBridge.mm
 //  LightningEngine
-//
 //  Created by Kian Marvi on 4/2/24.
-//
 
 #include "GLFWBridge.h"
 

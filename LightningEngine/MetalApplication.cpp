@@ -1,4 +1,4 @@
-//  mtl_engine.mm
+//  mtl_engine.cpp
 //  MetalTutorial
 
 #include "MetalApplication.h"
@@ -9,6 +9,10 @@
 #include "System/ImageLoader.h"
 #include "Math/AAPLMathUtilities.h"
 #include "GLFWBridge.h"
+
+#include <Metal/Metal.hpp>
+#include <QuartzCore/CAMetalLayer.hpp>
+#include <QuartzCore/QuartzCore.hpp>
 
 #include <simd/simd.h>
 
@@ -170,5 +174,4 @@ void CMetalApplication::draw()
     metalCommandBuffer->waitUntilCompleted();
 
     renderPassDescriptor->release();
-
 }

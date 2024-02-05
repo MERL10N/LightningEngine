@@ -14,7 +14,7 @@ int main()
 #ifdef __APPLE__
         CMetalApplication* pApp = CMetalApplication::GetInstance();
 #else
-     CApplication* pApp = CApplication::GetInstance();
+        CApplication* pApp = CApplication::GetInstance();
 #endif
         // if the application is initialised properly, then run it
         if (pApp->init() == true)

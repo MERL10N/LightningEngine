@@ -1,7 +1,5 @@
-//
-//  GLFWBridge.hpp
+//  GLFWBridge.h
 //  LightningEngine
-//
 //  Created by Kian Marvi on 4/2/24.
 
 #ifndef GLFWBridge_h
