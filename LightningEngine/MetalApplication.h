@@ -16,10 +16,6 @@
 #include <filesystem>
 
 struct GLFWwindow;
-@class NSWindow;
-@class CAMetalLayer;
-
-
 
 class CMetalApplication : public CSingletonTemplate<CMetalApplication>
 {
@@ -41,9 +37,6 @@ private:
     MTL::Device* metalDevice;
     
     GLFWwindow* glfwWindow;
-    NSWindow* metalWindow;
-    CAMetalLayer* metalLayer;
-
     
     CA::MetalLayer* layer;
     CA::MetalDrawable* metalDrawable;

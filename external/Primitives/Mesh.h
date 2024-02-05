@@ -59,7 +59,7 @@ public:
     CMesh(MTL::Device* device);
     // Destructor
     ~CMesh(void);
-    virtual void Render();
+    virtual void Render(MTL::RenderCommandEncoder* renderCommandEncoder);
 };
 
 #endif /* Mesh_h */

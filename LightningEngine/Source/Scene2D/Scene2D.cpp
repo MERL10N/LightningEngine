@@ -8,7 +8,7 @@
 #include "Scene2D.h"
 #include <RenderControl/ShaderManager.h>
 #include <System/ImageLoader.h>
-#include "VertexData.hpp"
+#include "VertexData.h"
 #include "CEditor.h"
 
 CScene2D::CScene2D(MTL::Device* metalDevice)

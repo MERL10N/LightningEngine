@@ -1,4 +1,3 @@
-//
 //  Mesh.cpp
 //  LightningEngine
 //  Created by Kian Marvi on 2/2/24.
@@ -12,22 +11,19 @@ CMesh::CMesh(MTL::Device* device)
 : mode(DRAW_TRIANGLES)
 {
     this->device = device;
-    /* vertexBuffer = device->newBuffer(vertices.data(), vertexBufferSize, MTL::ResourceStorageModeShared);
-       indexBuffer = device->newBuffer(vertexIndices.data(), indexBufferSize, MTL::ResourceStorageModeShared);
-     *?
+    vertexBuffer = device->newBuffer(vertices.data(), vertexBufferSize, MTL::ResourceStorageModeShared);
+    indexBuffer = device->newBuffer(vertexIndices.data(), indexBufferSize, MTL::ResourceStorageModeShared);
+     
 }
 
 CMesh::~CMesh(void)
 {
-    /*
     vertexBuffer->release();
     indexBuffer->release();
-     */
 }
 
-CMesh::Render(void)
+CMesh::Render(MTL::RenderCommandEncoder* renderCommandEncoder)
 {
-    /*
     switch (mode)
     {
         case: DRAW_LINES
@@ -41,7 +37,6 @@ CMesh::Render(void)
             break;
             
     }
-     */
 }
 
 

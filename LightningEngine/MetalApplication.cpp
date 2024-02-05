@@ -4,19 +4,16 @@
 #include "MetalApplication.h"
 #include <RenderControl/ShaderManager.h>
 #include "Source/Editor/CEditor.h"
-#include <QuartzCore/CAMetalLayer.h>
-#include <Metal/Metal.h>
 
-#include "VertexData.hpp"
+#include "VertexData.h"
 #include "System/ImageLoader.h"
 #include "Math/AAPLMathUtilities.h"
+#include "GLFWBridge.h"
 
 #include <simd/simd.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#define GLFW_EXPOSE_NATIVE_COCOA
-#include <GLFW/glfw3native.h>
 
 
 bool CMetalApplication::init()
@@ -49,16 +46,11 @@ bool CMetalApplication::init()
     int width, height;
     glfwGetFramebufferSize(glfwWindow, &width, &height);
     
-    metalWindow = glfwGetCocoaWindow(glfwWindow);
-    
     layer = CA::MetalLayer::layer();
     layer->setDevice(metalDevice);
     layer->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
     layer->setDrawableSize(CGSizeMake(width, height));
-    metalLayer = (__bridge CAMetalLayer*) layer;
-    metalWindow.contentView.layer = metalLayer;
-    metalWindow.contentView.wantsLayer = YES;
-    
+    GLFWBridge::AddLayerToWindow(glfwWindow, layer);
 
     // Initialise the shader
     CShaderManager::GetInstance()->Add("Square",
@@ -81,8 +73,6 @@ bool CMetalApplication::init()
     
     //Initialise the command queue
     metalCommandQueue = metalDevice->newCommandQueue();
-
-    
     
     return true;
 }
@@ -92,6 +82,7 @@ void CMetalApplication::Run()
     while (!glfwWindowShouldClose(glfwWindow))
     {
         pPool = NS::AutoreleasePool::alloc()->init();
+        metalDrawable = layer->nextDrawable();
         draw();
         pPool->release();
         glfwPollEvents();
@@ -120,7 +111,7 @@ void CMetalApplication::frameBufferSizeCallback(GLFWwindow *window, int width, i
 
 void CMetalApplication::resizeFrameBuffer(int width, int height)
 {
-    metalLayer.drawableSize = CGSizeMake(width, height);
+    layer->setDrawableSize(CGSizeMake(width, height));
 }
 
 void CMetalApplication::createSquare()
@@ -135,16 +126,15 @@ void CMetalApplication::createSquare()
             {{ 0.5, -0.5,  0.5, 1.0f}, {1.0f, 0.0f}}
     };
 
-     squareVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
+    squareVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
 
-     CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
+    CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
 
 }
 
 
 void CMetalApplication::draw()
 {
-    metalDrawable = (__bridge CA::MetalDrawable*)[metalLayer nextDrawable];
     metalCommandBuffer = metalCommandQueue->commandBuffer();
     
     renderPassDescriptor = MTL::RenderPassDescriptor::alloc()->init();

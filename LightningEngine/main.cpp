@@ -1,13 +1,21 @@
-//  main.mm
+//  main.cpp
 //  Metal Engine
 
+#ifdef __APPLE__
 #include "MetalApplication.h"
+#else
+#include "Application.h"
+#endif
 #include <iostream>
 
 int main()
 {
 
-    CMetalApplication* pApp = CMetalApplication::GetInstance();
+#ifdef __APPLE__
+        CMetalApplication* pApp = CMetalApplication::GetInstance();
+#else
+     CApplication* pApp = CApplication::GetInstance();
+#endif
         // if the application is initialised properly, then run it
         if (pApp->init() == true)
         {
