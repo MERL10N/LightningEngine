@@ -8,9 +8,29 @@
 #ifndef Scene2D_hpp
 #define Scene2D_hpp
 
-#include <Metal/Metal.hpp>
-#include <QuartzCore/CAMetalLayer.hpp>
-#include <QuartzCore/QuartzCore.hpp>
+namespace CA
+{
+    class MetalLayer;
+    class MetalDrawable;
+}
+
+namespace MTL
+{
+    class Device;
+    class Library;
+    class CommandQueue;
+    class CommandBuffer;
+    class RenderPipelineState;
+    class Buffer;
+    class RenderCommandEncoder;
+    class RenderPassDescriptor;
+}
+
+namespace NS
+{
+    class AutoreleasePool;
+}
+
 
 class CScene2D
 {

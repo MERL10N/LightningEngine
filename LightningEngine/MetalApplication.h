@@ -7,8 +7,7 @@
 
 #include <DesignPatterns/SingletonTemplate.h>
 
-#include <iostream>
-#include <filesystem>
+
 
 namespace CA
 {
