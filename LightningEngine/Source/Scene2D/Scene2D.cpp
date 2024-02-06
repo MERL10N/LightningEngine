@@ -10,6 +10,7 @@
 #include <System/ImageLoader.h>
 #include "VertexData.h"
 #include "CEditor.h"
+#include <iostream>
 
 CScene2D::CScene2D(MTL::Device* metalDevice)
 {

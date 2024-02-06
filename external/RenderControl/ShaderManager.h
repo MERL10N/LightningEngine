@@ -17,7 +17,16 @@
 #include <map>
 #include <string>
 #ifdef __APPLE__
-#include "MetalShader.h"
+//#include "MetalShader.h"
+class CMetalShader;
+
+namespace MTL
+{
+    class RenderPipelineDescriptor;
+    class RenderPipelineState;
+    class RenderCommandEncoder;
+    class Device;
+}
 #else
 #include "Shader.h"
 #endif

@@ -11,7 +11,14 @@
 
 // Include Metal
 #ifdef __APPLE__
-#include <Metal/Metal.hpp>
+
+
+namespace MTL
+{
+    class Device;
+    class Texture;
+}
+
 #else
 
     #ifndef GLEW_STATIC
