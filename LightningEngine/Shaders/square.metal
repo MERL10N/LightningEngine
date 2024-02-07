@@ -8,8 +8,8 @@ using namespace metal;
 
 struct VertexData
 {
-    float4 position;
-    float2 textureCoordinate;
+    float4 position[[id(0)]];
+    float2 textureCoordinate[[id(1)]];;
 };
 
 struct VertexOut

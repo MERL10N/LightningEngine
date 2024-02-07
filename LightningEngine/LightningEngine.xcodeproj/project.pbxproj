@@ -28,7 +28,7 @@
 		A9173C132B6F5FD400024ECD /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9173C122B6F5FD400024ECD /* libglfw3.a */; };
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
 		A9173C1C2B7051EE00024ECD /* GLFWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9173C1A2B7051EE00024ECD /* GLFWBridge.mm */; };
-		A93023882B6CE4D00099EB32 /* CEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93023862B6CE4D00099EB32 /* CEditor.cpp */; };
+		A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93023862B6CE4D00099EB32 /* Editor.cpp */; };
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
@@ -123,8 +123,8 @@
 		A9173C172B6F68B200024ECD /* Player2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player2D.h; sourceTree = "<group>"; };
 		A9173C1A2B7051EE00024ECD /* GLFWBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GLFWBridge.mm; sourceTree = "<group>"; };
 		A9173C1B2B7051EE00024ECD /* GLFWBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLFWBridge.h; sourceTree = "<group>"; };
-		A93023862B6CE4D00099EB32 /* CEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CEditor.cpp; sourceTree = "<group>"; };
-		A93023872B6CE4D00099EB32 /* CEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CEditor.h; sourceTree = "<group>"; };
+		A93023862B6CE4D00099EB32 /* Editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
+		A93023872B6CE4D00099EB32 /* Editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
 		A930238B2B6D8B880099EB32 /* AAPLMathUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; };
 		A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
 		A93531DB2B61C8F200347F4A /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
@@ -415,8 +415,8 @@
 		A93023852B6CE49E0099EB32 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
-				A93023862B6CE4D00099EB32 /* CEditor.cpp */,
-				A93023872B6CE4D00099EB32 /* CEditor.h */,
+				A93023862B6CE4D00099EB32 /* Editor.cpp */,
+				A93023872B6CE4D00099EB32 /* Editor.h */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -518,7 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */,
-				A93023882B6CE4D00099EB32 /* CEditor.cpp in Sources */,
+				A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */,
 				A908D4152B6B520A00C845F2 /* imgui_impl_metal.mm in Sources */,
 				A908D4062B6B263500C845F2 /* imgui_tables.cpp in Sources */,
 				A911D9972B60E51700FD2845 /* MetalApplication.cpp in Sources */,

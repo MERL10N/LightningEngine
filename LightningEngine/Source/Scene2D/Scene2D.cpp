@@ -14,7 +14,7 @@
 #include <QuartzCore/QuartzCore.hpp>
 
 #include "VertexData.h"
-#include "CEditor.h"
+#include "Editor.h"
 #include <iostream>
 
 CScene2D::CScene2D(MTL::Device* metalDevice)

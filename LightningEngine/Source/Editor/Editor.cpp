@@ -2,8 +2,8 @@
 //  LightningEngine
 //  Created by Kian Marvi on 2/2/24.
 
-#include "CEditor.h"
-
+#include "Editor.h"
+#include <Metal/Metal.hpp>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 

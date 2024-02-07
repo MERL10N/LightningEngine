@@ -17,7 +17,7 @@ int main()
         CApplication* pApp = CApplication::GetInstance();
 #endif
         // if the application is initialised properly, then run it
-        if (pApp->init() == true)
+        if (pApp->Init() == true)
         {
             // Run the Application instance
             pApp->Run();

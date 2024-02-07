@@ -1,9 +1,9 @@
-//  mtl_engine.cpp
-//  MetalTutorial
+//  MetalApplication.cpp
+//  Lightning Engine
 
 #include "MetalApplication.h"
 #include <RenderControl/ShaderManager.h>
-#include "Source/Editor/CEditor.h"
+#include "Source/Editor/Editor.h"
 
 #include "VertexData.h"
 #include "System/ImageLoader.h"
@@ -14,7 +14,6 @@
 #include <QuartzCore/CAMetalLayer.hpp>
 #include <QuartzCore/QuartzCore.hpp>
 
-#include <simd/simd.h>
 
 #include <iostream>
 
@@ -22,7 +21,7 @@
 #include <GLFW/glfw3.h>
 
 
-bool CMetalApplication::init()
+bool CMetalApplication::Init()
 {
     // Detect if metal is supported on the target device
     metalDevice = MTL::CreateSystemDefaultDevice();
@@ -90,8 +89,8 @@ void CMetalApplication::Run()
         pPool = NS::AutoreleasePool::alloc()->init();
         metalDrawable = layer->nextDrawable();
         draw();
-        pPool->release();
         glfwPollEvents();
+        pPool->release();
     }
 }
 
@@ -160,11 +159,11 @@ void CMetalApplication::draw()
     metalRenderPSO = CShaderManager::GetInstance()->getRenderPipelineState("Square");
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
 
-    renderCommandEncoder->setVertexBuffer(squareVertexBuffer, 0, 0);
+    CShaderManager::GetInstance()->BindResources("Square", renderCommandEncoder, squareVertexBuffer);
     renderCommandEncoder->useResource(squareVertexBuffer, MTL::ResourceUsageRead);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(6));
-    
+
 #ifdef DEBUG
     CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder);
 #endif

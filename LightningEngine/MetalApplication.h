@@ -1,13 +1,10 @@
-//
-//  mtl_engine.hpp
-//  MetalTutorial
+//  MetalApplication.h
+//  Lightning Engine
 
 #ifndef MetalApplication_h
 #define MetalApplication_h
 
 #include <DesignPatterns/SingletonTemplate.h>
-
-
 
 namespace CA
 {
@@ -23,6 +20,7 @@ namespace MTL
     class CommandBuffer;
     class RenderPipelineState;
     class Buffer;
+    class ArgumentEncoder;
     class RenderCommandEncoder;
     class RenderPassDescriptor;
 }
@@ -38,7 +36,7 @@ class CMetalApplication : public CSingletonTemplate<CMetalApplication>
 {
     friend CSingletonTemplate<CMetalApplication>;
 public:
-    bool init();
+    bool Init();
     void Run();
     void Destroy();
 
@@ -65,7 +63,6 @@ private:
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPipelineState* metalRenderPSO;
     MTL::Buffer* squareVertexBuffer;
-    MTL::Buffer* ArgumentBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
 };

@@ -9,7 +9,14 @@
 #define Editor_h
 
 #include <DesignPatterns/SingletonTemplate.h>
-#include <Metal/Metal.hpp>
+
+namespace MTL
+{
+    class Device;
+    class RenderPassDescriptor;
+    class CommandBuffer;
+    class RenderCommandEncoder;
+}
 
 struct GLFWwindow;
 
@@ -23,7 +30,6 @@ public:
    // Setters
     void SetClearColor(float value, int index);
     
-
    // Getters
     float GetClearColor(int index) const;
     
@@ -32,7 +38,6 @@ public:
 private:
     bool show_demo_window;
     bool show_another_window;
-//    float clear_color[4] = {0.15f, 0.15f, 0.15f, 1.0f};
     float clear_color[4] = {};
 };
 
