@@ -14,7 +14,6 @@
 #include <QuartzCore/CAMetalLayer.hpp>
 #include <QuartzCore/QuartzCore.hpp>
 
-
 #include <iostream>
 
 #define GLFW_INCLUDE_NONE
@@ -160,7 +159,6 @@ void CMetalApplication::draw()
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
 
     CShaderManager::GetInstance()->BindResources("Square", renderCommandEncoder, squareVertexBuffer);
-    renderCommandEncoder->useResource(squareVertexBuffer, MTL::ResourceUsageRead);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(6));
 
