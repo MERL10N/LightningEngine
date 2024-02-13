@@ -6,7 +6,7 @@
 */
 
 #include "MeshBuilder.h"
-#include "VertexData.hpp"
+#include "VertexData.h"
 
 #include <System/ImageLoader.h>
 
@@ -21,27 +21,66 @@
 
 CMesh* CMeshBuilder::GenerateQuad(simd::float4 colour, const float width, const float height, MTL::Device* metalDevice, bool bCentralisedOrigin)
 {
+    Vertex v;
+    std::vector<Vertex> vertex_buffer_data;
+    std::vector<NS::UInteger> index_buffer_data;
+    
+    if (bCentralisedOrigin == true)
+            v.position = make_float3(-0.5f * width, -0.5f * height, 0);
+    else
+            v.position = make_float3(0.0f, 0.0f, 0.f);
+    
+    v.normal = make_float3(0.0f, 0.0f, 1.0f);
+    v.colour = colour;
+    v.texCoord = make_float2(0.f, 0.f);
+    vertex_buffer_data.push_back(v);
+
+    if (bCentralisedOrigin == true)
+        v.position = make_float3(0.5f * width, -0.5f * height, 0);
+    else
+        v.position = make_float3(width, 0.0f, 0);
+    
+    v.normal = make_float3(0.0f, 0.0f, 1.0f);
+    v.colour = colour;
+    v.texCoord = make_float2(1.0f, 0);
+    vertex_buffer_data.push_back(v);
+
+    if (bCentralisedOrigin == true)
+        v.position = make_float3(0.5f * width, 0.5f * height, 0);
+    else
+        v.position = make_float3(width, height, 0);
+    
+    v.normal = make_float3(0.0f, 0.0f, 1.0f);
+    v.colour = colour;
+    v.texCoord = make_float2(1.0f, 1.0f);
+    vertex_buffer_data.push_back(v);
+
+    if (bCentralisedOrigin == true)
+        v.position = make_float3(-0.5f * width, 0.5f * height, 0);
+    else
+        v.position = make_float3(0.0f, height, 0);
+    v.normal = make_float3(0.0f, 0.0f, 1.0f);
+    v.colour = colour;
+    v.texCoord = make_float2(0.f, 1.0f);
+    
+    vertex_buffer_data.push_back(v);
+
+    index_buffer_data.push_back(3);
+    index_buffer_data.push_back(0);
+    index_buffer_data.push_back(2);
+    index_buffer_data.push_back(1);
+    index_buffer_data.push_back(2);
+    index_buffer_data.push_back(0);
+    
     CMesh* mesh = new CMesh(metalDevice);
+    
+    mesh->indexBuffer = metalDevice->newBuffer(index_buffer_data.size(), MTL::ResourceStorageModeShared);
+    
+    mesh->indexSize = index_buffer_data.size();
+    mesh->mode = CMesh::DRAW_TRIANGLES;
     
     return mesh;
 }
-
-//void CMeshBuilder::GenerateQuad(MTL::Buffer* squareVertexBuffer, MTL::Device* metalDevice)
-//{
-//    VertexData squareVertices[]
-//    {
-//            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-//            {{-0.5,  0.5,  0.5, 1.0f}, {0.0f, 1.0f}},
-//            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-//            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-//            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-//            {{ 0.5, -0.5,  0.5, 1.0f}, {1.0f, 0.0f}}
-//    };
-//
-//    squareVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
-//    CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
-//}
-
 /**
  @brief Generate a quad at a specific position and load it into Metal
  @param colour A simd::float4 variable containing the colour of this quad

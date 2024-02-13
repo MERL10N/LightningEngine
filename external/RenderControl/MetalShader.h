@@ -32,7 +32,8 @@ private:
     // Shader name
     std::string name;
 
-    std::string loadShaderFile(const std::string& path) {
+    std::string loadShaderFile(const std::string& path)
+    {
         std::ifstream file(path, std::ios::ate | std::ios::binary);
         if (!file.is_open()) {
             std::cerr << "Error: Cannot open shader file." << std::endl;
@@ -119,6 +120,7 @@ public:
         vertexFunction->release();
         fragmentFunction->release();
         argumentBuffer->release();
+        argumentEncoder->release();
         
     }
     

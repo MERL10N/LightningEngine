@@ -8,11 +8,11 @@
  @brief Constructor
  */
 CMesh::CMesh(MTL::Device* device)
-: mode(DRAW_TRIANGLES)
+: mode(DRAW_TRIANGLES),
+  device(device)
 {
-    this->device = device;
-    vertexBuffer = device->newBuffer(vertices.data(), vertexBufferSize, MTL::ResourceStorageModeShared);
-    indexBuffer = device->newBuffer(vertexIndices.data(), indexBufferSize, MTL::ResourceStorageModeShared);
+    vertexBuffer = device->newBuffer(v.data(), vertexBuffer->length(), MTL::ResourceStorageModeShared);
+    vertexBuffer = device->newBuffer(v.data(), indexBuffer->length(), MTL::ResourceStorageModeShared);
      
 }
 
@@ -22,14 +22,14 @@ CMesh::~CMesh(void)
     indexBuffer->release();
 }
 
-CMesh::Render(MTL::RenderCommandEncoder* renderCommandEncoder)
+void CMesh::Render(MTL::RenderCommandEncoder* renderCommandEncoder)
 {
     switch (mode)
     {
-        case: DRAW_LINES
+        case DRAW_LINES:
             renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeLine, NS::UInteger(0), NS::UInteger(0));
             break;
-        case: DRAW_TRIANGLE_STRIP:
+        case DRAW_TRIANGLE_STRIP:
             renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(6));
             break;
         default:

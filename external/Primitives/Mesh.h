@@ -10,6 +10,7 @@
 
 #include <simd/simd.h>
 #include <Metal/Metal.hpp>
+#include <vector>
 
 using namespace simd;
 /**
@@ -43,8 +44,10 @@ public:
     enum DRAW_MODE
     {
         DRAW_TRIANGLES, //default mode
+        DRAW_TRIANGLES_ARRAY,
         DRAW_TRIANGLE_STRIP,
         DRAW_LINES,
+        DRAW_TRIANGLES_INSTANCED,
         DRAW_MODE_LAST,
     };
 
@@ -52,6 +55,10 @@ public:
     MTL::Buffer* vertexBuffer;
     MTL::Buffer* indexBuffer;
     NS::UInteger indexSize;
+    NS::UInteger NumOfInstance;
+    
+    std::vector<Vertex> v;
+    
 
     DRAW_MODE mode;
 
@@ -59,7 +66,7 @@ public:
     CMesh(MTL::Device* device);
     // Destructor
     ~CMesh(void);
-    virtual void Render(MTL::RenderCommandEncoder* renderCommandEncoder);
+     void Render(MTL::RenderCommandEncoder* renderCommandEncoder);
 };
 
 #endif /* Mesh_h */

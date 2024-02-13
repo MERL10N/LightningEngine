@@ -88,8 +88,8 @@ void CMetalApplication::Run()
         pPool = NS::AutoreleasePool::alloc()->init();
         metalDrawable = layer->nextDrawable();
         draw();
-        glfwPollEvents();
         pPool->release();
+        glfwPollEvents();
     }
 }
 

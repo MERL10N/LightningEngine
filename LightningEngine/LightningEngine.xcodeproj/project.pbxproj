@@ -33,6 +33,8 @@
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
+		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
+		A9BD938C2B7AA39F0060E705 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94F4FA02B6DCCEF003488AE /* Mesh.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -517,6 +519,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */,
+				A9BD938C2B7AA39F0060E705 /* Mesh.cpp in Sources */,
 				A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */,
 				A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */,
 				A908D4152B6B520A00C845F2 /* imgui_impl_metal.mm in Sources */,
