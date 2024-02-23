@@ -64,7 +64,7 @@ bool CMetalApplication::Init()
                                         metalDevice);
 
     // Render the square
-    createSquare();
+    CreateSquare();
     
     // Initialise the default library
     metalDefaultLibrary = metalDevice->newDefaultLibrary();
@@ -87,7 +87,7 @@ void CMetalApplication::Run()
     {
         pPool = NS::AutoreleasePool::alloc()->init();
         metalDrawable = layer->nextDrawable();
-        draw();
+        Draw();
         pPool->release();
         glfwPollEvents();
     }
@@ -118,7 +118,7 @@ void CMetalApplication::resizeFrameBuffer(int width, int height)
     layer->setDrawableSize(CGSizeMake(width, height));
 }
 
-void CMetalApplication::createSquare()
+void CMetalApplication::CreateSquare()
 {
     VertexData squareVertices[]
     {
@@ -137,7 +137,7 @@ void CMetalApplication::createSquare()
 }
 
 
-void CMetalApplication::draw()
+void CMetalApplication::Draw()
 {
     metalCommandBuffer = metalCommandQueue->commandBuffer();
     

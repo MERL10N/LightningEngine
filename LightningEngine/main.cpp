@@ -25,7 +25,7 @@ int main()
             // Destroy the Application instance, just to be sure
             pApp->Destroy();
 
-            // Set the Application handler to NULL
+            // Set the Application handler to nullptr
             pApp = nullptr;
 
             // Return 0 since the application successfully ran

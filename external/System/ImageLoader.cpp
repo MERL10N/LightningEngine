@@ -6,11 +6,11 @@
  
  Update:
  
- @brief  CImageLoader has been updated to support Metal API
+ @brief CImageLoader has been updated to support Metal API
  Changes made by: Kian Heydari Marvi
  Date: January 2023
  
- */
+*/
 #include "ImageLoader.h"
 
 #include <iostream>
@@ -105,12 +105,12 @@ MTL::Texture* CImageLoader::GetTexture()
 #else
 
 /**
- @brief Load an image and return as unsigned char*
- @param filename A const char* storing the name of the image file
- @param width A int variable passed in by reference. It stores the width of the image.
- @param height A int variable passed in by reference. It stores the width of the image.
- @param nrChannels A int variable passed in by reference. It stores the number of channels in the image.
- @param bInvert A const bool
+     @brief Load an image and return as unsigned char*
+     @param filename A const char* storing the name of the image file
+     @param width A int variable passed in by reference. It stores the width of the image.
+     @param height A int variable passed in by reference. It stores the width of the image.
+     @param nrChannels A int variable passed in by reference. It stores the number of channels in the image.
+     @param bInvert A const bool
  */
 unsigned char * CImageLoader::Load(const char* filename, int& width, int& height, int& nrChannels, const bool bInvert)
 {

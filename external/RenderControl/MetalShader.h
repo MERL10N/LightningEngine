@@ -129,7 +129,7 @@ public:
         this->metalRenderPSO = metalRenderPSO;
     }
     
-    MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor() 
+    MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor()
     {
         return renderPipelineDescriptor;
     }

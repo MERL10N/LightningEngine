@@ -11,8 +11,9 @@ CMesh::CMesh(MTL::Device* device)
 : mode(DRAW_TRIANGLES),
   device(device)
 {
-    vertexBuffer = device->newBuffer(v.data(), vertexBuffer->length(), MTL::ResourceStorageModeShared);
-    vertexBuffer = device->newBuffer(v.data(), indexBuffer->length(), MTL::ResourceStorageModeShared);
+    vertexBuffer = device->newBuffer(v.data(), sizeof(Vertex) * v.size(), MTL::ResourceStorageModeShared);
+    indexSize = indices.size();
+    indexBuffer = device->newBuffer(v.data(), sizeof(uint32_t) * indexSize, MTL::ResourceStorageModeShared);
      
 }
 

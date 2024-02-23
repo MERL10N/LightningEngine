@@ -58,6 +58,7 @@ public:
     NS::UInteger NumOfInstance;
     
     std::vector<Vertex> v;
+    std::vector<uint32_t> indices;
     
 
     DRAW_MODE mode;

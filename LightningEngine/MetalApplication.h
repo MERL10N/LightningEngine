@@ -42,9 +42,9 @@ public:
 
 private:
     
-    void createSquare();
+    void CreateSquare();
     
-    void draw();
+    void Draw();
     
     static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
     void resizeFrameBuffer(int width, int height);

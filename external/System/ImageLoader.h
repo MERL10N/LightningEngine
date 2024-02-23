@@ -1,6 +1,5 @@
 //  ImageLoader.h
 //  Metal-Tutorial
-//
 //  Created by Kian Marvi on 23/1/24.
 
 #ifndef ImageLoader_h
