@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,13 +25,13 @@
 		A911D9962B60E30A00FD2845 /* square.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD7129876E7600178E19 /* square.metal */; };
 		A911D9972B60E51700FD2845 /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD6A298767CD00178E19 /* MetalApplication.cpp */; };
 		A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
-		A9173C132B6F5FD400024ECD /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9173C122B6F5FD400024ECD /* libglfw3.a */; };
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
 		A9173C1C2B7051EE00024ECD /* GLFWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9173C1A2B7051EE00024ECD /* GLFWBridge.mm */; };
 		A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93023862B6CE4D00099EB32 /* Editor.cpp */; };
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
+		A960E9C62C196EF2004A78DF /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9173C122B6F5FD400024ECD /* libglfw3.a */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
 		A9BD938C2B7AA39F0060E705 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94F4FA02B6DCCEF003488AE /* Mesh.cpp */; };
@@ -141,6 +141,7 @@
 		A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBuilder.h; sourceTree = "<group>"; };
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
 		A997092E2B5F5024004993D5 /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
+		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
 		A9E077522B6490BA0085E7A5 /* sonic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sonic.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9173C132B6F5FD400024ECD /* libglfw3.a in Frameworks */,
+				A960E9C62C196EF2004A78DF /* libglfw3.a in Frameworks */,
 				A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */,
 				A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */,
 				A911D9942B60E20100FD2845 /* Foundation.framework in Frameworks */,
@@ -195,6 +196,7 @@
 		3E56AB65297E0E6E00DB5F4F /* LightningEngine */ = {
 			isa = PBXGroup;
 			children = (
+				A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */,
 				3E9F222329A060A600383DCA /* assets */,
 				A93023842B6CE4910099EB32 /* Source */,
 				A908D4172B6CE1B000C845F2 /* Shaders */,
@@ -489,7 +491,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					A911D9812B60E16700FD2845 = {
 						CreatedOnToolsVersion = 14.2;
@@ -578,9 +580,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = NO;
@@ -599,10 +603,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
-					"$(PROJECT_DIR)/../metal-cpp-extensions",
 					"$(PROJECT_DIR)/../external",
 				);
-				LIBRARY_SEARCH_PATHS = "/Users/kianmarvi/Documents/LightningEngine/external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -644,9 +647,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -659,10 +664,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
-					"$(PROJECT_DIR)/../metal-cpp-extensions",
 					"$(PROJECT_DIR)/../external",
 				);
-				LIBRARY_SEARCH_PATHS = "/Users/kianmarvi/Documents/LightningEngine/external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -674,11 +678,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = LightningEngine.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DH9566CYW8;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
-				LIBRARY_SEARCH_PATHS = "/Users/kianmarvi/Documents/LightningEngine/external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -688,11 +695,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_ENTITLEMENTS = LightningEngine.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DH9566CYW8;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
-				LIBRARY_SEARCH_PATHS = "/Users/kianmarvi/Documents/LightningEngine/external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
