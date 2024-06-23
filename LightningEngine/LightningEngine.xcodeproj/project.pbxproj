@@ -34,7 +34,6 @@
 		A960E9C62C196EF2004A78DF /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9173C122B6F5FD400024ECD /* libglfw3.a */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
-		A9BD938C2B7AA39F0060E705 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94F4FA02B6DCCEF003488AE /* Mesh.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -129,12 +128,8 @@
 		A93023872B6CE4D00099EB32 /* Editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
 		A930238B2B6D8B880099EB32 /* AAPLMathUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; };
 		A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
-		A93531DB2B61C8F200347F4A /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
-		A93531E82B62172000347F4A /* AppKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AppKit; path = "metal-cpp-extensions/AppKit"; sourceTree = "<group>"; };
-		A93531E92B62172000347F4A /* MetalKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalKit; path = "metal-cpp-extensions/MetalKit"; sourceTree = "<group>"; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		A94F4FA02B6DCCEF003488AE /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene2D.cpp; sourceTree = "<group>"; };
 		A978D8602B6E0F4200B9FF1B /* Scene2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene2D.h; sourceTree = "<group>"; };
 		A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
@@ -176,7 +171,6 @@
 		3E56AB5A297E0E6E00DB5F4F = {
 			isa = PBXGroup;
 			children = (
-				A93531E72B62170D00347F4A /* metal-cpp-extensions */,
 				3E47CD272987185800938A41 /* metal-cpp */,
 				3E9F222129A05FDB00383DCA /* external */,
 				3E56AB65297E0E6E00DB5F4F /* LightningEngine */,
@@ -437,21 +431,10 @@
 		A93531DA2B61C8D200347F4A /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
-				A93531DB2B61C8F200347F4A /* Mesh.h */,
 				A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */,
 				A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */,
-				A94F4FA02B6DCCEF003488AE /* Mesh.cpp */,
 			);
 			path = Primitives;
-			sourceTree = "<group>";
-		};
-		A93531E72B62170D00347F4A /* metal-cpp-extensions */ = {
-			isa = PBXGroup;
-			children = (
-				A93531E82B62172000347F4A /* AppKit */,
-				A93531E92B62172000347F4A /* MetalKit */,
-			);
-			name = "metal-cpp-extensions";
 			sourceTree = "<group>";
 		};
 		A978D85E2B6E0F2400B9FF1B /* Scene2D */ = {
@@ -522,7 +505,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */,
-				A9BD938C2B7AA39F0060E705 /* Mesh.cpp in Sources */,
 				A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */,
 				A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */,
 				A908D4152B6B520A00C845F2 /* imgui_impl_metal.mm in Sources */,
@@ -604,6 +586,7 @@
 					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
 					"$(PROJECT_DIR)/../external",
+					"$(PROJECT_DIR)/../metal-cpp-extensions",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
@@ -665,6 +648,7 @@
 					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
 					"$(PROJECT_DIR)/../external",
+					"$(PROJECT_DIR)/../metal-cpp-extensions",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;

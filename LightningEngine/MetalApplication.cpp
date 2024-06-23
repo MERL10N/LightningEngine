@@ -13,6 +13,7 @@
 #include <Metal/Metal.hpp>
 #include <QuartzCore/CAMetalLayer.hpp>
 #include <QuartzCore/QuartzCore.hpp>
+#include "Primitives/MeshBuilder.h"
 
 #include <iostream>
 
@@ -85,10 +86,10 @@ void CMetalApplication::Run()
 {
     while (!glfwWindowShouldClose(glfwWindow))
     {
-        pPool = NS::AutoreleasePool::alloc()->init();
+        autoReleasePool = NS::AutoreleasePool::alloc()->init();
         metalDrawable = layer->nextDrawable();
         Draw();
-        pPool->release();
+        autoReleasePool->release();
         glfwPollEvents();
     }
 }
@@ -120,18 +121,8 @@ void CMetalApplication::resizeFrameBuffer(int width, int height)
 
 void CMetalApplication::CreateSquare()
 {
-    VertexData squareVertices[]
-    {
-            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-            {{-0.5,  0.5,  0.5, 1.0f}, {0.0f, 1.0f}},
-            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-            {{ 0.5, -0.5,  0.5, 1.0f}, {1.0f, 0.0f}}
-    };
-
-    squareVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
-
+    
+    squareVertexBuffer = CMeshBuilder::GenerateQuad(metalDevice);
     CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
 
 }

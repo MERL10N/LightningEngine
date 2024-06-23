@@ -56,7 +56,7 @@ private:
     CA::MetalLayer* layer;
     CA::MetalDrawable* metalDrawable;
     
-    NS::AutoreleasePool* pPool;
+    NS::AutoreleasePool* autoReleasePool;
     
     MTL::Library* metalDefaultLibrary;
     MTL::CommandQueue* metalCommandQueue;
