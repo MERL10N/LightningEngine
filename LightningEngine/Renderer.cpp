@@ -48,6 +48,7 @@ CRenderer::CRenderer(MTL::Device* pDevice)
         std::exit(-1);
     }
     
+    // Initialise the background color
     CEditor::GetInstance()->SetClearColor(0.15f, 0);
     CEditor::GetInstance()->SetClearColor(0.15f, 1);
     CEditor::GetInstance()->SetClearColor(0.15f, 2);

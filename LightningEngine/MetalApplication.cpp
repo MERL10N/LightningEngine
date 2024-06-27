@@ -3,14 +3,13 @@
 //  LightningEngine
 //
 //  Created by Kian Marvi on 6/26/24.
-//
 
-#include "MetalCPPApplication.h"
+#include "MetalApplication.h"
 #include "MyMTKViewDelegate.h"
 #include "Source/Editor/Editor.h"
 #include <Metal/Metal.hpp>
 
-CMetalCPPApplication::~CMetalCPPApplication()
+CMetalApplication::~CMetalApplication()
 {
     CEditor::GetInstance()->Destroy();
     _pMtkView->release();
@@ -19,7 +18,7 @@ CMetalCPPApplication::~CMetalCPPApplication()
     delete _pViewDelegate;
 }
 
-NS::Menu* CMetalCPPApplication::createMenuBar()
+NS::Menu* CMetalApplication::createMenuBar()
 {
     using NS::StringEncoding::UTF8StringEncoding;
 
@@ -61,7 +60,7 @@ NS::Menu* CMetalCPPApplication::createMenuBar()
     return pMainMenu->autorelease();
 }
 
-void CMetalCPPApplication::applicationWillFinishLaunching( NS::Notification* pNotification )
+void CMetalApplication::applicationWillFinishLaunching( NS::Notification* pNotification )
 {
     NS::Menu* pMenu = createMenuBar();
     NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
@@ -69,7 +68,7 @@ void CMetalCPPApplication::applicationWillFinishLaunching( NS::Notification* pNo
     pApp->setActivationPolicy( NS::ActivationPolicy::ActivationPolicyRegular );
 }
 
-void CMetalCPPApplication::applicationDidFinishLaunching( NS::Notification* pNotification )
+void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotification )
 {
     CGRect frame = (CGRect){ {100.0, 100.0}, {1920.0, 1080.0} };
 
@@ -79,27 +78,16 @@ void CMetalCPPApplication::applicationDidFinishLaunching( NS::Notification* pNot
         NS::BackingStoreBuffered,
         false );
     
-    
-    
-    
-
     _pDevice = MTL::CreateSystemDefaultDevice();
 
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     CEditor::GetInstance()->Init(_pDevice, _pMtkView);
     
-   
-    
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
     
-    
-    
-
     _pViewDelegate = new MyMTKViewDelegate( _pDevice );
     _pMtkView->setDelegate( _pViewDelegate );
     
-   
-
     _pWindow->setContentView( _pMtkView );
     _pWindow->setTitle( NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding ) );
 
@@ -109,7 +97,7 @@ void CMetalCPPApplication::applicationDidFinishLaunching( NS::Notification* pNot
     pApp->activateIgnoringOtherApps( true );
 }
 
-bool CMetalCPPApplication::applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender )
+bool CMetalApplication::applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender )
 {
     return true;
 }

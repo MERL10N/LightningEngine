@@ -29,12 +29,11 @@
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
-		A960E9C62C196EF2004A78DF /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9173C122B6F5FD400024ECD /* libglfw3.a */; };
 		A9769BD92C2D5DF800B28E1F /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */; };
 		A9769BDB2C2D5EF500B28E1F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9769BDA2C2D5EF500B28E1F /* GameController.framework */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
-		A9DB2BE32C2D0FB900D16F8F /* MetalCPPApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalCPPApplication.cpp */; };
+		A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */; };
 		A9DB2BF42C2D100E00D16F8F /* MyMTKViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* MyMTKViewDelegate.cpp */; };
 /* End PBXBuildFile section */
 
@@ -138,8 +137,8 @@
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
 		A997092E2B5F5024004993D5 /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
 		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
-		A9DB2BE12C2D0FB900D16F8F /* MetalCPPApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalCPPApplication.cpp; sourceTree = "<group>"; };
-		A9DB2BE22C2D0FB900D16F8F /* MetalCPPApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalCPPApplication.h; sourceTree = "<group>"; };
+		A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalApplication.cpp; sourceTree = "<group>"; };
+		A9DB2BE22C2D0FB900D16F8F /* MetalApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalApplication.h; sourceTree = "<group>"; };
 		A9DB2BE42C2D0FE900D16F8F /* AppKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppKit.hpp; sourceTree = "<group>"; };
 		A9DB2BE52C2D0FE900D16F8F /* AppKitPrivate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppKitPrivate.hpp; sourceTree = "<group>"; };
 		A9DB2BE62C2D0FE900D16F8F /* NSApplication.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NSApplication.hpp; sourceTree = "<group>"; };
@@ -162,7 +161,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9769BDB2C2D5EF500B28E1F /* GameController.framework in Frameworks */,
-				A960E9C62C196EF2004A78DF /* libglfw3.a in Frameworks */,
 				A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */,
 				A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */,
 				A911D9942B60E20100FD2845 /* Foundation.framework in Frameworks */,
@@ -216,8 +214,8 @@
 				3E76CD692987675300178E19 /* Metal-Tutorial.entitlements */,
 				3E56AB66297E0E6E00DB5F4F /* main.cpp */,
 				3E76CD6D2987690700178E19 /* mtl_implementation.cpp */,
-				A9DB2BE12C2D0FB900D16F8F /* MetalCPPApplication.cpp */,
-				A9DB2BE22C2D0FB900D16F8F /* MetalCPPApplication.h */,
+				A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */,
+				A9DB2BE22C2D0FB900D16F8F /* MetalApplication.h */,
 				A9DB2BF22C2D100E00D16F8F /* MyMTKViewDelegate.cpp */,
 				A9DB2BF32C2D100E00D16F8F /* MyMTKViewDelegate.h */,
 				A92A76F02C2D446200101F89 /* Renderer.cpp */,
@@ -576,7 +574,7 @@
 				A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */,
 				A911D98E2B60E1A000FD2845 /* mtl_implementation.cpp in Sources */,
 				A908D4112B6B26C300C845F2 /* ShaderManager.cpp in Sources */,
-				A9DB2BE32C2D0FB900D16F8F /* MetalCPPApplication.cpp in Sources */,
+				A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */,
 				A908D4072B6B263500C845F2 /* imgui_demo.cpp in Sources */,
 				A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */,
 				A911D98D2B60E19600FD2845 /* main.cpp in Sources */,
@@ -640,12 +638,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
 					"$(PROJECT_DIR)/../external",
 					"$(PROJECT_DIR)/../metal-cpp-extensions",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -702,12 +699,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../external/GLFW/include",
 					"$(PROJECT_DIR)/../metal-cpp",
 					"$(PROJECT_DIR)/../external",
 					"$(PROJECT_DIR)/../metal-cpp-extensions",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -726,8 +722,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
-				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -743,8 +739,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
-				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

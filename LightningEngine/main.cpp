@@ -2,8 +2,7 @@
 //  Metal Engine
 
 #ifdef __APPLE__
-//#include "MetalApplication.h"
-#include "MetalCPPApplication.h"
+#include "MetalApplication.h"
 #else
 #include "Application.h"
 #endif
@@ -14,7 +13,7 @@ int main(void)
 
 #ifdef __APPLE__
     
-    CMetalCPPApplication del;
+    CMetalApplication del;
 
     NS::Application* pApp = NS::Application::sharedApplication();
     pApp->setDelegate( &del );
@@ -23,7 +22,7 @@ int main(void)
 
 #else
 
-    
+    CApplication* pApp = CApplication::GetInstance();
         // if the application is initialised properly, then run it
         if (pApp->Init() == true)
         {
@@ -44,7 +43,7 @@ int main(void)
         return 1;
      
     
-    CApplication* pApp = CApplication::GetInstance();
+  
 #endif
     
     

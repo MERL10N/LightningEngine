@@ -21,10 +21,10 @@ namespace MTL
 
 class MyMTKViewDelegate;
 
-class CMetalCPPApplication : public NS::ApplicationDelegate
+class CMetalApplication : public NS::ApplicationDelegate
 {
     public:
-        ~CMetalCPPApplication();
+        ~CMetalApplication();
 
         NS::Menu* createMenuBar();
 

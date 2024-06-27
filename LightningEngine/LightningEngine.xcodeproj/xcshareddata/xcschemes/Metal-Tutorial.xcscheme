@@ -38,8 +38,8 @@
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
       customWorkingDirectory = "$(PROJECT_DIR)"
-      ignoresPersistentStateOnLaunch = "NO"
-      debugDocumentVersioning = "YES"
+      ignoresPersistentStateOnLaunch = "YES"
+      debugDocumentVersioning = "NO"
       debugServiceExtension = "internal"
       enableGPUFrameCaptureMode = "3"
       allowLocationSimulation = "YES"
@@ -59,7 +59,7 @@
       buildConfiguration = "Debug"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
-      useCustomWorkingDirectory = "NO"
+      useCustomWorkingDirectory = "YES"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
