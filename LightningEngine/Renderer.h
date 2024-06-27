@@ -1,16 +1,15 @@
-//  MetalApplication.h
-//  Lightning Engine
+//
+//  Renderer.hpp
+//  LightningEngine
+//
+//  Created by Kian Marvi on 6/26/24.
+//
 
-#ifndef MetalApplication_h
-#define MetalApplication_h
+#ifndef Renderer_h
+#define Renderer_h
 
 #include <DesignPatterns/SingletonTemplate.h>
 
-namespace CA
-{
-    class MetalLayer;
-    class MetalDrawable;
-}
 
 namespace MTL
 {
@@ -30,31 +29,24 @@ namespace NS
     class AutoreleasePool;
 }
 
-struct GLFWwindow;
-
-class CMetalApplication : public CSingletonTemplate<CMetalApplication>
+namespace MTK
 {
-    friend CSingletonTemplate<CMetalApplication>;
+class View;
+}
+
+class CRenderer : public CSingletonTemplate<CRenderer>
+{
+    friend CSingletonTemplate<CRenderer>;
 public:
-    bool Init();
-    void Run();
-    void Destroy();
+    CRenderer(MTL::Device* pDevice);
+    ~CRenderer();
+    void Draw(MTK::View* view);
 
 private:
     
     void CreateSquare();
     
-    void Draw();
-    
-    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
-    void resizeFrameBuffer(int width, int height);
-    
     MTL::Device* metalDevice;
-    
-    GLFWwindow* glfwWindow;
-    
-    CA::MetalLayer* layer;
-    CA::MetalDrawable* metalDrawable;
     
     NS::AutoreleasePool* autoReleasePool;
     
@@ -66,4 +58,5 @@ private:
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
 };
-#endif
+
+#endif /* Renderer_hpp */

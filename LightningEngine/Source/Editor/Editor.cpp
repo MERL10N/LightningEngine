@@ -4,21 +4,21 @@
 
 #include "Editor.h"
 #include <Metal/Metal.hpp>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <MetalKit/MetalKit.hpp>
+#include <AppKit/AppKit.hpp>
 
 #define IMGUI_IMPL_METAL_CPP
+#define IMGUI_IMPL_METAL_CPP_EXTENSIONS
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
 #include "imgui_impl_metal.h"
+#include "imgui_impl_osx.h"
 
 
-bool CEditor::Init(MTL::Device* device, GLFWwindow* window)
+bool CEditor::Init(MTL::Device* device, MTK::View* view)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-
 
     // Setup style
     ImGui::StyleColorsDark();
@@ -27,7 +27,7 @@ bool CEditor::Init(MTL::Device* device, GLFWwindow* window)
     ImGui_ImplMetal_Init(device);
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOther(window, true);
+    ImGui_ImplOSX_Init(view);
     
     
     show_demo_window = true;
@@ -46,11 +46,11 @@ float CEditor::GetClearColor(int index) const
     return clear_color[index];
 }
 
-void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder)
+void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
 {
     // Start the Dear ImGui frame
     ImGui_ImplMetal_NewFrame(renderPassDescriptor);
-    ImGui_ImplGlfw_NewFrame();
+    ImGui_ImplOSX_NewFrame(view);
     ImGui::NewFrame();
 
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -91,6 +91,6 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
 void CEditor::Destroy()
 {
     ImGui_ImplMetal_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
+    ImGui_ImplOSX_Shutdown();
     ImGui::DestroyContext();
 }
