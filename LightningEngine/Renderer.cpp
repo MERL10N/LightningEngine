@@ -48,6 +48,11 @@ CRenderer::CRenderer(MTL::Device* pDevice)
         std::exit(-1);
     }
     
+    CEditor::GetInstance()->SetClearColor(0.15f, 0);
+    CEditor::GetInstance()->SetClearColor(0.15f, 1);
+    CEditor::GetInstance()->SetClearColor(0.15f, 2);
+    CEditor::GetInstance()->SetClearColor(1.f, 3);
+    
     //Initialise the command queue
     metalCommandQueue = metalDevice->newCommandQueue();
 }
@@ -89,7 +94,13 @@ void CRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(6));
     
+    
     CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
+    view->setClearColor( MTL::ClearColor::Make( CEditor::GetInstance()->GetClearColor(0),
+                                                     CEditor::GetInstance()->GetClearColor(1),
+                                                     CEditor::GetInstance()->GetClearColor(2),
+                                                     CEditor::GetInstance()->GetClearColor(3)));
+    
 
     renderCommandEncoder->endEncoding();
 

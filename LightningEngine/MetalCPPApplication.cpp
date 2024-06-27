@@ -88,17 +88,10 @@ void CMetalCPPApplication::applicationDidFinishLaunching( NS::Notification* pNot
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     CEditor::GetInstance()->Init(_pDevice, _pMtkView);
     
-    CEditor::GetInstance()->SetClearColor(0.15f, 0);
-    CEditor::GetInstance()->SetClearColor(0.15f, 1);
-    CEditor::GetInstance()->SetClearColor(0.15f, 2);
-    CEditor::GetInstance()->SetClearColor(1.f, 3);
+   
     
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
     
-    _pMtkView->setClearColor( MTL::ClearColor::Make( CEditor::GetInstance()->GetClearColor(0),
-                                                     CEditor::GetInstance()->GetClearColor(1),
-                                                     CEditor::GetInstance()->GetClearColor(2),
-                                                     CEditor::GetInstance()->GetClearColor(3)));
     
     
 
