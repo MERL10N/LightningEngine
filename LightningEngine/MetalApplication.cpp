@@ -6,7 +6,7 @@
 
 #include "MetalApplication.h"
 #include "MyMTKViewDelegate.h"
-#include "Source/Editor/Editor.h"
+#include <Editor/Editor.h>
 #include <Metal/Metal.hpp>
 
 CMetalApplication::~CMetalApplication()
@@ -70,7 +70,7 @@ void CMetalApplication::applicationWillFinishLaunching( NS::Notification* pNotif
 
 void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotification )
 {
-    CGRect frame = (CGRect){ {100.0, 100.0}, {1920.0, 1080.0} };
+    CGRect frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
 
     _pWindow = NS::Window::alloc()->init(
         frame,

@@ -19,7 +19,7 @@
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 #include "Primitives/MeshBuilder.h"
-#include "Source/Editor/Editor.h"
+#include <Editor/Editor.h>
 
 #include <iostream>
 
