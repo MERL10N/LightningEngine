@@ -12,10 +12,10 @@
 CMetalApplication::~CMetalApplication()
 {
     CEditor::GetInstance()->Destroy();
-    _pMtkView->release();
-    _pWindow->release();
-    _pDevice->release();
-    delete _pViewDelegate;
+    metalKitView->release();
+    appWindow->release();
+    metalDevice->release();
+    delete viewDelegate;
 }
 
 NS::Menu* CMetalApplication::createMenuBar()
@@ -72,26 +72,26 @@ void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotifi
 {
     CGRect frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
 
-    _pWindow = NS::Window::alloc()->init(
+    appWindow = NS::Window::alloc()->init(
         frame,
         NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled,
         NS::BackingStoreBuffered,
         false );
     
-    _pDevice = MTL::CreateSystemDefaultDevice();
+    metalDevice = MTL::CreateSystemDefaultDevice();
 
-    _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
-    CEditor::GetInstance()->Init(_pDevice, _pMtkView);
+    metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+    CEditor::GetInstance()->Init(metalDevice, metalKitView);
     
-    _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
+    metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
     
-    _pViewDelegate = new MyMTKViewDelegate( _pDevice );
-    _pMtkView->setDelegate( _pViewDelegate );
+    viewDelegate = new MyMTKViewDelegate( metalDevice );
+    metalKitView->setDelegate( viewDelegate );
     
-    _pWindow->setContentView( _pMtkView );
-    _pWindow->setTitle( NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding ) );
+    appWindow->setContentView( metalKitView );
+    appWindow->setTitle( NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding ) );
 
-    _pWindow->makeKeyAndOrderFront( nullptr );
+    appWindow->makeKeyAndOrderFront( nullptr );
 
     NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
     pApp->activateIgnoringOtherApps( true );

@@ -33,10 +33,10 @@ class CMetalApplication : public NS::ApplicationDelegate
         virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
 
     private:
-        NS::Window* _pWindow;
-        MTK::View* _pMtkView;
-        MTL::Device* _pDevice;
-        MyMTKViewDelegate* _pViewDelegate = nullptr;
+        NS::Window* appWindow;
+        MTK::View* metalKitView;
+        MTL::Device* metalDevice;
+        MyMTKViewDelegate* viewDelegate = nullptr;
 };
 
-#endif /* MyAppDelegate_hpp */
+#endif /* MyAppDelegate_h */
