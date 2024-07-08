@@ -83,6 +83,7 @@ void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotifi
     metalKitView = MTK::View::alloc()->init( frame, metalDevice );
     CEditor::GetInstance()->Init(metalDevice, metalKitView);
     
+    metalKitView->setPreferredFramesPerSecond(120);
     metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
     
     viewDelegate = new MyMTKViewDelegate( metalDevice );

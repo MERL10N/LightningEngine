@@ -53,18 +53,25 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
     ImGui_ImplOSX_NewFrame(view);
     ImGui::NewFrame();
 
+    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
 
-    ImGui::Begin("Welcome to Lightning Engine!");                          // Create a window called "Hello, world!" and append into it.
+    {
 
-    ImGui::Text("This is a metal game engine written in C++");               // Display some text (you can use a format strings too)
-    ImGui::Checkbox("Message from developer", &show_another_window);
+        ImGui::Begin("Welcome to Lightning Engine!");                          // Create a window called "Hello, world!" and append into it.
+
+        ImGui::Text("This is a metal game engine written in C++");               // Display some text (you can use a format strings too)
+        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox("Message from developer", &show_another_window);
+        
+
+        ImGui::ColorEdit3("Adjust color", (float*)&clear_color); // Edit 3 floats representing a color
     
-
-    ImGui::ColorEdit3("Adjust color", (float*)&clear_color); // Edit 3 floats representing a color
-
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::End();
+    
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+    }
 
     // 3. Show another simple window.
     if (show_another_window)

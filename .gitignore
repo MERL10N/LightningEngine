@@ -16,3 +16,15 @@ external/Editor/._Editor.h
 external/Editor/._Editor.cpp
 
 LightningEngine/._MyMTKViewDelegate.cpp
+
+external/RenderControl/._MetalShader.h
+
+external/Primitives/._MeshBuilder.cpp
+
+LightningEngine/._LightningEngine.xcodeproj
+
+LightningEngine/._Renderer.cpp
+
+LightningEngine/._main.cpp
+
+LightningEngine/LightningEngine.xcodeproj/._project.xcworkspace
