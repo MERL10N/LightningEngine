@@ -22,8 +22,8 @@ private:
     MTL::Function* fragmentFunction;
     MTL::RenderPipelineDescriptor* renderPipelineDescriptor;
     MTL::RenderPipelineState* metalRenderPSO;
-    MTL::ArgumentEncoder* argumentEncoder;
-    MTL::Buffer* argumentBuffer;
+    //MTL::ArgumentEncoder* argumentEncoder;
+    //MTL::Buffer* argumentBuffer;
     std::string filePath;
     bool bResult;
     
@@ -113,15 +113,12 @@ public:
         {
             std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
         }
-        initializeResources();
-    
+
         renderPipelineDescriptor->release();
         library->release();
         vertexFunction->release();
         fragmentFunction->release();
-        argumentBuffer->release();
-        argumentEncoder->release();
-        
+    
     }
     
     void setRenderPipelineState(MTL::RenderPipelineState* metalRenderPSO)
@@ -139,18 +136,11 @@ public:
         return metalRenderPSO;
     }
     
-    void initializeResources()
-    {
-        argumentEncoder = vertexFunction->newArgumentEncoder(0);
-        argumentBuffer = device->newBuffer(argumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);
-        // Encode arguments
-        argumentEncoder->setArgumentBuffer(argumentBuffer, 0);
-    }
     
     void bindResources(MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer)
     {
         encoder->useResource(buffer, MTL::ResourceUsageRead);
-        encoder->setVertexBuffer(argumentBuffer, 0, 0); // Bind as a vertex buffer
+        encoder->setVertexBuffer(buffer, 0, 0); // Bind as a vertex buffer
     }
     
     void setName(const std::string name)

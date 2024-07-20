@@ -109,14 +109,6 @@ MTL::RenderPipelineState* CShaderManager::getRenderPipelineState(const std::stri
     return nullptr;
 }
 
-void CShaderManager::InitialiseResources(const std::string &shaderName)
-{
-    auto it = shaderMap.find(shaderName);
-    if (it != shaderMap.end() && it->second) {
-        it->second->initializeResources();
-    }
-}
-
 void CShaderManager::BindResources(const std::string &shaderName, MTL::RenderCommandEncoder *encoder, MTL::Buffer* buffer)
 {
     auto it = shaderMap.find(shaderName);

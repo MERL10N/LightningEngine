@@ -121,10 +121,8 @@ void CMetalApplication::resizeFrameBuffer(int width, int height)
 
 void CMetalApplication::CreateSquare()
 {
-    
     squareVertexBuffer = CMeshBuilder::GenerateQuad(metalDevice);
     CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
-
 }
 
 
