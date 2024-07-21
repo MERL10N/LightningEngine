@@ -123,10 +123,10 @@ public:
         depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
 
         renderPipelineDescriptor->release();
+        depthStencilDescriptor->release();
         library->release();
         vertexFunction->release();
         fragmentFunction->release();
-    
     }
     
     void setRenderPipelineState(MTL::RenderPipelineState* metalRenderPSO)
