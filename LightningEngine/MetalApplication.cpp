@@ -74,7 +74,7 @@ void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotifi
 
     appWindow = NS::Window::alloc()->init(
         frame,
-        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled,
+        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled|NS::WindowStyleMaskResizable|NS::WindowStyleMaskMiniaturizable,
         NS::BackingStoreBuffered,
         false );
     
