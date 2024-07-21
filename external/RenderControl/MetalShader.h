@@ -24,6 +24,7 @@ private:
     MTL::RenderPipelineState* metalRenderPSO;
     //MTL::ArgumentEncoder* argumentEncoder;
     //MTL::Buffer* argumentBuffer;
+    MTL::DepthStencilState* depthStencilState;
     std::string filePath;
     bool bResult;
     
@@ -106,6 +107,8 @@ public:
         renderPipelineDescriptor->setFragmentFunction(fragmentFunction);
         assert(renderPipelineDescriptor);
         renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+        renderPipelineDescriptor->setSampleCount(4);
+        renderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
         setRenderPipelineState(metalRenderPSO);
         metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
         
@@ -113,6 +116,11 @@ public:
         {
             std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
         }
+        
+        MTL::DepthStencilDescriptor* depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
+        depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
+        depthStencilDescriptor->setDepthWriteEnabled(true);
+        depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
 
         renderPipelineDescriptor->release();
         library->release();
@@ -134,6 +142,11 @@ public:
     MTL::RenderPipelineState* getRenderPipelineState()
     {
         return metalRenderPSO;
+    }
+    
+    MTL::DepthStencilState* getDepthStencilState()
+    {
+        return depthStencilState;
     }
     
     

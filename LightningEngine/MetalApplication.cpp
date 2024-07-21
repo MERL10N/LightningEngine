@@ -14,7 +14,7 @@
 #include <QuartzCore/QuartzCore.hpp>
 #include <Primitives/MeshBuilder.h>
 #include <Primitives/VertexData.h>
-#include <CoreGraphics/CoreGraphics.h>
+
 
 #include <iostream>
 
@@ -24,6 +24,10 @@
 
 bool CMetalApplication::Init()
 {
+    screenRect = CGDisplayBounds(CGMainDisplayID());
+    width = screenRect.size.width;
+    height = screenRect.size.height;
+    
     // Detect if metal is supported on the target device
     metalDevice = MTL::CreateSystemDefaultDevice();
     
@@ -49,7 +53,6 @@ bool CMetalApplication::Init()
     
     glfwSetWindowUserPointer(glfwWindow, this);
     glfwSetFramebufferSizeCallback(glfwWindow, frameBufferSizeCallback);
-    int width, height;
     glfwGetFramebufferSize(glfwWindow, &width, &height);
     
     layer = CA::MetalLayer::layer();
@@ -140,21 +143,32 @@ void CMetalApplication::Draw()
     renderPassDescriptor = MTL::RenderPassDescriptor::alloc()->init();
     
     MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
+    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
     
-    colorAttachmentDescriptor->setTexture(metalDrawable->texture());
+    colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
+    colorAttachmentDescriptor->setResolveTexture(metalDrawable->texture());
     colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
     colorAttachmentDescriptor->setClearColor(MTL::ClearColor(CEditor::GetInstance()->GetClearColor(0),
                                       CEditor::GetInstance()->GetClearColor(1),
                                       CEditor::GetInstance()->GetClearColor(2),
                                       CEditor::GetInstance()->GetClearColor(3)));
-    colorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
+    colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
+    
+    depthAttachment->setTexture(depthTexture);
+    depthAttachment->setLoadAction(MTL::LoadActionClear);
+    depthAttachment->setStoreAction(MTL::StoreActionDontCare);
+    depthAttachment->setClearDepth(1.0);
     
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
+    
+    renderPassDescriptor->colorAttachments()->object(0)->setTexture(msaaRenderTargetTexture);
+    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(metalDrawable->texture());
+    renderPassDescriptor->depthAttachment()->setTexture(depthTexture);
     
     // Moves the Cube 2 units down the negative Z-axis
     matrix_float4x4 translationMatrix = matrix4x4_translation(0, 0,-1.0);
     
-    float angleInDegrees = glfwGetTime()/2.0 * 45;
+        float angleInDegrees = glfwGetTime()* 0.5f * 45;
         float angleInRadians = angleInDegrees * M_PI / 180.0f;
         matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
 
@@ -182,8 +196,10 @@ void CMetalApplication::Draw()
 
     
     metalRenderPSO = CShaderManager::GetInstance()->getRenderPipelineState("Cube");
+    renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+    renderCommandEncoder->setCullMode(MTL::CullModeBack);
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
-
+    renderCommandEncoder->setDepthStencilState(CShaderManager::GetInstance()->getDepthStencilState("Cube"));
     CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, squareVertexBuffer);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
@@ -207,9 +223,9 @@ void CMetalApplication::createDepthAndMSAATextures()
         MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
         msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
         msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-        msaaTextureDescriptor->setWidth();
-        msaaTextureDescriptor->setHeight(metalLayer.drawableSize.height);
-        msaaTextureDescriptor->setSampleCount(sampleCount);
+        msaaTextureDescriptor->setWidth(width);
+        msaaTextureDescriptor->setHeight(height);
+        msaaTextureDescriptor->setSampleCount(4);
         msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
 
         msaaRenderTargetTexture = metalDevice->newTexture(msaaTextureDescriptor);
@@ -217,10 +233,10 @@ void CMetalApplication::createDepthAndMSAATextures()
         MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
         depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
         depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
-        depthTextureDescriptor->setWidth(metalLayer.drawableSize.width);
-        depthTextureDescriptor->setHeight(metalLayer.drawableSize.height);
+        depthTextureDescriptor->setWidth(width);
+        depthTextureDescriptor->setHeight(height);
         depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-        depthTextureDescriptor->setSampleCount(sampleCount);
+        depthTextureDescriptor->setSampleCount(4);
 
         depthTexture = metalDevice->newTexture(depthTextureDescriptor);
 
@@ -228,11 +244,8 @@ void CMetalApplication::createDepthAndMSAATextures()
         depthTextureDescriptor->release();
 }
 
-float CMetalApplication::GetAspectRatio()
+inline float CMetalApplication::GetAspectRatio()
 {
-    CGRect screenRect = CGDisplayBounds(CGMainDisplayID());
-    float width = screenRect.size.width;
-    float height = screenRect.size.height;
     return width / height;
 }
 

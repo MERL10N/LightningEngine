@@ -25,6 +25,7 @@ namespace MTL
     class RenderPipelineDescriptor;
     class RenderPipelineState;
     class RenderCommandEncoder;
+    class DepthStencilState;
     class Device;
     class Buffer;
     class Texture;
@@ -48,6 +49,7 @@ public:
     MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor(const std::string& shaderName) const;
     void setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const;
     MTL::RenderPipelineState* getRenderPipelineState(const std::string& shaderName) const;
+    MTL::DepthStencilState* getDepthStencilState(const std::string& shaderName) const;
     
     void InitialiseResources(const std::string& shaderName);
     void BindResources(const std::string& shaderName, MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer);

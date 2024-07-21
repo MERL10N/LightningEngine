@@ -44,3 +44,9 @@ metal-cpp/Metal/._MTLRenderCommandEncoder.hpp
 metal-cpp/Metal/._MTLTexture.hpp
 
 LightningEngine/._VertexData.h
+
+external/RenderControl/._ShaderManager.h
+
+external/System/._ImageLoader.cpp
+
+LightningEngine/LightningEngine.xcodeproj/._project.xcworkspace

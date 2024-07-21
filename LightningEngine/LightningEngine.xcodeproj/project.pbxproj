@@ -385,13 +385,6 @@
 			path = GameControl;
 			sourceTree = "<group>";
 		};
-		A9173C142B6F685C00024ECD /* Scene3D */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Scene3D;
-			sourceTree = "<group>";
-		};
 		A9173C152B6F687800024ECD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,7 +397,6 @@
 		A93023842B6CE4910099EB32 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				A9173C142B6F685C00024ECD /* Scene3D */,
 				A978D85E2B6E0F2400B9FF1B /* Scene2D */,
 				A93023852B6CE49E0099EB32 /* Editor */,
 			);

@@ -5,6 +5,7 @@
 #define MetalApplication_h
 
 #include <DesignPatterns/SingletonTemplate.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 namespace CA
 {
@@ -32,6 +33,7 @@ namespace NS
 }
 
 struct GLFWwindow;
+struct CGRect;
 
 class CMetalApplication : public CSingletonTemplate<CMetalApplication>
 {
@@ -49,7 +51,7 @@ private:
     
     void createDepthAndMSAATextures();
     
-    float GetAspectRatio();
+    inline float GetAspectRatio();
     
     static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
     void resizeFrameBuffer(int width, int height);
@@ -74,5 +76,9 @@ private:
     
     MTL::Texture* msaaRenderTargetTexture = nullptr;
     MTL::Texture* depthTexture;
+    
+    int width;
+    int height;
+    CGRect screenRect;
 };
 #endif
