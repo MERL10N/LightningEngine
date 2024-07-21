@@ -40,3 +40,7 @@ external/Primitives/._MeshBuilder.h
 external/RenderControl/._ShaderManager.cpp
 
 LightningEngine/._mtl_implementation.cpp
+
+external/System/._ImageLoader.cpp
+
+._.gitignore
