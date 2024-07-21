@@ -28,3 +28,15 @@ LightningEngine/._Renderer.cpp
 LightningEngine/._main.cpp
 
 LightningEngine/LightningEngine.xcodeproj/._project.xcworkspace
+
+LightningEngine/Shaders/._square.metal
+
+external/imgui/backends/._imgui_impl_osx.h
+
+external/imgui/backends/._imgui_impl_osx.mm
+
+external/Primitives/._MeshBuilder.h
+
+external/RenderControl/._ShaderManager.cpp
+
+LightningEngine/._mtl_implementation.cpp
