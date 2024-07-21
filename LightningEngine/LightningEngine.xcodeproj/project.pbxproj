@@ -22,11 +22,11 @@
 		A911D9922B60E1EC00FD2845 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489229CFFEF3009CDE34 /* Cocoa.framework */; };
 		A911D9932B60E1F600FD2845 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1529871D3000E5CDF6 /* QuartzCore.framework */; };
 		A911D9942B60E20100FD2845 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1929871D4300E5CDF6 /* Foundation.framework */; };
-		A911D9962B60E30A00FD2845 /* square.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD7129876E7600178E19 /* square.metal */; };
 		A911D9972B60E51700FD2845 /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD6A298767CD00178E19 /* MetalApplication.cpp */; };
 		A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
 		A9173C1C2B7051EE00024ECD /* GLFWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9173C1A2B7051EE00024ECD /* GLFWBridge.mm */; };
+		A9222FF92C4B4DE200603B24 /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9222FF82C4B4DE200603B24 /* cube.metal */; };
 		A93023882B6CE4D00099EB32 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93023862B6CE4D00099EB32 /* Editor.cpp */; };
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
@@ -124,6 +124,7 @@
 		A9173C172B6F68B200024ECD /* Player2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player2D.h; sourceTree = "<group>"; };
 		A9173C1A2B7051EE00024ECD /* GLFWBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GLFWBridge.mm; sourceTree = "<group>"; };
 		A9173C1B2B7051EE00024ECD /* GLFWBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLFWBridge.h; sourceTree = "<group>"; };
+		A9222FF82C4B4DE200603B24 /* cube.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cube.metal; sourceTree = "<group>"; };
 		A93023862B6CE4D00099EB32 /* Editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
 		A93023872B6CE4D00099EB32 /* Editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
 		A930238B2B6D8B880099EB32 /* AAPLMathUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; };
@@ -194,7 +195,6 @@
 				3E9F222329A060A600383DCA /* assets */,
 				A93023842B6CE4910099EB32 /* Source */,
 				A908D4172B6CE1B000C845F2 /* Shaders */,
-				A997092E2B5F5024004993D5 /* VertexData.h */,
 				3E76CD692987675300178E19 /* Metal-Tutorial.entitlements */,
 				3E56AB66297E0E6E00DB5F4F /* main.cpp */,
 				3E76CD6A298767CD00178E19 /* MetalApplication.cpp */,
@@ -364,6 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				3E76CD7129876E7600178E19 /* square.metal */,
+				A9222FF82C4B4DE200603B24 /* cube.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -431,6 +432,7 @@
 		A93531DA2B61C8D200347F4A /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
+				A997092E2B5F5024004993D5 /* VertexData.h */,
 				A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */,
 				A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */,
 			);
@@ -510,11 +512,11 @@
 				A908D4152B6B520A00C845F2 /* imgui_impl_metal.mm in Sources */,
 				A908D4062B6B263500C845F2 /* imgui_tables.cpp in Sources */,
 				A911D9972B60E51700FD2845 /* MetalApplication.cpp in Sources */,
+				A9222FF92C4B4DE200603B24 /* cube.metal in Sources */,
 				A908D4052B6B263500C845F2 /* imgui.cpp in Sources */,
 				A9173C1C2B7051EE00024ECD /* GLFWBridge.mm in Sources */,
 				A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */,
 				A908D3FD2B6B263400C845F2 /* imgui_widgets.cpp in Sources */,
-				A911D9962B60E30A00FD2845 /* square.metal in Sources */,
 				A908D4042B6B263500C845F2 /* imgui_impl_glfw.cpp in Sources */,
 				A908D4082B6B263500C845F2 /* imgui_draw.cpp in Sources */,
 				A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */,
@@ -670,7 +672,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
-				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -687,7 +689,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_NO_COMMON_BLOCKS = NO;
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../external/GLFW/lib-universal";
-				MACOSX_DEPLOYMENT_TARGET = 12.7;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

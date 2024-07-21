@@ -8,8 +8,6 @@
 #include "MeshBuilder.h"
 #include "VertexData.h"
 
-#include <System/ImageLoader.h>
-
 /**
  @brief Generate a quad and load it into Metal
  @param metalDevice A metal compatible device (Either mac or iOS)
@@ -29,4 +27,60 @@ MTL::Buffer* CMeshBuilder::GenerateQuad(MTL::Device* metalDevice)
     
     MTL::Buffer* quadVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
     return quadVertexBuffer;
+}
+
+MTL::Buffer* CMeshBuilder::GenerateCube(MTL::Device* metalDevice)
+{
+    VertexData cubeVertices[] = {
+            // Front face
+            {{-0.5, -0.5, 0.5, 1.0}, {0.0, 0.0}},
+            {{0.5, -0.5, 0.5, 1.0}, {1.0, 0.0}},
+            {{0.5, 0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, 0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 1.0}},
+            {{-0.5, -0.5, 0.5, 1.0}, {0.0, 0.0}},
+
+            // Back face
+            {{0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+            {{-0.5, -0.5, -0.5, 1.0}, {1.0, 0.0}},
+            {{-0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, 0.5, -0.5, 1.0}, {0.0, 1.0}},
+            {{0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+
+            // Top face
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 0.0}},
+            {{0.5, 0.5, 0.5, 1.0}, {1.0, 0.0}},
+            {{0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, 0.5, -0.5, 1.0}, {0.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 0.0}},
+
+            // Bottom face
+            {{-0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+            {{0.5, -0.5, -0.5, 1.0}, {1.0, 0.0}},
+            {{0.5, -0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, -0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, -0.5, 0.5, 1.0}, {0.0, 1.0}},
+            {{-0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+
+            // Left face
+            {{-0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+            {{-0.5, -0.5, 0.5, 1.0}, {1.0, 0.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {1.0, 1.0}},
+            {{-0.5, 0.5, -0.5, 1.0}, {0.0, 1.0}},
+            {{-0.5, -0.5, -0.5, 1.0}, {0.0, 0.0}},
+
+            // Right face
+            {{0.5, -0.5, 0.5, 1.0}, {0.0, 0.0}},
+            {{0.5, -0.5, -0.5, 1.0}, {1.0, 0.0}},
+            {{0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, 0.5, -0.5, 1.0}, {1.0, 1.0}},
+            {{0.5, 0.5, 0.5, 1.0}, {0.0, 1.0}},
+            {{0.5, -0.5, 0.5, 1.0}, {0.0, 0.0}},
+        };
+    
+    MTL::Buffer* cubeVertexBuffer = metalDevice->newBuffer(&cubeVertices, sizeof(cubeVertices), MTL::ResourceStorageModeShared);
+    return cubeVertexBuffer;
 }

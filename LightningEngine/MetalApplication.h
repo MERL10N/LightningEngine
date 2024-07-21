@@ -20,6 +20,7 @@ namespace MTL
     class CommandBuffer;
     class RenderPipelineState;
     class Buffer;
+    class Texture;
     class ArgumentEncoder;
     class RenderCommandEncoder;
     class RenderPassDescriptor;
@@ -46,6 +47,10 @@ private:
     
     void Draw();
     
+    void createDepthAndMSAATextures();
+    
+    float GetAspectRatio();
+    
     static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
     void resizeFrameBuffer(int width, int height);
     
@@ -63,7 +68,11 @@ private:
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPipelineState* metalRenderPSO;
     MTL::Buffer* squareVertexBuffer;
+    MTL::Buffer* transformationBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
+    
+    MTL::Texture* msaaRenderTargetTexture = nullptr;
+    MTL::Texture* depthTexture;
 };
 #endif
