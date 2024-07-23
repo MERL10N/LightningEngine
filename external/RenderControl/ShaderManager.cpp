@@ -109,13 +109,16 @@ MTL::RenderPipelineState* CShaderManager::getRenderPipelineState(const std::stri
     return nullptr;
 }
 
-void CShaderManager::InitialiseResources(const std::string &shaderName)
+MTL::DepthStencilState* CShaderManager::getDepthStencilState(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
-    if (it != shaderMap.end() && it->second) {
-        it->second->initializeResources();
+    if (it != shaderMap.end() && it->second)
+    {
+        return it->second->getDepthStencilState();
     }
+    return nullptr;
 }
+
 
 void CShaderManager::BindResources(const std::string &shaderName, MTL::RenderCommandEncoder *encoder, MTL::Buffer* buffer)
 {

@@ -21,7 +21,6 @@
 		A911D9922B60E1EC00FD2845 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489229CFFEF3009CDE34 /* Cocoa.framework */; };
 		A911D9932B60E1F600FD2845 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1529871D3000E5CDF6 /* QuartzCore.framework */; };
 		A911D9942B60E20100FD2845 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1929871D4300E5CDF6 /* Foundation.framework */; };
-		A911D9962B60E30A00FD2845 /* square.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD7129876E7600178E19 /* square.metal */; };
 		A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
 		A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
@@ -33,6 +32,8 @@
 		A9769BDB2C2D5EF500B28E1F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9769BDA2C2D5EF500B28E1F /* GameController.framework */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
+		A9D700212C502B7B002A50BA /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
+		A9D700272C502C94002A50BA /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D700262C502C94002A50BA /* Timer.cpp */; };
 		A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */; };
 		A9DB2BF42C2D100E00D16F8F /* MyMTKViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* MyMTKViewDelegate.cpp */; };
 /* End PBXBuildFile section */
@@ -136,6 +137,9 @@
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
 		A997092E2B5F5024004993D5 /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
 		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
+		A9D700202C502B7B002A50BA /* cube.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cube.metal; sourceTree = "<group>"; };
+		A9D700252C502C94002A50BA /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		A9D700262C502C94002A50BA /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalApplication.cpp; sourceTree = "<group>"; };
 		A9DB2BE22C2D0FB900D16F8F /* MetalApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalApplication.h; sourceTree = "<group>"; };
 		A9DB2BE42C2D0FE900D16F8F /* AppKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppKit.hpp; sourceTree = "<group>"; };
@@ -251,6 +255,7 @@
 		3E9F222129A05FDB00383DCA /* external */ = {
 			isa = PBXGroup;
 			children = (
+				A9D700242C502C84002A50BA /* TimeControl */,
 				A91D66E82C3B81CD00B3287A /* Editor */,
 				A930238A2B6D8B130099EB32 /* Math */,
 				A908D40A2B6B26C300C845F2 /* RenderControl */,
@@ -381,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				3E76CD7129876E7600178E19 /* square.metal */,
+				A9D700202C502B7B002A50BA /* cube.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -454,6 +460,15 @@
 				A978D8602B6E0F4200B9FF1B /* Scene2D.h */,
 			);
 			path = Scene2D;
+			sourceTree = "<group>";
+		};
+		A9D700242C502C84002A50BA /* TimeControl */ = {
+			isa = PBXGroup;
+			children = (
+				A9D700252C502C94002A50BA /* Timer.h */,
+				A9D700262C502C94002A50BA /* Timer.cpp */,
+			);
+			path = TimeControl;
 			sourceTree = "<group>";
 		};
 		A9DB2BEC2C2D0FE900D16F8F /* AppKit */ = {
@@ -558,13 +573,14 @@
 				A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */,
 				A908D3FD2B6B263400C845F2 /* imgui_widgets.cpp in Sources */,
 				A9DB2BF42C2D100E00D16F8F /* MyMTKViewDelegate.cpp in Sources */,
-				A911D9962B60E30A00FD2845 /* square.metal in Sources */,
 				A908D4082B6B263500C845F2 /* imgui_draw.cpp in Sources */,
 				A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */,
+				A9D700272C502C94002A50BA /* Timer.cpp in Sources */,
 				A911D98E2B60E1A000FD2845 /* mtl_implementation.cpp in Sources */,
 				A908D4112B6B26C300C845F2 /* ShaderManager.cpp in Sources */,
 				A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */,
 				A908D4072B6B263500C845F2 /* imgui_demo.cpp in Sources */,
+				A9D700212C502B7B002A50BA /* cube.metal in Sources */,
 				A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */,
 				A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */,
 				A911D98D2B60E19600FD2845 /* main.cpp in Sources */,

@@ -18,7 +18,7 @@ int main(void)
     NS::Application* pApp = NS::Application::sharedApplication();
     pApp->setDelegate( &del );
     pApp->run();
-
+    pApp->release();
 
 #else
 

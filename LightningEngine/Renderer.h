@@ -10,7 +10,6 @@
 
 #include <DesignPatterns/SingletonTemplate.h>
 
-
 namespace MTL
 {
     class Device;
@@ -19,6 +18,7 @@ namespace MTL
     class CommandBuffer;
     class RenderPipelineState;
     class Buffer;
+    class Texture;
     class ArgumentEncoder;
     class RenderCommandEncoder;
     class RenderPassDescriptor;
@@ -28,7 +28,6 @@ namespace NS
 {
     class AutoreleasePool;
 }
-
 namespace MTK
 {
 class View;
@@ -45,6 +44,8 @@ public:
 private:
     
     void CreateSquare();
+    void CreateDepthAndMSAATextures(MTK::View* view);
+    inline float GetAspectRatio();
     
     MTL::Device* metalDevice;
     
@@ -55,8 +56,15 @@ private:
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPipelineState* metalRenderPSO;
     MTL::Buffer* squareVertexBuffer;
+    MTL::Buffer* transformationBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
+    
+    MTL::Texture* msaaRenderTargetTexture = nullptr;
+    MTL::Texture* depthTexture;
+    
+    float width;
+    float height;
 };
 
 #endif /* Renderer_hpp */

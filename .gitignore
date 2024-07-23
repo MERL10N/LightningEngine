@@ -44,3 +44,25 @@ LightningEngine/._mtl_implementation.cpp
 external/System/._ImageLoader.cpp
 
 ._.gitignore
+
+external/RenderControl/._ShaderManager.h
+
+external/TimeControl/._Timer.h
+
+LightningEngine/Shaders/._cube.metal
+
+metal-cpp-extensions/AppKit/._NSApplication.hpp
+
+metal-cpp-extensions/MetalKit/._MTKView.hpp
+
+external/TimeControl/._Timer.cpp
+
+LightningEngine/._MyMTKViewDelegate.h
+
+external/System/._ImageLoader.h
+
+LightningEngine/._Renderer.h
+
+metal-cpp/Foundation/._NSString.hpp
+
+metal-cpp/Metal/._MTLRenderCommandEncoder.hpp

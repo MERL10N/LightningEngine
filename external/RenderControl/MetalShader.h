@@ -22,8 +22,7 @@ private:
     MTL::Function* fragmentFunction;
     MTL::RenderPipelineDescriptor* renderPipelineDescriptor;
     MTL::RenderPipelineState* metalRenderPSO;
-    //MTL::ArgumentEncoder* argumentEncoder;
-   // MTL::Buffer* argumentBuffer;
+    MTL::DepthStencilState* depthStencilState;
     std::string filePath;
     bool bResult;
     
@@ -106,6 +105,8 @@ public:
         renderPipelineDescriptor->setFragmentFunction(fragmentFunction);
         assert(renderPipelineDescriptor);
         renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+        renderPipelineDescriptor->setSampleCount(4);
+        renderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
         setRenderPipelineState(metalRenderPSO);
         metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
         
@@ -113,15 +114,17 @@ public:
         {
             std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
         }
-       // initializeResources();
-    
+        
+        MTL::DepthStencilDescriptor* depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
+        depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
+        depthStencilDescriptor->setDepthWriteEnabled(true);
+        depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
+
         renderPipelineDescriptor->release();
+        depthStencilDescriptor->release();
         library->release();
         vertexFunction->release();
         fragmentFunction->release();
-       //argumentBuffer->release();
-        //argumentEncoder->release();
-        
     }
     
     void setRenderPipelineState(MTL::RenderPipelineState* metalRenderPSO)
@@ -139,13 +142,11 @@ public:
         return metalRenderPSO;
     }
     
-    void initializeResources()
+    MTL::DepthStencilState* getDepthStencilState()
     {
-       // argumentEncoder = vertexFunction->newArgumentEncoder(0);
-        //argumentBuffer = device->newBuffer(argumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);
-        // Encode arguments
-        //argumentEncoder->setArgumentBuffer(argumentBuffer, 0);
+        return depthStencilState;
     }
+    
     
     void bindResources(MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer)
     {
