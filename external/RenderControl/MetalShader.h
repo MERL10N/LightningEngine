@@ -22,8 +22,6 @@ private:
     MTL::Function* fragmentFunction;
     MTL::RenderPipelineDescriptor* renderPipelineDescriptor;
     MTL::RenderPipelineState* metalRenderPSO;
-    //MTL::ArgumentEncoder* argumentEncoder;
-    //MTL::Buffer* argumentBuffer;
     MTL::DepthStencilState* depthStencilState;
     std::string filePath;
     bool bResult;

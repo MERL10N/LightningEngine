@@ -67,28 +67,26 @@ bool CImageLoader::Init(void)
 void CImageLoader::LoadTexture(const char* filename,  MTL::Device* device)
 {
     int width, height, channels;
-    
     this->device = device;
-    
+
     stbi_set_flip_vertically_on_load(true);
     unsigned char* image = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
     assert(image != nullptr);
-    
     MTL::TextureDescriptor* textureDescriptor = MTL::TextureDescriptor::alloc()->init();
     textureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     textureDescriptor->setWidth(width);
     textureDescriptor->setHeight(height);
-
-    texture = device->newTexture(textureDescriptor);
     
+    texture = device->newTexture(textureDescriptor);
+
     MTL::Region region = MTL::Region(0, 0, 0, width, height, 1);
     NS::UInteger bytesPerRow = 4 * width;
-    
+
     texture->replaceRegion(region, 0, image, bytesPerRow);
         
     textureDescriptor->release();
     stbi_image_free(image);
-    
+
     std::cout << "Texture loaded" << std::endl;
 }
 

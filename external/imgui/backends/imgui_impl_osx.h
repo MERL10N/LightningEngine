@@ -38,7 +38,7 @@ IMGUI_IMPL_API void     ImGui_ImplOSX_NewFrame(NSView* _Nullable view);
 //-----------------------------------------------------------------------------
 
 #ifdef IMGUI_IMPL_METAL_CPP_EXTENSIONS
-// #include <AppKit/AppKit.hpp>
+ //#include <AppKit/AppKit.hpp>
 #ifndef __OBJC__
 
 IMGUI_IMPL_API bool     ImGui_ImplOSX_Init(void* _Nonnull view);

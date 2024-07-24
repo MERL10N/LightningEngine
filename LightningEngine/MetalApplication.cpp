@@ -1,221 +1,106 @@
-//  MetalApplication.cpp
-//  Lightning Engine
+//
+//  MyAppDelegate.cpp
+//  LightningEngine
+//
+//  Created by Kian Marvi on 6/26/24.
 
 #include "MetalApplication.h"
-#include <RenderControl/ShaderManager.h>
-#include "Source/Editor/Editor.h"
-
-#include <System/ImageLoader.h>
-#include "Math/AAPLMathUtilities.h"
-#include "GLFWBridge.h"
-
+#include "MyMTKViewDelegate.h"
+#include <Editor/Editor.h>
 #include <Metal/Metal.hpp>
-#include <QuartzCore/CAMetalLayer.hpp>
-#include <QuartzCore/QuartzCore.hpp>
-#include <Primitives/MeshBuilder.h>
-#include <Primitives/VertexData.h>
 
-
-#include <iostream>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-
-bool CMetalApplication::Init()
+CMetalApplication::~CMetalApplication()
 {
-    screenRect = CGDisplayBounds(CGMainDisplayID());
-    width = screenRect.size.width;
-    height = screenRect.size.height;
-    
-    // Detect if metal is supported on the target device
-    metalDevice = MTL::CreateSystemDefaultDevice();
-    
-    // Initialise GLFW
-    glfwInit();
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindow = glfwCreateWindow(1280, 720, "Lightning Engine", nullptr, nullptr);
-    
-    CEditor::GetInstance()->SetClearColor(0.15f, 0);
-    CEditor::GetInstance()->SetClearColor(0.15f, 1);
-    CEditor::GetInstance()->SetClearColor(0.15f, 2);
-    CEditor::GetInstance()->SetClearColor(1.f, 3);
-    
-#ifdef DEBUG
-    CEditor::GetInstance()->Init(metalDevice, glfwWindow);
-#endif
-    
-    if (!glfwWindow)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    
-    glfwSetWindowUserPointer(glfwWindow, this);
-    glfwSetFramebufferSizeCallback(glfwWindow, frameBufferSizeCallback);
-    glfwGetFramebufferSize(glfwWindow, &width, &height);
-    
-    layer = CA::MetalLayer::layer();
-    layer->setDevice(metalDevice);
-    layer->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-    layer->setDrawableSize(CGSizeMake(width, height));
-    GLFWBridge::AddLayerToWindow(glfwWindow, layer);
-
-    // Initialise the shader
-    CShaderManager::GetInstance()->Add("Cube",
-                                       "Shaders/cube.metal",
-                                       "vertexShader",
-                                       "fragmentShader",
-                                        metalDevice);
-
-    // Render the square
-    CreateSquare();
-    
-    // Create MSAA and Depth Texture
-    createDepthAndMSAATextures();
-    
-    // Initialise the default library
-    metalDefaultLibrary = metalDevice->newDefaultLibrary();
-    
-    if(!metalDefaultLibrary)
-    {
-        std::cerr << "Failed to load default library.";
-        std::exit(-1);
-    }
-    
-    //Initialise the command queue
-    metalCommandQueue = metalDevice->newCommandQueue();
-    
-    return true;
-}
-
-void CMetalApplication::Run()
-{
-    while (!glfwWindowShouldClose(glfwWindow))
-    {
-        autoReleasePool = NS::AutoreleasePool::alloc()->init();
-        metalDrawable = layer->nextDrawable();
-        Draw();
-        autoReleasePool->release();
-        glfwPollEvents();
-    }
-}
-
-void CMetalApplication::Destroy()
-{
-    glfwTerminate();
-    CShaderManager::GetInstance()->Destroy();
-    CImageLoader::GetInstance()->Destroy();
-    
-#ifdef DEBUG
     CEditor::GetInstance()->Destroy();
-#endif
-    
+    metalKitView->release();
+    appWindow->release();
     metalDevice->release();
-    metalCommandQueue->release();
-    squareVertexBuffer->release();
-    transformationBuffer->release();
-
-}
-void CMetalApplication::frameBufferSizeCallback(GLFWwindow *window, int width, int height)
-{
-    CMetalApplication* engine = (CMetalApplication*)glfwGetWindowUserPointer(window);
-    engine->resizeFrameBuffer(width, height);
+    delete viewDelegate;
 }
 
-void CMetalApplication::resizeFrameBuffer(int width, int height)
+NS::Menu* CMetalApplication::createMenuBar()
 {
-    layer->setDrawableSize(CGSizeMake(width, height));
+    using NS::StringEncoding::UTF8StringEncoding;
+
+    NS::Menu* pMainMenu = NS::Menu::alloc()->init();
+    NS::MenuItem* pAppMenuItem = NS::MenuItem::alloc()->init();
+    NS::Menu* pAppMenu = NS::Menu::alloc()->init( NS::String::string( "Appname", UTF8StringEncoding ) );
+
+    NS::String* appName = NS::RunningApplication::currentApplication()->localizedName();
+    NS::String* quitItemName = NS::String::string( "Quit ", UTF8StringEncoding )->stringByAppendingString( appName );
+    SEL quitCb = NS::MenuItem::registerActionCallback( "appQuit", [](void*,SEL,const NS::Object* pSender){
+        auto pApp = NS::Application::sharedApplication();
+        pApp->terminate( pSender );
+    } );
+
+    NS::MenuItem* pAppQuitItem = pAppMenu->addItem( quitItemName, quitCb, NS::String::string( "q", UTF8StringEncoding ) );
+    pAppQuitItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
+    pAppMenuItem->setSubmenu( pAppMenu );
+
+    NS::MenuItem* pWindowMenuItem = NS::MenuItem::alloc()->init();
+    NS::Menu* pWindowMenu = NS::Menu::alloc()->init( NS::String::string( "Window", UTF8StringEncoding ) );
+
+    SEL closeWindowCb = NS::MenuItem::registerActionCallback( "windowClose", [](void*, SEL, const NS::Object*){
+        auto pApp = NS::Application::sharedApplication();
+            pApp->windows()->object< NS::Window >(0)->close();
+    } );
+    NS::MenuItem* pCloseWindowItem = pWindowMenu->addItem( NS::String::string( "Close Window", UTF8StringEncoding ), closeWindowCb, NS::String::string( "w", UTF8StringEncoding ) );
+    pCloseWindowItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
+
+    pWindowMenuItem->setSubmenu( pWindowMenu );
+
+    pMainMenu->addItem( pAppMenuItem );
+    pMainMenu->addItem( pWindowMenuItem );
+
+    pAppMenuItem->release();
+    pWindowMenuItem->release();
+    pAppMenu->release();
+    pWindowMenu->release();
+
+    return pMainMenu->autorelease();
 }
 
-void CMetalApplication::CreateSquare()
+void CMetalApplication::applicationWillFinishLaunching( NS::Notification* pNotification )
 {
-    squareVertexBuffer = CMeshBuilder::GenerateCube(metalDevice);
-    transformationBuffer = metalDevice->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
-    CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
+    NS::Menu* pMenu = createMenuBar();
+    NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
+    pApp->setMainMenu( pMenu );
+    pApp->setActivationPolicy( NS::ActivationPolicy::ActivationPolicyRegular );
 }
 
-
-void CMetalApplication::Draw()
+void CMetalApplication::applicationDidFinishLaunching( NS::Notification* pNotification )
 {
-    metalCommandBuffer = metalCommandQueue->commandBuffer();
-    
-    renderPassDescriptor = MTL::RenderPassDescriptor::alloc()->init();
-    
-    MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
-    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
-    
-    colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
-    colorAttachmentDescriptor->setResolveTexture(metalDrawable->texture());
-    colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
-    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(CEditor::GetInstance()->GetClearColor(0),
-                                      CEditor::GetInstance()->GetClearColor(1),
-                                      CEditor::GetInstance()->GetClearColor(2),
-                                      CEditor::GetInstance()->GetClearColor(3)));
-    colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
-    
-    depthAttachment->setTexture(depthTexture);
-    depthAttachment->setLoadAction(MTL::LoadActionClear);
-    depthAttachment->setStoreAction(MTL::StoreActionDontCare);
-    depthAttachment->setClearDepth(1.0);
-    
-    renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
-    
-    renderPassDescriptor->colorAttachments()->object(0)->setTexture(msaaRenderTargetTexture);
-    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(metalDrawable->texture());
-    renderPassDescriptor->depthAttachment()->setTexture(depthTexture);
-    
-    // Moves the Cube 2 units down the negative Z-axis
-    matrix_float4x4 translationMatrix = matrix4x4_translation(0, 0,-1.0);
-    
-        float angleInDegrees = glfwGetTime()* 0.5f * 45;
-        float angleInRadians = angleInDegrees * M_PI / 180.0f;
-        matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
+    CGRect frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
 
-        matrix_float4x4 modelMatrix = simd_mul(translationMatrix, rotationMatrix);
-
-        simd::float3 R = simd::float3 {1, 0, 0}; // Unit-Right
-        simd::float3 U = simd::float3 {0, 1, 0}; // Unit-Up
-        simd::float3 F = simd::float3 {0, 0,-1}; // Unit-Forward
-        simd::float3 P = simd::float3 {0, 0, 1}; // Camera Position in World Space
-
-        matrix_float4x4 viewMatrix = matrix_make_rows(R.x, R.y, R.z, simd::dot(-R, P),
-                                                      U.x, U.y, U.z, simd::dot(-U, P),
-                                                     -F.x,-F.y,-F.z, simd::dot( F, P),
-                                                      0, 0, 0, 1);
-
-        float aspectRatio = GetAspectRatio();
-        float fov = 90 * (M_PI / 180.0f);
-        float nearZ = 0.1f;
-        float farZ = 100.0f;
-
-        matrix_float4x4 perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
-
-        TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
-        memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
-
+    appWindow = NS::Window::alloc()->init(
+        frame,
+        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled|NS::WindowStyleMaskResizable|NS::WindowStyleMaskMiniaturizable,
+        NS::BackingStoreBuffered,
+        false );
     
-    metalRenderPSO = CShaderManager::GetInstance()->getRenderPipelineState("Cube");
-    renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
-    renderCommandEncoder->setCullMode(MTL::CullModeBack);
-    renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
-    renderCommandEncoder->setDepthStencilState(CShaderManager::GetInstance()->getDepthStencilState("Cube"));
-    CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, squareVertexBuffer);
-    renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
-    renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
-    renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
+    metalDevice = MTL::CreateSystemDefaultDevice();
 
-#ifdef DEBUG
-    CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder);
-#endif
+    metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+    CEditor::GetInstance()->Init(metalDevice, metalKitView);
     
-    renderCommandEncoder->endEncoding();
+    metalKitView->setPreferredFramesPerSecond(120);
+    metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
+    
+    viewDelegate = new MyMTKViewDelegate( metalDevice );
+    metalKitView->setDelegate( viewDelegate );
+    
+    appWindow->setContentView( metalKitView );
+    appWindow->setTitle( NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding ) );
 
-    metalCommandBuffer->presentDrawable(metalDrawable);
-    metalCommandBuffer->commit();
-    metalCommandBuffer->waitUntilCompleted();
+    appWindow->makeKeyAndOrderFront( nullptr );
 
-    renderPassDescriptor->release();
+    NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
+    pApp->activateIgnoringOtherApps( true );
+}
+
+bool CMetalApplication::applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender )
+{
+    return true;
 }
 
 void CMetalApplication::createDepthAndMSAATextures()

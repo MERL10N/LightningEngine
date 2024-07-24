@@ -8,14 +8,21 @@
 #endif
 #include <iostream>
 
-int main()
+int main(void)
 {
 
 #ifdef __APPLE__
-        CMetalApplication* pApp = CMetalApplication::GetInstance();
+    
+    CMetalApplication del;
+
+    NS::Application* pApp = NS::Application::sharedApplication();
+    pApp->setDelegate( &del );
+    pApp->run();
+    pApp->release();
+
 #else
-        CApplication* pApp = CApplication::GetInstance();
-#endif
+
+    CApplication* pApp = CApplication::GetInstance();
         // if the application is initialised properly, then run it
         if (pApp->Init() == true)
         {
@@ -34,5 +41,10 @@ int main()
 
         // Return 1 if the application failed to run
         return 1;
+     
+    
+  
+#endif
+    
     
 }

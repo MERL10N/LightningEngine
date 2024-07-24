@@ -1,84 +1,42 @@
-//  MetalApplication.h
-//  Lightning Engine
+//
+//  MyAppDelegate.h
+//  LightningEngine
+//
+//  Created by Kian Marvi on 6/26/24.
+//
 
-#ifndef MetalApplication_h
-#define MetalApplication_h
+#ifndef MyAppDelegate_h
+#define MyAppDelegate_h
+#include <AppKit/AppKit.hpp>
 
-#include <DesignPatterns/SingletonTemplate.h>
-#include <CoreGraphics/CoreGraphics.h>
-
-namespace CA
+namespace MTK
 {
-    class MetalLayer;
-    class MetalDrawable;
+    class View;
 }
 
 namespace MTL
 {
     class Device;
-    class Library;
-    class CommandQueue;
-    class CommandBuffer;
-    class RenderPipelineState;
-    class Buffer;
-    class Texture;
-    class ArgumentEncoder;
-    class RenderCommandEncoder;
-    class RenderPassDescriptor;
 }
 
-namespace NS
+class MyMTKViewDelegate;
+
+class CMetalApplication : public NS::ApplicationDelegate
 {
-    class AutoreleasePool;
-}
+    public:
+        ~CMetalApplication();
 
-struct GLFWwindow;
-struct CGRect;
+        NS::Menu* createMenuBar();
 
-class CMetalApplication : public CSingletonTemplate<CMetalApplication>
-{
-    friend CSingletonTemplate<CMetalApplication>;
-public:
-    bool Init();
-    void Run();
-    void Destroy();
+        virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
+        virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
+        virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
 
-private:
-    
-    void CreateSquare();
-    
-    void Draw();
-    
-    void createDepthAndMSAATextures();
-    
-    inline float GetAspectRatio();
-    
-    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
-    void resizeFrameBuffer(int width, int height);
-    
-    MTL::Device* metalDevice;
-    
-    GLFWwindow* glfwWindow;
-    
-    CA::MetalLayer* layer;
-    CA::MetalDrawable* metalDrawable;
-    
-    NS::AutoreleasePool* autoReleasePool;
-    
-    MTL::Library* metalDefaultLibrary;
-    MTL::CommandQueue* metalCommandQueue;
-    MTL::CommandBuffer* metalCommandBuffer;
-    MTL::RenderPipelineState* metalRenderPSO;
-    MTL::Buffer* squareVertexBuffer;
-    MTL::Buffer* transformationBuffer;
-    MTL::RenderCommandEncoder* renderCommandEncoder;
-    MTL::RenderPassDescriptor* renderPassDescriptor;
-    
-    MTL::Texture* msaaRenderTargetTexture = nullptr;
-    MTL::Texture* depthTexture;
-    
-    int width;
-    int height;
-    CGRect screenRect;
+    private:
+        NS::Window* appWindow;
+        MTK::View* metalKitView;
+        MTL::Device* metalDevice;
+        MyMTKViewDelegate* viewDelegate = nullptr;
 };
-#endif
+
+#endif /* MyAppDelegate_h */

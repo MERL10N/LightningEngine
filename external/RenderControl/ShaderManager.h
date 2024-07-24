@@ -50,8 +50,6 @@ public:
     void setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const;
     MTL::RenderPipelineState* getRenderPipelineState(const std::string& shaderName) const;
     MTL::DepthStencilState* getDepthStencilState(const std::string& shaderName) const;
-    
-    void InitialiseResources(const std::string& shaderName);
     void BindResources(const std::string& shaderName, MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer);
 #else
 	void Add(const std::string& _name, const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);

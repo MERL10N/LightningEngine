@@ -18,14 +18,16 @@ namespace MTL
     class RenderCommandEncoder;
 }
 
-struct GLFWwindow;
-
+namespace MTK
+{
+    class View;
+}
 class CEditor : public CSingletonTemplate<CEditor>
 {
     friend CSingletonTemplate<CEditor>;
 public:
-    bool Init(MTL::Device* device, GLFWwindow* window);
-    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder);
+    bool Init(MTL::Device* device, MTK::View * view);
+    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view);
     
    // Setters
     void SetClearColor(float value, int index);

@@ -6,9 +6,16 @@
 
 using namespace simd;
 
-struct VertexData {
+struct VertexData
+{
     float4 position;
     float2 textureCoordinate;
+};
+struct TransformationData
+{
+    float4x4 modelMatrix;
+    float4x4 viewMatrix;
+    float4x4 perspectiveMatrix;
 };
 
 struct TransformationData

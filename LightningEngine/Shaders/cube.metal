@@ -54,5 +54,3 @@ fragment float4 fragmentShader(VertexOut in [[stage_in]],
     const float4 colorSample = colorTexture.sample(textureSampler, in.textureCoordinate);
     return colorSample;
 }
-
-
