@@ -72,3 +72,23 @@ LightningEngine/._imgui.ini
 LightningEngine/LightningEngine.xcodeproj/._project.pbxproj
 
 LightningEngine/LightningEngine.xcodeproj/project.xcworkspace/xcuserdata/kianmarvi.xcuserdatad/._UserInterfaceState.xcuserstate
+
+external/Math/._AAPLMathUtilities.cpp
+
+external/Math/._AAPLMathUtilities.h
+
+metal-cpp-extensions/._UIKit
+
+metal-cpp-extensions/UIKit/._UIApplication.hpp
+
+metal-cpp-extensions/UIKit/._UIKit.hpp
+
+metal-cpp-extensions/UIKit/._UIKitPrivate.hpp
+
+metal-cpp-extensions/UIKit/._UIScreen.hpp
+
+metal-cpp-extensions/UIKit/._UIView.hpp
+
+metal-cpp-extensions/UIKit/._UIViewController.hpp
+
+metal-cpp-extensions/UIKit/._UIWindow.hpp
