@@ -94,8 +94,12 @@ void CRenderer::Draw(MTK::View* view)
 
     renderPassDescriptor = view->currentRenderPassDescriptor();
 
-    CreateDepthAndMSAATextures(view);
-
+    auto drawableSize = view->drawableSize();
+    // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
+    if (drawableSize.width != width || drawableSize.height != height)
+    {
+        CreateDepthAndMSAATextures(view);
+    }
     MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
 
@@ -176,6 +180,7 @@ void CRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     width = drawableSize.width;
     height = drawableSize.height;
     
+    
     if (msaaRenderTargetTexture)
     {
         msaaRenderTargetTexture->release();
@@ -185,6 +190,7 @@ void CRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     {
         depthTexture->release();
     }
+     
 
     MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
