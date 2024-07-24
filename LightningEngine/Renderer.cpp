@@ -89,8 +89,7 @@ void CRenderer::CreateSquare()
 
 void CRenderer::Draw(MTK::View* view)
 {
-   autoReleasePool = NS::AutoreleasePool::alloc()->init();
-
+    
     metalCommandBuffer = metalCommandQueue->commandBuffer();
 
     renderPassDescriptor = view->currentRenderPassDescriptor();
@@ -169,8 +168,6 @@ void CRenderer::Draw(MTK::View* view)
     metalCommandBuffer->presentDrawable(view->currentDrawable());
     metalCommandBuffer->commit();
     metalCommandBuffer->waitUntilCompleted();
-    
-   // autoReleasePool->release();
 }
 
 void CRenderer::CreateDepthAndMSAATextures(MTK::View* view)
