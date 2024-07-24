@@ -8,8 +8,6 @@
 #include "MeshBuilder.h"
 #include "VertexData.h"
 
-#include <System/ImageLoader.h>
-
 /**
  @brief Generate a quad and load it into Metal
  @param metalDevice A metal compatible device (Either mac or iOS)

@@ -102,3 +102,35 @@ bool CMetalApplication::applicationShouldTerminateAfterLastWindowClosed( NS::App
 {
     return true;
 }
+
+void CMetalApplication::createDepthAndMSAATextures()
+{
+        MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+        msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
+        msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+        msaaTextureDescriptor->setWidth(width);
+        msaaTextureDescriptor->setHeight(height);
+        msaaTextureDescriptor->setSampleCount(4);
+        msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
+
+        msaaRenderTargetTexture = metalDevice->newTexture(msaaTextureDescriptor);
+
+        MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+        depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
+        depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
+        depthTextureDescriptor->setWidth(width);
+        depthTextureDescriptor->setHeight(height);
+        depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
+        depthTextureDescriptor->setSampleCount(4);
+
+        depthTexture = metalDevice->newTexture(depthTextureDescriptor);
+
+        msaaTextureDescriptor->release();
+        depthTextureDescriptor->release();
+}
+
+inline float CMetalApplication::GetAspectRatio()
+{
+    return width / height;
+}
+
