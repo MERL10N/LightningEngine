@@ -25,6 +25,7 @@
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
 		A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
 		A92A76F22C2D446200101F89 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92A76F02C2D446200101F89 /* Renderer.cpp */; };
+		A92CC3292C51C2A9006625FE /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92CC3282C51C2A9006625FE /* Camera.cpp */; };
 		A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A93531F12B621E7A00347F4A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
 		A93531F32B621E7E00347F4A /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
@@ -125,6 +126,15 @@
 		A91D66EA2C3B81E200B3287A /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
 		A92A76F02C2D446200101F89 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		A92A76F12C2D446200101F89 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		A92CC31E2C51C0DA006625FE /* UIApplication.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIApplication.hpp; sourceTree = "<group>"; };
+		A92CC31F2C51C0DA006625FE /* UIKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIKit.hpp; sourceTree = "<group>"; };
+		A92CC3202C51C0DA006625FE /* UIKitPrivate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIKitPrivate.hpp; sourceTree = "<group>"; };
+		A92CC3212C51C0DA006625FE /* UIScreen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIScreen.hpp; sourceTree = "<group>"; };
+		A92CC3222C51C0DA006625FE /* UIView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIView.hpp; sourceTree = "<group>"; };
+		A92CC3232C51C0DA006625FE /* UIViewController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIViewController.hpp; sourceTree = "<group>"; };
+		A92CC3242C51C0DA006625FE /* UIWindow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIWindow.hpp; sourceTree = "<group>"; };
+		A92CC3272C51C2A9006625FE /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		A92CC3282C51C2A9006625FE /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		A930238B2B6D8B880099EB32 /* AAPLMathUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; };
 		A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -255,6 +265,8 @@
 		3E9F222129A05FDB00383DCA /* external */ = {
 			isa = PBXGroup;
 			children = (
+				A92CC3262C51C297006625FE /* Camera */,
+				A92CC3162C51C09E006625FE /* Input */,
 				A9D700242C502C84002A50BA /* TimeControl */,
 				A91D66E82C3B81CD00B3287A /* Editor */,
 				A930238A2B6D8B130099EB32 /* Math */,
@@ -425,6 +437,36 @@
 			path = Editor;
 			sourceTree = "<group>";
 		};
+		A92CC3162C51C09E006625FE /* Input */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		A92CC3252C51C0DA006625FE /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				A92CC31E2C51C0DA006625FE /* UIApplication.hpp */,
+				A92CC31F2C51C0DA006625FE /* UIKit.hpp */,
+				A92CC3202C51C0DA006625FE /* UIKitPrivate.hpp */,
+				A92CC3212C51C0DA006625FE /* UIScreen.hpp */,
+				A92CC3222C51C0DA006625FE /* UIView.hpp */,
+				A92CC3232C51C0DA006625FE /* UIViewController.hpp */,
+				A92CC3242C51C0DA006625FE /* UIWindow.hpp */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		A92CC3262C51C297006625FE /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A92CC3272C51C2A9006625FE /* Camera.h */,
+				A92CC3282C51C2A9006625FE /* Camera.cpp */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		A93023842B6CE4910099EB32 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,6 +541,7 @@
 		A9DB2BF12C2D0FE900D16F8F /* metal-cpp-extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A92CC3252C51C0DA006625FE /* UIKit */,
 				A9DB2BEC2C2D0FE900D16F8F /* AppKit */,
 				A9DB2BF02C2D0FE900D16F8F /* MetalKit */,
 			);
@@ -573,6 +616,7 @@
 				A930238D2B6D8BE30099EB32 /* AAPLMathUtilities.cpp in Sources */,
 				A908D3FD2B6B263400C845F2 /* imgui_widgets.cpp in Sources */,
 				A9DB2BF42C2D100E00D16F8F /* MyMTKViewDelegate.cpp in Sources */,
+				A92CC3292C51C2A9006625FE /* Camera.cpp in Sources */,
 				A908D4082B6B263500C845F2 /* imgui_draw.cpp in Sources */,
 				A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */,
 				A9D700272C502C94002A50BA /* Timer.cpp in Sources */,
