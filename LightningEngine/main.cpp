@@ -1,5 +1,5 @@
 //  main.cpp
-//  Metal Engine
+//  Lightning Engine
 
 #ifdef __APPLE__
     #include "MetalApplication.h"
