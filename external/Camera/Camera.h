@@ -39,14 +39,18 @@ public:
     // Constructor with scalar values
     Camera(float &posX, float &posY, float &posZ, float &upX, float &upY, float &upZ, float &yaw, float &pitch);
     
-    inline float4x4 GetViewMatrix();
+    float4x4 GetViewMatrix();
     
     // Process input from any keyboard-like input system
-    void ProcessKeyboard(CAMERA_MOVEMENT &direction, float &deltaTime);
+    void ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime);
     
     // Processes input received from a mouse input system
-    void ProcessMouseMovement(float xOffset, float &yOffset, bool constraintPitch = true);
+    void ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch = true);
     
+    float GetZoom();
+    
+    float3 GetCameraLocation();
+
 private:
     
     float4x4 LookAt(const float3 &eye, const float3 &center, const float3 &up);

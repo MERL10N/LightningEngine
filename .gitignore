@@ -92,3 +92,21 @@ metal-cpp-extensions/UIKit/._UIView.hpp
 metal-cpp-extensions/UIKit/._UIViewController.hpp
 
 metal-cpp-extensions/UIKit/._UIWindow.hpp
+
+external/Camera/._Camera.h
+
+external/Input/._Controller.h
+
+external/Input/._Controller.mm
+
+metal-cpp-extensions/AppKit/._AppKitPrivate.hpp
+
+metal-cpp-extensions/AppKit/._NSMenu.hpp
+
+metal-cpp-extensions/AppKit/._NSMenuItem.hpp
+
+metal-cpp-extensions/AppKit/._NSView.hpp
+
+metal-cpp-extensions/AppKit/._NSWindow.hpp
+
+external/Camera/._Camera.cpp

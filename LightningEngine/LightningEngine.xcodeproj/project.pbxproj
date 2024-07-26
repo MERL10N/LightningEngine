@@ -23,6 +23,7 @@
 		A911D9942B60E20100FD2845 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1929871D4300E5CDF6 /* Foundation.framework */; };
 		A911D99B2B60E54C00FD2845 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
 		A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
+		A919E1772C520ABF00E4B533 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = A919E1762C520ABF00E4B533 /* Controller.mm */; };
 		A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
 		A92A76F22C2D446200101F89 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92A76F02C2D446200101F89 /* Renderer.cpp */; };
 		A92CC3292C51C2A9006625FE /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92CC3282C51C2A9006625FE /* Camera.cpp */; };
@@ -122,6 +123,8 @@
 		A9173C122B6F5FD400024ECD /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../external/GLFW/lib-universal/libglfw3.a"; sourceTree = "<group>"; };
 		A9173C162B6F68B200024ECD /* Player2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player2D.cpp; sourceTree = "<group>"; };
 		A9173C172B6F68B200024ECD /* Player2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player2D.h; sourceTree = "<group>"; };
+		A919E1752C520ABF00E4B533 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
+		A919E1762C520ABF00E4B533 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
 		A91D66E92C3B81E200B3287A /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
 		A91D66EA2C3B81E200B3287A /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
 		A92A76F02C2D446200101F89 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
@@ -440,6 +443,8 @@
 		A92CC3162C51C09E006625FE /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				A919E1752C520ABF00E4B533 /* Controller.h */,
+				A919E1762C520ABF00E4B533 /* Controller.mm */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -627,6 +632,7 @@
 				A9D700212C502B7B002A50BA /* cube.metal in Sources */,
 				A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */,
 				A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */,
+				A919E1772C520ABF00E4B533 /* Controller.mm in Sources */,
 				A911D98D2B60E19600FD2845 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

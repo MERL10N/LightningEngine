@@ -58,6 +58,8 @@ CRenderer::CRenderer(MTL::Device* pDevice)
     
     //Initialise the command queue
     metalCommandQueue = metalDevice->newCommandQueue();
+    
+    camera = Camera();
 }
 
 CRenderer::~CRenderer()
@@ -100,6 +102,9 @@ void CRenderer::Draw(MTK::View* view)
     {
         CreateDepthAndMSAATextures(view);
     }
+    
+    view->setPreferredFramesPerSecond(CEditor::GetInstance()->GetFrameRate());
+    
     MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
 
@@ -131,19 +136,10 @@ void CRenderer::Draw(MTK::View* view)
     matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
 
     matrix_float4x4 modelMatrix = simd_mul(translationMatrix, rotationMatrix);
-
-    simd::float3 R = simd::float3 {1, 0, 0}; // Unit-Right
-    simd::float3 U = simd::float3 {0, 1, 0}; // Unit-Up
-    simd::float3 F = simd::float3 {0, 0,-1}; // Unit-Forward
-    simd::float3 P = simd::float3 {0, 0, 1}; // Camera Position in World Space
-
-    matrix_float4x4 viewMatrix = matrix_make_rows(R.x, R.y, R.z, simd::dot(-R, P),
-                                         U.x, U.y, U.z, simd::dot(-U, P),
-                                        -F.x,-F.y,-F.z, simd::dot( F, P),
-                                         0, 0, 0, 1);
-
-    float aspectRatio = GetAspectRatio();
-    float fov = 90 * (M_PI / 180.0f);
+    matrix_float4x4 viewMatrix = camera.GetViewMatrix();
+    
+    float aspectRatio = (view->currentDrawable()->layer()->drawableSize().width /view->currentDrawable()->layer()->drawableSize().height);
+    float fov = camera.GetZoom() * (M_PI / 180.0f);
     float nearZ = 0.1f;
     float farZ = 100.0f;
 
@@ -161,11 +157,14 @@ void CRenderer::Draw(MTK::View* view)
     CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, squareVertexBuffer);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
+    renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
+    renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
 
     #ifdef DEBUG
     CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
     #endif
+    ProcessInput();
 
     renderCommandEncoder->endEncoding();
 
@@ -216,7 +215,26 @@ void CRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     depthTextureDescriptor->release();
 }
 
-inline float CRenderer::GetAspectRatio()
+float CRenderer::GetAspectRatio()
 {
     return width / height;
 }
+
+void CRenderer::ProcessInput() 
+{
+
+    float currentFrame = Timer::GetTimeInSeconds();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+       
+    if (gameController.isUpArrowDown() || gameController.isWKeyDown())
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    else if (gameController.isDownArrowDown() || gameController.isSKeyDown())
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    else if (gameController.isLeftArrowDown() || gameController.isAKeyDown())
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    else if (gameController.isRightArrowDown() || gameController.isDKeyDown())
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+       
+}
+

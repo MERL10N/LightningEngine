@@ -2,9 +2,9 @@
 //  Metal Engine
 
 #ifdef __APPLE__
-#include "MetalApplication.h"
+    #include "MetalApplication.h"
 #else
-#include "Application.h"
+    #include "Application.h"
 #endif
 #include <iostream>
 

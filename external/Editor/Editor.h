@@ -30,17 +30,22 @@ public:
     void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view);
     
    // Setters
-    void SetClearColor(float value, int index);
+   void SetClearColor(float value, int index);
+   void SetFrameRate(int fps);
     
    // Getters
-    float GetClearColor(int index) const;
+   float GetClearColor(int index) const;
+   int   GetFrameRate();
     
-    void Destroy();
+   void Destroy();
     
 private:
     bool show_demo_window;
     bool show_another_window;
+    bool enable_high_fps;
     float clear_color[4] = {};
+    int fps;
+   
 };
 
 #endif /* Editor_h */

@@ -6,6 +6,7 @@
 //
 
 #include "Camera.h"
+#include <iostream>
 
 Camera::Camera(float3 position, float3 up, float Yaw, float Pitch)
 : Front(make_float3(0.f, 0.f, -1.f))
@@ -14,7 +15,8 @@ Camera::Camera(float3 position, float3 up, float Yaw, float Pitch)
 , Zoom(ZOOM)
 , Position(position)
 , Yaw(Yaw)
-,Pitch(Pitch)
+, Pitch(Pitch)
+, WorldUp(up)
 {
     UpdateCameraVectors();
 }
@@ -67,6 +69,62 @@ void Camera::UpdateCameraVectors()
     Front = normalize(front);
     
     // also re-calculate the Right and Up vector
-    Right = normalize(cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+    // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+    Right = normalize(cross(Front, WorldUp));
     Up    = normalize(cross(Right, Front));
 }
+
+void Camera::ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime)
+{
+    float velocity = MovementSpeed * deltaTime;
+    switch (direction)
+    {
+        case FORWARD:
+            Position += Front * velocity;
+            break;
+        case BACKWARD:
+            Position -= Front * velocity;
+            break;
+        case LEFT:
+            Position -= Right * velocity;
+            break;
+        case RIGHT:
+            Position += Right * velocity;
+            break;
+    }
+}
+
+void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch)
+{
+    xOffset *= MouseSensitivity;
+    yOffset *= MouseSensitivity;
+
+    Yaw   += xOffset;
+    Pitch += yOffset;
+
+    // make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (constraintPitch)
+    {
+      if (Pitch > 89.0f)
+          Pitch = 89.0f;
+      if (Pitch < -89.0f)
+          Pitch = -89.0f;
+    }
+
+    // update Front, Right and Up Vectors using the updated Euler angles
+   // UpdateCameraVectors();
+}
+
+float Camera::GetZoom()
+{
+    return Zoom;
+}
+
+float3 Camera::GetCameraLocation()
+{
+    return Position;
+}
+
+
+
+

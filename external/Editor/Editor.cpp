@@ -14,6 +14,7 @@
 #include "imgui_impl_osx.h"
 
 
+
 bool CEditor::Init(MTL::Device* device, MTK::View* view)
 {
     IMGUI_CHECKVERSION();
@@ -32,6 +33,7 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     
     show_demo_window = true;
     show_another_window = false;
+    fps = 120;
 
     return true;
 }
@@ -41,9 +43,19 @@ void CEditor::SetClearColor(float value, int index)
     clear_color[index] = value;
 }
 
+void CEditor::SetFrameRate(int fps)
+{
+    this->fps = fps;
+}
+
 float CEditor::GetClearColor(int index) const
 {
     return clear_color[index];
+}
+
+int CEditor::GetFrameRate()
+{
+    return fps;
 }
 
 void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
@@ -60,12 +72,23 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
     ImGui::Text("This is a metal game engine written in C++");               // Display some text (you can use a format strings too)
 
     ImGui::Checkbox("Message from developer", &show_another_window);
-
+    
+    ImGui::Checkbox("Enable 120fps", &enable_high_fps);
+    
+    if (enable_high_fps)
+    {
+        fps = 120;
+    }
+    else
+    {
+        fps = 60;
+    }
 
     ImGui::ColorEdit3("Adjust color", (float*)&clear_color); // Edit 3 floats representing a color
 
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    
     ImGui::End();
 
 

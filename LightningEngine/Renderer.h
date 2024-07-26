@@ -9,6 +9,8 @@
 #define Renderer_h
 
 #include <DesignPatterns/SingletonTemplate.h>
+#include <Input/Controller.h>
+#include <Camera/Camera.h>
 
 namespace MTL
 {
@@ -33,6 +35,7 @@ namespace MTK
 class View;
 }
 
+
 class CRenderer : public CSingletonTemplate<CRenderer>
 {
     friend CSingletonTemplate<CRenderer>;
@@ -45,7 +48,8 @@ private:
     
     void CreateSquare();
     void CreateDepthAndMSAATextures(MTK::View* view);
-    inline float GetAspectRatio();
+    void ProcessInput();
+    float GetAspectRatio();
     
     MTL::Device* metalDevice;
     
@@ -65,6 +69,18 @@ private:
     
     float width;
     float height;
+    
+    Camera camera;
+    float lastX;
+    float lastY;
+    bool firstMouse = true;
+
+    // Timing
+    float deltaTime = 0.0f;    // time between current frame and last frame
+    float lastFrame = 0.0f;
+    
+    // Controller
+    GameController gameController;
 };
 
 #endif /* Renderer_hpp */
