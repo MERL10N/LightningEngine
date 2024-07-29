@@ -268,6 +268,7 @@
 		3E9F222129A05FDB00383DCA /* external */ = {
 			isa = PBXGroup;
 			children = (
+				A93CF0FD2C55A9BF007B432E /* Entities */,
 				A92CC3262C51C297006625FE /* Camera */,
 				A92CC3162C51C09E006625FE /* Input */,
 				A9D700242C502C84002A50BA /* TimeControl */,
@@ -497,6 +498,13 @@
 				A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */,
 			);
 			path = Primitives;
+			sourceTree = "<group>";
+		};
+		A93CF0FD2C55A9BF007B432E /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		A978D85E2B6E0F2400B9FF1B /* Scene2D */ = {

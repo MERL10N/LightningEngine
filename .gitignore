@@ -110,3 +110,11 @@ metal-cpp-extensions/AppKit/._NSView.hpp
 metal-cpp-extensions/AppKit/._NSWindow.hpp
 
 external/Camera/._Camera.cpp
+
+*.xcuserstate
+
+LightningEngine/Source/Scene2D/._Scene2D.cpp
+
+LightningEngine/Source/Scene2D/Entities/._Player2D.cpp
+
+LightningEngine/Source/Scene2D/Entities/._Player2D.h

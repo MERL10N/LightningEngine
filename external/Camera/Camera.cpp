@@ -94,6 +94,15 @@ void Camera::ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime)
     }
 }
 
+void Camera::ProcessGamepadLeftJoystick(const float &deltaTime, const float &axisXValue, const float &axisYValue)
+{
+    float velocity = MovementSpeed * deltaTime;
+    
+    Position += Right * velocity * axisXValue;
+    Position += Front * velocity * axisYValue;
+}
+
+
 void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch)
 {
     xOffset *= MouseSensitivity;
@@ -112,7 +121,7 @@ void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, bool constrain
     }
 
     // update Front, Right and Up Vectors using the updated Euler angles
-   // UpdateCameraVectors();
+    UpdateCameraVectors();
 }
 
 float Camera::GetZoom()
@@ -124,6 +133,25 @@ float3 Camera::GetCameraLocation()
 {
     return Position;
 }
+
+void Camera::ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, bool constraintPitch)
+{
+    Yaw += (axisXValue);
+    Pitch += (axisYValue);
+    
+    // make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (constraintPitch)
+    {
+      if (Pitch > 89.0f)
+          Pitch = 89.0f;
+      if (Pitch < -89.0f)
+          Pitch = -89.0f;
+    }
+
+    // update Front, Right and Up Vectors using the updated Euler angles
+    UpdateCameraVectors();
+}
+
 
 
 

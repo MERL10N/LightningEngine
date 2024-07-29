@@ -78,6 +78,7 @@ CRenderer::~CRenderer()
     depthTexture->release();
     msaaRenderTargetTexture->release();
     renderPassDescriptor->release();
+    renderCommandEncoder->release();
 
 }
 
@@ -227,14 +228,12 @@ void CRenderer::ProcessInput()
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
        
-    if (gameController.isUpArrowDown() || gameController.isWKeyDown())
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    else if (gameController.isDownArrowDown() || gameController.isSKeyDown())
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    else if (gameController.isLeftArrowDown() || gameController.isAKeyDown())
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    else if (gameController.isRightArrowDown() || gameController.isDKeyDown())
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-       
+    if (gameController.leftThumbstickX() || gameController.rightThumbstickY())
+        camera.ProcessGamepadLeftJoystick(deltaTime, gameController.leftThumbstickX(), gameController.leftThumbstickY());
+
+    if (gameController.rightThumbstickX() || gameController.rightThumbstickY())
+        camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
+    
+    
 }
 

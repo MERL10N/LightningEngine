@@ -47,7 +47,9 @@ public:
     bool isSpacebarDown() const;
     
     float leftThumbstickX() const;
+    float leftThumbstickY() const;
     float rightThumbstickX() const;
+    float rightThumbstickY() const;
     bool isButtonADown() const;
     
     void setHapticIntensity(float intensity) const;

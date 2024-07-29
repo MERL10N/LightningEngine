@@ -42,6 +42,7 @@
       debugDocumentVersioning = "NO"
       debugServiceExtension = "internal"
       enableGPUFrameCaptureMode = "1"
+      showGraphicsOverview = "Yes"
       allowLocationSimulation = "YES"
       viewDebuggingEnabled = "No">
       <BuildableProductRunnable

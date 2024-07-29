@@ -8,6 +8,7 @@
 #define METAL_SHADER_H
 #include <Metal/Metal.hpp>
 #include <QuartzCore/CAMetalLayer.hpp>
+#include <Editor/Editor.h>
 #include <string>
 #include <iostream>
 #include <fstream>

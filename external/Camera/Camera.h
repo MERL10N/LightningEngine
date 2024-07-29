@@ -47,6 +47,11 @@ public:
     // Processes input received from a mouse input system
     void ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch = true);
     
+    // Process input from any gamepad input system
+    void ProcessGamepadLeftJoystick(const float &deltaTime, const float &axisXValue, const float &axisYValue);
+    
+    void ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, bool constrainTBool);
+    
     float GetZoom();
     
     float3 GetCameraLocation();
@@ -74,6 +79,7 @@ private:
     // Camera options
     float MovementSpeed;
     float MouseSensitivity;
+    float JoystickRightAxis;
     float Zoom;
 };
 
