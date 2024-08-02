@@ -14,7 +14,7 @@
  @brief Constructor
  */
 CShaderManager::CShaderManager(void) 
-	: pActiveShader(nullptr)
+	: activeShader(nullptr)
 {
 }
 
@@ -34,7 +34,7 @@ void CShaderManager::Destroy(void)
 {
 #ifdef __APPLE__
     // Delete all scenes stored and empty the entire map
-    std::map<std::string, CMetalShader*>::iterator it, end;
+    std::map<std::string, MetalShader*>::iterator it, end;
 #else
 	// Delete all scenes stored and empty the entire map
 	std::map<std::string, CShader*>::iterator it, end;
@@ -48,7 +48,7 @@ void CShaderManager::Destroy(void)
 	shaderMap.clear();
 
 	// Set pActiveShader to nullptr
-	pActiveShader = nullptr;
+	activeShader = nullptr;
 }
 
 #ifdef __APPLE__
@@ -64,13 +64,13 @@ void CShaderManager::Add(const std::string& _name, const char* shaderPath, const
     }
 
     // Initialise a new Shader
-    CMetalShader* cNewShader = new CMetalShader(shaderPath, vertexFunction, fragmentFunction, device);
+    MetalShader* cNewShader = new MetalShader(shaderPath, vertexFunction, fragmentFunction, device);
 
     if (cNewShader->IsLoaded())
     {
         std::cout << "Shader loaded" << std::endl;
         // Set a name to this Shader
-        cNewShader->setName(_name);
+        cNewShader->SetName(_name);
 
         // Nothing wrong, add the scene to our map
         shaderMap[_name] = cNewShader;
@@ -87,7 +87,7 @@ MTL::RenderPipelineDescriptor* CShaderManager::getRenderPipelineDescriptor(const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
-        return it->second->getRenderPipelineDescriptor();
+        return it->second->GetRenderPipelineDescriptor();
     }
     return nullptr;
 }
@@ -96,15 +96,15 @@ void CShaderManager::setRenderPipelineState(const std::string& shaderName, MTL::
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
-        it->second->setRenderPipelineState(metalRenderPSO);
+        it->second->SetRenderPipelineState(metalRenderPSO);
     }
 }
 
-MTL::RenderPipelineState* CShaderManager::getRenderPipelineState(const std::string& shaderName) const
+MTL::RenderPipelineState* CShaderManager::GetRenderPipelineState(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
-        return it->second->getRenderPipelineState();
+        return it->second->GetRenderPipelineState();
     }
     return nullptr;
 }
@@ -114,7 +114,7 @@ MTL::DepthStencilState* CShaderManager::getDepthStencilState(const std::string& 
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second)
     {
-        return it->second->getDepthStencilState();
+        return it->second->GetDepthStencilState();
     }
     return nullptr;
 }
@@ -124,7 +124,7 @@ void CShaderManager::BindResources(const std::string &shaderName, MTL::RenderCom
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
-        it->second->bindResources(encoder, buffer);
+        it->second->BindResources(encoder, buffer);
     }
 }
 
@@ -176,12 +176,12 @@ void CShaderManager::Remove(const std::string& _name)
 		return;
 
 #ifdef __APPLE__
-    CMetalShader* target = shaderMap[_name];
+    MetalShader* target = shaderMap[_name];
 #else
 	CShader* target = shaderMap[_name];
 #endif
 	try {
-		if (target == pActiveShader)
+		if (target == activeShader)
 		{
 //			throw std::exception("Unable to remove active Shader");
 		}
@@ -214,11 +214,11 @@ void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* co
 	}
 
 	// Check if the new shader is different from the current shader...
-	if ((pActiveShader == nullptr) || (pActiveShader->getName().compare(_name) != 0))
+	if ((activeShader == nullptr) || (activeShader->GetName().compare(_name) != 0))
 	{
 		// if Shader exist, set the pActiveShader pointer to that Shader
-		pActiveShader = shaderMap[_name];
-        pActiveShader->use(commandEncoder);
+		activeShader = shaderMap[_name];
+        activeShader->use(commandEncoder);
 	}
 }
 

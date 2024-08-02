@@ -8,29 +8,31 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera(float3 position, float3 up, float Yaw, float Pitch)
+
+Camera::Camera()
 : Front(make_float3(0.f, 0.f, -1.f))
-, MovementSpeed(SPEED)
-, MouseSensitivity(SENSITIVITY)
-, Zoom(ZOOM)
-, Position(position)
-, Yaw(Yaw)
-, Pitch(Pitch)
-, WorldUp(up)
+, Position(make_float3(0.f, 0.f, 0.f))
+, Up(make_float3(0.f, 1.f, 0.f))
+, MovementSpeed(2.5f)
+, MouseSensitivity(0.1f)
+, Zoom(45.0f)
+, Yaw(-90.0f)
+, Pitch(0.0f)
+, WorldUp(Up)
 {
     UpdateCameraVectors();
 }
 
 Camera::Camera(float &posX, float &posY, float &posZ, float &upX, float &upY, float &upZ, float &yaw, float &pitch)
 : Front(make_float3(0.f, 0.f, -1.f))
-, MovementSpeed(SPEED)
-, MouseSensitivity(SENSITIVITY)
-, Zoom(ZOOM)
+, Position(make_float3(posX, posY, posZ))
+, WorldUp(make_float3(upX, upY, upZ))
+, MovementSpeed(2.5f)
+, MouseSensitivity(0.1f)
+, Zoom(45.0f)
+, Yaw(yaw)
+, Pitch(pitch)
 {
-    Position = make_float3(posX, posY, posZ);
-    WorldUp = make_float3(upX, upY, upZ);
-    Yaw = yaw;
-    Pitch = pitch;
     UpdateCameraVectors();
 }
 
@@ -54,7 +56,7 @@ float4x4 Camera::LookAt(const float3 &eye, const float3 &center, const float3 &u
     return inverse(viewMatrix);
 }
 
-inline float Camera::Radians(float &degrees)
+float Camera::Radians(float &degrees)
 {
     return degrees * M_PI / 180.0f;
 }
@@ -76,7 +78,7 @@ void Camera::UpdateCameraVectors()
 
 void Camera::ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime)
 {
-    float velocity = MovementSpeed * deltaTime;
+    velocity = MovementSpeed * deltaTime;
     switch (direction)
     {
         case FORWARD:
@@ -96,14 +98,14 @@ void Camera::ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime)
 
 void Camera::ProcessGamepadLeftJoystick(const float &deltaTime, const float &axisXValue, const float &axisYValue)
 {
-    float velocity = MovementSpeed * deltaTime;
+    velocity = MovementSpeed * deltaTime;
     
     Position += Right * velocity * axisXValue;
     Position += Front * velocity * axisYValue;
 }
 
 
-void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch)
+void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, bool &constraintPitch)
 {
     xOffset *= MouseSensitivity;
     yOffset *= MouseSensitivity;
@@ -134,7 +136,7 @@ float3 Camera::GetCameraLocation()
     return Position;
 }
 
-void Camera::ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, bool constraintPitch)
+void Camera::ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, const bool &constraintPitch)
 {
     Yaw += (axisXValue);
     Pitch += (axisYValue);

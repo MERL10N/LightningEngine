@@ -1,5 +1,5 @@
 //
-//  Renderer.hpp
+//  MetalRenderer.h
 //  LightningEngine
 //
 //  Created by Kian Marvi on 6/26/24.
@@ -32,24 +32,23 @@ namespace NS
 }
 namespace MTK
 {
-class View;
+    class View;
 }
 
 
-class CRenderer : public CSingletonTemplate<CRenderer>
+class MetalRenderer : public CSingletonTemplate<MetalRenderer>
 {
-    friend CSingletonTemplate<CRenderer>;
+    friend CSingletonTemplate<MetalRenderer>;
 public:
-    CRenderer(MTL::Device* pDevice);
-    ~CRenderer();
+    MetalRenderer(MTL::Device* pDevice);
+    ~MetalRenderer();
     void Draw(MTK::View* view);
 
 private:
     
-    void CreateSquare();
+    void CreateCube();
     void CreateDepthAndMSAATextures(MTK::View* view);
     void ProcessInput();
-    float GetAspectRatio();
     
     MTL::Device* metalDevice;
     
@@ -80,7 +79,7 @@ private:
     float lastFrame = 0.0f;
     
     // Controller
-    GameController gameController;
+    //Controller gameController;
 };
 
 #endif /* Renderer_hpp */

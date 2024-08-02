@@ -13,7 +13,7 @@ int main(void)
 
 #ifdef __APPLE__
     
-    CMetalApplication del;
+    MetalApplication del;
 
     NS::AutoreleasePool* autoReleasePool = NS::AutoreleasePool::alloc()->init();
         NS::Application* pApp = NS::Application::sharedApplication();

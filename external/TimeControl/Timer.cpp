@@ -1,5 +1,5 @@
 //
-//  Timer.c
+//  Timer.cpp
 //  LightningEngine
 //
 //  Created by Kian Marvi on 7/23/24.

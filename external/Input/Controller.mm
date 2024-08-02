@@ -1,86 +1,17 @@
-/*
-        Copyright [2024] [Apple Inc]
-
-        Licensed under the Apache License, Version 2.0 (the "License");
-        you may not use this file except in compliance with the License.
-        You may obtain a copy of the License at
-
-            http://www.apache.org/licenses/LICENSE-2.0
-
-        Unless required by applicable law or agreed to in writing, software
-        distributed under the License is distributed on an "AS IS" BASIS,
-        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.
- */
-
-
 #include "Controller.h"
 #import <GameController/GameController.h>
 #import <Foundation/Foundation.h>
 #import <CoreMotion/CoreMotion.h>
 #include <iostream>
 
-GameController::GameController()
+Controller::Controller()
 : _haptics(nil)
 , _motionManager(nil)
 {
-    
-    [NSNotificationCenter.defaultCenter addObserverForName:GCControllerDidDisconnectNotification
-                                                    object:nil
-                                                     queue:nil
-                                                usingBlock:^(NSNotification * _Nonnull notification) {
-        
-        
-        GCController* controller = (GCController *)(notification.object);
-        if (![controller.vendorName isEqualToString:@"Apple Touch Controller"])
-        {
-            CFRelease(this->_haptics);
-            this->_haptics = nil;
-        }
-    }];
-    
-   // __block GameController* pOwner = this; // capture as writable by the block
-    
-    [NSNotificationCenter.defaultCenter addObserverForName:GCControllerDidConnectNotification
-                                                    object: nil
-                                                     queue: nil
-                                                usingBlock:^(NSNotification * _Nonnull notification) {
-        
-      //  GCController* controller = (GCController *)(notification.object);
-        
-        // Check if the controller supports haptic feedback and if so prepare to
-        // play haptics on it:
-        /*
-        if (controller.haptics)
-        {
-            CHHapticEngine* hapticEngine =
-            [controller.haptics createEngineWithLocality:GCHapticsLocalityHandles];
-            
-            if (pOwner->_haptics)
-            {
-                CFRelease(this->_haptics);
-                this->_haptics = nil;
-            }
-            
-        }
-         */
-    }];
-    
-    // Accelerometer
-    
-#if TARGET_OS_IOS
-    CMMotionManager* cm = [[CMMotionManager alloc] init];
-    if (cm.isAccelerometerAvailable)
-    {
-        cm.accelerometerUpdateInterval = 1/60.0f;
-        [cm startAccelerometerUpdates];
-        _motionManager = CFBridgingRetain(cm);
-    }
-#endif
+
 }
 
-GameController::~GameController()
+Controller::~Controller()
 {
     if (this->_haptics)
         CFRelease(this->_haptics);
@@ -89,100 +20,84 @@ GameController::~GameController()
         CFRelease(this->_motionManager);
 }
 
-simd::float3 GameController::accelerometerData() const
-{
-    if (this->_motionManager)
-    {
-#if TARGET_OS_IOS
-        CMMotionManager* cm = (__bridge CMMotionManager *)this->_motionManager;
-        CMAcceleration accel = cm.accelerometerData.acceleration;
-        return simd::float3 { (float)accel.x, (float)accel.y, (float)accel.z };
-#endif
-    }
-    return simd::float3{ 0, 0, 0 };
-}
 
-bool GameController::isLeftArrowDown() const
+bool Controller::isLeftArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeLeftArrow].pressed;
 }
 
-bool GameController::isRightArrowDown() const
+bool Controller::isRightArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeRightArrow].pressed;
 }
 
-bool GameController::isUpArrowDown() const
+bool Controller::isUpArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeUpArrow].pressed;
 }
 
-bool GameController::isDownArrowDown() const
+bool Controller::isDownArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeDownArrow].pressed;
 }
 
-bool GameController::isWKeyDown() const
+bool Controller::isWKeyDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyW].pressed;
 }
 
-bool GameController::isAKeyDown() const
+bool Controller::isAKeyDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyA].pressed;
 }
 
-bool GameController::isSKeyDown() const
+bool Controller::isSKeyDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyS].pressed;
 }
 
-bool GameController::isDKeyDown() const
+bool Controller::isDKeyDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyD].pressed;
 }
 
 
-bool GameController::isSpacebarDown() const
+bool Controller::isSpacebarDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeSpacebar].pressed;
 }
 
-float GameController::leftThumbstickX() const
+float Controller::leftThumbstickX() const
 {
-    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return (gamepad.leftThumbstick.xAxis.value);
+    return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.xAxis.value;
 }
 
-float GameController::leftThumbstickY() const
+float Controller::leftThumbstickY() const
 {
-    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return gamepad.leftThumbstick.yAxis.value;
+    return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.yAxis.value;
 }
 
-float GameController::rightThumbstickX() const
+float Controller::rightThumbstickX() const
 {
-    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return gamepad.rightThumbstick.xAxis.value;
-}
-float GameController::rightThumbstickY() const
-{
-    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return gamepad.rightThumbstick.yAxis.value;
+    return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.xAxis.value;
 }
 
-bool GameController::isButtonADown() const
+float Controller::rightThumbstickY() const
 {
-    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return gamepad.buttonA.pressed;
+    return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.yAxis.value;
 }
 
-void GameController::setHapticIntensity(float intensity) const
+bool Controller::isButtonADown() const
+{
+    return GCController.controllers.firstObject.extendedGamepad.buttonA.pressed;
+}
+
+void Controller::setHapticIntensity(float intensity) const
 {
 
 }
 
-void GameController::renderOverlay(MTL::RenderCommandEncoder* pEnc)
+void Controller::renderOverlay(MTL::RenderCommandEncoder* pEnc)
 {
     // Here you can customize how your touch (virtual) game controller looks
     // by directly issuing Metal commands and render it onscreen.

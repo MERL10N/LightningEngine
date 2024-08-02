@@ -7,7 +7,7 @@
  Update:
  @brief This class has been updated to also manage metal shaders used in this project
  By: Kian Heydari Marvi
- Date: Jan 2023
+ Date: Jan 2024
 */
 #pragma once
 
@@ -18,7 +18,7 @@
 #include <string>
 #ifdef __APPLE__
 //#include "MetalShader.h"
-class CMetalShader;
+class MetalShader;
 
 namespace MTL
 {
@@ -48,7 +48,7 @@ public:
     
     MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor(const std::string& shaderName) const;
     void setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const;
-    MTL::RenderPipelineState* getRenderPipelineState(const std::string& shaderName) const;
+    MTL::RenderPipelineState* GetRenderPipelineState(const std::string& shaderName) const;
     MTL::DepthStencilState* getDepthStencilState(const std::string& shaderName) const;
     void BindResources(const std::string& shaderName, MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer);
 #else
@@ -63,7 +63,7 @@ public:
 
 #ifdef __APPLE__
     // The current active shader
-    CMetalShader* pActiveShader;
+    MetalShader* activeShader;
 #else
 	// The current active shader
 	CShader* pActiveShader;
@@ -78,7 +78,7 @@ protected:
 
 #ifdef __APPLE__
     // The map containing all the shaders loaded
-    std::map<std::string, CMetalShader*> shaderMap;
+    std::map<std::string, MetalShader*> shaderMap;
 #else
 	// The map containing all the shaders loaded
 	std::map<std::string, CShader*> shaderMap;

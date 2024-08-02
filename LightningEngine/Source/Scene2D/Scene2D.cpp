@@ -95,8 +95,8 @@ void CScene2D::Render(CA::MetalDrawable* metalDrawable)
     
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
     
-    metalRenderPSO = CShaderManager::GetInstance()->getRenderPipelineState("Square");
-    renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
+    metalRenderPSO = CShaderManager::GetInstance()->GetRenderPipelineState("Square");
+    renderCommandEncoder->SetRenderPipelineState(metalRenderPSO);
 
     renderCommandEncoder->setVertexBuffer(squareVertexBuffer, 0, 0);
     renderCommandEncoder->useResource(squareVertexBuffer, MTL::ResourceUsageRead);

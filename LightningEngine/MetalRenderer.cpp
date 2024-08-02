@@ -1,11 +1,11 @@
-//
-//  MetalRenderer.cpp
-//  LightningEngine
-//
-//  Created by Kian Marvi on 6/26/24.
-//
+/*
+      MetalRenderer.cpp
+      LightningEngine
 
-#include "Renderer.h"
+      Created by Kian Marvi on 6/26/24.
+*/
+
+#include "MetalRenderer.h"
 
 #include <RenderControl/ShaderManager.h>
 
@@ -35,8 +35,8 @@ MetalRenderer::MetalRenderer(MTL::Device* pDevice)
                                        "fragmentShader",
                                         metalDevice);
 
-    // Render the square
-    CreateSquare();
+    // Render the cube
+    CreateCube();
     
     // Initialise the default library
     metalDefaultLibrary = metalDevice->newDefaultLibrary();
@@ -76,10 +76,11 @@ MetalRenderer::~MetalRenderer()
     msaaRenderTargetTexture->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
+    Controller::GetInstance()->Destroy();
 
 }
 
-void MetalRenderer::CreateSquare()
+void MetalRenderer::CreateCube()
 {
     squareVertexBuffer = CMeshBuilder::GenerateCube(metalDevice);
     transformationBuffer = metalDevice->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
@@ -214,18 +215,14 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     depthTextureDescriptor->release();
 }
 
-inline float MetalRenderer::GetAspectRatio()
-{
-    return width / height;
-}
-
 void MetalRenderer::ProcessInput() 
 {
 
     float currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-       
+      
+    /*
     if (gameController.leftThumbstickX() || gameController.rightThumbstickY())
         camera.ProcessGamepadLeftJoystick(deltaTime, gameController.leftThumbstickX(), gameController.leftThumbstickY());
 
@@ -243,6 +240,11 @@ void MetalRenderer::ProcessInput()
         
     if (gameController.isDKeyDown())
         camera.ProcessKeyboard(RIGHT, deltaTime);
+     */
+    if (Controller::GetInstance()->leftThumbstickX() || Controller::GetInstance()->leftThumbstickY())
+        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::GetInstance()->leftThumbstickX(), Controller::GetInstance()->leftThumbstickY());
     
+    if (Controller::GetInstance()->rightThumbstickX() || Controller::GetInstance()->rightThumbstickY())
+        camera.ProcessGamepadRightJoystick(Controller::GetInstance()->rightThumbstickX(), Controller::GetInstance()->rightThumbstickY(), true);
 }
 

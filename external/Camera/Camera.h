@@ -1,7 +1,17 @@
-/*
-      Camera.h
-      LightningEngine
-      Created by Kian Marvi on 7/24/24.
+/**
+     File: Camera.h
+     @brief
+     This camera class has been adapted from LearnOpenGL to be used with Apple's SIMD library instead of GLM.
+     Minor enhancements have been made for better clarity and efficiency (e.g using initializer list and pass by reference).
+      
+     Extensions have also been made to support input from a Gamepad.
+     @copyright
+        
+     Original code by: Joey De Vries
+     Link:  https://learnopengl.com/Getting-started/Camera
+ 
+     Extended by: Kian Heydari Marvi
+     Date: July 2024
 */
 
 #ifndef CAMERA_H
@@ -22,19 +32,13 @@ enum CAMERA_MOVEMENT
     RIGHT
 };
 
-// Assign default camera values
-const float YAW         = -90.0f;
-const float PITCH       =  0.0f;
-const float SPEED       =  2.5f;
-const float SENSITIVITY =  0.1f;
-const float ZOOM        =  45.0f;
 
 class Camera 
 {
 public:
     
-    // Constructor with vectors
-    Camera(float3 position = make_float3(0.f, 0.f, 0.f), float3 Up = make_float3(0.f, 1.f, 0.f), float Yaw = YAW, float Pitch = PITCH);
+    // Default Constructor
+    Camera();
     
     // Constructor with scalar values
     Camera(float &posX, float &posY, float &posZ, float &upX, float &upY, float &upZ, float &yaw, float &pitch);
@@ -45,12 +49,12 @@ public:
     void ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime);
     
     // Processes input received from a mouse input system
-    void ProcessMouseMovement(float &xOffset, float &yOffset, bool constraintPitch = true);
+    void ProcessMouseMovement(float &xOffset, float &yOffset, bool &constraintPitch);
     
     // Process input from any gamepad input system
     void ProcessGamepadLeftJoystick(const float &deltaTime, const float &axisXValue, const float &axisYValue);
     
-    void ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, bool constrainTBool);
+    void ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, const bool &constrainTBool);
     
     float GetZoom();
     
@@ -81,6 +85,10 @@ private:
     float MouseSensitivity;
     float JoystickRightAxis;
     float Zoom;
+    
+    // Speed variables
+    float velocity;
+    float deltaTime;
 };
 
 
