@@ -33,6 +33,38 @@
 		A9769BD92C2D5DF800B28E1F /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */; };
 		A9769BDB2C2D5EF500B28E1F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9769BDA2C2D5EF500B28E1F /* GameController.framework */; };
 		A978D8612B6E0F4200B9FF1B /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
+		A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A98297F02C5ED6D900211F0E /* Assets.xcassets */; };
+		A983C4552C5EBE06001AD35D /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9769BDA2C2D5EF500B28E1F /* GameController.framework */; };
+		A983C4562C5EBE0C001AD35D /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
+		A983C4572C5EBE10001AD35D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1729871D3400E5CDF6 /* Metal.framework */; };
+		A983C4582C5EBE16001AD35D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F02B621E7A00347F4A /* AppKit.framework */; };
+		A983C4592C5EBE30001AD35D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1929871D4300E5CDF6 /* Foundation.framework */; };
+		A983C45A2C5EBE3D001AD35D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489229CFFEF3009CDE34 /* Cocoa.framework */; };
+		A983C45B2C5EBE7F001AD35D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489029CFFEEF009CDE34 /* IOKit.framework */; };
+		A983C45C2C5EBE85001AD35D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1529871D3000E5CDF6 /* QuartzCore.framework */; };
+		A983C45D2C5EBEBA001AD35D /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92CC3282C51C2A9006625FE /* Camera.cpp */; };
+		A983C45E2C5EBEBA001AD35D /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = A919E1762C520ABF00E4B533 /* Controller.mm */; };
+		A983C45F2C5EBEBA001AD35D /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D700262C502C94002A50BA /* Timer.cpp */; };
+		A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
+		A983C4612C5EBEBA001AD35D /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
+		A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D40F2B6B26C300C845F2 /* ShaderManager.cpp */; };
+		A983C4632C5EBEBA001AD35D /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3D32B6B263400C845F2 /* imgui_widgets.cpp */; };
+		A983C4642C5EBEBA001AD35D /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3DC2B6B263400C845F2 /* imgui_impl_metal.mm */; };
+		A983C4652C5EBEBA001AD35D /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */; };
+		A983C4662C5EBEBA001AD35D /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3EB2B6B263400C845F2 /* imgui.cpp */; };
+		A983C4672C5EBEBA001AD35D /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FA2B6B263400C845F2 /* imgui_tables.cpp */; };
+		A983C4682C5EBEBA001AD35D /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FB2B6B263400C845F2 /* imgui_demo.cpp */; };
+		A983C4692C5EBEBA001AD35D /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FC2B6B263400C845F2 /* imgui_draw.cpp */; };
+		A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
+		A983C46B2C5EBEBA001AD35D /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
+		A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
+		A983C46E2C5EBEBA001AD35D /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
+		A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
+		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
+		A983C4712C5EBEBA001AD35D /* mtl_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD6D2987690700178E19 /* mtl_implementation.cpp */; };
+		A983C4722C5EBEBA001AD35D /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */; };
+		A983C4732C5EBEBA001AD35D /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */; };
+		A983C4742C5EBEBA001AD35D /* MetalRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92A76F02C2D446200101F89 /* MetalRenderer.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
 		A9D700212C502B7B002A50BA /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
 		A9D700272C502C94002A50BA /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D700262C502C94002A50BA /* Timer.cpp */; };
@@ -50,6 +82,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		A983C4882C5ED05A001AD35D /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +99,6 @@
 		3E32488F29CFFED9009CDE34 /* lib-universal */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "lib-universal"; sourceTree = "<group>"; };
 		3E32489029CFFEEF009CDE34 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		3E32489229CFFEF3009CDE34 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		3E32489429CFFF0B009CDE34 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "external/GLFW/lib-universal/libglfw3.a"; sourceTree = "<group>"; };
 		3E47CD272987185800938A41 /* metal-cpp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "metal-cpp"; path = "../metal-cpp"; sourceTree = "<group>"; };
 		3E56AB66297E0E6E00DB5F4F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3E581F1529871D3000E5CDF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -65,7 +106,6 @@
 		3E581F1929871D4300E5CDF6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3E6B88E229A56CCD0087A2B1 /* stb_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
 		3E6B88E329A56CCD0087A2B1 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		3E76CD672987671200178E19 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		3E76CD6D2987690700178E19 /* mtl_implementation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mtl_implementation.cpp; sourceTree = "<group>"; };
 		3E76CD7129876E7600178E19 /* square.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = square.metal; sourceTree = "<group>"; };
 		3E9F222429A060BA00383DCA /* mc_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mc_grass.png; sourceTree = "<group>"; };
@@ -120,7 +160,6 @@
 		A911D9822B60E16700FD2845 /* LightningEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LightningEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		A911D9982B60E54C00FD2845 /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoader.h; sourceTree = "<group>"; };
 		A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLoader.cpp; sourceTree = "<group>"; };
-		A9173C122B6F5FD400024ECD /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../external/GLFW/lib-universal/libglfw3.a"; sourceTree = "<group>"; };
 		A9173C162B6F68B200024ECD /* Player2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player2D.cpp; sourceTree = "<group>"; };
 		A9173C172B6F68B200024ECD /* Player2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player2D.h; sourceTree = "<group>"; };
 		A919E1752C520ABF00E4B533 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -145,6 +184,8 @@
 		A9769BDA2C2D5EF500B28E1F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene2D.cpp; sourceTree = "<group>"; };
 		A978D8602B6E0F4200B9FF1B /* Scene2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene2D.h; sourceTree = "<group>"; };
+		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
 		A98AE32A2B6DBF4B00AA7004 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBuilder.h; sourceTree = "<group>"; };
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
@@ -187,6 +228,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A983C43F2C5EBDB1001AD35D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A983C45C2C5EBE85001AD35D /* QuartzCore.framework in Frameworks */,
+				A983C45B2C5EBE7F001AD35D /* IOKit.framework in Frameworks */,
+				A983C45A2C5EBE3D001AD35D /* Cocoa.framework in Frameworks */,
+				A983C4592C5EBE30001AD35D /* Foundation.framework in Frameworks */,
+				A983C4582C5EBE16001AD35D /* AppKit.framework in Frameworks */,
+				A983C4572C5EBE10001AD35D /* Metal.framework in Frameworks */,
+				A983C4562C5EBE0C001AD35D /* MetalKit.framework in Frameworks */,
+				A983C4552C5EBE06001AD35D /* GameController.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -215,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				A911D9822B60E16700FD2845 /* LightningEngine */,
+				A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -242,13 +299,10 @@
 			isa = PBXGroup;
 			children = (
 				A9769BDA2C2D5EF500B28E1F /* GameController.framework */,
-				A9173C122B6F5FD400024ECD /* libglfw3.a */,
 				A93531F22B621E7E00347F4A /* MetalKit.framework */,
 				A93531F02B621E7A00347F4A /* AppKit.framework */,
-				3E32489429CFFF0B009CDE34 /* libglfw3.a */,
 				3E32489229CFFEF3009CDE34 /* Cocoa.framework */,
 				3E32489029CFFEEF009CDE34 /* IOKit.framework */,
-				3E76CD672987671200178E19 /* libglfw.3.3.dylib */,
 				3E581F1929871D4300E5CDF6 /* Foundation.framework */,
 				3E581F1729871D3400E5CDF6 /* Metal.framework */,
 				3E581F1529871D3000E5CDF6 /* QuartzCore.framework */,
@@ -290,6 +344,7 @@
 		3E9F222329A060A600383DCA /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A98297F02C5ED6D900211F0E /* Assets.xcassets */,
 				A9E077522B6490BA0085E7A5 /* sonic.png */,
 				3E9F222429A060BA00383DCA /* mc_grass.png */,
 			);
@@ -582,6 +637,24 @@
 			productReference = A911D9822B60E16700FD2845 /* LightningEngine */;
 			productType = "com.apple.product-type.tool";
 		};
+		A983C4412C5EBDB1001AD35D /* LightningEngine - macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A983C4542C5EBDB2001AD35D /* Build configuration list for PBXNativeTarget "LightningEngine - macOS" */;
+			buildPhases = (
+				A983C43E2C5EBDB1001AD35D /* Sources */,
+				A983C43F2C5EBDB1001AD35D /* Frameworks */,
+				A983C4402C5EBDB1001AD35D /* Resources */,
+				A983C4882C5ED05A001AD35D /* Embed ExtensionKit Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LightningEngine - macOS";
+			productName = "LightningEngine - macOS";
+			productReference = A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -589,10 +662,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					A911D9812B60E16700FD2845 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					A983C4412C5EBDB1001AD35D = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
@@ -610,9 +687,21 @@
 			projectRoot = "";
 			targets = (
 				A911D9812B60E16700FD2845 /* LightningEngine */,
+				A983C4412C5EBDB1001AD35D /* LightningEngine - macOS */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A983C4402C5EBDB1001AD35D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A911D97E2B60E16700FD2845 /* Sources */ = {
@@ -642,6 +731,36 @@
 				A91D66EB2C3B81E200B3287A /* Editor.cpp in Sources */,
 				A919E1772C520ABF00E4B533 /* Controller.mm in Sources */,
 				A911D98D2B60E19600FD2845 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A983C43E2C5EBDB1001AD35D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A983C4652C5EBEBA001AD35D /* imgui_impl_osx.mm in Sources */,
+				A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */,
+				A983C46E2C5EBEBA001AD35D /* Scene2D.cpp in Sources */,
+				A983C4642C5EBEBA001AD35D /* imgui_impl_metal.mm in Sources */,
+				A983C4742C5EBEBA001AD35D /* MetalRenderer.cpp in Sources */,
+				A983C4672C5EBEBA001AD35D /* imgui_tables.cpp in Sources */,
+				A983C4662C5EBEBA001AD35D /* imgui.cpp in Sources */,
+				A983C4612C5EBEBA001AD35D /* AAPLMathUtilities.cpp in Sources */,
+				A983C4632C5EBEBA001AD35D /* imgui_widgets.cpp in Sources */,
+				A983C4732C5EBEBA001AD35D /* ViewDelegate.cpp in Sources */,
+				A983C45D2C5EBEBA001AD35D /* Camera.cpp in Sources */,
+				A983C4692C5EBEBA001AD35D /* imgui_draw.cpp in Sources */,
+				A983C46B2C5EBEBA001AD35D /* ImageLoader.cpp in Sources */,
+				A983C45F2C5EBEBA001AD35D /* Timer.cpp in Sources */,
+				A983C4712C5EBEBA001AD35D /* mtl_implementation.cpp in Sources */,
+				A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */,
+				A983C4722C5EBEBA001AD35D /* MetalApplication.cpp in Sources */,
+				A983C4682C5EBEBA001AD35D /* imgui_demo.cpp in Sources */,
+				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
+				A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */,
+				A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */,
+				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
+				A983C45E2C5EBEBA001AD35D /* Controller.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +928,78 @@
 			};
 			name = Release;
 		};
+		A983C4522C5EBDB2001AD35D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DH9566CYW8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = c17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine---macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		A983C4532C5EBDB2001AD35D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DH9566CYW8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = c17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine---macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -826,6 +1017,15 @@
 			buildConfigurations = (
 				A911D9872B60E16800FD2845 /* Debug */,
 				A911D9882B60E16800FD2845 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A983C4542C5EBDB2001AD35D /* Build configuration list for PBXNativeTarget "LightningEngine - macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A983C4522C5EBDB2001AD35D /* Debug */,
+				A983C4532C5EBDB2001AD35D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

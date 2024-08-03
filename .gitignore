@@ -11,8 +11,14 @@ LightningEngine/LightningEngine.xcodeproj/._project.xcworkspace
 ._*.metal
 ._.gitignore
 
-LightningEngine/._LightningEngine.xcodeproj
+._*.xcodeproj
 
 metal-cpp-extensions/._UIKit
 
-metal-cpp/Metal/MTLRenderCommandEncoder.hpp
+._*.json
+._*.a
+._*.png
+._*.noindex
+._*.entitlements
+
+LightningEngine/Build/
