@@ -79,7 +79,7 @@ private:
     float lastFrame = 0.0f;
     
     // Controller
-    //Controller gameController;
+    Controller gameController;
 };
 
 #endif /* Renderer_hpp */

@@ -28,7 +28,6 @@
 // For CFIndex, CFTypeRef
 #include <CoreFoundation/CFBase.h>
 #include <unordered_map>
-#include <DesignPatterns/SingletonTemplate.h>
 
 #include <simd/simd.h>
 
@@ -37,7 +36,7 @@ namespace MTL
     class RenderCommandEncoder;
 }
 
-class Controller : public CSingletonTemplate<Controller>
+class Controller
 {
 public:
     // Default functions already implemented by Apple

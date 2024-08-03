@@ -76,7 +76,6 @@ MetalRenderer::~MetalRenderer()
     msaaRenderTargetTexture->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
-    Controller::GetInstance()->Destroy();
 
 }
 
@@ -221,14 +220,7 @@ void MetalRenderer::ProcessInput()
     float currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-      
-    /*
-    if (gameController.leftThumbstickX() || gameController.rightThumbstickY())
-        camera.ProcessGamepadLeftJoystick(deltaTime, gameController.leftThumbstickX(), gameController.leftThumbstickY());
-
-    if (gameController.rightThumbstickX() || gameController.rightThumbstickY())
-        camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
-    
+        
     if (gameController.isWKeyDown())
         camera.ProcessKeyboard(FORWARD, deltaTime);
         
@@ -240,11 +232,11 @@ void MetalRenderer::ProcessInput()
         
     if (gameController.isDKeyDown())
         camera.ProcessKeyboard(RIGHT, deltaTime);
-     */
-    if (Controller::GetInstance()->leftThumbstickX() || Controller::GetInstance()->leftThumbstickY())
-        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::GetInstance()->leftThumbstickX(), Controller::GetInstance()->leftThumbstickY());
+     
+    if (gameController.leftThumbstickX() || gameController.leftThumbstickY())
+        camera.ProcessGamepadLeftJoystick(deltaTime, gameController.leftThumbstickX(), gameController.leftThumbstickY());
     
-    if (Controller::GetInstance()->rightThumbstickX() || Controller::GetInstance()->rightThumbstickY())
-        camera.ProcessGamepadRightJoystick(Controller::GetInstance()->rightThumbstickX(), Controller::GetInstance()->rightThumbstickY(), true);
+    if (gameController.rightThumbstickX() || gameController.rightThumbstickY())
+        camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
 }
 
