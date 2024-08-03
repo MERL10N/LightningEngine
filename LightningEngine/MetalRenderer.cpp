@@ -216,7 +216,6 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
 
 void MetalRenderer::ProcessInput() 
 {
-
     float currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
@@ -238,5 +237,6 @@ void MetalRenderer::ProcessInput()
     
     if (gameController.rightThumbstickX() || gameController.rightThumbstickY())
         camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
+     
 }
 

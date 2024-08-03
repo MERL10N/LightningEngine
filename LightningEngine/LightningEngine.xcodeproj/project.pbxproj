@@ -62,13 +62,33 @@
 		A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
 		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
 		A983C4712C5EBEBA001AD35D /* mtl_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD6D2987690700178E19 /* mtl_implementation.cpp */; };
-		A983C4722C5EBEBA001AD35D /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */; };
+		A983C4722C5EBEBA001AD35D /* MacApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MacApplication.cpp */; };
 		A983C4732C5EBEBA001AD35D /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */; };
 		A983C4742C5EBEBA001AD35D /* MetalRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92A76F02C2D446200101F89 /* MetalRenderer.cpp */; };
 		A9BD938B2B7AA39F0060E705 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
+		A9C9080B2C5EE426000B2197 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
+		A9C9080E2C5EE4A6000B2197 /* IOSApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9C9080D2C5EE4A6000B2197 /* IOSApplication.cpp */; };
+		A9C9081B2C5EE9E3000B2197 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
+		A9C9081C2C5EE9E3000B2197 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
+		A9C9081D2C5EE9E3000B2197 /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
+		A9C9081E2C5EE9E3000B2197 /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
+		A9C9081F2C5EE9E3000B2197 /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
+		A9C908212C5EE9E3000B2197 /* MetalRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92A76F02C2D446200101F89 /* MetalRenderer.cpp */; };
+		A9C908222C5EE9E3000B2197 /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */; };
+		A9C9082A2C5EEBAB000B2197 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
+		A9C9082B2C5EEBC1000B2197 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = A919E1762C520ABF00E4B533 /* Controller.mm */; };
+		A9C9082C2C5EEBCD000B2197 /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D40F2B6B26C300C845F2 /* ShaderManager.cpp */; };
+		A9C9082D2C5EEBDF000B2197 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A92CC3282C51C2A9006625FE /* Camera.cpp */; };
+		A9C9082F2C5EEC62000B2197 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D700262C502C94002A50BA /* Timer.cpp */; };
+		A9C908332C5EEEA7000B2197 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
+		A9C908362C5EF005000B2197 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C9080F2C5EE968000B2197 /* UIKit.framework */; };
+		A9C908382C5EF01D000B2197 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908242C5EEA0F000B2197 /* Metal.framework */; };
+		A9C908392C5EF06E000B2197 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908112C5EE970000B2197 /* GameController.framework */; };
+		A9C9083A2C5EF0AB000B2197 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908282C5EEA49000B2197 /* Foundation.framework */; };
+		A9C9083C2C5EF0CC000B2197 /* mtl_implementation_ios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9C9083B2C5EF0CC000B2197 /* mtl_implementation_ios.cpp */; };
 		A9D700212C502B7B002A50BA /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
 		A9D700272C502C94002A50BA /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9D700262C502C94002A50BA /* Timer.cpp */; };
-		A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */; };
+		A9DB2BE32C2D0FB900D16F8F /* MacApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BE12C2D0FB900D16F8F /* MacApplication.cpp */; };
 		A9DB2BF42C2D100E00D16F8F /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */; };
 /* End PBXBuildFile section */
 
@@ -191,11 +211,21 @@
 		A997092B2B5F4E13004993D5 /* DesignPatterns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DesignPatterns; sourceTree = "<group>"; };
 		A997092E2B5F5024004993D5 /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
 		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
+		A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9C9080C2C5EE492000B2197 /* IOSApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSApplication.h; sourceTree = "<group>"; };
+		A9C9080D2C5EE4A6000B2197 /* IOSApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOSApplication.cpp; sourceTree = "<group>"; };
+		A9C9080F2C5EE968000B2197 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		A9C908112C5EE970000B2197 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
+		A9C908152C5EE9A0000B2197 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		A9C908242C5EEA0F000B2197 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
+		A9C908262C5EEA15000B2197 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
+		A9C908282C5EEA49000B2197 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		A9C9083B2C5EF0CC000B2197 /* mtl_implementation_ios.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mtl_implementation_ios.cpp; sourceTree = "<group>"; };
 		A9D700202C502B7B002A50BA /* cube.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cube.metal; sourceTree = "<group>"; };
 		A9D700252C502C94002A50BA /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		A9D700262C502C94002A50BA /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
-		A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalApplication.cpp; sourceTree = "<group>"; };
-		A9DB2BE22C2D0FB900D16F8F /* MetalApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalApplication.h; sourceTree = "<group>"; };
+		A9DB2BE12C2D0FB900D16F8F /* MacApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MacApplication.cpp; sourceTree = "<group>"; };
+		A9DB2BE22C2D0FB900D16F8F /* MacApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacApplication.h; sourceTree = "<group>"; };
 		A9DB2BE42C2D0FE900D16F8F /* AppKit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppKit.hpp; sourceTree = "<group>"; };
 		A9DB2BE52C2D0FE900D16F8F /* AppKitPrivate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppKitPrivate.hpp; sourceTree = "<group>"; };
 		A9DB2BE62C2D0FE900D16F8F /* NSApplication.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NSApplication.hpp; sourceTree = "<group>"; };
@@ -243,6 +273,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9C907EC2C5EE1FD000B2197 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9C9083A2C5EF0AB000B2197 /* Foundation.framework in Frameworks */,
+				A9C908392C5EF06E000B2197 /* GameController.framework in Frameworks */,
+				A9C908382C5EF01D000B2197 /* Metal.framework in Frameworks */,
+				A9C908362C5EF005000B2197 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -272,6 +313,7 @@
 			children = (
 				A911D9822B60E16700FD2845 /* LightningEngine */,
 				A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */,
+				A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -279,18 +321,18 @@
 		3E56AB65297E0E6E00DB5F4F /* LightningEngine */ = {
 			isa = PBXGroup;
 			children = (
+				A9C908082C5EE249000B2197 /* Platforms */,
 				A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */,
 				3E9F222329A060A600383DCA /* assets */,
 				A93023842B6CE4910099EB32 /* Source */,
 				A908D4172B6CE1B000C845F2 /* Shaders */,
 				3E56AB66297E0E6E00DB5F4F /* main.cpp */,
 				3E76CD6D2987690700178E19 /* mtl_implementation.cpp */,
-				A9DB2BE12C2D0FB900D16F8F /* MetalApplication.cpp */,
-				A9DB2BE22C2D0FB900D16F8F /* MetalApplication.h */,
-				A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */,
-				A9DB2BF32C2D100E00D16F8F /* ViewDelegate.h */,
 				A92A76F02C2D446200101F89 /* MetalRenderer.cpp */,
 				A92A76F12C2D446200101F89 /* MetalRenderer.h */,
+				A9DB2BF22C2D100E00D16F8F /* ViewDelegate.cpp */,
+				A9DB2BF32C2D100E00D16F8F /* ViewDelegate.h */,
+				A9C9083B2C5EF0CC000B2197 /* mtl_implementation_ios.cpp */,
 			);
 			name = LightningEngine;
 			sourceTree = "<group>";
@@ -298,6 +340,12 @@
 		3E581F1429871D3000E5CDF6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9C908282C5EEA49000B2197 /* Foundation.framework */,
+				A9C908262C5EEA15000B2197 /* MetalKit.framework */,
+				A9C908242C5EEA0F000B2197 /* Metal.framework */,
+				A9C908152C5EE9A0000B2197 /* QuartzCore.framework */,
+				A9C908112C5EE970000B2197 /* GameController.framework */,
+				A9C9080F2C5EE968000B2197 /* UIKit.framework */,
 				A9769BDA2C2D5EF500B28E1F /* GameController.framework */,
 				A93531F22B621E7E00347F4A /* MetalKit.framework */,
 				A93531F02B621E7A00347F4A /* AppKit.framework */,
@@ -572,6 +620,33 @@
 			path = Scene2D;
 			sourceTree = "<group>";
 		};
+		A9C908082C5EE249000B2197 /* Platforms */ = {
+			isa = PBXGroup;
+			children = (
+				A9C9080A2C5EE29F000B2197 /* iOS */,
+				A9C908092C5EE25D000B2197 /* macOS */,
+			);
+			path = Platforms;
+			sourceTree = "<group>";
+		};
+		A9C908092C5EE25D000B2197 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				A9DB2BE12C2D0FB900D16F8F /* MacApplication.cpp */,
+				A9DB2BE22C2D0FB900D16F8F /* MacApplication.h */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		A9C9080A2C5EE29F000B2197 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				A9C9080C2C5EE492000B2197 /* IOSApplication.h */,
+				A9C9080D2C5EE4A6000B2197 /* IOSApplication.cpp */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		A9D700242C502C84002A50BA /* TimeControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -655,6 +730,23 @@
 			productReference = A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A9C907EE2C5EE1FD000B2197 /* LightningEngine-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9C908052C5EE1FD000B2197 /* Build configuration list for PBXNativeTarget "LightningEngine-iOS" */;
+			buildPhases = (
+				A9C907EB2C5EE1FD000B2197 /* Sources */,
+				A9C907EC2C5EE1FD000B2197 /* Frameworks */,
+				A9C907ED2C5EE1FD000B2197 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LightningEngine-iOS";
+			productName = "LightningEngine-iOS";
+			productReference = A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -669,6 +761,9 @@
 						CreatedOnToolsVersion = 14.2;
 					};
 					A983C4412C5EBDB1001AD35D = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					A9C907EE2C5EE1FD000B2197 = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
@@ -688,6 +783,7 @@
 			targets = (
 				A911D9812B60E16700FD2845 /* LightningEngine */,
 				A983C4412C5EBDB1001AD35D /* LightningEngine - macOS */,
+				A9C907EE2C5EE1FD000B2197 /* LightningEngine-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -698,6 +794,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C907ED2C5EE1FD000B2197 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,7 +827,7 @@
 				A9D700272C502C94002A50BA /* Timer.cpp in Sources */,
 				A911D98E2B60E1A000FD2845 /* mtl_implementation.cpp in Sources */,
 				A908D4112B6B26C300C845F2 /* ShaderManager.cpp in Sources */,
-				A9DB2BE32C2D0FB900D16F8F /* MetalApplication.cpp in Sources */,
+				A9DB2BE32C2D0FB900D16F8F /* MacApplication.cpp in Sources */,
 				A908D4072B6B263500C845F2 /* imgui_demo.cpp in Sources */,
 				A9D700212C502B7B002A50BA /* cube.metal in Sources */,
 				A9173C182B6F68B200024ECD /* Player2D.cpp in Sources */,
@@ -754,13 +857,36 @@
 				A983C45F2C5EBEBA001AD35D /* Timer.cpp in Sources */,
 				A983C4712C5EBEBA001AD35D /* mtl_implementation.cpp in Sources */,
 				A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */,
-				A983C4722C5EBEBA001AD35D /* MetalApplication.cpp in Sources */,
+				A983C4722C5EBEBA001AD35D /* MacApplication.cpp in Sources */,
 				A983C4682C5EBEBA001AD35D /* imgui_demo.cpp in Sources */,
 				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
 				A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */,
 				A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
 				A983C45E2C5EBEBA001AD35D /* Controller.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9C907EB2C5EE1FD000B2197 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9C908332C5EEEA7000B2197 /* Editor.cpp in Sources */,
+				A9C9082F2C5EEC62000B2197 /* Timer.cpp in Sources */,
+				A9C9082D2C5EEBDF000B2197 /* Camera.cpp in Sources */,
+				A9C9082C2C5EEBCD000B2197 /* ShaderManager.cpp in Sources */,
+				A9C9082B2C5EEBC1000B2197 /* Controller.mm in Sources */,
+				A9C9082A2C5EEBAB000B2197 /* AAPLMathUtilities.cpp in Sources */,
+				A9C9081B2C5EE9E3000B2197 /* MeshBuilder.cpp in Sources */,
+				A9C9083C2C5EF0CC000B2197 /* mtl_implementation_ios.cpp in Sources */,
+				A9C9081C2C5EE9E3000B2197 /* ImageLoader.cpp in Sources */,
+				A9C9081D2C5EE9E3000B2197 /* Player2D.cpp in Sources */,
+				A9C9081E2C5EE9E3000B2197 /* Scene2D.cpp in Sources */,
+				A9C9081F2C5EE9E3000B2197 /* cube.metal in Sources */,
+				A9C908212C5EE9E3000B2197 /* MetalRenderer.cpp in Sources */,
+				A9C908222C5EE9E3000B2197 /* ViewDelegate.cpp in Sources */,
+				A9C9080E2C5EE4A6000B2197 /* IOSApplication.cpp in Sources */,
+				A9C9080B2C5EE426000B2197 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,11 +1065,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DH9566CYW8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -975,11 +1101,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DH9566CYW8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -997,6 +1123,85 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine---macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		A9C908062C5EE1FD000B2197 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DH9566CYW8;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9C908072C5EE1FD000B2197 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DH9566CYW8;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -1026,6 +1231,15 @@
 			buildConfigurations = (
 				A983C4522C5EBDB2001AD35D /* Debug */,
 				A983C4532C5EBDB2001AD35D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9C908052C5EE1FD000B2197 /* Build configuration list for PBXNativeTarget "LightningEngine-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9C908062C5EE1FD000B2197 /* Debug */,
+				A9C908072C5EE1FD000B2197 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

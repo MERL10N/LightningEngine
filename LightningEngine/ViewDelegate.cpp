@@ -1,5 +1,5 @@
 //
-//  MyMTKViewDelegate.cpp
+//  ViewDelegate.cpp
 //  LightningEngine
 //
 //  Created by Kian Marvi on 6/26/24.

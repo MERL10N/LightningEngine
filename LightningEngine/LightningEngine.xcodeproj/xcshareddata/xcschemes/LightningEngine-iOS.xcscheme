@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-               BuildableName = "LightningEngine - macOS.app"
-               BlueprintName = "LightningEngine - macOS"
+               BlueprintIdentifier = "A9C907EE2C5EE1FD000B2197"
+               BuildableName = "LightningEngine-iOS.app"
+               BlueprintName = "LightningEngine-iOS"
                ReferencedContainer = "container:LightningEngine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -31,12 +31,11 @@
       shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "$(PROJECT_DIR)"
+      useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -45,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-            BuildableName = "LightningEngine - macOS.app"
-            BlueprintName = "LightningEngine - macOS"
+            BlueprintIdentifier = "A9C907EE2C5EE1FD000B2197"
+            BuildableName = "LightningEngine-iOS.app"
+            BlueprintName = "LightningEngine-iOS"
             ReferencedContainer = "container:LightningEngine.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-            BuildableName = "LightningEngine - macOS.app"
-            BlueprintName = "LightningEngine - macOS"
+            BlueprintIdentifier = "A9C907EE2C5EE1FD000B2197"
+            BuildableName = "LightningEngine-iOS.app"
+            BlueprintName = "LightningEngine-iOS"
             ReferencedContainer = "container:LightningEngine.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -1,6 +1,8 @@
 //
-//  mtl_implementation.cpp
-//  MetalTutorial
+//  mtl_implementation_ios.cpp
+//  LightningEngine-iOS
+//
+//  Created by Kian Marvi on 8/3/24.
 //
 
 #define NS_PRIVATE_IMPLEMENTATION
@@ -9,7 +11,6 @@
 #define MTK_PRIVATE_IMPLEMENTATION
 #define CA_PRIVATE_IMPLEMENTATION
 #include <Metal/Metal.hpp>
-#include <AppKit/AppKit.hpp>
 #include <UIKit/UIKit.hpp>
 #include <MetalKit/MetalKit.hpp>
-//#include <Foundation/Foundation.hpp>
+

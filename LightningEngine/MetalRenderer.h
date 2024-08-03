@@ -35,7 +35,6 @@ namespace MTK
     class View;
 }
 
-
 class MetalRenderer : public CSingletonTemplate<MetalRenderer>
 {
     friend CSingletonTemplate<MetalRenderer>;
