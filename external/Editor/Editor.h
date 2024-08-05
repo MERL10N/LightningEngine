@@ -43,7 +43,7 @@ private:
     bool show_demo_window;
     bool show_another_window;
     bool enable_high_fps;
-    float clear_color[4] = {};
+    float clear_color[4] = {0.15f, 0.15f, 0.15f, 1.f};
     int fps;
    
 };

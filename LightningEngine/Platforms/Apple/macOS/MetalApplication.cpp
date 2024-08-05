@@ -21,7 +21,7 @@
 */
 
 #include "MacApplication.h"
-#include "../../ViewDelegate.h"
+#include "ViewDelegate.h"
 #include <Editor/Editor.h>
 #include <Metal/Metal.hpp>
 

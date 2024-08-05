@@ -48,6 +48,7 @@ private:
     void CreateCube();
     void CreateDepthAndMSAATextures(MTK::View* view);
     void ProcessInput();
+    void UpdateMousePosition(float x, float y);
     
     MTL::Device* metalDevice;
     
@@ -69,6 +70,8 @@ private:
     float height;
     
     Camera camera;
+    float mouseX;
+    float mouseY;
     float lastX;
     float lastY;
     bool firstMouse = true;

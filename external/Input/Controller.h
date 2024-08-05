@@ -29,12 +29,15 @@
 #include <CoreFoundation/CFBase.h>
 #include <unordered_map>
 
+
 #include <simd/simd.h>
 
 namespace MTL
 {
     class RenderCommandEncoder;
 }
+
+struct CGPoint;
 
 class Controller
 {
@@ -56,15 +59,25 @@ public:
     simd::float3 accelerometerData() const;
 
     // Below are functions I have added to the class
+    
+    //Keyboard Input functions
     bool isWKeyDown() const;
     bool isAKeyDown() const;
     bool isSKeyDown() const;
     bool isDKeyDown() const;
 
+    // Gamepad input functions
     float leftThumbstickX() const;
     float leftThumbstickY() const;
     float rightThumbstickX() const;
     float rightThumbstickY() const;
+    
+    // Mouse input functions
+    CGPoint getMousePosition();
+    void hideCursor();
+    void showCursor();
+    bool isLeftMouseClicked() const;
+    bool isRightMouseClicked() const;
    
 private:
     CFTypeRef                         _haptics;

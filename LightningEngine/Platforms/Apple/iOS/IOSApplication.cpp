@@ -7,9 +7,13 @@
 
 #include "IOSApplication.h"
 #include "../../ViewDelegate.h"
+//#include <Editor/Editor.h>
+#include <Metal/Metal.hpp>
+
 
 IOSApplication::~IOSApplication()
 {
+   // CEditor::GetInstance()->Destroy();
     viewController->release();
     metalKitView->release();
     window->release();
@@ -31,6 +35,7 @@ bool IOSApplication::applicationDidFinishLaunching(  UI::Application *app, NS::V
        metalDevice = MTL::CreateSystemDefaultDevice();
 
        metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+       //CEditor::GetInstance()->Init(metalDevice, metalKitView);
         metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
         metalKitView->setClearColor( MTL::ClearColor::Make( 1.0, 0.0, 0.0, 1.0 ) );
 

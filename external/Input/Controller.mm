@@ -2,6 +2,8 @@
 #import <GameController/GameController.h>
 #import <Foundation/Foundation.h>
 #import <CoreMotion/CoreMotion.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <Cocoa/Cocoa.h>
 #include <iostream>
 
 Controller::Controller()
@@ -109,3 +111,35 @@ void Controller::renderOverlay(MTL::RenderCommandEncoder* pEnc)
     // experience for your players by surfacing actions relevant to your
     // game's context, and drawing semantically-meaningful glyphs.
 }
+
+CGPoint Controller::getMousePosition() 
+{
+    CGEventRef event = CGEventCreate(nullptr);
+    CGPoint location = CGEventGetLocation(event);
+    CFRelease(event);
+    return location;
+}
+
+void Controller::hideCursor() 
+{
+    [NSCursor hide];
+    CGAssociateMouseAndMouseCursorPosition(true);
+}
+
+void Controller::showCursor() 
+{ 
+    [NSCursor unhide];
+    CGAssociateMouseAndMouseCursorPosition(true);
+}
+
+bool Controller::isLeftMouseClicked() const
+{
+    return ([NSEvent pressedMouseButtons] & ((1 << 0))) != 0;
+}
+bool Controller::isRightMouseClicked() const
+{
+    return ([NSEvent pressedMouseButtons] & ((1 << 1))) != 0;
+}
+
+
+

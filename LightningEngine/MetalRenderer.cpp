@@ -35,6 +35,7 @@ MetalRenderer::MetalRenderer(MTL::Device* pDevice)
                                        "fragmentShader",
                                         metalDevice);
 
+
     // Render the cube
     CreateCube();
     
@@ -46,12 +47,6 @@ MetalRenderer::MetalRenderer(MTL::Device* pDevice)
         std::cerr << "Failed to load default library.";
         std::exit(-1);
     }
-    
-    // Initialise the background color
-    CEditor::GetInstance()->SetClearColor(0.15f, 0);
-    CEditor::GetInstance()->SetClearColor(0.15f, 1);
-    CEditor::GetInstance()->SetClearColor(0.15f, 2);
-    CEditor::GetInstance()->SetClearColor(1.f, 3);
     
     //Initialise the command queue
     metalCommandQueue = metalDevice->newCommandQueue();
@@ -101,7 +96,11 @@ void MetalRenderer::Draw(MTK::View* view)
         CreateDepthAndMSAATextures(view);
     }
     
+#ifdef DEBUG
     view->setPreferredFramesPerSecond(CEditor::GetInstance()->GetFrameRate());
+#else
+    view->setPreferredFramesPerSecond(120);
+#endif
     
     MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
@@ -109,10 +108,16 @@ void MetalRenderer::Draw(MTK::View* view)
     colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
     colorAttachmentDescriptor->setResolveTexture(view->currentDrawable()->texture());
     colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
+#ifdef DEBUG
     colorAttachmentDescriptor->setClearColor(MTL::ClearColor(CEditor::GetInstance()->GetClearColor(0),
                              CEditor::GetInstance()->GetClearColor(1),
                              CEditor::GetInstance()->GetClearColor(2),
                              CEditor::GetInstance()->GetClearColor(3)));
+    
+#else
+    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 0.15f)));
+#endif
+    
     colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
 
     depthAttachment->setTexture(depthTexture);
@@ -219,6 +224,30 @@ void MetalRenderer::ProcessInput()
     float currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
+    
+    if (gameController.isRightMouseClicked())
+    {
+        mouseX = gameController.getMousePosition().x;
+        mouseY = gameController.getMousePosition().y;
+        
+        if (firstMouse)
+        {
+               lastX = mouseX;
+               lastY = mouseY;
+               firstMouse = false;
+        }
+        else
+        {
+            UpdateMousePosition(mouseX, mouseY);
+        }
+        gameController.hideCursor();
+    }
+    else
+    {
+        firstMouse = true;
+        gameController.showCursor();
+    }
+    
         
     if (gameController.isWKeyDown())
         camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -239,4 +268,17 @@ void MetalRenderer::ProcessInput()
         camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
      
 }
+
+void MetalRenderer::UpdateMousePosition(float x, float y) 
+{
+    
+       float xoffset = x - lastX;
+       float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
+
+       lastX = x;
+       lastY = y;
+
+       camera.ProcessMouseMovement(xoffset, yoffset, false);
+}
+
 

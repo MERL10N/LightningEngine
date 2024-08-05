@@ -1,13 +1,13 @@
 //  main.cpp
 //  Lightning Engine
 #ifdef __APPLE__
-    #include "Platforms/macOS/MacApplication.h"
+    #include "Platforms/Apple/macOS/MacApplication.h"
 #else
     #include "Application.h"
 #endif
 #include <iostream>
 
-int main(int argc, char* argv[])
+int main()
 {
 
 #ifdef __APPLE__
@@ -20,14 +20,6 @@ int main(int argc, char* argv[])
         pApp->run();
         pApp->release();
     autoReleasePool->release();
-    
-    /*
-    IOSApplication del;
-    
-    NS::AutoreleasePool* autoReleasePool = NS::AutoreleasePool::alloc()->init();
-    UI::ApplicationMain(argc, argv, &del);
-    autoReleasePool->release();
-     */
 
 #else
 

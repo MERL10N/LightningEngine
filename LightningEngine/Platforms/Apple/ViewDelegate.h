@@ -30,7 +30,7 @@
 
 namespace MTL
 {
-class Device;
+    class Device;
 }
 
 class MetalRenderer;

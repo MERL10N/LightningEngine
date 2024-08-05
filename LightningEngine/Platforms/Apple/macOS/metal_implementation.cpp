@@ -1,6 +1,5 @@
 //
-//  mtl_implementation.cpp
-//  MetalTutorial
+//  metal_implementation.cpp
 //
 
 #define NS_PRIVATE_IMPLEMENTATION
@@ -12,4 +11,4 @@
 #include <AppKit/AppKit.hpp>
 #include <UIKit/UIKit.hpp>
 #include <MetalKit/MetalKit.hpp>
-//#include <Foundation/Foundation.hpp>
+#include <Foundation/Foundation.hpp>
