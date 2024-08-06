@@ -26,7 +26,7 @@
 #ifndef VIEW_DELEGATE_H
 #define VIEW_DELEGATE_H
 
-#include <MetalKit/MetalKit.hpp>
+#include <../ThirdParty/metal-cpp-extensions/MetalKit/MetalKit.hpp>
 
 namespace MTL
 {

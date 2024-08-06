@@ -7,8 +7,8 @@
 #define MTL_PRIVATE_IMPLEMENTATION
 #define MTK_PRIVATE_IMPLEMENTATION
 #define CA_PRIVATE_IMPLEMENTATION
-#include <Metal/Metal.hpp>
-#include <AppKit/AppKit.hpp>
-#include <UIKit/UIKit.hpp>
-#include <MetalKit/MetalKit.hpp>
-#include <Foundation/Foundation.hpp>
+#include <../ThirdParty/metal-cpp/Metal/Metal.hpp>
+#include <../ThirdParty/metal-cpp-extensions/AppKit/AppKit.hpp>
+#include <../ThirdParty/metal-cpp-extensions/UIKit/UIKit.hpp>
+#include <../ThirdParty/metal-cpp-extensions/MetalKit/MetalKit.hpp>
+#include <../ThirdParty/metal-cpp/Foundation/Foundation.hpp>

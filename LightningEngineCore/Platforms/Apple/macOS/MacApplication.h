@@ -25,7 +25,8 @@
 
 #ifndef METALAPPLICATION_H
 #define METALAPPLICATION_H
-#include <AppKit/AppKit.hpp>
+//#include <AppKit/AppKit.hpp>
+#include <../ThirdParty/metal-cpp-extensions/AppKit/AppKit.hpp>
 
 namespace MTK
 {
