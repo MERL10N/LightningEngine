@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A94E894B2C61835400CA2C97 /* GraphEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94E893C2C61832000CA2C97 /* GraphEditor.cpp */; };
-		A94E894C2C61835B00CA2C97 /* ImCurveEdit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94E893E2C61832000CA2C97 /* ImCurveEdit.cpp */; };
-		A94E894D2C61835D00CA2C97 /* ImGradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94E89402C61832000CA2C97 /* ImGradient.cpp */; };
-		A94E894E2C61835F00CA2C97 /* ImGuizmo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94E89422C61832000CA2C97 /* ImGuizmo.cpp */; };
-		A94E894F2C61836100CA2C97 /* ImSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94E89442C61832000CA2C97 /* ImSequencer.cpp */; };
 		A94E89522C6188E900CA2C97 /* AovelSansRounded-rdDL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A94E89512C6188E900CA2C97 /* AovelSansRounded-rdDL.ttf */; };
 		A94E89542C618C6000CA2C97 /* NaturalMonoRegular-9YBeK.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A94E89532C618C6000CA2C97 /* NaturalMonoRegular-9YBeK.ttf */; };
+		A9594EFB2C61AA3F00DDC128 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9594E522C61A6CD00DDC128 /* imgui_impl_metal.mm */; };
+		A9594EFC2C61AA4500DDC128 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9594E572C61A6CD00DDC128 /* imgui_impl_osx.mm */; };
+		A9594EFD2C61AA5300DDC128 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E662C61A6CD00DDC128 /* imgui.cpp */; };
+		A9594EFE2C61AA6300DDC128 /* ImGuizmo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E752C61A6CD00DDC128 /* ImGuizmo.cpp */; };
+		A9594EFF2C61AA7800DDC128 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E612C61A6CD00DDC128 /* imgui_demo.cpp */; };
+		A9594F002C61AA7800DDC128 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E622C61A6CD00DDC128 /* imgui_draw.cpp */; };
+		A9594F012C61AA7800DDC128 /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E642C61A6CD00DDC128 /* imgui_tables.cpp */; };
+		A9594F022C61AA7800DDC128 /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9594E652C61A6CD00DDC128 /* imgui_widgets.cpp */; };
 		A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A98297F02C5ED6D900211F0E /* Assets.xcassets */; };
 		A983C4562C5EBE0C001AD35D /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
 		A983C4572C5EBE10001AD35D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1729871D3400E5CDF6 /* Metal.framework */; };
@@ -27,13 +30,6 @@
 		A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A91D66E92C3B81E200B3287A /* Editor.cpp */; };
 		A983C4612C5EBEBA001AD35D /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */; };
 		A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D40F2B6B26C300C845F2 /* ShaderManager.cpp */; };
-		A983C4632C5EBEBA001AD35D /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3D32B6B263400C845F2 /* imgui_widgets.cpp */; };
-		A983C4642C5EBEBA001AD35D /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3DC2B6B263400C845F2 /* imgui_impl_metal.mm */; };
-		A983C4652C5EBEBA001AD35D /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */; };
-		A983C4662C5EBEBA001AD35D /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3EB2B6B263400C845F2 /* imgui.cpp */; };
-		A983C4672C5EBEBA001AD35D /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FA2B6B263400C845F2 /* imgui_tables.cpp */; };
-		A983C4682C5EBEBA001AD35D /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FB2B6B263400C845F2 /* imgui_demo.cpp */; };
-		A983C4692C5EBEBA001AD35D /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D3FC2B6B263400C845F2 /* imgui_draw.cpp */; };
 		A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
 		A983C46B2C5EBEBA001AD35D /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
 		A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
@@ -92,52 +88,10 @@
 		3E76CD6D2987690700178E19 /* metal_implementation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = metal_implementation.cpp; sourceTree = "<group>"; };
 		3E76CD7129876E7600178E19 /* square.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = square.metal; sourceTree = "<group>"; };
 		3E9F222429A060BA00383DCA /* mc_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mc_grass.png; sourceTree = "<group>"; };
-		A908D3D02B6B263400C845F2 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
-		A908D3D12B6B263400C845F2 /* imstb_textedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_textedit.h; sourceTree = "<group>"; };
-		A908D3D22B6B263400C845F2 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
-		A908D3D32B6B263400C845F2 /* imgui_widgets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_widgets.cpp; sourceTree = "<group>"; };
-		A908D3D42B6B263400C845F2 /* imstb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
-		A908D3D62B6B263400C845F2 /* imgui_impl_win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_win32.h; sourceTree = "<group>"; };
-		A908D3D72B6B263400C845F2 /* imgui_impl_dx12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_dx12.h; sourceTree = "<group>"; };
-		A908D3D82B6B263400C845F2 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_osx.h; sourceTree = "<group>"; };
-		A908D3D92B6B263400C845F2 /* imgui_impl_opengl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_opengl3.h; sourceTree = "<group>"; };
-		A908D3DA2B6B263400C845F2 /* imgui_impl_win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_win32.cpp; sourceTree = "<group>"; };
-		A908D3DB2B6B263400C845F2 /* imgui_impl_opengl3_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_opengl3_loader.h; sourceTree = "<group>"; };
-		A908D3DC2B6B263400C845F2 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_metal.mm; sourceTree = "<group>"; };
-		A908D3DE2B6B263400C845F2 /* glsl_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = glsl_shader.vert; sourceTree = "<group>"; };
-		A908D3DF2B6B263400C845F2 /* generate_spv.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = generate_spv.sh; sourceTree = "<group>"; };
-		A908D3E02B6B263400C845F2 /* glsl_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = glsl_shader.frag; sourceTree = "<group>"; };
-		A908D3E12B6B263400C845F2 /* imgui_impl_glfw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_glfw.h; sourceTree = "<group>"; };
-		A908D3E22B6B263400C845F2 /* imgui_impl_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal.h; sourceTree = "<group>"; };
-		A908D3E32B6B263400C845F2 /* imgui_impl_opengl3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_opengl3.cpp; sourceTree = "<group>"; };
-		A908D3E42B6B263400C845F2 /* imgui_impl_vulkan.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_vulkan.cpp; sourceTree = "<group>"; };
-		A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_osx.mm; sourceTree = "<group>"; };
-		A908D3E62B6B263400C845F2 /* imgui_impl_dx12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_dx12.cpp; sourceTree = "<group>"; };
-		A908D3E72B6B263400C845F2 /* imgui_impl_vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_vulkan.h; sourceTree = "<group>"; };
-		A908D3E82B6B263400C845F2 /* imgui_impl_glfw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_glfw.cpp; sourceTree = "<group>"; };
-		A908D3E92B6B263400C845F2 /* .editorconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
-		A908D3EA2B6B263400C845F2 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		A908D3EB2B6B263400C845F2 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
-		A908D3EC2B6B263400C845F2 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
-		A908D3EE2B6B263400C845F2 /* FUNDING.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = FUNDING.yml; sourceTree = "<group>"; };
-		A908D3F02B6B263400C845F2 /* static-analysis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = "static-analysis.yml"; sourceTree = "<group>"; };
-		A908D3F12B6B263400C845F2 /* scheduled.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = scheduled.yml; sourceTree = "<group>"; };
-		A908D3F22B6B263400C845F2 /* build.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = build.yml; sourceTree = "<group>"; };
-		A908D3F32B6B263400C845F2 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = pull_request_template.md; sourceTree = "<group>"; };
-		A908D3F52B6B263400C845F2 /* issue_template.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = issue_template.yml; sourceTree = "<group>"; };
-		A908D3F62B6B263400C845F2 /* config.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = config.yml; sourceTree = "<group>"; };
-		A908D3F72B6B263400C845F2 /* .gitattributes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
-		A908D3F82B6B263400C845F2 /* imstb_rectpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
-		A908D3F92B6B263400C845F2 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		A908D3FA2B6B263400C845F2 /* imgui_tables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_tables.cpp; sourceTree = "<group>"; };
-		A908D3FB2B6B263400C845F2 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
-		A908D3FC2B6B263400C845F2 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
 		A908D40C2B6B26C300C845F2 /* OpenGLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLShader.h; sourceTree = "<group>"; };
 		A908D40E2B6B26C300C845F2 /* ShaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderManager.h; sourceTree = "<group>"; };
 		A908D40F2B6B26C300C845F2 /* ShaderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderManager.cpp; sourceTree = "<group>"; };
 		A908D4102B6B26C300C845F2 /* MetalShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalShader.h; sourceTree = "<group>"; };
-		A908D4122B6B4F5D00C845F2 /* imgui_impl_metal_cpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_metal_cpp.cpp; sourceTree = "<group>"; };
-		A908D4132B6B4F5D00C845F2 /* imgui_impl_metal_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal_cpp.h; sourceTree = "<group>"; };
 		A911D9982B60E54C00FD2845 /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoader.h; sourceTree = "<group>"; };
 		A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLoader.cpp; sourceTree = "<group>"; };
 		A9173C162B6F68B200024ECD /* Player2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player2D.cpp; sourceTree = "<group>"; };
@@ -154,46 +108,6 @@
 		A930238C2B6D8BE30099EB32 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		A94E891E2C61832000CA2C97 /* imgui.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = imgui.ini; sourceTree = "<group>"; };
-		A94E891F2C61832000CA2C97 /* ImGuizmoSample.exe */ = {isa = PBXFileReference; lastKnownFileType = file; path = ImGuizmoSample.exe; sourceTree = "<group>"; };
-		A94E89212C61832000CA2C97 /* ImApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImApp.h; sourceTree = "<group>"; };
-		A94E89222C61832000CA2C97 /* imconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
-		A94E89232C61832000CA2C97 /* imgui_demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
-		A94E89242C61832000CA2C97 /* imgui_draw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
-		A94E89252C61832000CA2C97 /* imgui_internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
-		A94E89262C61832000CA2C97 /* imgui_tables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_tables.cpp; sourceTree = "<group>"; };
-		A94E89272C61832000CA2C97 /* imgui_widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_widgets.cpp; sourceTree = "<group>"; };
-		A94E89282C61832000CA2C97 /* imgui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
-		A94E89292C61832000CA2C97 /* imgui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
-		A94E892A2C61832000CA2C97 /* ImGuizmoSample.vcxproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ImGuizmoSample.vcxproj; sourceTree = "<group>"; };
-		A94E892B2C61832000CA2C97 /* imstb_rectpack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
-		A94E892C2C61832000CA2C97 /* imstb_textedit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_textedit.h; sourceTree = "<group>"; };
-		A94E892D2C61832000CA2C97 /* imstb_truetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
-		A94E892E2C61832000CA2C97 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A94E892F2C61832000CA2C97 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		A94E89312C61832000CA2C97 /* nodeeditor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nodeeditor.jpg; sourceTree = "<group>"; };
-		A94E89332C61832000CA2C97 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		A94E89342C61832000CA2C97 /* ImApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImApp.h; sourceTree = "<group>"; };
-		A94E89352C61832000CA2C97 /* imgui.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = imgui.ini; sourceTree = "<group>"; };
-		A94E89362C61832000CA2C97 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A94E89372C61832000CA2C97 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		A94E89382C61832000CA2C97 /* vcpkg.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = vcpkg.json; sourceTree = "<group>"; };
-		A94E893A2C61832000CA2C97 /* .editorconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
-		A94E893B2C61832000CA2C97 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		A94E893C2C61832000CA2C97 /* GraphEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GraphEditor.cpp; sourceTree = "<group>"; };
-		A94E893D2C61832000CA2C97 /* GraphEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphEditor.h; sourceTree = "<group>"; };
-		A94E893E2C61832000CA2C97 /* ImCurveEdit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImCurveEdit.cpp; sourceTree = "<group>"; };
-		A94E893F2C61832000CA2C97 /* ImCurveEdit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImCurveEdit.h; sourceTree = "<group>"; };
-		A94E89402C61832000CA2C97 /* ImGradient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGradient.cpp; sourceTree = "<group>"; };
-		A94E89412C61832000CA2C97 /* ImGradient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGradient.h; sourceTree = "<group>"; };
-		A94E89422C61832000CA2C97 /* ImGuizmo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImGuizmo.cpp; sourceTree = "<group>"; };
-		A94E89432C61832000CA2C97 /* ImGuizmo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImGuizmo.h; sourceTree = "<group>"; };
-		A94E89442C61832000CA2C97 /* ImSequencer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImSequencer.cpp; sourceTree = "<group>"; };
-		A94E89452C61832000CA2C97 /* ImSequencer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImSequencer.h; sourceTree = "<group>"; };
-		A94E89462C61832000CA2C97 /* ImZoomSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImZoomSlider.h; sourceTree = "<group>"; };
-		A94E89472C61832000CA2C97 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A94E89482C61832000CA2C97 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		A94E89492C61832000CA2C97 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A94E89512C6188E900CA2C97 /* AovelSansRounded-rdDL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AovelSansRounded-rdDL.ttf"; sourceTree = "<group>"; };
 		A94E89532C618C6000CA2C97 /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A9594E3D2C61A6CD00DDC128 /* config.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = config.yml; sourceTree = "<group>"; };
@@ -500,7 +414,6 @@
 			children = (
 				A9C908082C5EE249000B2197 /* Platforms */,
 				A94E89502C61885500CA2C97 /* Fonts */,
-				A94E894A2C61832000CA2C97 /* ImGuizmo */,
 				A93CF0FD2C55A9BF007B432E /* Entities */,
 				A92CC3262C51C297006625FE /* Camera */,
 				A92CC3162C51C09E006625FE /* Input */,
@@ -508,7 +421,6 @@
 				A91D66E82C3B81CD00B3287A /* Editor */,
 				A930238A2B6D8B130099EB32 /* Math */,
 				A908D40A2B6B26C300C845F2 /* Renderer */,
-				A908D3CF2B6B263400C845F2 /* imgui */,
 				A93531DA2B61C8D200347F4A /* Primitives */,
 				A911D9772B60CD8C00FD2845 /* GameControl */,
 				A911D9722B60CD0B00FD2845 /* System */,
@@ -528,95 +440,6 @@
 				3E9F222429A060BA00383DCA /* mc_grass.png */,
 			);
 			path = assets;
-			sourceTree = "<group>";
-		};
-		A908D3CF2B6B263400C845F2 /* imgui */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3D02B6B263400C845F2 /* imgui.h */,
-				A908D3D12B6B263400C845F2 /* imstb_textedit.h */,
-				A908D3D22B6B263400C845F2 /* imconfig.h */,
-				A908D3D32B6B263400C845F2 /* imgui_widgets.cpp */,
-				A908D3D42B6B263400C845F2 /* imstb_truetype.h */,
-				A908D3D52B6B263400C845F2 /* backends */,
-				A908D3E92B6B263400C845F2 /* .editorconfig */,
-				A908D3EA2B6B263400C845F2 /* .gitignore */,
-				A908D3EB2B6B263400C845F2 /* imgui.cpp */,
-				A908D3EC2B6B263400C845F2 /* imgui_internal.h */,
-				A908D3ED2B6B263400C845F2 /* .github */,
-				A908D3F72B6B263400C845F2 /* .gitattributes */,
-				A908D3F82B6B263400C845F2 /* imstb_rectpack.h */,
-				A908D3F92B6B263400C845F2 /* LICENSE.txt */,
-				A908D3FA2B6B263400C845F2 /* imgui_tables.cpp */,
-				A908D3FB2B6B263400C845F2 /* imgui_demo.cpp */,
-				A908D3FC2B6B263400C845F2 /* imgui_draw.cpp */,
-			);
-			path = imgui;
-			sourceTree = "<group>";
-		};
-		A908D3D52B6B263400C845F2 /* backends */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3D62B6B263400C845F2 /* imgui_impl_win32.h */,
-				A908D3D72B6B263400C845F2 /* imgui_impl_dx12.h */,
-				A908D3D82B6B263400C845F2 /* imgui_impl_osx.h */,
-				A908D3D92B6B263400C845F2 /* imgui_impl_opengl3.h */,
-				A908D3DA2B6B263400C845F2 /* imgui_impl_win32.cpp */,
-				A908D3DB2B6B263400C845F2 /* imgui_impl_opengl3_loader.h */,
-				A908D3DC2B6B263400C845F2 /* imgui_impl_metal.mm */,
-				A908D3DD2B6B263400C845F2 /* vulkan */,
-				A908D3E12B6B263400C845F2 /* imgui_impl_glfw.h */,
-				A908D3E22B6B263400C845F2 /* imgui_impl_metal.h */,
-				A908D3E32B6B263400C845F2 /* imgui_impl_opengl3.cpp */,
-				A908D3E42B6B263400C845F2 /* imgui_impl_vulkan.cpp */,
-				A908D3E52B6B263400C845F2 /* imgui_impl_osx.mm */,
-				A908D3E62B6B263400C845F2 /* imgui_impl_dx12.cpp */,
-				A908D3E72B6B263400C845F2 /* imgui_impl_vulkan.h */,
-				A908D3E82B6B263400C845F2 /* imgui_impl_glfw.cpp */,
-				A908D4122B6B4F5D00C845F2 /* imgui_impl_metal_cpp.cpp */,
-				A908D4132B6B4F5D00C845F2 /* imgui_impl_metal_cpp.h */,
-			);
-			path = backends;
-			sourceTree = "<group>";
-		};
-		A908D3DD2B6B263400C845F2 /* vulkan */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3DE2B6B263400C845F2 /* glsl_shader.vert */,
-				A908D3DF2B6B263400C845F2 /* generate_spv.sh */,
-				A908D3E02B6B263400C845F2 /* glsl_shader.frag */,
-			);
-			path = vulkan;
-			sourceTree = "<group>";
-		};
-		A908D3ED2B6B263400C845F2 /* .github */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3EE2B6B263400C845F2 /* FUNDING.yml */,
-				A908D3EF2B6B263400C845F2 /* workflows */,
-				A908D3F32B6B263400C845F2 /* pull_request_template.md */,
-				A908D3F42B6B263400C845F2 /* ISSUE_TEMPLATE */,
-			);
-			path = .github;
-			sourceTree = "<group>";
-		};
-		A908D3EF2B6B263400C845F2 /* workflows */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3F02B6B263400C845F2 /* static-analysis.yml */,
-				A908D3F12B6B263400C845F2 /* scheduled.yml */,
-				A908D3F22B6B263400C845F2 /* build.yml */,
-			);
-			path = workflows;
-			sourceTree = "<group>";
-		};
-		A908D3F42B6B263400C845F2 /* ISSUE_TEMPLATE */ = {
-			isa = PBXGroup;
-			children = (
-				A908D3F52B6B263400C845F2 /* issue_template.yml */,
-				A908D3F62B6B263400C845F2 /* config.yml */,
-			);
-			path = ISSUE_TEMPLATE;
 			sourceTree = "<group>";
 		};
 		A908D40A2B6B26C300C845F2 /* Renderer */ = {
@@ -723,85 +546,6 @@
 			children = (
 			);
 			path = Entities;
-			sourceTree = "<group>";
-		};
-		A94E89202C61832000CA2C97 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				A94E891E2C61832000CA2C97 /* imgui.ini */,
-				A94E891F2C61832000CA2C97 /* ImGuizmoSample.exe */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
-		A94E89302C61832000CA2C97 /* example */ = {
-			isa = PBXGroup;
-			children = (
-				A94E89212C61832000CA2C97 /* ImApp.h */,
-				A94E89222C61832000CA2C97 /* imconfig.h */,
-				A94E89232C61832000CA2C97 /* imgui_demo.cpp */,
-				A94E89242C61832000CA2C97 /* imgui_draw.cpp */,
-				A94E89252C61832000CA2C97 /* imgui_internal.h */,
-				A94E89262C61832000CA2C97 /* imgui_tables.cpp */,
-				A94E89272C61832000CA2C97 /* imgui_widgets.cpp */,
-				A94E89282C61832000CA2C97 /* imgui.cpp */,
-				A94E89292C61832000CA2C97 /* imgui.h */,
-				A94E892A2C61832000CA2C97 /* ImGuizmoSample.vcxproj */,
-				A94E892B2C61832000CA2C97 /* imstb_rectpack.h */,
-				A94E892C2C61832000CA2C97 /* imstb_textedit.h */,
-				A94E892D2C61832000CA2C97 /* imstb_truetype.h */,
-				A94E892E2C61832000CA2C97 /* main.cpp */,
-				A94E892F2C61832000CA2C97 /* stb_image.h */,
-			);
-			path = example;
-			sourceTree = "<group>";
-		};
-		A94E89322C61832000CA2C97 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				A94E89312C61832000CA2C97 /* nodeeditor.jpg */,
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
-		A94E89392C61832000CA2C97 /* vcpkg-example */ = {
-			isa = PBXGroup;
-			children = (
-				A94E89332C61832000CA2C97 /* CMakeLists.txt */,
-				A94E89342C61832000CA2C97 /* ImApp.h */,
-				A94E89352C61832000CA2C97 /* imgui.ini */,
-				A94E89362C61832000CA2C97 /* main.cpp */,
-				A94E89372C61832000CA2C97 /* README.md */,
-				A94E89382C61832000CA2C97 /* vcpkg.json */,
-			);
-			path = "vcpkg-example";
-			sourceTree = "<group>";
-		};
-		A94E894A2C61832000CA2C97 /* ImGuizmo */ = {
-			isa = PBXGroup;
-			children = (
-				A94E89202C61832000CA2C97 /* bin */,
-				A94E89302C61832000CA2C97 /* example */,
-				A94E89322C61832000CA2C97 /* Images */,
-				A94E89392C61832000CA2C97 /* vcpkg-example */,
-				A94E893A2C61832000CA2C97 /* .editorconfig */,
-				A94E893B2C61832000CA2C97 /* .gitignore */,
-				A94E893C2C61832000CA2C97 /* GraphEditor.cpp */,
-				A94E893D2C61832000CA2C97 /* GraphEditor.h */,
-				A94E893E2C61832000CA2C97 /* ImCurveEdit.cpp */,
-				A94E893F2C61832000CA2C97 /* ImCurveEdit.h */,
-				A94E89402C61832000CA2C97 /* ImGradient.cpp */,
-				A94E89412C61832000CA2C97 /* ImGradient.h */,
-				A94E89422C61832000CA2C97 /* ImGuizmo.cpp */,
-				A94E89432C61832000CA2C97 /* ImGuizmo.h */,
-				A94E89442C61832000CA2C97 /* ImSequencer.cpp */,
-				A94E89452C61832000CA2C97 /* ImSequencer.h */,
-				A94E89462C61832000CA2C97 /* ImZoomSlider.h */,
-				A94E89472C61832000CA2C97 /* LICENSE */,
-				A94E89482C61832000CA2C97 /* Makefile */,
-				A94E89492C61832000CA2C97 /* README.md */,
-			);
-			path = ImGuizmo;
 			sourceTree = "<group>";
 		};
 		A94E89502C61885500CA2C97 /* Fonts */ = {
@@ -1306,34 +1050,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A983C4652C5EBEBA001AD35D /* imgui_impl_osx.mm in Sources */,
+				A9594EFF2C61AA7800DDC128 /* imgui_demo.cpp in Sources */,
+				A9594F002C61AA7800DDC128 /* imgui_draw.cpp in Sources */,
+				A9594F012C61AA7800DDC128 /* imgui_tables.cpp in Sources */,
+				A9594F022C61AA7800DDC128 /* imgui_widgets.cpp in Sources */,
+				A9594EFE2C61AA6300DDC128 /* ImGuizmo.cpp in Sources */,
+				A9594EFD2C61AA5300DDC128 /* imgui.cpp in Sources */,
+				A9594EFC2C61AA4500DDC128 /* imgui_impl_osx.mm in Sources */,
+				A9594EFB2C61AA3F00DDC128 /* imgui_impl_metal.mm in Sources */,
 				A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */,
 				A983C46E2C5EBEBA001AD35D /* Scene2D.cpp in Sources */,
-				A983C4642C5EBEBA001AD35D /* imgui_impl_metal.mm in Sources */,
 				A983C4742C5EBEBA001AD35D /* MetalRenderer.cpp in Sources */,
-				A983C4672C5EBEBA001AD35D /* imgui_tables.cpp in Sources */,
-				A983C4662C5EBEBA001AD35D /* imgui.cpp in Sources */,
 				A983C4612C5EBEBA001AD35D /* AAPLMathUtilities.cpp in Sources */,
-				A983C4632C5EBEBA001AD35D /* imgui_widgets.cpp in Sources */,
 				A983C4732C5EBEBA001AD35D /* ViewDelegate.cpp in Sources */,
 				A983C45D2C5EBEBA001AD35D /* Camera.cpp in Sources */,
-				A983C4692C5EBEBA001AD35D /* imgui_draw.cpp in Sources */,
 				A983C46B2C5EBEBA001AD35D /* ImageLoader.cpp in Sources */,
 				A983C45F2C5EBEBA001AD35D /* Timer.cpp in Sources */,
 				A983C4712C5EBEBA001AD35D /* metal_implementation.cpp in Sources */,
 				A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */,
 				A983C4722C5EBEBA001AD35D /* MacApplication.cpp in Sources */,
-				A983C4682C5EBEBA001AD35D /* imgui_demo.cpp in Sources */,
 				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
 				A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */,
 				A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
 				A983C45E2C5EBEBA001AD35D /* Controller.mm in Sources */,
-				A94E894B2C61835400CA2C97 /* GraphEditor.cpp in Sources */,
-				A94E894C2C61835B00CA2C97 /* ImCurveEdit.cpp in Sources */,
-				A94E894D2C61835D00CA2C97 /* ImGradient.cpp in Sources */,
-				A94E894E2C61835F00CA2C97 /* ImGuizmo.cpp in Sources */,
-				A94E894F2C61836100CA2C97 /* ImSequencer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1508,6 +1248,7 @@
 					"$(PROJECT_DIR)/../LightningEngineCore",
 					"$(PROJECT_DIR)/../ThirdParty/metal-cpp",
 					"$(PROJECT_DIR)/../ThirdParty/metal-cpp-extensions",
+					"$(PROJECT_DIR)/../ThirdParty",
 				);
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -1549,6 +1290,7 @@
 					"$(PROJECT_DIR)/../LightningEngineCore",
 					"$(PROJECT_DIR)/../ThirdParty/metal-cpp",
 					"$(PROJECT_DIR)/../ThirdParty/metal-cpp-extensions",
+					"$(PROJECT_DIR)/../ThirdParty",
 				);
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
