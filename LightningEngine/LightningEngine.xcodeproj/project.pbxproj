@@ -32,8 +32,6 @@
 		A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A908D40F2B6B26C300C845F2 /* ShaderManager.cpp */; };
 		A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98AE3292B6DBF4B00AA7004 /* MeshBuilder.cpp */; };
 		A983C46B2C5EBEBA001AD35D /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */; };
-		A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9173C162B6F68B200024ECD /* Player2D.cpp */; };
-		A983C46E2C5EBEBA001AD35D /* Scene2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */; };
 		A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
 		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
 		A983C4712C5EBEBA001AD35D /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E76CD6D2987690700178E19 /* metal_implementation.cpp */; };
@@ -94,8 +92,6 @@
 		A908D4102B6B26C300C845F2 /* MetalShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalShader.h; sourceTree = "<group>"; };
 		A911D9982B60E54C00FD2845 /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoader.h; sourceTree = "<group>"; };
 		A911D99A2B60E54C00FD2845 /* ImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLoader.cpp; sourceTree = "<group>"; };
-		A9173C162B6F68B200024ECD /* Player2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player2D.cpp; sourceTree = "<group>"; };
-		A9173C172B6F68B200024ECD /* Player2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player2D.h; sourceTree = "<group>"; };
 		A919E1752C520ABF00E4B533 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		A919E1762C520ABF00E4B533 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
 		A91D66E92C3B81E200B3287A /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
@@ -282,8 +278,6 @@
 		A9594EF52C61A6CD00DDC128 /* UIView.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UIView.hpp; sourceTree = "<group>"; };
 		A9594EF62C61A6CD00DDC128 /* UIViewController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UIViewController.hpp; sourceTree = "<group>"; };
 		A9594EF72C61A6CD00DDC128 /* UIWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UIWindow.hpp; sourceTree = "<group>"; };
-		A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene2D.cpp; sourceTree = "<group>"; };
-		A978D8602B6E0F4200B9FF1B /* Scene2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene2D.h; sourceTree = "<group>"; };
 		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9889DD12C605A8700245914 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -478,15 +472,6 @@
 			path = GameControl;
 			sourceTree = "<group>";
 		};
-		A9173C152B6F687800024ECD /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-				A9173C162B6F68B200024ECD /* Player2D.cpp */,
-				A9173C172B6F68B200024ECD /* Player2D.h */,
-			);
-			path = Entities;
-			sourceTree = "<group>";
-		};
 		A91D66E82C3B81CD00B3287A /* Editor */ = {
 			isa = PBXGroup;
 			children = (
@@ -517,7 +502,6 @@
 		A93023842B6CE4910099EB32 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				A978D85E2B6E0F2400B9FF1B /* Scene2D */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -891,16 +875,6 @@
 			path = ../ThirdParty;
 			sourceTree = "<group>";
 		};
-		A978D85E2B6E0F2400B9FF1B /* Scene2D */ = {
-			isa = PBXGroup;
-			children = (
-				A9173C152B6F687800024ECD /* Entities */,
-				A978D85F2B6E0F4200B9FF1B /* Scene2D.cpp */,
-				A978D8602B6E0F4200B9FF1B /* Scene2D.h */,
-			);
-			path = Scene2D;
-			sourceTree = "<group>";
-		};
 		A9C908082C5EE249000B2197 /* Platforms */ = {
 			isa = PBXGroup;
 			children = (
@@ -1059,7 +1033,6 @@
 				A9594EFC2C61AA4500DDC128 /* imgui_impl_osx.mm in Sources */,
 				A9594EFB2C61AA3F00DDC128 /* imgui_impl_metal.mm in Sources */,
 				A983C46A2C5EBEBA001AD35D /* MeshBuilder.cpp in Sources */,
-				A983C46E2C5EBEBA001AD35D /* Scene2D.cpp in Sources */,
 				A983C4742C5EBEBA001AD35D /* MetalRenderer.cpp in Sources */,
 				A983C4612C5EBEBA001AD35D /* AAPLMathUtilities.cpp in Sources */,
 				A983C4732C5EBEBA001AD35D /* ViewDelegate.cpp in Sources */,
@@ -1070,7 +1043,6 @@
 				A983C4622C5EBEBA001AD35D /* ShaderManager.cpp in Sources */,
 				A983C4722C5EBEBA001AD35D /* MacApplication.cpp in Sources */,
 				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
-				A983C46D2C5EBEBA001AD35D /* Player2D.cpp in Sources */,
 				A983C4602C5EBEBA001AD35D /* Editor.cpp in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
 				A983C45E2C5EBEBA001AD35D /* Controller.mm in Sources */,
