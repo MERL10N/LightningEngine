@@ -1,7 +1,7 @@
 //  main.cpp
 //  Lightning Engine
 #ifdef __APPLE__
-    #include "Platforms/Apple/macOS/MacApplication.h"
+    #include <LightningEngineCore/MacApplication.h>
 #else
     #include "Application.h"
 #endif
