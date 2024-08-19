@@ -8,7 +8,11 @@
 #ifndef MeshBuilder_hpp
 #define MeshBuilder_hpp
 
-#include <Metal/Metal.hpp>
+namespace MTL
+{
+    class Buffer;
+    class Device;
+}
 
 class CMeshBuilder
 {

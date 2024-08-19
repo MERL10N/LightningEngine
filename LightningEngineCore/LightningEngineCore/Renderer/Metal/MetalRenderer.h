@@ -11,8 +11,6 @@
 #include <Input/Controller.h>
 #include <Camera/Camera.h>
 
-class Camera;
-
 namespace MTL
 {
     class Device;

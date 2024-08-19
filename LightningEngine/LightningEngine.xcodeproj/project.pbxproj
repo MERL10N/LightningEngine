@@ -132,7 +132,6 @@
 			children = (
 				A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */,
 				3E9F222329A060A600383DCA /* assets */,
-				A93023842B6CE4910099EB32 /* Source */,
 				A908D4172B6CE1B000C845F2 /* Shaders */,
 				3E56AB66297E0E6E00DB5F4F /* main.cpp */,
 			);
@@ -174,13 +173,6 @@
 				A9D700202C502B7B002A50BA /* cube.metal */,
 			);
 			path = Shaders;
-			sourceTree = "<group>";
-		};
-		A93023842B6CE4910099EB32 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

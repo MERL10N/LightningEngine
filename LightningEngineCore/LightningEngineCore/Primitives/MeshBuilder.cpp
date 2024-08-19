@@ -7,6 +7,7 @@
 
 #include "MeshBuilder.h"
 #include "VertexData.h"
+#include <Metal/Metal.hpp>
 
 /**
  @brief Generate a quad and load it into Metal

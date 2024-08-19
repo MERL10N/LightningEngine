@@ -1,7 +1,10 @@
-//
-//  square.metal
-//  MetalTutorial
-//
+/*
+    square.metal
+    LightningEngine
+
+    Created by Kian Marvi on 2/2/24.
+*/
+
 
 #include <metal_stdlib>
 using namespace metal;
