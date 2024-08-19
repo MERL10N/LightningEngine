@@ -185,10 +185,6 @@
 		A9F6812E2C70291800987BA7 /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A9F681302C70291800987BA7 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		A9F681312C70291800987BA7 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
-		A9F681332C70291800987BA7 /* glfw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
-		A9F681342C70291800987BA7 /* glfw3native.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3native.h; sourceTree = "<group>"; };
-		A9F681372C70291800987BA7 /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libglfw.3.dylib; sourceTree = "<group>"; };
-		A9F681382C70291800987BA7 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
 		A9F6813C2C70291800987BA7 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		A9F6813D2C70291800987BA7 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
 		A9F6813F2C70291800987BA7 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
@@ -196,8 +192,6 @@
 		A9F681472C70291800987BA7 /* MacApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MacApplication.cpp; sourceTree = "<group>"; };
 		A9F681482C70291800987BA7 /* MacApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacApplication.h; sourceTree = "<group>"; };
 		A9F681492C70291800987BA7 /* metal_implementation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = metal_implementation.cpp; sourceTree = "<group>"; };
-		A9F6814A2C70291800987BA7 /* MetalApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetalApplication.cpp; sourceTree = "<group>"; };
-		A9F6814B2C70291800987BA7 /* MetalApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalApplication.h; sourceTree = "<group>"; };
 		A9F6814D2C70291800987BA7 /* ViewDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ViewDelegate.cpp; sourceTree = "<group>"; };
 		A9F6814E2C70291800987BA7 /* ViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDelegate.h; sourceTree = "<group>"; };
 		A9F681512C70291800987BA7 /* MeshBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
@@ -469,48 +463,6 @@
 			path = GameControl;
 			sourceTree = "<group>";
 		};
-		A9F681352C70291800987BA7 /* GLFW */ = {
-			isa = PBXGroup;
-			children = (
-				A9F681332C70291800987BA7 /* glfw3.h */,
-				A9F681342C70291800987BA7 /* glfw3native.h */,
-			);
-			path = GLFW;
-			sourceTree = "<group>";
-		};
-		A9F681362C70291800987BA7 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				A9F681352C70291800987BA7 /* GLFW */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		A9F681392C70291800987BA7 /* lib-universal */ = {
-			isa = PBXGroup;
-			children = (
-				A9F681372C70291800987BA7 /* libglfw.3.dylib */,
-				A9F681382C70291800987BA7 /* libglfw3.a */,
-			);
-			path = "lib-universal";
-			sourceTree = "<group>";
-		};
-		A9F6813A2C70291800987BA7 /* GLFW */ = {
-			isa = PBXGroup;
-			children = (
-				A9F681362C70291800987BA7 /* include */,
-				A9F681392C70291800987BA7 /* lib-universal */,
-			);
-			path = GLFW;
-			sourceTree = "<group>";
-		};
-		A9F6813B2C70291800987BA7 /* ImGuizmo */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ImGuizmo;
-			sourceTree = "<group>";
-		};
 		A9F6813E2C70291800987BA7 /* Input */ = {
 			isa = PBXGroup;
 			children = (
@@ -535,8 +487,6 @@
 				A9F681472C70291800987BA7 /* MacApplication.cpp */,
 				A9F681482C70291800987BA7 /* MacApplication.h */,
 				A9F681492C70291800987BA7 /* metal_implementation.cpp */,
-				A9F6814A2C70291800987BA7 /* MetalApplication.cpp */,
-				A9F6814B2C70291800987BA7 /* MetalApplication.h */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -935,8 +885,6 @@
 				A9F6812C2C70291800987BA7 /* Editor */,
 				A9F6812F2C70291800987BA7 /* Fonts */,
 				A9F681322C70291800987BA7 /* GameControl */,
-				A9F6813A2C70291800987BA7 /* GLFW */,
-				A9F6813B2C70291800987BA7 /* ImGuizmo */,
 				A9F6813E2C70291800987BA7 /* Input */,
 				A9F681412C70291800987BA7 /* Math */,
 				A9F681502C70291800987BA7 /* Platforms */,

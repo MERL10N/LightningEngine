@@ -28,3 +28,7 @@ LightningEngineCore/._ImGuizmo
 ._*.ttf
 
 ._*
+
+LightningEngine/.DS_Store
+
+LightningEngineCore/.DS_Store

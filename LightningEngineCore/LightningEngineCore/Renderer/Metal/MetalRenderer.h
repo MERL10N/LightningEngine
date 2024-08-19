@@ -8,9 +8,10 @@
 #ifndef Renderer_h
 #define Renderer_h
 
-#include <DesignPatterns/SingletonTemplate.h>
 #include <Input/Controller.h>
 #include <Camera/Camera.h>
+
+class Camera;
 
 namespace MTL
 {
@@ -35,9 +36,8 @@ namespace MTK
     class View;
 }
 
-class MetalRenderer : public CSingletonTemplate<MetalRenderer>
+class MetalRenderer
 {
-    friend CSingletonTemplate<MetalRenderer>;
 public:
     MetalRenderer(MTL::Device* pDevice);
     ~MetalRenderer();

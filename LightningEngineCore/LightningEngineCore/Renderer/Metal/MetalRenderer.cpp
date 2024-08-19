@@ -19,6 +19,7 @@
 #include <Editor/Editor.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <TimeControl/Timer.h>
+#include <Camera/Camera.h>
 
 #include <iostream>
 
