@@ -37,7 +37,7 @@ namespace MTK
 class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* pDevice);
+    MetalRenderer(MTL::Device* metalDevice);
     ~MetalRenderer();
     void Draw(MTK::View* view);
 

@@ -23,10 +23,17 @@
 
 #include <iostream>
 
-MetalRenderer::MetalRenderer(MTL::Device* pDevice)
+MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
+: metalDevice(MTL::CreateSystemDefaultDevice())
+, metalDefaultLibrary(metalDevice->newDefaultLibrary())
+, metalCommandQueue(metalDevice->newCommandQueue())
+, camera(Camera())
 {
-    // Detect if metal is supported on the target device
-    metalDevice = MTL::CreateSystemDefaultDevice();
+    if(!metalDefaultLibrary)
+    {
+        std::cerr << "Failed to load default library.";
+        std::exit(-1);
+    }
     
     
     // Initialise the shader
@@ -35,24 +42,10 @@ MetalRenderer::MetalRenderer(MTL::Device* pDevice)
                                        "vertexShader",
                                        "fragmentShader",
                                         metalDevice);
-
-
+    
     // Render the cube
     CreateCube();
     
-    // Initialise the default library
-    metalDefaultLibrary = metalDevice->newDefaultLibrary();
-    
-    if(!metalDefaultLibrary)
-    {
-        std::cerr << "Failed to load default library.";
-        std::exit(-1);
-    }
-    
-    //Initialise the command queue
-    metalCommandQueue = metalDevice->newCommandQueue();
-    
-    camera = Camera();
 }
 
 MetalRenderer::~MetalRenderer()
@@ -156,7 +149,7 @@ void MetalRenderer::Draw(MTK::View* view)
     metalRenderPSO = CShaderManager::GetInstance()->GetRenderPipelineState("Cube");
     renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     renderCommandEncoder->setCullMode(MTL::CullModeBack); // Enable backface culling
-    renderCommandEncoder->SetRenderPipelineState(metalRenderPSO);
+    renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
     renderCommandEncoder->setDepthStencilState(CShaderManager::GetInstance()->getDepthStencilState("Cube"));
     CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, squareVertexBuffer);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);

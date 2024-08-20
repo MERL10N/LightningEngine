@@ -37,9 +37,9 @@ class MetalRenderer;
 class ViewDelegate : public MTK::ViewDelegate
 {
     public:
-        ViewDelegate( MTL::Device* pDevice );
+        ViewDelegate( MTL::Device* metalDevice );
         virtual ~ViewDelegate() override;
-        virtual void drawInMTKView( MTK::View* pView ) override;
+        virtual void drawInMTKView( MTK::View* view ) override;
 
     private:
         MetalRenderer* metalRenderer;

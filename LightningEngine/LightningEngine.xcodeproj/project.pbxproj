@@ -18,13 +18,6 @@
 		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
 		A9889DD42C605BBA00245914 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908282C5EEA49000B2197 /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A9889DD52C605BC700245914 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908112C5EE970000B2197 /* GameController.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		A9889DD72C605DA400245914 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1729871D3400E5CDF6 /* Metal.framework */; };
-		A9889DD82C605DAD00245914 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489029CFFEEF009CDE34 /* IOKit.framework */; };
-		A9889DDA2C60601400245914 /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
-		A9889DDB2C6060DE00245914 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; };
-		A9C908362C5EF005000B2197 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C9080F2C5EE968000B2197 /* UIKit.framework */; };
-		A9C908392C5EF06E000B2197 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908112C5EE970000B2197 /* GameController.framework */; };
-		A9C9083A2C5EF0AB000B2197 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908282C5EEA49000B2197 /* Foundation.framework */; };
 		A9F683282C70327D00987BA7 /* LightningEngineCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F6830C2C702CEE00987BA7 /* LightningEngineCore.framework */; };
 		A9F683292C70327D00987BA7 /* LightningEngineCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F6830C2C702CEE00987BA7 /* LightningEngineCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -63,10 +56,11 @@
 		3E9F222429A060BA00383DCA /* mc_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mc_grass.png; sourceTree = "<group>"; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		A97C89A32C752FCF002E27DC /* AovelSansRounded-rdDL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AovelSansRounded-rdDL.ttf"; sourceTree = "<group>"; };
+		A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
-		A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9C9080F2C5EE968000B2197 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9C908112C5EE970000B2197 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		A9C908152C5EE9A0000B2197 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -93,19 +87,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9C907EC2C5EE1FD000B2197 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9C9083A2C5EF0AB000B2197 /* Foundation.framework in Frameworks */,
-				A9C908392C5EF06E000B2197 /* GameController.framework in Frameworks */,
-				A9C908362C5EF005000B2197 /* UIKit.framework in Frameworks */,
-				A9889DDB2C6060DE00245914 /* MetalKit.framework in Frameworks */,
-				A9889DD72C605DA400245914 /* Metal.framework in Frameworks */,
-				A9889DD82C605DAD00245914 /* IOKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -122,7 +103,6 @@
 			isa = PBXGroup;
 			children = (
 				A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */,
-				A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,6 +139,7 @@
 		3E9F222329A060A600383DCA /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A97C89A52C752FCF002E27DC /* Fonts */,
 				A98297F02C5ED6D900211F0E /* Assets.xcassets */,
 				A9E077522B6490BA0085E7A5 /* sonic.png */,
 				3E9F222429A060BA00383DCA /* mc_grass.png */,
@@ -173,6 +154,15 @@
 				A9D700202C502B7B002A50BA /* cube.metal */,
 			);
 			path = Shaders;
+			sourceTree = "<group>";
+		};
+		A97C89A52C752FCF002E27DC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A97C89A32C752FCF002E27DC /* AovelSansRounded-rdDL.ttf */,
+				A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,23 +187,6 @@
 			productReference = A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A9C907EE2C5EE1FD000B2197 /* LightningEngine-iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A9C908052C5EE1FD000B2197 /* Build configuration list for PBXNativeTarget "LightningEngine-iOS" */;
-			buildPhases = (
-				A9C907EB2C5EE1FD000B2197 /* Sources */,
-				A9C907EC2C5EE1FD000B2197 /* Frameworks */,
-				A9C907ED2C5EE1FD000B2197 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "LightningEngine-iOS";
-			productName = "LightningEngine-iOS";
-			productReference = A9C907EF2C5EE1FD000B2197 /* LightningEngine-iOS.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -225,9 +198,6 @@
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					A983C4412C5EBDB1001AD35D = {
-						CreatedOnToolsVersion = 15.4;
-					};
-					A9C907EE2C5EE1FD000B2197 = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
@@ -246,7 +216,6 @@
 			projectRoot = "";
 			targets = (
 				A983C4412C5EBDB1001AD35D /* LightningEngine - macOS */,
-				A9C907EE2C5EE1FD000B2197 /* LightningEngine-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -260,13 +229,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9C907ED2C5EE1FD000B2197 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -276,14 +238,6 @@
 			files = (
 				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9C907EB2C5EE1FD000B2197 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9889DDA2C60601400245914 /* cube.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,87 +451,6 @@
 			};
 			name = Release;
 		};
-		A9C908062C5EE1FD000B2197 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DH9566CYW8;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A9C908072C5EE1FD000B2197 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DH9566CYW8;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "LightningInc.LightningEngine-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -595,15 +468,6 @@
 			buildConfigurations = (
 				A983C4522C5EBDB2001AD35D /* Debug */,
 				A983C4532C5EBDB2001AD35D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A9C908052C5EE1FD000B2197 /* Build configuration list for PBXNativeTarget "LightningEngine-iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9C908062C5EE1FD000B2197 /* Debug */,
-				A9C908072C5EE1FD000B2197 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -181,8 +181,6 @@
 		A9F681282C70291800987BA7 /* SingletonTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingletonTemplate.h; sourceTree = "<group>"; };
 		A9F6812A2C70291800987BA7 /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
 		A9F6812B2C70291800987BA7 /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
-		A9F6812D2C70291800987BA7 /* AovelSansRounded-rdDL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AovelSansRounded-rdDL.ttf"; sourceTree = "<group>"; };
-		A9F6812E2C70291800987BA7 /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A9F681302C70291800987BA7 /* Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		A9F681312C70291800987BA7 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		A9F6813C2C70291800987BA7 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -443,15 +441,6 @@
 				A9F6812B2C70291800987BA7 /* Editor.h */,
 			);
 			path = Editor;
-			sourceTree = "<group>";
-		};
-		A9F6812F2C70291800987BA7 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				A9F6812D2C70291800987BA7 /* AovelSansRounded-rdDL.ttf */,
-				A9F6812E2C70291800987BA7 /* NaturalMonoRegular-9YBeK.ttf */,
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 		A9F681322C70291800987BA7 /* GameControl */ = {
@@ -883,7 +872,6 @@
 				A9F681272C70291800987BA7 /* Camera */,
 				A9F681292C70291800987BA7 /* DesignPatterns */,
 				A9F6812C2C70291800987BA7 /* Editor */,
-				A9F6812F2C70291800987BA7 /* Fonts */,
 				A9F681322C70291800987BA7 /* GameControl */,
 				A9F6813E2C70291800987BA7 /* Input */,
 				A9F681412C70291800987BA7 /* Math */,

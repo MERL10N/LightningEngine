@@ -141,7 +141,7 @@ _MTL_OPTIONS(NS::UInteger, RenderStages) {
 class RenderCommandEncoder : public NS::Referencing<RenderCommandEncoder, CommandEncoder>
 {
 public:
-    void         SetRenderPipelineState(const class RenderPipelineState* pipelineState);
+    void         setRenderPipelineState(const class RenderPipelineState* pipelineState);
 
     void         setVertexBytes(const void* bytes, NS::UInteger length, NS::UInteger index);
 
@@ -403,7 +403,7 @@ public:
 }
 
 // method: setRenderPipelineState:
-_MTL_INLINE void MTL::RenderCommandEncoder::SetRenderPipelineState(const MTL::RenderPipelineState* pipelineState)
+_MTL_INLINE void MTL::RenderCommandEncoder::setRenderPipelineState(const MTL::RenderPipelineState* pipelineState)
 {
     Object::sendMessage<void>(this, _MTL_PRIVATE_SEL(setRenderPipelineState_), pipelineState);
 }

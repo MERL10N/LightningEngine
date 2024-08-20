@@ -159,7 +159,7 @@ public:
     
     void use(MTL::RenderCommandEncoder* commandEncoder)
     {
-        commandEncoder->SetRenderPipelineState(GetRenderPipelineState());
+        commandEncoder->setRenderPipelineState(GetRenderPipelineState());
     }
     // Get shader name
 // ------------------------------------------------------------------------

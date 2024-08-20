@@ -20,8 +20,8 @@ ViewDelegate::~ViewDelegate()
     delete metalRenderer;
 }
 
-void ViewDelegate::drawInMTKView( MTK::View* pView )
+void ViewDelegate::drawInMTKView( MTK::View* view )
 {
-    metalRenderer->Draw( pView );
+    metalRenderer->Draw( view );
 }
 

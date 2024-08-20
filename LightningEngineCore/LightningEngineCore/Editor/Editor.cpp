@@ -32,7 +32,7 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     ImGui_ImplOSX_Init(view);
     
     io.Fonts->AddFontDefault();
-    mainFont = io.Fonts->AddFontFromFileTTF("/Users/kianmarvi/Documents/LightningEngine/LightningEngineCore/LightningEngineCore/Fonts/AovelSansRounded-rdDL.ttf", 16.f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+    mainFont = io.Fonts->AddFontFromFileTTF("assets/Fonts/AovelSansRounded-rdDL.ttf", 16.f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     assert(mainFont != nullptr);
     
     
