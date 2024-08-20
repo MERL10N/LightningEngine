@@ -7,19 +7,11 @@
 #include <iostream>
 
 Controller::Controller()
-: _haptics(nil)
-, _motionManager(nil)
 {
-
 }
 
 Controller::~Controller()
 {
-    if (this->_haptics)
-        CFRelease(this->_haptics);
-    
-    if (this->_motionManager)
-        CFRelease(this->_motionManager);
 }
 
 

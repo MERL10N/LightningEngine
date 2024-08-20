@@ -8,7 +8,7 @@
 #ifndef Renderer_h
 #define Renderer_h
 
-#include <Input/Controller.h>
+
 #include <Camera/Camera.h>
 
 namespace MTL
@@ -77,9 +77,7 @@ private:
     // Timing
     float deltaTime = 0.0f;    // time between current frame and last frame
     float lastFrame = 0.0f;
-    
-    // Controller
-    Controller gameController;
+
 };
 
 #endif /* Renderer_hpp */

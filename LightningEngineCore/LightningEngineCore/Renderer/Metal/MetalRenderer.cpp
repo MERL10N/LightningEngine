@@ -20,7 +20,7 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <TimeControl/Timer.h>
 #include <Camera/Camera.h>
-
+#include <Input/Controller.h>
 #include <iostream>
 
 MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
@@ -219,6 +219,8 @@ void MetalRenderer::ProcessInput()
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     
+    Controller gameController;
+    
     if (gameController.isRightMouseClicked())
     {
         mouseX = gameController.getMousePosition().x;
@@ -238,8 +240,8 @@ void MetalRenderer::ProcessInput()
     }
     else
     {
-        firstMouse = true;
         gameController.showCursor();
+        firstMouse = true;
     }
     
         

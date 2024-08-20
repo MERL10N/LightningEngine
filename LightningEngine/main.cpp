@@ -14,10 +14,12 @@ int main()
     
     MacApplication del;
 
-    NS::Application* pApp = NS::Application::sharedApplication();
-    pApp->setDelegate( &del );
-    pApp->run();
-    pApp->release();
+    NS::AutoreleasePool* autoReleasePool = NS::AutoreleasePool::alloc()->init();
+        NS::Application* pApp = NS::Application::sharedApplication();
+        pApp->setDelegate( &del );
+        pApp->run();
+        pApp->release();
+    autoReleasePool->release();
 #else
     Application app;
     app.init();

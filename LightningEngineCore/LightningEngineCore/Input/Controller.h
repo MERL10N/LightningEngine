@@ -25,8 +25,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-// For CFIndex, CFTypeRef
-#include <CoreFoundation/CFBase.h>
 #include <unordered_map>
 
 
@@ -78,10 +76,7 @@ public:
     void showCursor();
     bool isLeftMouseClicked() const;
     bool isRightMouseClicked() const;
-   
-private:
-    CFTypeRef                         _haptics;
-    CFTypeRef                         _motionManager;
+
 };
 
 #endif // CONTROLLER_H

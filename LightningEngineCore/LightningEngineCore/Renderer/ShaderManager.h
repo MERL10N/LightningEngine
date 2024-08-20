@@ -17,7 +17,7 @@
 #include <map>
 #include <string>
 #ifdef __APPLE__
-//#include "MetalShader.h"
+
 class MetalShader;
 
 namespace MTL
