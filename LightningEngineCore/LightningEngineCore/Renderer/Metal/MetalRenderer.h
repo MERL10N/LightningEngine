@@ -39,6 +39,7 @@ class MetalRenderer
 public:
     MetalRenderer(MTL::Device* metalDevice);
     ~MetalRenderer();
+    
     void Draw(MTK::View* view);
 
 private:

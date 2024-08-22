@@ -83,7 +83,8 @@ void MetalRenderer::Draw(MTK::View* view)
 
     renderPassDescriptor = view->currentRenderPassDescriptor();
 
-    auto drawableSize = view->drawableSize();
+    CGSize drawableSize = view->drawableSize();
+    
     // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
     if (drawableSize.width != width || drawableSize.height != height)
     {
@@ -157,10 +158,12 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
-
+    
     #ifdef DEBUG
     CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
+
     #endif
+    
     ProcessInput();
 
     renderCommandEncoder->endEncoding();
@@ -195,6 +198,7 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     msaaTextureDescriptor->setWidth(width);
     msaaTextureDescriptor->setHeight(height);
     msaaTextureDescriptor->setSampleCount(4);
+    msaaTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
     msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
 
     msaaRenderTargetTexture = metalDevice->newTexture(msaaTextureDescriptor);
@@ -204,8 +208,10 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
     depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
     depthTextureDescriptor->setWidth(width);
     depthTextureDescriptor->setHeight(height);
-    depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
     depthTextureDescriptor->setSampleCount(4);
+    depthTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
+    depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
+
 
     depthTexture = metalDevice->newTexture(depthTextureDescriptor);
 

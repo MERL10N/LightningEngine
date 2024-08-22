@@ -7,11 +7,9 @@
 #include <MetalKit/MetalKit.hpp>
 #include <AppKit/AppKit.hpp>
 
-#define IMGUI_IMPL_METAL_CPP
-#define IMGUI_IMPL_METAL_CPP_EXTENSIONS
-#include "imgui.h"
-#include "imgui_impl_metal.h"
-#include "imgui_impl_osx.h"
+#include <imgui.h>
+#include <backends/imgui_impl_metal.h>
+#include <backends/imgui_impl_osx.h>
 
 
 
@@ -21,6 +19,9 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
     // Setup style
     ImGui::StyleColorsDark();
@@ -65,6 +66,7 @@ int CEditor::GetFrameRate()
 
 void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
 {
+    ImGuiIO& io = ImGui::GetIO();
     // Start the Dear ImGui frame
     ImGui_ImplMetal_NewFrame(renderPassDescriptor);
     ImGui_ImplOSX_NewFrame(view);
@@ -110,9 +112,18 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
         ImGui::End();
     }
     ImGui::PopFont();
-        // Rendering
-        ImGui::Render();
-        ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), metalCommandBuffer, renderCommandEncoder);
+    
+    // Rendering
+    ImGui::Render();
+    ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), metalCommandBuffer, renderCommandEncoder);
+    // Update and Render additional Platform Windows
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+    }
+   
+    
 }
 
 void CEditor::Destroy()

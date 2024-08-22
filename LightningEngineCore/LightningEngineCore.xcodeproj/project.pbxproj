@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A97C89AF2C75DF26002E27DC /* imgui_impl_metal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681792C70291800987BA7 /* imgui_impl_metal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A97C89B02C75DF2D002E27DC /* imgui_impl_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
+		A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
+		A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97C89B32C765C30002E27DC /* QuartzCore.framework */; };
 		A9F682272C70291800987BA7 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681252C70291800987BA7 /* Camera.cpp */; };
 		A9F682282C70291800987BA7 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681262C70291800987BA7 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F682292C70291800987BA7 /* SingletonTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681282C70291800987BA7 /* SingletonTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,10 +39,6 @@
 		A9F6824D2C70291800987BA7 /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6815F2C70291800987BA7 /* stb_image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F6824F2C70291800987BA7 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681622C70291800987BA7 /* ImageLoader.cpp */; };
 		A9F682502C70291800987BA7 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681632C70291800987BA7 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9F682612C70291800987BA7 /* imgui_impl_metal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681792C70291800987BA7 /* imgui_impl_metal.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9F682622C70291800987BA7 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
-		A9F682662C70291800987BA7 /* imgui_impl_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9F682672C70291800987BA7 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
 		A9F6826F2C70291800987BA7 /* imconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681882C70291800987BA7 /* imconfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681892C70291800987BA7 /* imgui_demo.cpp */; };
 		A9F682712C70291800987BA7 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F6818A2C70291800987BA7 /* imgui_draw.cpp */; };
@@ -175,6 +176,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A9F6811B2C70281700987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F681252C70291800987BA7 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		A9F681262C70291800987BA7 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
@@ -213,26 +215,10 @@
 		A9F6816A2C70291800987BA7 /* static-analysis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = "static-analysis.yml"; sourceTree = "<group>"; };
 		A9F6816C2C70291800987BA7 /* FUNDING.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = FUNDING.yml; sourceTree = "<group>"; };
 		A9F6816D2C70291800987BA7 /* pull_request_template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = pull_request_template.md; sourceTree = "<group>"; };
-		A9F6816F2C70291800987BA7 /* generate_spv.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = generate_spv.sh; sourceTree = "<group>"; };
-		A9F681702C70291800987BA7 /* glsl_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = glsl_shader.frag; sourceTree = "<group>"; };
-		A9F681712C70291800987BA7 /* glsl_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = glsl_shader.vert; sourceTree = "<group>"; };
-		A9F681732C70291800987BA7 /* imgui_impl_dx12.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_dx12.cpp; sourceTree = "<group>"; };
-		A9F681742C70291800987BA7 /* imgui_impl_dx12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_dx12.h; sourceTree = "<group>"; };
-		A9F681752C70291800987BA7 /* imgui_impl_glfw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_glfw.cpp; sourceTree = "<group>"; };
-		A9F681762C70291800987BA7 /* imgui_impl_glfw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_glfw.h; sourceTree = "<group>"; };
-		A9F681772C70291800987BA7 /* imgui_impl_metal_cpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_metal_cpp.cpp; sourceTree = "<group>"; };
-		A9F681782C70291800987BA7 /* imgui_impl_metal_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal_cpp.h; sourceTree = "<group>"; };
 		A9F681792C70291800987BA7 /* imgui_impl_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_metal.h; sourceTree = "<group>"; };
 		A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_metal.mm; sourceTree = "<group>"; };
-		A9F6817B2C70291800987BA7 /* imgui_impl_opengl3_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_opengl3_loader.h; sourceTree = "<group>"; };
-		A9F6817C2C70291800987BA7 /* imgui_impl_opengl3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_opengl3.cpp; sourceTree = "<group>"; };
-		A9F6817D2C70291800987BA7 /* imgui_impl_opengl3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_opengl3.h; sourceTree = "<group>"; };
 		A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_osx.h; sourceTree = "<group>"; };
 		A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = imgui_impl_osx.mm; sourceTree = "<group>"; };
-		A9F681802C70291800987BA7 /* imgui_impl_vulkan.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_vulkan.cpp; sourceTree = "<group>"; };
-		A9F681812C70291800987BA7 /* imgui_impl_vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_vulkan.h; sourceTree = "<group>"; };
-		A9F681822C70291800987BA7 /* imgui_impl_win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_win32.cpp; sourceTree = "<group>"; };
-		A9F681832C70291800987BA7 /* imgui_impl_win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_win32.h; sourceTree = "<group>"; };
 		A9F681852C70291800987BA7 /* .editorconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
 		A9F681862C70291800987BA7 /* .gitattributes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 		A9F681872C70291800987BA7 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -387,6 +373,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */,
 				A9F683162C7031A900987BA7 /* Cocoa.framework in Frameworks */,
 				A9F683252C70325200987BA7 /* GameController.framework in Frameworks */,
 				A9F683202C7031AF00987BA7 /* Metal.framework in Frameworks */,
@@ -586,37 +573,13 @@
 			path = .github;
 			sourceTree = "<group>";
 		};
-		A9F681722C70291800987BA7 /* vulkan */ = {
-			isa = PBXGroup;
-			children = (
-				A9F6816F2C70291800987BA7 /* generate_spv.sh */,
-				A9F681702C70291800987BA7 /* glsl_shader.frag */,
-				A9F681712C70291800987BA7 /* glsl_shader.vert */,
-			);
-			path = vulkan;
-			sourceTree = "<group>";
-		};
 		A9F681842C70291800987BA7 /* backends */ = {
 			isa = PBXGroup;
 			children = (
-				A9F681722C70291800987BA7 /* vulkan */,
-				A9F681732C70291800987BA7 /* imgui_impl_dx12.cpp */,
-				A9F681742C70291800987BA7 /* imgui_impl_dx12.h */,
-				A9F681752C70291800987BA7 /* imgui_impl_glfw.cpp */,
-				A9F681762C70291800987BA7 /* imgui_impl_glfw.h */,
-				A9F681772C70291800987BA7 /* imgui_impl_metal_cpp.cpp */,
-				A9F681782C70291800987BA7 /* imgui_impl_metal_cpp.h */,
 				A9F681792C70291800987BA7 /* imgui_impl_metal.h */,
 				A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */,
-				A9F6817B2C70291800987BA7 /* imgui_impl_opengl3_loader.h */,
-				A9F6817C2C70291800987BA7 /* imgui_impl_opengl3.cpp */,
-				A9F6817D2C70291800987BA7 /* imgui_impl_opengl3.h */,
 				A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */,
 				A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */,
-				A9F681802C70291800987BA7 /* imgui_impl_vulkan.cpp */,
-				A9F681812C70291800987BA7 /* imgui_impl_vulkan.h */,
-				A9F681822C70291800987BA7 /* imgui_impl_win32.cpp */,
-				A9F681832C70291800987BA7 /* imgui_impl_win32.h */,
 			);
 			path = backends;
 			sourceTree = "<group>";
@@ -889,6 +852,7 @@
 		A9F682FF2C702A0B00987BA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A97C89B32C765C30002E27DC /* QuartzCore.framework */,
 				A9F6830E2C702F3600987BA7 /* Cocoa.framework */,
 				A9F6830A2C702A2800987BA7 /* AppKit.framework */,
 				A9F683082C702A2000987BA7 /* GameController.framework */,
@@ -954,7 +918,6 @@
 				A9F682DD2C70291800987BA7 /* MetalFX.hpp in Headers */,
 				A9F682DA2C70291800987BA7 /* MTLVersion.hpp in Headers */,
 				A9F682AD2C70291800987BA7 /* MTLCaptureScope.hpp in Headers */,
-				A9F682662C70291800987BA7 /* imgui_impl_osx.h in Headers */,
 				A9F682C72C70291800987BA7 /* MTLIOCommandQueue.hpp in Headers */,
 				A9F682472C70291800987BA7 /* MetalRenderer.h in Headers */,
 				A9F682EE2C70291800987BA7 /* NSMenu.hpp in Headers */,
@@ -1012,7 +975,6 @@
 				A9F682982C70291800987BA7 /* NSObjCRuntime.hpp in Headers */,
 				A9F682482C70291800987BA7 /* MetalShader.h in Headers */,
 				A9F682C02C70291800987BA7 /* MTLFunctionStitching.hpp in Headers */,
-				A9F682612C70291800987BA7 /* imgui_impl_metal.h in Headers */,
 				A9F682B62C70291800987BA7 /* MTLDepthStencil.hpp in Headers */,
 				A9F682D02C70291800987BA7 /* MTLRenderCommandEncoder.hpp in Headers */,
 				A9F682D42C70291800987BA7 /* MTLResourceStateCommandEncoder.hpp in Headers */,
@@ -1035,6 +997,8 @@
 				A9F682DF2C70291800987BA7 /* MTLFXPrivate.hpp in Headers */,
 				A9F682AF2C70291800987BA7 /* MTLCommandEncoder.hpp in Headers */,
 				A9F682C52C70291800987BA7 /* MTLIntersectionFunctionTable.hpp in Headers */,
+				A97C89B02C75DF2D002E27DC /* imgui_impl_osx.h in Headers */,
+				A97C89AF2C75DF26002E27DC /* imgui_impl_metal.h in Headers */,
 				A9F682C92C70291800987BA7 /* MTLLibrary.hpp in Headers */,
 				A9F682B42C70291800987BA7 /* MTLCounters.hpp in Headers */,
 				A9F682952C70291800987BA7 /* NSLock.hpp in Headers */,
@@ -1113,6 +1077,7 @@
 			files = (
 				A9F682362C70291800987BA7 /* AAPLMathUtilities.cpp in Sources */,
 				A9F6827F2C70291800987BA7 /* ImCurveEdit.cpp in Sources */,
+				A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */,
 				A9F682812C70291800987BA7 /* ImGradient.cpp in Sources */,
 				A9F6822A2C70291800987BA7 /* Editor.cpp in Sources */,
 				A9F682352C70291800987BA7 /* Controller.mm in Sources */,
@@ -1122,12 +1087,11 @@
 				A9F6823E2C70291800987BA7 /* metal_implementation.cpp in Sources */,
 				A9F6827D2C70291800987BA7 /* GraphEditor.cpp in Sources */,
 				A9F6824F2C70291800987BA7 /* ImageLoader.cpp in Sources */,
-				A9F682672C70291800987BA7 /* imgui_impl_osx.mm in Sources */,
 				A9F6823C2C70291800987BA7 /* MacApplication.cpp in Sources */,
 				A9F682462C70291800987BA7 /* MetalRenderer.cpp in Sources */,
-				A9F682622C70291800987BA7 /* imgui_impl_metal.mm in Sources */,
 				A9F682272C70291800987BA7 /* Camera.cpp in Sources */,
 				A9F682832C70291800987BA7 /* ImGuizmo.cpp in Sources */,
+				A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */,
 				A9F682412C70291800987BA7 /* ViewDelegate.cpp in Sources */,
 				A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */,
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
