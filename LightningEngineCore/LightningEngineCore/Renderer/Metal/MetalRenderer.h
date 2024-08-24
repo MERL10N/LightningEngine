@@ -34,6 +34,8 @@ namespace MTK
     class View;
 }
 
+struct CGSize;
+
 class MetalRenderer
 {
 public:
@@ -45,7 +47,7 @@ public:
 private:
     
     void CreateCube();
-    void CreateDepthAndMSAATextures(MTK::View* view);
+    void CreateDepthAndMSAATextures(MTK::View* view, CGSize &size);
     void ProcessInput();
     void UpdateMousePosition(float x, float y);
     
@@ -78,6 +80,7 @@ private:
     // Timing
     float deltaTime = 0.0f;    // time between current frame and last frame
     float lastFrame = 0.0f;
+    float currentFrame;
 
 };
 

@@ -27,7 +27,9 @@
 
 MacApplication::~MacApplication()
 {
+    #ifdef DEBUG
     CEditor::GetInstance()->Destroy();
+    #endif
     metalKitView->release();
     appWindow->release();
     metalDevice->release();
@@ -90,14 +92,20 @@ void MacApplication::applicationDidFinishLaunching( NS::Notification* notificati
 
     appWindow = NS::Window::alloc()->init(
         frame,
-        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled|NS::WindowStyleMaskResizable|NS::WindowStyleMaskMiniaturizable,
+        NS::WindowStyleMaskClosable
+        |NS::WindowStyleMaskTitled
+        |NS::WindowStyleMaskResizable
+        |NS::WindowStyleMaskMiniaturizable,
         NS::BackingStoreBuffered,
         false );
     
     metalDevice = MTL::CreateSystemDefaultDevice();
 
     metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+    
+#ifdef DEBUG
     CEditor::GetInstance()->Init(metalDevice, metalKitView);
+#endif
     
    
     metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );

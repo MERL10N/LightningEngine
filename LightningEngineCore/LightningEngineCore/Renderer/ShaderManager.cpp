@@ -180,15 +180,8 @@ void CShaderManager::Remove(const std::string& _name)
 #else
 	CShader* target = shaderMap[_name];
 #endif
-	try {
-		if (target == activeShader)
-		{
-//			throw std::exception("Unable to remove active Shader");
-		}
-	}
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-	}
+    
+    assert(target == activeShader);
 
 	// Delete and remove from our map
 	delete target;
@@ -201,17 +194,7 @@ void CShaderManager::Remove(const std::string& _name)
 */
 void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* commandEncoder)
 {
-	try {
-		if (!Check(_name))
-		{
-			// Shader does not exist
-//			throw std::exception("Shader does not exist");
-		}
-	}
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-		return;
-	}
+    assert(!Check(_name));
 
 	// Check if the new shader is different from the current shader...
 	if ((activeShader == nullptr) || (activeShader->GetName().compare(_name) != 0))

@@ -19,12 +19,11 @@
 #include <Editor/Editor.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <TimeControl/Timer.h>
-#include <Camera/Camera.h>
 #include <Input/Controller.h>
 #include <iostream>
 
 MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
-: metalDevice(MTL::CreateSystemDefaultDevice())
+: metalDevice(metalDevice)
 , metalDefaultLibrary(metalDevice->newDefaultLibrary())
 , metalCommandQueue(metalDevice->newCommandQueue())
 , camera(Camera())
@@ -52,12 +51,6 @@ MetalRenderer::~MetalRenderer()
 {
     CShaderManager::GetInstance()->Destroy();
     CImageLoader::GetInstance()->Destroy();
-
-    #ifdef DEBUG
-    CEditor::GetInstance()->Destroy();
-    #endif
-
-    metalDevice->release();
     metalCommandQueue->release();
     squareVertexBuffer->release();
     transformationBuffer->release();
@@ -78,9 +71,7 @@ void MetalRenderer::CreateCube()
 
 void MetalRenderer::Draw(MTK::View* view)
 {
-    
     metalCommandBuffer = metalCommandQueue->commandBuffer();
-
     renderPassDescriptor = view->currentRenderPassDescriptor();
 
     CGSize drawableSize = view->drawableSize();
@@ -88,27 +79,26 @@ void MetalRenderer::Draw(MTK::View* view)
     // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
     if (drawableSize.width != width || drawableSize.height != height)
     {
-        CreateDepthAndMSAATextures(view);
+        CreateDepthAndMSAATextures(view, drawableSize);
     }
     
 #ifdef DEBUG
-    view->setPreferredFramesPerSecond(CEditor::GetInstance()->GetFrameRate());
+    view->setPreferredFramesPerSecond(120);
 #else
     view->setPreferredFramesPerSecond(120);
 #endif
     
     MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
-
     colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
     colorAttachmentDescriptor->setResolveTexture(view->currentDrawable()->texture());
     colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
+    
 #ifdef DEBUG
     colorAttachmentDescriptor->setClearColor(MTL::ClearColor(CEditor::GetInstance()->GetClearColor(0),
                              CEditor::GetInstance()->GetClearColor(1),
                              CEditor::GetInstance()->GetClearColor(2),
                              CEditor::GetInstance()->GetClearColor(3)));
-    
 #else
     colorAttachmentDescriptor->setClearColor(MTL::ClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 0.15f)));
 #endif
@@ -127,7 +117,7 @@ void MetalRenderer::Draw(MTK::View* view)
     renderPassDescriptor->depthAttachment()->setTexture(depthTexture);
 
     // Moves the Cube 2 units down the negative Z-axis
-    matrix_float4x4 translationMatrix = matrix4x4_translation(0, 0,-1.0);
+    matrix_float4x4 translationMatrix = matrix4x4_translation(0.f, 0.f,-5.f);
 
     float angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45;
     float angleInRadians = angleInDegrees * M_PI / 180.0f;
@@ -136,7 +126,7 @@ void MetalRenderer::Draw(MTK::View* view)
     matrix_float4x4 modelMatrix = simd_mul(translationMatrix, rotationMatrix);
     matrix_float4x4 viewMatrix = camera.GetViewMatrix();
     
-    float aspectRatio = (view->currentDrawable()->layer()->drawableSize().width /view->currentDrawable()->layer()->drawableSize().height);
+    float aspectRatio = (drawableSize.width / drawableSize.height);
     float fov = camera.GetZoom() * (M_PI / 180.0f);
     float nearZ = 0.1f;
     float farZ = 100.0f;
@@ -161,7 +151,6 @@ void MetalRenderer::Draw(MTK::View* view)
     
     #ifdef DEBUG
     CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
-
     #endif
     
     ProcessInput();
@@ -173,11 +162,10 @@ void MetalRenderer::Draw(MTK::View* view)
     metalCommandBuffer->waitUntilCompleted();
 }
 
-void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
+void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view, CGSize &size)
 {
-    CGSize drawableSize = view->drawableSize();
-    width = drawableSize.width;
-    height = drawableSize.height;
+    width = size.width;
+    height = size.height;
     
     
     // Deallocate the already existing target textures to avoid memory leak
@@ -221,7 +209,7 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view)
 
 void MetalRenderer::ProcessInput() 
 {
-    float currentFrame = Timer::GetTimeInSeconds();
+    currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     
@@ -273,7 +261,6 @@ void MetalRenderer::ProcessInput()
 
 void MetalRenderer::UpdateMousePosition(float x, float y) 
 {
-    
        float xoffset = x - lastX;
        float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
 
