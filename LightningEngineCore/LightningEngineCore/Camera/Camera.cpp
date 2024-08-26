@@ -105,7 +105,7 @@ void Camera::ProcessGamepadLeftJoystick(const float &deltaTime, const float &axi
 }
 
 
-void Camera::ProcessMouseMovement(float xOffset, float yOffset, const bool &constraintPitch)
+void Camera::ProcessMouseMovement(float &xOffset, float &yOffset, const bool &constraintPitch)
 {
     xOffset *= MouseSensitivity;
     yOffset *= MouseSensitivity;

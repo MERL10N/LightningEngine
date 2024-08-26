@@ -23,6 +23,8 @@ namespace MTL
     class ArgumentEncoder;
     class RenderCommandEncoder;
     class RenderPassDescriptor;
+    class RenderPassColorAttachmentDescriptor;
+    class RenderPassDepthAttachmentDescriptor;
 }
 
 namespace NS
@@ -49,7 +51,7 @@ private:
     void CreateCube();
     void CreateDepthAndMSAATextures(MTK::View* view, CGSize &size);
     void ProcessInput();
-    void UpdateMousePosition(float x, float y);
+    void UpdateMousePosition(float &x, float &y);
     
     MTL::Device* metalDevice;
     
@@ -63,6 +65,8 @@ private:
     MTL::Buffer* transformationBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
+    MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor;
+    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment;
     
     MTL::Texture* msaaRenderTargetTexture = nullptr;
     MTL::Texture* depthTexture;
@@ -81,6 +85,22 @@ private:
     float deltaTime = 0.0f;    // time between current frame and last frame
     float lastFrame = 0.0f;
     float currentFrame;
+    
+    
+    // Math
+    float fov;
+    float nearZ;
+    float farZ;
+    float angleInDegrees;
+    float angleInRadians;
+    float aspectRatio;
+    
+    // Transforms
+    matrix_float4x4 translationMatrix;
+    matrix_float4x4 perspectiveMatrix;
+    matrix_float4x4 rotationMatrix;
+    matrix_float4x4 modelMatrix;
+    matrix_float4x4 viewMatrix;
 
 };
 

@@ -49,7 +49,7 @@ public:
     void ProcessKeyboard(const CAMERA_MOVEMENT &direction, float &deltaTime);
     
     // Processes input received from a mouse input system
-    void ProcessMouseMovement(float xOffset, float yOffset, const bool &constraintPitch);
+    void ProcessMouseMovement(float &xOffset, float &yOffset, const bool &constraintPitch);
     
     // Process input from any gamepad input system
     void ProcessGamepadLeftJoystick(const float &deltaTime, const float &axisXValue, const float &axisYValue);

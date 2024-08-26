@@ -27,7 +27,12 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
 , metalDefaultLibrary(metalDevice->newDefaultLibrary())
 , metalCommandQueue(metalDevice->newCommandQueue())
 , camera(Camera())
+, fov(camera.GetZoom() * (M_PI / 180.0f))
+, nearZ(0.1f)
+, farZ(100.f)
+, translationMatrix(matrix4x4_translation(0.f, 0.f,-10.f))
 {
+    
     if(!metalDefaultLibrary)
     {
         std::cerr << "Failed to load default library.";
@@ -83,13 +88,14 @@ void MetalRenderer::Draw(MTK::View* view)
     }
     
 #ifdef DEBUG
-    view->setPreferredFramesPerSecond(120);
+    view->setPreferredFramesPerSecond(60);
 #else
     view->setPreferredFramesPerSecond(120);
 #endif
     
-    MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
-    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = renderPassDescriptor->depthAttachment();
+    colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
+
+    
     colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
     colorAttachmentDescriptor->setResolveTexture(view->currentDrawable()->texture());
     colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
@@ -105,6 +111,7 @@ void MetalRenderer::Draw(MTK::View* view)
     
     colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
 
+    depthAttachment = renderPassDescriptor->depthAttachment();
     depthAttachment->setTexture(depthTexture);
     depthAttachment->setLoadAction(MTL::LoadActionClear);
     depthAttachment->setStoreAction(MTL::StoreActionDontCare);
@@ -116,22 +123,17 @@ void MetalRenderer::Draw(MTK::View* view)
     renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(view->currentDrawable()->texture());
     renderPassDescriptor->depthAttachment()->setTexture(depthTexture);
 
-    // Moves the Cube 2 units down the negative Z-axis
-    matrix_float4x4 translationMatrix = matrix4x4_translation(0.f, 0.f,-5.f);
 
-    float angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45;
-    float angleInRadians = angleInDegrees * M_PI / 180.0f;
-    matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
-
-    matrix_float4x4 modelMatrix = simd_mul(translationMatrix, rotationMatrix);
-    matrix_float4x4 viewMatrix = camera.GetViewMatrix();
+    angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45;
+    angleInRadians = angleInDegrees * M_PI / 180.0f;
     
-    float aspectRatio = (drawableSize.width / drawableSize.height);
-    float fov = camera.GetZoom() * (M_PI / 180.0f);
-    float nearZ = 0.1f;
-    float farZ = 100.0f;
+    rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
 
-    matrix_float4x4 perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
+    modelMatrix = simd_mul(translationMatrix, rotationMatrix);
+    viewMatrix = camera.GetViewMatrix();
+    
+    aspectRatio = (drawableSize.width / drawableSize.height);
+    perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
 
     TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
     memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
@@ -159,14 +161,12 @@ void MetalRenderer::Draw(MTK::View* view)
 
     metalCommandBuffer->presentDrawable(view->currentDrawable());
     metalCommandBuffer->commit();
-    metalCommandBuffer->waitUntilCompleted();
 }
 
 void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view, CGSize &size)
 {
     width = size.width;
     height = size.height;
-    
     
     // Deallocate the already existing target textures to avoid memory leak
     if (msaaRenderTargetTexture)
@@ -179,7 +179,6 @@ void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view, CGSize &size)
         depthTexture->release();
     }
      
-
     MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
     msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
@@ -259,7 +258,7 @@ void MetalRenderer::ProcessInput()
      
 }
 
-void MetalRenderer::UpdateMousePosition(float x, float y) 
+void MetalRenderer::UpdateMousePosition(float &x, float &y) 
 {
        float xoffset = x - lastX;
        float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top

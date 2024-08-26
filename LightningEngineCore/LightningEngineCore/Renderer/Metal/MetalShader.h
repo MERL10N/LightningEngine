@@ -25,6 +25,7 @@ private:
     MTL::RenderPipelineDescriptor* renderPipelineDescriptor;
     MTL::RenderPipelineState* metalRenderPSO;
     MTL::DepthStencilState* depthStencilState;
+    MTL::DepthStencilDescriptor* depthStencilDescriptor;
     std::string filePath;
     bool bResult;
 
@@ -114,7 +115,7 @@ public:
             std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
         }
         
-        MTL::DepthStencilDescriptor* depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
+        depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
         depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
         depthStencilDescriptor->setDepthWriteEnabled(true);
         depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
