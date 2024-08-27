@@ -110,79 +110,78 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
     // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    
     ImGui::Begin("DockSpace Demo", &opt_fullscreen, window_flags);
-    if (!opt_padding)
-        ImGui::PopStyleVar();
-
-    if (opt_fullscreen)
-        ImGui::PopStyleVar(2);
-
-    // Submit the DockSpace
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-    {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    }
-
-    if (ImGui::BeginMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            // Disabling fullscreen would allow the window to be moved to the front of other windows,
-            // which we can't undo at the moment without finer window depth/z control.
-            ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-            ImGui::MenuItem("Padding", NULL, &opt_padding);
-            ImGui::Separator();
-
         
-            ImGui::EndMenu();
+        if (!opt_padding)
+            ImGui::PopStyleVar();
+
+        if (opt_fullscreen)
+            ImGui::PopStyleVar(2);
+
+        // Submit the DockSpace
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+        {
+            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
- 
 
-        ImGui::EndMenuBar();
-    }
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                // Disabling fullscreen would allow the window to be moved to the front of other windows,
+                // which we can't undo at the moment without finer window depth/z control.
+                ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+                ImGui::MenuItem("Padding", NULL, &opt_padding);
+                ImGui::Separator();
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+     
     
-    ImGui::Begin("Welcome to Lightning Engine!");                          // Create a window called "Hello, world!" and append into it.
-    
+        ImGui::Begin("Welcome to Lightning Engine!");                          // Create a window called "Hello, world!" and append into it.
+        
 
-    ImGui::Text("This is a metal game engine written in C++");               // Display some text (you can use a format strings too)
+            ImGui::Text("This is a metal game engine written in C++");               // Display some text (you can use a format strings too)
 
-    ImGui::Checkbox("Message from developer", &show_another_window);
-    
-    ImGui::Checkbox("Enable 120fps", &enable_high_fps);
-    
-    if (enable_high_fps)
-    {
-        fps = 120;
-    }
-    else
-    {
-        fps = 60;
-    }
+            ImGui::Checkbox("Message from developer", &show_another_window);
+            
+            ImGui::Checkbox("Enable 120fps", &enable_high_fps);
+            
+            if (enable_high_fps)
+            {
+                fps = 120;
+            }
+            else
+            {
+                fps = 60;
+            }
 
-    ImGui::ColorEdit3("Adjust color", (float*)&clear_color); // Edit 3 floats representing a color
-
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    
-    
-    ImGui::End();
+            ImGui::ColorEdit3("Adjust color", (float*)&clear_color); // Edit 3 floats representing a color
 
 
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        ImGui::Begin("Message from developer", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("I can't wait to show you more of what is to come!");
-        if (ImGui::Button("Close"))
-            show_another_window = false;
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        
+        
         ImGui::End();
-    }
+
+
+        // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin("Message from developer", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text("I can't wait to show you more of what is to come!");
+            if (ImGui::Button("Close"))
+                show_another_window = false;
+            ImGui::End();
+        }
     
-    ImGui::Begin("Viewport");
-    //ImVec2 viewportPanelSze = ImGui::GetContentRegionAvail();
-    ImGui::End();
+        ImGui::Begin("Viewport");
+        //ImVec2 viewportPanelSze = ImGui::GetContentRegionAvail();
+        ImGui::End();
     
 
     ImGui::End();

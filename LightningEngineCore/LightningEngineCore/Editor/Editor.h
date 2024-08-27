@@ -29,6 +29,8 @@ public:
     bool Init(MTL::Device* device, MTK::View * view);
     void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view);
     
+    void RenderDockSpace();
+    
    // Setters
    void SetClearColor(float value, int index);
    void SetFrameRate(int fps);

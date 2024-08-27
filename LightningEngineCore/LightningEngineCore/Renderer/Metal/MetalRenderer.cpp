@@ -56,7 +56,7 @@ MetalRenderer::~MetalRenderer()
     CShaderManager::GetInstance()->Destroy();
     CImageLoader::GetInstance()->Destroy();
     metalCommandQueue->release();
-    squareVertexBuffer->release();
+    cubeVertexBuffer->release();
     transformationBuffer->release();
     depthTexture->release();
     msaaRenderTargetTexture->release();
@@ -67,7 +67,7 @@ MetalRenderer::~MetalRenderer()
 
 void MetalRenderer::CreateCube()
 {
-    squareVertexBuffer = CMeshBuilder::GenerateCube(metalDevice);
+    cubeVertexBuffer = CMeshBuilder::GenerateCube(metalDevice);
     transformationBuffer = metalDevice->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
     CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
 }
@@ -143,7 +143,7 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setCullMode(MTL::CullModeBack); // Enable backface culling
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
     renderCommandEncoder->setDepthStencilState(CShaderManager::GetInstance()->getDepthStencilState("Cube"));
-    CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, squareVertexBuffer);
+    CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, cubeVertexBuffer);
     renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
