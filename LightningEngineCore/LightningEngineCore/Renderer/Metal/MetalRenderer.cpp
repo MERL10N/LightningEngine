@@ -39,7 +39,6 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
         std::exit(-1);
     }
     
-    
     // Initialise the shader
     CShaderManager::GetInstance()->Add("Cube",
                                        "Shaders/cube.metal",

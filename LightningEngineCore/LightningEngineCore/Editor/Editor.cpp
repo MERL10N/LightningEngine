@@ -21,8 +21,7 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-
+   
     // Setup style
     ImGui::StyleColorsDark();
     
@@ -32,8 +31,8 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     // Setup Platform/Renderer backends
     ImGui_ImplOSX_Init(view);
     
-    io.Fonts->AddFontDefault();
-    mainFont = io.Fonts->AddFontFromFileTTF("assets/Fonts/AovelSansRounded-rdDL.ttf", 16.f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+   io.Fonts->AddFontDefault();
+   mainFont = io.Fonts->AddFontFromFileTTF("assets/Fonts/NaturalMonoRegular-9YBeK.ttf", 16.f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     assert(mainFont != nullptr);
     
     
@@ -66,15 +65,84 @@ int CEditor::GetFrameRate()
 
 void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
 {
-    ImGuiIO& io = ImGui::GetIO();
     // Start the Dear ImGui frame
     ImGui_ImplMetal_NewFrame(renderPassDescriptor);
     ImGui_ImplOSX_NewFrame(view);
-    void BeginFrame();
     ImGui::NewFrame();
 
 
     ImGui::PushFont(mainFont);
+    
+    // Dockspace code start
+    
+    static bool opt_fullscreen = true;
+    static bool opt_padding = false;
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+    // because it would be confusing to have two docking targets within each others.
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    if (opt_fullscreen)
+    {
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
+    else
+    {
+        dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+    }
+
+    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+    // and handle the pass-thru hole, so we ask Begin() to not render a background.
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+        window_flags |= ImGuiWindowFlags_NoBackground;
+
+    // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+    // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+    // all active windows docked into it will lose their parent and become undocked.
+    // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+    // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+    if (!opt_padding)
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace Demo", &opt_fullscreen, window_flags);
+    if (!opt_padding)
+        ImGui::PopStyleVar();
+
+    if (opt_fullscreen)
+        ImGui::PopStyleVar(2);
+
+    // Submit the DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+            ImGui::MenuItem("Padding", NULL, &opt_padding);
+            ImGui::Separator();
+
+        
+            ImGui::EndMenu();
+        }
+ 
+
+        ImGui::EndMenuBar();
+    }
+    
     ImGui::Begin("Welcome to Lightning Engine!");                          // Create a window called "Hello, world!" and append into it.
     
 
@@ -111,18 +179,21 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
             show_another_window = false;
         ImGui::End();
     }
+    
+    ImGui::Begin("Viewport");
+    //ImVec2 viewportPanelSze = ImGui::GetContentRegionAvail();
+    ImGui::End();
+    
+
+    ImGui::End();
+    
+    // Dockspace code end
+
     ImGui::PopFont();
     
     // Rendering
     ImGui::Render();
     ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), metalCommandBuffer, renderCommandEncoder);
-    // Update and Render additional Platform Windows
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-    }
-   
     
 }
 

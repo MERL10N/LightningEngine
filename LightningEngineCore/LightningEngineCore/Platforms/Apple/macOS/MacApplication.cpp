@@ -96,7 +96,7 @@ void MacApplication::applicationDidFinishLaunching( NS::Notification* notificati
         |NS::WindowStyleMaskTitled
         |NS::WindowStyleMaskResizable
         |NS::WindowStyleMaskMiniaturizable,
-        NS::BackingStoreBuffered,
+         NS::BackingStoreBuffered,
         false );
     
     metalDevice = MTL::CreateSystemDefaultDevice();
