@@ -22,17 +22,20 @@
 
 #include "MacApplication.h"
 #include "ViewDelegate.h"
-#include <Editor/Editor.h>
 #include <Metal/Metal.hpp>
+#include <Renderer/Metal/MetalDevice.h>
+
+MTL::Device* MetalDevice::device = nullptr;
 
 MacApplication::~MacApplication()
 {
     #ifdef DEBUG
-    CEditor::GetInstance()->Destroy();
+    editor.Destroy();
     #endif
     metalKitView->release();
     appWindow->release();
-    metalDevice->release();
+    
+    MetalDevice::Cleanup();
     delete viewDelegate;
 }
 
@@ -99,18 +102,20 @@ void MacApplication::applicationDidFinishLaunching( NS::Notification* notificati
          NS::BackingStoreBuffered,
         false );
     
-    metalDevice = MTL::CreateSystemDefaultDevice();
+    MetalDevice::Init(); // Initialise metal device
 
-    metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+    metalKitView = MTK::View::alloc()->init(frame, MetalDevice::GetDevice());
+    
     
 #ifdef DEBUG
-    CEditor::GetInstance()->Init(metalDevice, metalKitView);
+    editor.Init(MetalDevice::GetDevice(), metalKitView);
 #endif
     
    
     metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
+    metalKitView->setSampleCount(4);
     
-    viewDelegate = new ViewDelegate( metalDevice );
+    viewDelegate = new ViewDelegate(MetalDevice::GetDevice(), metalKitView);
     metalKitView->setDelegate( viewDelegate );
     
     appWindow->setContentView( metalKitView );

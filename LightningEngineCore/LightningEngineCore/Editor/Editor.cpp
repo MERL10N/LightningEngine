@@ -12,9 +12,7 @@
 #include <backends/imgui_impl_osx.h>
 
 
-
-
-bool CEditor::Init(MTL::Device* device, MTK::View* view)
+bool Editor::Init(MTL::Device* device, MTK::View* view)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -43,27 +41,27 @@ bool CEditor::Init(MTL::Device* device, MTK::View* view)
     return true;
 }
 
-void CEditor::SetClearColor(float value, int index)
+void Editor::SetClearColor(float value, int index)
 {
     clear_color[index] = value;
 }
 
-void CEditor::SetFrameRate(int fps)
+void Editor::SetFrameRate(int fps)
 {
     this->fps = fps;
 }
 
-float CEditor::GetClearColor(int index) const
+float Editor::GetClearColor(int index) const
 {
     return clear_color[index];
 }
 
-int CEditor::GetFrameRate()
+int Editor::GetFrameRate()
 {
     return fps;
 }
 
-void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
+void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view, MTL::Texture* targetTexture)
 {
     // Start the Dear ImGui frame
     ImGui_ImplMetal_NewFrame(renderPassDescriptor);
@@ -178,9 +176,11 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
                 show_another_window = false;
             ImGui::End();
         }
-    
-        ImGui::Begin("Viewport");
-        //ImVec2 viewportPanelSze = ImGui::GetContentRegionAvail();
+
+        ImGui::Begin("Game Scene");
+        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+        ImTextureID imguiTexture = (ImTextureID)targetTexture;
+        ImGui::Image(imguiTexture, viewportPanelSize);
         ImGui::End();
     
 
@@ -196,7 +196,7 @@ void CEditor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comma
     
 }
 
-void CEditor::Destroy()
+void Editor::Destroy()
 {
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplOSX_Shutdown();

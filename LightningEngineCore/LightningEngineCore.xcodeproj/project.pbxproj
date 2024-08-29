@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9494F282C7ECBC0008E8B52 /* MetalDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9494F262C7ECBC0008E8B52 /* MetalDevice.cpp */; };
+		A9494F292C7ECBC0008E8B52 /* MetalDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = A9494F272C7ECBC0008E8B52 /* MetalDevice.h */; };
 		A97C89AF2C75DF26002E27DC /* imgui_impl_metal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681792C70291800987BA7 /* imgui_impl_metal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A97C89B02C75DF2D002E27DC /* imgui_impl_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
@@ -176,6 +178,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A9494F262C7ECBC0008E8B52 /* MetalDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalDevice.cpp; sourceTree = "<group>"; };
+		A9494F272C7ECBC0008E8B52 /* MetalDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalDevice.h; sourceTree = "<group>"; };
 		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A9F6811B2C70281700987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F681252C70291800987BA7 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
@@ -501,6 +505,8 @@
 				A9F681552C70291800987BA7 /* MetalRenderer.cpp */,
 				A9F681562C70291800987BA7 /* MetalRenderer.h */,
 				A9F681572C70291800987BA7 /* MetalShader.h */,
+				A9494F262C7ECBC0008E8B52 /* MetalDevice.cpp */,
+				A9494F272C7ECBC0008E8B52 /* MetalDevice.h */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
@@ -919,6 +925,7 @@
 				A9F682DA2C70291800987BA7 /* MTLVersion.hpp in Headers */,
 				A9F682AD2C70291800987BA7 /* MTLCaptureScope.hpp in Headers */,
 				A9F682C72C70291800987BA7 /* MTLIOCommandQueue.hpp in Headers */,
+				A9494F292C7ECBC0008E8B52 /* MetalDevice.h in Headers */,
 				A9F682472C70291800987BA7 /* MetalRenderer.h in Headers */,
 				A9F682EE2C70291800987BA7 /* NSMenu.hpp in Headers */,
 				A9F6826F2C70291800987BA7 /* imconfig.h in Headers */,
@@ -1096,6 +1103,7 @@
 				A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */,
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
 				A9F682742C70291800987BA7 /* imgui_widgets.cpp in Sources */,
+				A9494F282C7ECBC0008E8B52 /* MetalDevice.cpp in Sources */,
 				A9F6822E2C70291800987BA7 /* Settings.cpp in Sources */,
 				A9F682732C70291800987BA7 /* imgui_tables.cpp in Sources */,
 				A9F682852C70291800987BA7 /* ImSequencer.cpp in Sources */,

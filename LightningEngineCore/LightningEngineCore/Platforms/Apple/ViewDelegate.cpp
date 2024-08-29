@@ -7,21 +7,19 @@
 
 #include "ViewDelegate.h"
 
-#include "MetalRenderer.h"
-
-ViewDelegate::ViewDelegate( MTL::Device* metalDevice )
+ViewDelegate::ViewDelegate( MTL::Device* metalDevice, MTK::View* view )
 : MTK::ViewDelegate()
-, metalRenderer( new MetalRenderer( metalDevice ) )
+, renderer(MetalRenderer(metalDevice, view))
 {
 }
 
 ViewDelegate::~ViewDelegate()
 {
-    delete metalRenderer;
+    renderer.Destroy();
 }
 
-void ViewDelegate::drawInMTKView( MTK::View* view )
+void ViewDelegate::drawInMTKView( MTK::View *view )
 {
-    metalRenderer->Draw( view );
+    renderer.Draw(view);
 }
 

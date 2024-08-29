@@ -12,7 +12,7 @@
 #pragma once
 
 // Include SingletonTemplate
-#include "../DesignPatterns/SingletonTemplate.h"
+//#include "../DesignPatterns/SingletonTemplate.h"
 
 #include <map>
 #include <string>
@@ -30,13 +30,19 @@ namespace MTL
     class Buffer;
     class Texture;
 }
+
+namespace MTK
+{
+    class View;
+}
+
 #else
 #include "Shader.h"
 #endif
 
-class CShaderManager : public CSingletonTemplate<CShaderManager>
+class CShaderManager
 {
-	friend CSingletonTemplate<CShaderManager>;
+	//friend SingletonTemplate<CShaderManager>;
 public:
 	// Destroy the instance
 	void Destroy(void);
@@ -44,12 +50,12 @@ public:
 	// User Interface
 	// Add a shader to this map
 #ifdef __APPLE__
-    void Add(const std::string& _name, const char* shaderPath, const char* vertexFunction, const char* fragmentFunction,  MTL::Device* device);
+    void Add(const std::string& _name, const char* shaderPath, MTL::Device* device, MTK::View* view);
     
     MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor(const std::string& shaderName) const;
     void setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const;
     MTL::RenderPipelineState* GetRenderPipelineState(const std::string& shaderName) const;
-    MTL::DepthStencilState* getDepthStencilState(const std::string& shaderName) const;
+    MTL::DepthStencilState* GetDepthStencilState(const std::string& shaderName) const;
     void BindResources(const std::string& shaderName, MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer);
 #else
 	void Add(const std::string& _name, const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
@@ -69,13 +75,14 @@ public:
 	CShader* pActiveShader;
 #endif
 
-protected:
 	// Constructor
-	CShaderManager(void);
+	CShaderManager();
+    // Destructor
+    ~CShaderManager();
 
-	// Destructor
-	virtual ~CShaderManager(void);
+protected:
 
+	
 #ifdef __APPLE__
     // The map containing all the shaders loaded
     std::map<std::string, MetalShader*> shaderMap;

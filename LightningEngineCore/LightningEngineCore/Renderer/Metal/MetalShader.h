@@ -8,8 +8,7 @@
 #ifndef METAL_SHADER_H
 #define METAL_SHADER_H
 #include <Metal/Metal.hpp>
-#include <QuartzCore/CAMetalLayer.hpp>
-#include <Editor/Editor.h>
+#include <MetalKit/MetalKit.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -26,6 +25,7 @@ private:
     MTL::RenderPipelineState* metalRenderPSO;
     MTL::DepthStencilState* depthStencilState;
     MTL::DepthStencilDescriptor* depthStencilDescriptor;
+    MTL::Texture* targetTexture;
     std::string filePath;
     bool bResult;
 
@@ -50,7 +50,7 @@ private:
     }
 
 public:
-    MetalShader(const std::string& path, const char* vertName, const char* fragName, MTL::Device* device)
+    MetalShader(const std::string& path, MTL::Device* device, MTK::View* view)
         : filePath(path),
           device(device)
     {
@@ -76,22 +76,24 @@ public:
             assert( false );
         }
 
-        vertexFunction = library->newFunction(NS::String::string(vertName, NS::UTF8StringEncoding)); // Load the vertex function
+        vertexFunction = library->newFunction(NS::String::string("vertexShader", NS::UTF8StringEncoding)); // Load the vertex function
         
         if (!vertexFunction)
         {
-            std::cerr << "Error: Vertex function not found in shader library." << std::endl;
+            std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
+            std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
         }
         else
         {
             std::cout << "Vertex function successfully found and loaded" << std::endl;
         }
         
-        fragmentFunction = library->newFunction(NS::String::string(fragName, NS::UTF8StringEncoding)); // Load the fragment function
+        fragmentFunction = library->newFunction(NS::String::string("fragmentShader", NS::UTF8StringEncoding)); // Load the fragment function
         
         if (!fragmentFunction)
         {
-            std::cerr << "Error: Fragment function not found in shader library." << std::endl;
+            std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
+            std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
         }
         else
         {
@@ -104,8 +106,8 @@ public:
         renderPipelineDescriptor->setVertexFunction(vertexFunction);
         renderPipelineDescriptor->setFragmentFunction(fragmentFunction);
         assert(renderPipelineDescriptor);
-        renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-        renderPipelineDescriptor->setSampleCount(4);
+        renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(view->colorPixelFormat());
+        renderPipelineDescriptor->setSampleCount(view->sampleCount());
         renderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
         SetRenderPipelineState(metalRenderPSO);
         metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
@@ -127,7 +129,7 @@ public:
         fragmentFunction->release();
     }
     
-    void SetRenderPipelineState(MTL::RenderPipelineState* metalRenderPSO)
+    inline void SetRenderPipelineState(MTL::RenderPipelineState* metalRenderPSO)
     {
         this->metalRenderPSO = metalRenderPSO;
     }
@@ -147,7 +149,7 @@ public:
         return depthStencilState;
     }
     
-    void BindResources(MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer)
+    inline void BindResources(MTL::RenderCommandEncoder* encoder, MTL::Buffer* buffer)
     {
         encoder->useResource(buffer, MTL::ResourceUsageRead);
         encoder->setVertexBuffer(buffer, 0, 0); // Bind as a vertex buffer

@@ -6,7 +6,7 @@
 #pragma once
 
 template <typename T>
-class CSingletonTemplate
+class SingletonTemplate
 {
 public:
 	// Get the Singleton instance
@@ -38,11 +38,11 @@ public:
 
 protected:
 	// Constructor
-	CSingletonTemplate(void)
+	SingletonTemplate(void)
 	{
 	};
 	// Destructor
-	virtual ~CSingletonTemplate(void)
+	virtual ~SingletonTemplate(void)
 	{
 	};
 
@@ -51,4 +51,4 @@ private:
 };
 
 template <typename T>
-T* CSingletonTemplate<T>::s_mInstance = nullptr;
+T* SingletonTemplate<T>::s_mInstance = nullptr;

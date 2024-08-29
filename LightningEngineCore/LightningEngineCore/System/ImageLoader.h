@@ -6,7 +6,6 @@
 #define ImageLoader_h
 
 // Include SingletonTemplate
-#include "../DesignPatterns/SingletonTemplate.h"
 
 // Include Metal
 #ifdef __APPLE__
@@ -14,9 +13,16 @@
 
 namespace MTL
 {
-    class Device;
     class Texture;
+    class Device;
 }
+
+namespace MTK
+{
+    class View;
+}
+
+struct CGSize;
 
 #else
 
@@ -26,17 +32,25 @@ namespace MTL
     #endif
 #endif
 
-class CImageLoader : public CSingletonTemplate<CImageLoader>
+class CImageLoader
 {
-    friend CSingletonTemplate<CImageLoader>;
 public:
+    // Constructor
+    CImageLoader(void);
+
+    // Destructor
+    virtual ~CImageLoader(void);
+    
     // Init
     bool Init(void);
 #ifdef __APPLE__
     
     // Load an image and return as a Texture ID
-    void LoadTexture(const char* filename, MTL::Device* device);
+    void LoadTexture(const char* filename);
+    void CreateDepthAndMSAATextures(float &width, float &height, CGSize &size);
     MTL::Texture*  GetTexture();
+    MTL::Texture*  GetTargetTexture();
+    MTL::Texture*  GetDepthTexture();
     void Destroy();
 #else
     // Load an image and return as unsigned char*
@@ -48,16 +62,13 @@ public:
     unsigned int LoadTextureGetID(const char* filename, const bool bInvert);
 #endif
 protected:
-    // Constructor
-    CImageLoader(void);
-
-    // Destructor
-    virtual ~CImageLoader(void);
+ 
     
 private:
 #ifdef __APPLE__
     MTL::Texture* texture;
-    MTL::Device* device;
+    MTL::Texture* msaaRenderTargetTexture = nullptr;
+    MTL::Texture* depthTexture;
 #endif
 
 };

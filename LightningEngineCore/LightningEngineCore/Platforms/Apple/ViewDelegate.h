@@ -32,17 +32,18 @@ namespace MTL
     class Device;
 }
 
-class MetalRenderer;
+#include "MetalRenderer.h"
 
 class ViewDelegate : public MTK::ViewDelegate
 {
     public:
-        ViewDelegate( MTL::Device* metalDevice );
+        ViewDelegate( MTL::Device* metalDevice, MTK::View* view );
         virtual ~ViewDelegate() override;
         virtual void drawInMTKView( MTK::View* view ) override;
-
-    private:
-        MetalRenderer* metalRenderer;
+private:
+    MetalRenderer renderer;
+    MTK::View* view;
+    MTL::Device* metalDevice;
 };
 
 #endif

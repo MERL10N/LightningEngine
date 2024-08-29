@@ -10,19 +10,21 @@
 #include <Renderer/ShaderManager.h>
 
 #include "VertexData.h"
-#include "System/ImageLoader.h"
 #include "Math/AAPLMathUtilities.h"
 
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 #include "Primitives/MeshBuilder.h"
-#include <Editor/Editor.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <TimeControl/Timer.h>
 #include <Input/Controller.h>
+#include <System/ImageLoader.h>
 #include <iostream>
 
-MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
+CShaderManager shaderManager;
+CImageLoader imageLoader;
+
+MetalRenderer::MetalRenderer(MTL::Device* metalDevice, MTK::View* view)
 : metalDevice(metalDevice)
 , metalDefaultLibrary(metalDevice->newDefaultLibrary())
 , metalCommandQueue(metalDevice->newCommandQueue())
@@ -32,6 +34,48 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
 , farZ(100.f)
 , translationMatrix(matrix4x4_translation(0.f, 0.f,-10.f))
 {
+    if(!metalDefaultLibrary)
+    {
+        std::cerr << "Failed to load default library.";
+        std::exit(-1);
+    }
+    
+    // Initialise the shader
+     shaderManager.Add("Cube",
+                       "Shaders/cube.metal",
+                        metalDevice, view);
+    imageLoader.Init();
+    
+    
+    // Render the cube
+    CreateCube();
+}
+
+MetalRenderer::~MetalRenderer()
+{
+    shaderManager.Destroy();
+    
+    imageLoader.Destroy();
+    
+    metalCommandQueue->release();
+    cubeVertexBuffer->release();
+    transformationBuffer->release();
+    renderPassDescriptor->release();
+    renderCommandEncoder->release();
+}
+
+void MetalRenderer::Init(MTL::Device* metalDevice, MTK::View* view)
+{
+    this->metalDevice = metalDevice;
+    metalDefaultLibrary = metalDevice->newDefaultLibrary();
+    metalCommandQueue = metalDevice->newCommandQueue();
+    camera = Camera();
+    
+    fov = camera.GetZoom() * (M_PI / 180.0f);
+    nearZ = 0.1f;
+    farZ = 100.f;
+    
+    translationMatrix = matrix4x4_translation(0.f, 0.f,-10.f);
     
     if(!metalDefaultLibrary)
     {
@@ -40,36 +84,43 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
     }
     
     // Initialise the shader
-    CShaderManager::GetInstance()->Add("Cube",
-                                       "Shaders/cube.metal",
-                                       "vertexShader",
-                                       "fragmentShader",
-                                        metalDevice);
+     shaderManager.Add("Cube",
+                       "Shaders/cube.metal",
+                        metalDevice, view);
+    
+    imageLoader.Init();
+    
+#ifdef DEBUG
+    offscreenTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+    offscreenTextureDescriptor->setTextureType(MTL::TextureType2D);
+    offscreenTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead);
+    offscreenTextureDescriptor->setWidth(width);
+    offscreenTextureDescriptor->setHeight(height);
+    offScreenTexture = metalDevice->newTexture(offscreenTextureDescriptor);
+#endif
     
     // Render the cube
     CreateCube();
-    
 }
 
-MetalRenderer::~MetalRenderer()
+void MetalRenderer::Destroy()
 {
-    CShaderManager::GetInstance()->Destroy();
-    CImageLoader::GetInstance()->Destroy();
+    shaderManager.Destroy();
+    imageLoader.Destroy();
     metalCommandQueue->release();
     cubeVertexBuffer->release();
     transformationBuffer->release();
-    depthTexture->release();
-    msaaRenderTargetTexture->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
-
+    offScreenTexture->release();
+    offscreenTextureDescriptor->release();
 }
 
 void MetalRenderer::CreateCube()
 {
-    cubeVertexBuffer = CMeshBuilder::GenerateCube(metalDevice);
+    cubeVertexBuffer = MeshBuilder::GenerateCube();
     transformationBuffer = metalDevice->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
-    CImageLoader::GetInstance()->LoadTexture("assets/mc_grass.png", metalDevice);
+    imageLoader.LoadTexture("assets/mc_grass.png");
 }
 
 
@@ -83,27 +134,24 @@ void MetalRenderer::Draw(MTK::View* view)
     // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
     if (drawableSize.width != width || drawableSize.height != height)
     {
-        CreateDepthAndMSAATextures(view, drawableSize);
+        imageLoader.CreateDepthAndMSAATextures(width, height, drawableSize);
     }
     
-#ifdef DEBUG
-    view->setPreferredFramesPerSecond(60);
-#else
     view->setPreferredFramesPerSecond(120);
-#endif
+    
     
     colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
 
     
-    colorAttachmentDescriptor->setTexture(msaaRenderTargetTexture);
+    colorAttachmentDescriptor->setTexture(imageLoader.GetTargetTexture());
     colorAttachmentDescriptor->setResolveTexture(view->currentDrawable()->texture());
     colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
     
 #ifdef DEBUG
-    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(CEditor::GetInstance()->GetClearColor(0),
-                             CEditor::GetInstance()->GetClearColor(1),
-                             CEditor::GetInstance()->GetClearColor(2),
-                             CEditor::GetInstance()->GetClearColor(3)));
+    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(editor.GetClearColor(0),
+                                                             editor.GetClearColor(1),
+                                                             editor.GetClearColor(2),
+                                                             editor.GetClearColor(3)));
 #else
     colorAttachmentDescriptor->setClearColor(MTL::ClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 0.15f)));
 #endif
@@ -111,19 +159,26 @@ void MetalRenderer::Draw(MTK::View* view)
     colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
 
     depthAttachment = renderPassDescriptor->depthAttachment();
-    depthAttachment->setTexture(depthTexture);
+    depthAttachment->setTexture(imageLoader.GetDepthTexture());
     depthAttachment->setLoadAction(MTL::LoadActionClear);
     depthAttachment->setStoreAction(MTL::StoreActionDontCare);
     depthAttachment->setClearDepth(1.0);
 
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
 
-    renderPassDescriptor->colorAttachments()->object(0)->setTexture(msaaRenderTargetTexture);
+    renderPassDescriptor->colorAttachments()->object(0)->setTexture(imageLoader.GetTargetTexture());
     renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(view->currentDrawable()->texture());
-    renderPassDescriptor->depthAttachment()->setTexture(depthTexture);
+    
+#ifdef DEBUG
+    renderPassDescriptor->colorAttachments()->object(1)->setTexture(offScreenTexture);
+    renderPassDescriptor->colorAttachments()->object(1)->setLoadAction(MTL::LoadActionClear);
+    renderPassDescriptor->colorAttachments()->object(1)->setClearColor(MTL::ClearColor::Make(0.0, 0.0, 0.0, 1.0));
+    renderPassDescriptor->colorAttachments()->object(1)->setStoreAction(MTL::StoreActionStore);
+#endif
 
+    renderPassDescriptor->depthAttachment()->setTexture(imageLoader.GetDepthTexture());
 
-    angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45;
+    angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45.f;
     angleInRadians = angleInDegrees * M_PI / 180.0f;
     
     rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
@@ -138,20 +193,20 @@ void MetalRenderer::Draw(MTK::View* view)
     memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
 
 
-    metalRenderPSO = CShaderManager::GetInstance()->GetRenderPipelineState("Cube");
+    metalRenderPSO = shaderManager.GetRenderPipelineState("Cube");
     renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     renderCommandEncoder->setCullMode(MTL::CullModeBack); // Enable backface culling
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
-    renderCommandEncoder->setDepthStencilState(CShaderManager::GetInstance()->getDepthStencilState("Cube"));
-    CShaderManager::GetInstance()->BindResources("Cube", renderCommandEncoder, cubeVertexBuffer);
-    renderCommandEncoder->setFragmentTexture(CImageLoader::GetInstance()->GetTexture(), 0);
+    renderCommandEncoder->setDepthStencilState(shaderManager.GetDepthStencilState("Cube"));
+    shaderManager.BindResources("Cube", renderCommandEncoder, cubeVertexBuffer);
+    renderCommandEncoder->setFragmentTexture(imageLoader.GetTexture(), 0);
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
     
     #ifdef DEBUG
-    CEditor::GetInstance()->Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
+    editor.Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view, offScreenTexture);
     #endif
     
     ProcessInput();
@@ -162,61 +217,16 @@ void MetalRenderer::Draw(MTK::View* view)
     metalCommandBuffer->commit();
 }
 
-void MetalRenderer::CreateDepthAndMSAATextures(MTK::View* view, CGSize &size)
-{
-    width = size.width;
-    height = size.height;
-    
-    // Deallocate the already existing target textures to avoid memory leak
-    if (msaaRenderTargetTexture)
-    {
-        msaaRenderTargetTexture->release();
-    }
-    
-    if (depthTexture)
-    {
-        depthTexture->release();
-    }
-     
-    MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
-    msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-    msaaTextureDescriptor->setWidth(width);
-    msaaTextureDescriptor->setHeight(height);
-    msaaTextureDescriptor->setSampleCount(4);
-    msaaTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
-    msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-
-    msaaRenderTargetTexture = metalDevice->newTexture(msaaTextureDescriptor);
-
-    MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
-    depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
-    depthTextureDescriptor->setWidth(width);
-    depthTextureDescriptor->setHeight(height);
-    depthTextureDescriptor->setSampleCount(4);
-    depthTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
-    depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-
-
-    depthTexture = metalDevice->newTexture(depthTextureDescriptor);
-
-    msaaTextureDescriptor->release();
-    depthTextureDescriptor->release();
-}
-
 void MetalRenderer::ProcessInput() 
 {
     currentFrame = Timer::GetTimeInSeconds();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     
-    Controller gameController;
-    
-    if (gameController.isRightMouseClicked())
+    if (Controller::isRightMouseClicked())
     {
-        mouseX = gameController.getMousePosition().x;
-        mouseY = gameController.getMousePosition().y;
+        mouseX = Controller::getMousePosition().x;
+        mouseY = Controller::getMousePosition().y;
         
         if (firstMouse)
         {
@@ -228,32 +238,32 @@ void MetalRenderer::ProcessInput()
         {
             UpdateMousePosition(mouseX, mouseY);
         }
-        gameController.hideCursor();
+        Controller::hideCursor();
     }
     else
     {
-        gameController.showCursor();
+        Controller::showCursor();
         firstMouse = true;
     }
     
         
-    if (gameController.isWKeyDown())
+    if (Controller::isWKeyDown())
         camera.ProcessKeyboard(FORWARD, deltaTime);
         
-    if (gameController.isAKeyDown())
+    if (Controller::isAKeyDown())
         camera.ProcessKeyboard(LEFT, deltaTime);
         
-    if (gameController.isSKeyDown())
+    if (Controller::isSKeyDown())
         camera.ProcessKeyboard(BACKWARD, deltaTime);
         
-    if (gameController.isDKeyDown())
+    if (Controller::isDKeyDown())
         camera.ProcessKeyboard(RIGHT, deltaTime);
      
-    if (gameController.leftThumbstickX() || gameController.leftThumbstickY())
-        camera.ProcessGamepadLeftJoystick(deltaTime, gameController.leftThumbstickX(), gameController.leftThumbstickY());
+    if (Controller::leftThumbstickX() || Controller::leftThumbstickY())
+        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::leftThumbstickX(), Controller::leftThumbstickX());
     
-    if (gameController.rightThumbstickX() || gameController.rightThumbstickY())
-        camera.ProcessGamepadRightJoystick(gameController.rightThumbstickX(), gameController.rightThumbstickY(), true);
+    if (Controller::rightThumbstickX() || Controller::rightThumbstickY())
+        camera.ProcessGamepadRightJoystick(Controller::rightThumbstickX(), Controller::rightThumbstickY(), true);
      
 }
 
@@ -267,5 +277,4 @@ void MetalRenderer::UpdateMousePosition(float &x, float &y)
 
        camera.ProcessMouseMovement(xoffset, yoffset, false);
 }
-
 

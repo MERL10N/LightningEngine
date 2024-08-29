@@ -8,7 +8,7 @@
 #ifndef Editor_h
 #define Editor_h
 
-#include <DesignPatterns/SingletonTemplate.h>
+//#include <DesignPatterns/SingletonTemplate.h>
 
 namespace MTL
 {
@@ -16,18 +16,22 @@ namespace MTL
     class RenderPassDescriptor;
     class CommandBuffer;
     class RenderCommandEncoder;
+    class Texture;
 }
 struct ImFont;
 namespace MTK
 {
     class View;
 }
-class CEditor : public CSingletonTemplate<CEditor>
+
+class CImageLoader;
+
+class Editor
 {
-    friend CSingletonTemplate<CEditor>;
+    //friend SingletonTemplate<CEditor>;
 public:
     bool Init(MTL::Device* device, MTK::View * view);
-    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view);
+    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view, MTL::Texture* targetTexture);
     
     void RenderDockSpace();
     

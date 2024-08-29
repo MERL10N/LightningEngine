@@ -20,6 +20,7 @@ int main()
         pApp->run();
         pApp->release();
     autoReleasePool->release();
+    
 #else
     Application app;
     app.init();

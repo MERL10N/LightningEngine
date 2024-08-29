@@ -19,6 +19,7 @@ using namespace std;
 // Include Metal
 #ifdef __APPLE__
 #include <Metal/Metal.hpp>
+#include <Renderer/Metal/MetalDevice.h>
 #else
 
     #ifndef GLEW_STATIC
@@ -62,22 +63,21 @@ bool CImageLoader::Init(void)
 /**
  @brief Load an image into the graphics card and return its ID.
  @param filename A const char* storing the name of the image file
- @param device the metal supported device running the program
  */
-void CImageLoader::LoadTexture(const char* filename,  MTL::Device* device)
+void CImageLoader::LoadTexture(const char* filename)
 {
     int width, height, channels;
-    this->device = device;
 
     stbi_set_flip_vertically_on_load(true);
     unsigned char* image = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
     assert(image != nullptr);
+    
     MTL::TextureDescriptor* textureDescriptor = MTL::TextureDescriptor::alloc()->init();
     textureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     textureDescriptor->setWidth(width);
     textureDescriptor->setHeight(height);
     
-    texture = device->newTexture(textureDescriptor);
+    texture = MetalDevice::GetDevice()->newTexture(textureDescriptor);
 
     MTL::Region region = MTL::Region(0, 0, 0, width, height, 1);
     NS::UInteger bytesPerRow = 4 * width;
@@ -93,12 +93,68 @@ void CImageLoader::LoadTexture(const char* filename,  MTL::Device* device)
 void CImageLoader::Destroy()
 {
     texture->release();
+    msaaRenderTargetTexture->release();
+    depthTexture->release();
 }
 
 MTL::Texture* CImageLoader::GetTexture()
 {
     return texture;
 }
+
+MTL::Texture* CImageLoader::GetTargetTexture()
+{
+    return msaaRenderTargetTexture;
+}
+
+MTL::Texture* CImageLoader::GetDepthTexture()
+{
+    return depthTexture;
+}
+
+void CImageLoader::CreateDepthAndMSAATextures(float &width, float &height, CGSize &size)
+{
+    width = size.width;
+    height = size.height;
+    
+    // Deallocate the already existing target textures to avoid memory leak
+    if (msaaRenderTargetTexture)
+    {
+        msaaRenderTargetTexture->release();
+    }
+    
+    if (depthTexture)
+    {
+        depthTexture->release();
+    }
+     
+    MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+    msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
+    msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    msaaTextureDescriptor->setWidth(width);
+    msaaTextureDescriptor->setHeight(height);
+    msaaTextureDescriptor->setSampleCount(4);
+    msaaTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
+    msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
+
+    msaaRenderTargetTexture = MetalDevice::GetDevice()->newTexture(msaaTextureDescriptor);
+
+    MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+    depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
+    depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
+    depthTextureDescriptor->setWidth(width);
+    depthTextureDescriptor->setHeight(height);
+    depthTextureDescriptor->setSampleCount(4);
+    depthTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
+    depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
+
+
+    depthTexture = MetalDevice::GetDevice()->newTexture(depthTextureDescriptor);
+
+    msaaTextureDescriptor->release();
+    depthTextureDescriptor->release();
+}
+
 
 #else
 

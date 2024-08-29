@@ -8,13 +8,14 @@
 #include "MeshBuilder.h"
 #include "VertexData.h"
 #include <Metal/Metal.hpp>
+#include <Renderer/Metal/MetalDevice.h>
 
 /**
  @brief Generate a quad and load it into Metal
  @param metalDevice A metal compatible device (Either mac or iOS)
  */
 
-MTL::Buffer* CMeshBuilder::GenerateQuad(MTL::Device* metalDevice)
+MTL::Buffer* MeshBuilder::GenerateQuad(MTL::Device* metalDevice)
 {
     VertexData squareVertices[]
     {
@@ -30,7 +31,7 @@ MTL::Buffer* CMeshBuilder::GenerateQuad(MTL::Device* metalDevice)
     return quadVertexBuffer;
 }
 
-MTL::Buffer* CMeshBuilder::GenerateCube(MTL::Device* metalDevice)
+MTL::Buffer* MeshBuilder::GenerateCube()
 {
     VertexData cubeVertices[] = {
             // Front face
@@ -82,6 +83,8 @@ MTL::Buffer* CMeshBuilder::GenerateCube(MTL::Device* metalDevice)
             {{0.5, -0.5, 0.5, 1.0}, {0.0, 0.0}},
         };
     
-    MTL::Buffer* cubeVertexBuffer = metalDevice->newBuffer(&cubeVertices, sizeof(cubeVertices), MTL::ResourceStorageModeShared);
+    MTL::Buffer* cubeVertexBuffer = MetalDevice::GetDevice()->newBuffer(&cubeVertices,
+                                                                        sizeof(cubeVertices),
+                                                                        MTL::ResourceStorageModeShared);
     return cubeVertexBuffer;
 }

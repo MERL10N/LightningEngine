@@ -59,23 +59,23 @@ public:
     // Below are functions I have added to the class
     
     //Keyboard Input functions
-    bool isWKeyDown() const;
-    bool isAKeyDown() const;
-    bool isSKeyDown() const;
-    bool isDKeyDown() const;
+    static bool isWKeyDown();
+    static bool isAKeyDown();
+    static bool isSKeyDown();
+    static bool isDKeyDown();
 
     // Gamepad input functions
-    float leftThumbstickX() const;
-    float leftThumbstickY() const;
-    float rightThumbstickX() const;
-    float rightThumbstickY() const;
+    static float leftThumbstickX();
+    static float leftThumbstickY();
+    static float rightThumbstickX();
+    static float rightThumbstickY();
     
     // Mouse input functions
-    CGPoint getMousePosition();
-    void hideCursor();
-    void showCursor();
-    bool isLeftMouseClicked() const;
-    bool isRightMouseClicked() const;
+    static CGPoint getMousePosition();
+    static void hideCursor();
+    static void showCursor();
+    static bool isLeftMouseClicked();
+    static bool isRightMouseClicked();
 
 };
 

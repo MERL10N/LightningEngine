@@ -35,22 +35,22 @@ bool Controller::isDownArrowDown() const
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeDownArrow].pressed;
 }
 
-bool Controller::isWKeyDown() const
+bool Controller::isWKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyW].pressed;
 }
 
-bool Controller::isAKeyDown() const
+bool Controller::isAKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyA].pressed;
 }
 
-bool Controller::isSKeyDown() const
+bool Controller::isSKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyS].pressed;
 }
 
-bool Controller::isDKeyDown() const
+bool Controller::isDKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyD].pressed;
 }
@@ -61,34 +61,29 @@ bool Controller::isSpacebarDown() const
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeSpacebar].pressed;
 }
 
-float Controller::leftThumbstickX() const
+float Controller::leftThumbstickX()
 {
     return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.xAxis.value;
 }
 
-float Controller::leftThumbstickY() const
+float Controller::leftThumbstickY()
 {
     return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.yAxis.value;
 }
 
-float Controller::rightThumbstickX() const
+float Controller::rightThumbstickX()
 {
     return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.xAxis.value;
 }
 
-float Controller::rightThumbstickY() const
+float Controller::rightThumbstickY()
 {
     return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.yAxis.value;
 }
 
-bool Controller::isButtonADown() const
-{
-    return GCController.controllers.firstObject.extendedGamepad.buttonA.pressed;
-}
 
 void Controller::setHapticIntensity(float intensity) const
 {
-
 }
 
 void Controller::renderOverlay(MTL::RenderCommandEncoder* pEnc)
@@ -124,11 +119,11 @@ void Controller::showCursor()
     CGAssociateMouseAndMouseCursorPosition(true);
 }
 
-bool Controller::isLeftMouseClicked() const
+bool Controller::isLeftMouseClicked()
 {
     return ([NSEvent pressedMouseButtons] & ((1 << 0))) != 0;
 }
-bool Controller::isRightMouseClicked() const
+bool Controller::isRightMouseClicked()
 {
     return ([NSEvent pressedMouseButtons] & ((1 << 1))) != 0;
 }

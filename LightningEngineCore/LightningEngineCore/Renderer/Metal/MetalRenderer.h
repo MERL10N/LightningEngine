@@ -10,6 +10,7 @@
 
 
 #include <Camera/Camera.h>
+#include <Editor/Editor.h>
 
 namespace MTL
 {
@@ -25,6 +26,7 @@ namespace MTL
     class RenderPassDescriptor;
     class RenderPassColorAttachmentDescriptor;
     class RenderPassDepthAttachmentDescriptor;
+    class TextureDescriptor;
 }
 
 namespace NS
@@ -37,19 +39,23 @@ namespace MTK
 }
 
 struct CGSize;
+class CImageLoader;
 
 class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* metalDevice);
+    MetalRenderer(MTL::Device* metalDevice, MTK::View* view);
     ~MetalRenderer();
     
+    void Init(MTL::Device* metalDevice, MTK::View* view);
+    
     void Draw(MTK::View* view);
+    
+    void Destroy();
 
 private:
     
     void CreateCube();
-    void CreateDepthAndMSAATextures(MTK::View* view, CGSize &size);
     void ProcessInput();
     void UpdateMousePosition(float &x, float &y);
     
@@ -69,10 +75,15 @@ private:
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment;
     
     MTL::Texture* msaaRenderTargetTexture = nullptr;
-    MTL::Texture* depthTexture;
+    MTL::Texture* depthTexture = nullptr;
+    MTL::Texture* offScreenTexture = nullptr;
+    MTL::TextureDescriptor* offscreenTextureDescriptor = nullptr;
     
     float width;
     float height;
+    
+    //Editor
+    Editor editor;
     
     Camera camera;
     float mouseX;

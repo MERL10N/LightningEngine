@@ -52,7 +52,7 @@ void CShaderManager::Destroy(void)
 }
 
 #ifdef __APPLE__
-void CShaderManager::Add(const std::string& _name, const char* shaderPath, const char* vertexFunction, const char* fragmentFunction,  MTL::Device* device)
+void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTL::Device* device, MTK::View* view)
 {
     // Check if there is already a similar shader name in the map
     if (Check(_name))
@@ -64,7 +64,7 @@ void CShaderManager::Add(const std::string& _name, const char* shaderPath, const
     }
 
     // Initialise a new Shader
-    MetalShader* cNewShader = new MetalShader(shaderPath, vertexFunction, fragmentFunction, device);
+    MetalShader* cNewShader = new MetalShader(shaderPath, device, view);
 
     if (cNewShader->IsLoaded())
     {
@@ -109,7 +109,7 @@ MTL::RenderPipelineState* CShaderManager::GetRenderPipelineState(const std::stri
     return nullptr;
 }
 
-MTL::DepthStencilState* CShaderManager::getDepthStencilState(const std::string& shaderName) const
+MTL::DepthStencilState* CShaderManager::GetDepthStencilState(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second)
