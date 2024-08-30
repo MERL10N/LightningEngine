@@ -19,7 +19,7 @@ class MeshBuilder
 public:
     // Generate a quad
     static MTL::Buffer* GenerateQuad(MTL::Device* metalDevice);
-    static MTL::Buffer* GenerateCube();
+    static MTL::Buffer* GenerateCube(MTL::Device* metalDevice);
 };
 
 #endif /* MeshBuilder_hpp */

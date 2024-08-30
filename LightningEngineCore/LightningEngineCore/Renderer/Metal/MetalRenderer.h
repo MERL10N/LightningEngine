@@ -44,10 +44,10 @@ class CImageLoader;
 class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* metalDevice, MTK::View* view);
+    MetalRenderer(MTK::View* view);
     ~MetalRenderer();
     
-    void Init(MTL::Device* metalDevice, MTK::View* view);
+    void Init(MTK::View* view);
     
     void Draw(MTK::View* view);
     
@@ -59,9 +59,8 @@ private:
     void ProcessInput();
     void UpdateMousePosition(float &x, float &y);
     
-    MTL::Device* metalDevice;
     
-    NS::AutoreleasePool* autoReleasePool;
+    MTK::View* view;
     
     MTL::Library* metalDefaultLibrary;
     MTL::CommandQueue* metalCommandQueue;
@@ -71,13 +70,10 @@ private:
     MTL::Buffer* transformationBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
-    MTL::RenderPassColorAttachmentDescriptor* colorAttachmentDescriptor;
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment;
     
     MTL::Texture* msaaRenderTargetTexture = nullptr;
     MTL::Texture* depthTexture = nullptr;
-    MTL::Texture* offScreenTexture = nullptr;
-    MTL::TextureDescriptor* offscreenTextureDescriptor = nullptr;
     
     float width;
     float height;

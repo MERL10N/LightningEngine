@@ -37,13 +37,12 @@ namespace MTL
 class ViewDelegate : public MTK::ViewDelegate
 {
     public:
-        ViewDelegate( MTL::Device* metalDevice, MTK::View* view );
+        ViewDelegate(MTK::View* view);
         virtual ~ViewDelegate() override;
         virtual void drawInMTKView( MTK::View* view ) override;
 private:
     MetalRenderer renderer;
     MTK::View* view;
-    MTL::Device* metalDevice;
 };
 
 #endif

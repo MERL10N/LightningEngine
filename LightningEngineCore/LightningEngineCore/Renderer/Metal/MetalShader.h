@@ -50,9 +50,9 @@ private:
     }
 
 public:
-    MetalShader(const std::string& path, MTL::Device* device, MTK::View* view)
+    MetalShader(const std::string& path, MTK::View* view)
         : filePath(path),
-          device(device)
+          device(view->device())
     {
         if (!device)
         {

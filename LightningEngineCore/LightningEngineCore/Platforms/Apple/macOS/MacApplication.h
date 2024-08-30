@@ -27,13 +27,18 @@
 #define METALAPPLICATION_H
 #include <AppKit/AppKit.hpp>
 
-#ifdef DEBUG
+//#ifdef DEBUG
     #include <Editor/Editor.h>
-#endif
+//#endif
 
 namespace MTK
 {
     class View;
+}
+
+namespace MTL
+{
+   class Device;
 }
 
 class ViewDelegate;
@@ -53,10 +58,11 @@ class MacApplication : public NS::ApplicationDelegate
         NS::Window* appWindow;
         MTK::View* metalKitView;
         ViewDelegate* viewDelegate = nullptr;
+        MTL::Device* metalDevice = nullptr;
     
-#ifdef DEBUG
+//#ifdef DEBUG
     Editor editor;
-#endif
+//#endif
 };
 
 #endif

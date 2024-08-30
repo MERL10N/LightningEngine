@@ -25,7 +25,6 @@ namespace MTK
 struct CGSize;
 
 #else
-
     #ifndef GLEW_STATIC
     #include <GL/glew.h>
     #define GLEW_STATIC
@@ -46,11 +45,12 @@ public:
 #ifdef __APPLE__
     
     // Load an image and return as a Texture ID
-    void LoadTexture(const char* filename);
-    void CreateDepthAndMSAATextures(float &width, float &height, CGSize &size);
+    void LoadTexture(const char* filename, MTL::Device* device);
+    void CreateDepthAndMSAATextures(float &width, float &height, CGSize &size, MTL::Device* device);
     MTL::Texture*  GetTexture();
     MTL::Texture*  GetTargetTexture();
     MTL::Texture*  GetDepthTexture();
+    MTL::Texture*  GetResolvedTexture();
     void Destroy();
 #else
     // Load an image and return as unsigned char*
@@ -61,14 +61,14 @@ public:
     // Load an image and return as a Texture ID
     unsigned int LoadTextureGetID(const char* filename, const bool bInvert);
 #endif
-protected:
  
-    
 private:
 #ifdef __APPLE__
+    MTL::Device* device;
     MTL::Texture* texture;
     MTL::Texture* msaaRenderTargetTexture = nullptr;
     MTL::Texture* depthTexture;
+    MTL::Texture* resolvedTexture;
 #endif
 
 };

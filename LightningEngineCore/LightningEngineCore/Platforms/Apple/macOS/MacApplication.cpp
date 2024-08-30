@@ -23,19 +23,16 @@
 #include "MacApplication.h"
 #include "ViewDelegate.h"
 #include <Metal/Metal.hpp>
-#include <Renderer/Metal/MetalDevice.h>
-
-MTL::Device* MetalDevice::device = nullptr;
 
 MacApplication::~MacApplication()
 {
-    #ifdef DEBUG
+    //#ifdef DEBUG
     editor.Destroy();
-    #endif
+    //#endif
     metalKitView->release();
     appWindow->release();
     
-    MetalDevice::Cleanup();
+    metalDevice->release();
     delete viewDelegate;
 }
 
@@ -102,24 +99,24 @@ void MacApplication::applicationDidFinishLaunching( NS::Notification* notificati
          NS::BackingStoreBuffered,
         false );
     
-    MetalDevice::Init(); // Initialise metal device
+    metalDevice = MTL::CreateSystemDefaultDevice();
 
-    metalKitView = MTK::View::alloc()->init(frame, MetalDevice::GetDevice());
+    metalKitView = MTK::View::alloc()->init(frame, metalDevice);
     
-    
-#ifdef DEBUG
-    editor.Init(MetalDevice::GetDevice(), metalKitView);
-#endif
-    
+
+    editor.Init(metalKitView);
    
-    metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm );
+    metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatRGBA8Unorm );
     metalKitView->setSampleCount(4);
+    metalKitView->setClearColor(MTL::ClearColor(editor.GetClearColor(0), editor.GetClearColor(1), editor.GetClearColor(2), editor.GetClearColor(3)));
+    metalKitView->setDevice(metalDevice); // Set the device on the Metal Kit View
     
-    viewDelegate = new ViewDelegate(MetalDevice::GetDevice(), metalKitView);
+    viewDelegate = new ViewDelegate(metalKitView);
     metalKitView->setDelegate( viewDelegate );
     
     appWindow->setContentView( metalKitView );
-    appWindow->setTitle( NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding ) );
+    appWindow->setTitle(NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding));
+    
 
     appWindow->makeKeyAndOrderFront( nullptr );
 

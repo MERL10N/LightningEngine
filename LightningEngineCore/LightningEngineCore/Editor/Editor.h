@@ -28,10 +28,9 @@ class CImageLoader;
 
 class Editor
 {
-    //friend SingletonTemplate<CEditor>;
 public:
-    bool Init(MTL::Device* device, MTK::View * view);
-    void Render(MTL::RenderPassDescriptor* renderPassDescriptor, MTL::CommandBuffer* metalCommandBuffer, MTL::RenderCommandEncoder* renderCommandEncoder, MTK::View * view, MTL::Texture* targetTexture);
+    bool Init(MTK::View * view);
+    void Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view);
     
     void RenderDockSpace();
     

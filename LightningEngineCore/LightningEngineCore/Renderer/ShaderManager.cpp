@@ -52,7 +52,7 @@ void CShaderManager::Destroy(void)
 }
 
 #ifdef __APPLE__
-void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTL::Device* device, MTK::View* view)
+void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTK::View* view)
 {
     // Check if there is already a similar shader name in the map
     if (Check(_name))
@@ -64,7 +64,7 @@ void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTL::
     }
 
     // Initialise a new Shader
-    MetalShader* cNewShader = new MetalShader(shaderPath, device, view);
+    MetalShader* cNewShader = new MetalShader(shaderPath, view);
 
     if (cNewShader->IsLoaded())
     {
@@ -214,3 +214,5 @@ bool CShaderManager::Check(const std::string& _name)
 {
 	return shaderMap.count(_name) != 0;
 }
+
+

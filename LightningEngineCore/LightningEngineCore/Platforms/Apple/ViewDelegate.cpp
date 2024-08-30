@@ -7,9 +7,9 @@
 
 #include "ViewDelegate.h"
 
-ViewDelegate::ViewDelegate( MTL::Device* metalDevice, MTK::View* view )
+ViewDelegate::ViewDelegate(MTK::View* view )
 : MTK::ViewDelegate()
-, renderer(MetalRenderer(metalDevice, view))
+, renderer(MetalRenderer(view))
 {
 }
 

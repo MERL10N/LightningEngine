@@ -21,13 +21,13 @@
 #include <System/ImageLoader.h>
 #include <iostream>
 
-CShaderManager shaderManager;
-CImageLoader imageLoader;
+static CShaderManager shaderManager;
+static CImageLoader imageLoader;
 
-MetalRenderer::MetalRenderer(MTL::Device* metalDevice, MTK::View* view)
-: metalDevice(metalDevice)
-, metalDefaultLibrary(metalDevice->newDefaultLibrary())
-, metalCommandQueue(metalDevice->newCommandQueue())
+MetalRenderer::MetalRenderer(MTK::View* view)
+: view(view)
+, metalDefaultLibrary(view->device()->newDefaultLibrary())
+, metalCommandQueue(view->device()->newCommandQueue())
 , camera(Camera())
 , fov(camera.GetZoom() * (M_PI / 180.0f))
 , nearZ(0.1f)
@@ -41,13 +41,10 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice, MTK::View* view)
     }
     
     // Initialise the shader
-     shaderManager.Add("Cube",
-                       "Shaders/cube.metal",
-                        metalDevice, view);
+    shaderManager.Add("Cube", "Shaders/cube.metal", view);
     imageLoader.Init();
     
-    
-    // Render the cube
+   // Render the cube
     CreateCube();
 }
 
@@ -64,11 +61,10 @@ MetalRenderer::~MetalRenderer()
     renderCommandEncoder->release();
 }
 
-void MetalRenderer::Init(MTL::Device* metalDevice, MTK::View* view)
+void MetalRenderer::Init(MTK::View* view)
 {
-    this->metalDevice = metalDevice;
-    metalDefaultLibrary = metalDevice->newDefaultLibrary();
-    metalCommandQueue = metalDevice->newCommandQueue();
+    metalDefaultLibrary = view->device()->newDefaultLibrary();
+    metalCommandQueue = view->device()->newCommandQueue();
     camera = Camera();
     
     fov = camera.GetZoom() * (M_PI / 180.0f);
@@ -86,18 +82,9 @@ void MetalRenderer::Init(MTL::Device* metalDevice, MTK::View* view)
     // Initialise the shader
      shaderManager.Add("Cube",
                        "Shaders/cube.metal",
-                        metalDevice, view);
+                        view);
     
     imageLoader.Init();
-    
-#ifdef DEBUG
-    offscreenTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    offscreenTextureDescriptor->setTextureType(MTL::TextureType2D);
-    offscreenTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead);
-    offscreenTextureDescriptor->setWidth(width);
-    offscreenTextureDescriptor->setHeight(height);
-    offScreenTexture = metalDevice->newTexture(offscreenTextureDescriptor);
-#endif
     
     // Render the cube
     CreateCube();
@@ -112,15 +99,14 @@ void MetalRenderer::Destroy()
     transformationBuffer->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
-    offScreenTexture->release();
-    offscreenTextureDescriptor->release();
+    
 }
 
 void MetalRenderer::CreateCube()
 {
-    cubeVertexBuffer = MeshBuilder::GenerateCube();
-    transformationBuffer = metalDevice->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
-    imageLoader.LoadTexture("assets/mc_grass.png");
+    cubeVertexBuffer = MeshBuilder::GenerateCube(view->device());
+    transformationBuffer = view->device()->newBuffer(sizeof(TransformationData), MTL::ResourceStorageModeShared);
+    imageLoader.LoadTexture("assets/mc_grass.png", view->device());
 }
 
 
@@ -132,32 +118,13 @@ void MetalRenderer::Draw(MTK::View* view)
     CGSize drawableSize = view->drawableSize();
     
     // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
-    if (drawableSize.width != width || drawableSize.height != height)
+    if (width != drawableSize.width|| height != drawableSize.height)
     {
-        imageLoader.CreateDepthAndMSAATextures(width, height, drawableSize);
+        imageLoader.CreateDepthAndMSAATextures(width, height, drawableSize, view->device());
     }
     
     view->setPreferredFramesPerSecond(120);
     
-    
-    colorAttachmentDescriptor = renderPassDescriptor->colorAttachments()->object(0);
-
-    
-    colorAttachmentDescriptor->setTexture(imageLoader.GetTargetTexture());
-    colorAttachmentDescriptor->setResolveTexture(view->currentDrawable()->texture());
-    colorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
-    
-#ifdef DEBUG
-    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(editor.GetClearColor(0),
-                                                             editor.GetClearColor(1),
-                                                             editor.GetClearColor(2),
-                                                             editor.GetClearColor(3)));
-#else
-    colorAttachmentDescriptor->setClearColor(MTL::ClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 0.15f)));
-#endif
-    
-    colorAttachmentDescriptor->setStoreAction(MTL::StoreActionMultisampleResolve);
-
     depthAttachment = renderPassDescriptor->depthAttachment();
     depthAttachment->setTexture(imageLoader.GetDepthTexture());
     depthAttachment->setLoadAction(MTL::LoadActionClear);
@@ -167,15 +134,16 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
 
     renderPassDescriptor->colorAttachments()->object(0)->setTexture(imageLoader.GetTargetTexture());
-    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(view->currentDrawable()->texture());
+    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(imageLoader.GetResolvedTexture());
     
 #ifdef DEBUG
-    renderPassDescriptor->colorAttachments()->object(1)->setTexture(offScreenTexture);
-    renderPassDescriptor->colorAttachments()->object(1)->setLoadAction(MTL::LoadActionClear);
-    renderPassDescriptor->colorAttachments()->object(1)->setClearColor(MTL::ClearColor::Make(0.0, 0.0, 0.0, 1.0));
-    renderPassDescriptor->colorAttachments()->object(1)->setStoreAction(MTL::StoreActionStore);
+    editor.Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
 #endif
-
+    
+    renderPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionMultisampleResolve);
+    renderPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionClear);
+    renderPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor(view->clearColor().red, view->clearColor().blue, view->clearColor().green, view->clearColor().alpha));
+    
     renderPassDescriptor->depthAttachment()->setTexture(imageLoader.GetDepthTexture());
 
     angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45.f;
@@ -192,7 +160,6 @@ void MetalRenderer::Draw(MTK::View* view)
     TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
     memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
 
-
     metalRenderPSO = shaderManager.GetRenderPipelineState("Cube");
     renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     renderCommandEncoder->setCullMode(MTL::CullModeBack); // Enable backface culling
@@ -204,11 +171,7 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
-    
-    #ifdef DEBUG
-    editor.Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view, offScreenTexture);
-    #endif
-    
+
     ProcessInput();
 
     renderCommandEncoder->endEncoding();

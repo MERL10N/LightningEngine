@@ -12,7 +12,7 @@
 #include <backends/imgui_impl_osx.h>
 
 
-bool Editor::Init(MTL::Device* device, MTK::View* view)
+bool Editor::Init(MTK::View* view)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -24,7 +24,7 @@ bool Editor::Init(MTL::Device* device, MTK::View* view)
     ImGui::StyleColorsDark();
     
     
-    ImGui_ImplMetal_Init(device);
+    ImGui_ImplMetal_Init(view->device());
 
     // Setup Platform/Renderer backends
     ImGui_ImplOSX_Init(view);
@@ -61,7 +61,7 @@ int Editor::GetFrameRate()
     return fps;
 }
 
-void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view, MTL::Texture* targetTexture)
+void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
 {
     // Start the Dear ImGui frame
     ImGui_ImplMetal_NewFrame(renderPassDescriptor);
@@ -88,7 +88,7 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
     else
@@ -127,12 +127,12 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
 
         if (ImGui::BeginMenuBar())
         {
-            if (ImGui::BeginMenu("File"))
+            if (ImGui::BeginMenu("Menu"))
             {
                 // Disabling fullscreen would allow the window to be moved to the front of other windows,
                 // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-                ImGui::MenuItem("Padding", NULL, &opt_padding);
+                ImGui::MenuItem("Fullscreen", nullptr, &opt_fullscreen);
+                ImGui::MenuItem("Padding", nullptr, &opt_padding);
                 ImGui::Separator();
                 ImGui::EndMenu();
             }
@@ -179,7 +179,7 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
 
         ImGui::Begin("Game Scene");
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        ImTextureID imguiTexture = (ImTextureID)targetTexture;
+        ImTextureID imguiTexture = ImTextureID(renderPassDescriptor->colorAttachments()->object(0)->resolveTexture()); // pass in the resolved texture from imageLoader.GetResolveTeture()
         ImGui::Image(imguiTexture, viewportPanelSize);
         ImGui::End();
     

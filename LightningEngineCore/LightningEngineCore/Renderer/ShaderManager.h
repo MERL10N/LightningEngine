@@ -50,7 +50,7 @@ public:
 	// User Interface
 	// Add a shader to this map
 #ifdef __APPLE__
-    void Add(const std::string& _name, const char* shaderPath, MTL::Device* device, MTK::View* view);
+    void Add(const std::string& _name, const char* shaderPath, MTK::View* view);
     
     MTL::RenderPipelineDescriptor* getRenderPipelineDescriptor(const std::string& shaderName) const;
     void setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const;
