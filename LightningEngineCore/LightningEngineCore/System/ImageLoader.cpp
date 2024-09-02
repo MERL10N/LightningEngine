@@ -19,6 +19,7 @@ using namespace std;
 // Include Metal
 #ifdef __APPLE__
 #include <Metal/Metal.hpp>
+#include <MetalKit/MetalKit.hpp>
 #else
 
     #ifndef GLEW_STATIC
@@ -117,30 +118,21 @@ MTL::Texture* CImageLoader::GetResolvedTexture()
     return resolvedTexture;
 }
 
-
 void CImageLoader::CreateDepthAndMSAATextures(float &width, float &height, CGSize &size, MTL::Device* device)
 {
     width = size.width;
     height = size.height;
     
     // Deallocate the already existing target textures to avoid memory leak
-
     if (msaaRenderTargetTexture)
     {
         msaaRenderTargetTexture->release();
     }
-    
     if (depthTexture)
     {
         depthTexture->release();
     }
     
-    if (resolvedTexture)
-    {
-        resolvedTexture->release();
-    }
-    
-     
     MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
     msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
@@ -151,16 +143,6 @@ void CImageLoader::CreateDepthAndMSAATextures(float &width, float &height, CGSiz
     msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
     
     msaaRenderTargetTexture = device->newTexture(msaaTextureDescriptor);
-    
-    MTL::TextureDescriptor* resolvedTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    resolvedTextureDescriptor->setTextureType(MTL::TextureType2D);
-    resolvedTextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    resolvedTextureDescriptor->setWidth(width);
-    resolvedTextureDescriptor->setHeight(height);
-    resolvedTextureDescriptor->setStorageMode(MTL::StorageModeManaged);
-    resolvedTextureDescriptor->setUsage(MTL::TextureUsageShaderRead);
-
-    resolvedTexture = device->newTexture(resolvedTextureDescriptor);
 
     MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
@@ -175,11 +157,30 @@ void CImageLoader::CreateDepthAndMSAATextures(float &width, float &height, CGSiz
     depthTexture = device->newTexture(depthTextureDescriptor);
 
     msaaTextureDescriptor->release();
-    resolvedTextureDescriptor->release();
     depthTextureDescriptor->release();
 }
 
+void CImageLoader::CreateResolveTexture(float &width, float &height, CGSize &size, MTL::Device* device)
+{
+    width = size.width;
+    height = size.height;
+    
+    if (resolvedTexture)
+    {
+        resolvedTexture->release();
+    }
+    
+    MTL::TextureDescriptor* resolvedTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
+    resolvedTextureDescriptor->setTextureType(MTL::TextureType2D);
+    resolvedTextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    resolvedTextureDescriptor->setWidth(width);
+    resolvedTextureDescriptor->setHeight(height);
+    resolvedTextureDescriptor->setStorageMode(MTL::StorageModeManaged);
+    resolvedTextureDescriptor->setUsage(MTL::TextureUsageShaderRead);
 
+    resolvedTexture = device->newTexture(resolvedTextureDescriptor);
+    resolvedTextureDescriptor->release();
+}
 #else
 
 /**

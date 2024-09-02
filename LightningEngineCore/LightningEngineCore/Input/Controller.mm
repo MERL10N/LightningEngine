@@ -35,22 +35,22 @@ bool Controller::isDownArrowDown() const
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeDownArrow].pressed;
 }
 
-bool Controller::isWKeyDown()
+bool Controller::IsWKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyW].pressed;
 }
 
-bool Controller::isAKeyDown()
+bool Controller::IsAKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyA].pressed;
 }
 
-bool Controller::isSKeyDown()
+bool Controller::IsSKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyS].pressed;
 }
 
-bool Controller::isDKeyDown()
+bool Controller::IsDKeyDown()
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyD].pressed;
 }
@@ -61,22 +61,22 @@ bool Controller::isSpacebarDown() const
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeSpacebar].pressed;
 }
 
-float Controller::leftThumbstickX()
+float Controller::LeftThumbstickX()
 {
     return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.xAxis.value;
 }
 
-float Controller::leftThumbstickY()
+float Controller::LeftThumbstickY()
 {
     return GCController.controllers.firstObject.extendedGamepad.leftThumbstick.yAxis.value;
 }
 
-float Controller::rightThumbstickX()
+float Controller::RightThumbstickX()
 {
     return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.xAxis.value;
 }
 
-float Controller::rightThumbstickY()
+float Controller::RightThumbstickY()
 {
     return GCController.controllers.firstObject.extendedGamepad.rightThumbstick.yAxis.value;
 }
@@ -99,7 +99,7 @@ void Controller::renderOverlay(MTL::RenderCommandEncoder* pEnc)
     // game's context, and drawing semantically-meaningful glyphs.
 }
 
-CGPoint Controller::getMousePosition() 
+CGPoint Controller::GetMousePosition() 
 {
     CGEventRef event = CGEventCreate(nullptr);
     CGPoint location = CGEventGetLocation(event);
@@ -107,13 +107,13 @@ CGPoint Controller::getMousePosition()
     return location;
 }
 
-void Controller::hideCursor() 
+void Controller::HideCursor() 
 {
     [NSCursor hide];
     CGAssociateMouseAndMouseCursorPosition(true);
 }
 
-void Controller::showCursor() 
+void Controller::ShowCursor() 
 { 
     [NSCursor unhide];
     CGAssociateMouseAndMouseCursorPosition(true);

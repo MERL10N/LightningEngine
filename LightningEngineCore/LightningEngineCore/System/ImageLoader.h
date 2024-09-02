@@ -47,6 +47,7 @@ public:
     // Load an image and return as a Texture ID
     void LoadTexture(const char* filename, MTL::Device* device);
     void CreateDepthAndMSAATextures(float &width, float &height, CGSize &size, MTL::Device* device);
+    void CreateResolveTexture(float &width, float &height, CGSize &size, MTL::Device* device);
     MTL::Texture*  GetTexture();
     MTL::Texture*  GetTargetTexture();
     MTL::Texture*  GetDepthTexture();

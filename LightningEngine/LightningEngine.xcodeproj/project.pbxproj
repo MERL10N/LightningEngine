@@ -17,7 +17,7 @@
 		A983C45A2C5EBE3D001AD35D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489229CFFEF3009CDE34 /* Cocoa.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A983C45B2C5EBE7F001AD35D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E32489029CFFEEF009CDE34 /* IOKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A983C45C2C5EBE85001AD35D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E581F1529871D3000E5CDF6 /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* cube.metal */; };
+		A983C46F2C5EBEBA001AD35D /* Shader3D.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D700202C502B7B002A50BA /* Shader3D.metal */; };
 		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
 		A9889DD42C605BBA00245914 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908282C5EEA49000B2197 /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A9889DD52C605BC700245914 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908112C5EE970000B2197 /* GameController.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -55,7 +55,7 @@
 		3E56AB66297E0E6E00DB5F4F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		3E581F1529871D3000E5CDF6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3E581F1729871D3400E5CDF6 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		3E76CD7129876E7600178E19 /* square.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = square.metal; sourceTree = "<group>"; };
+		3E76CD7129876E7600178E19 /* Shader2D.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader2D.metal; sourceTree = "<group>"; };
 		3E9F222429A060BA00383DCA /* mc_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mc_grass.png; path = assets/mc_grass.png; sourceTree = SOURCE_ROOT; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
@@ -68,7 +68,7 @@
 		A9C908112C5EE970000B2197 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		A9C908152C5EE9A0000B2197 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		A9C908282C5EEA49000B2197 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		A9D700202C502B7B002A50BA /* cube.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cube.metal; sourceTree = "<group>"; };
+		A9D700202C502B7B002A50BA /* Shader3D.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader3D.metal; sourceTree = "<group>"; };
 		A9E077522B6490BA0085E7A5 /* sonic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sonic.png; sourceTree = "<group>"; };
 		A9F6830C2C702CEE00987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -153,8 +153,8 @@
 		A908D4172B6CE1B000C845F2 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				3E76CD7129876E7600178E19 /* square.metal */,
-				A9D700202C502B7B002A50BA /* cube.metal */,
+				3E76CD7129876E7600178E19 /* Shader2D.metal */,
+				A9D700202C502B7B002A50BA /* Shader3D.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -242,7 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A983C46F2C5EBEBA001AD35D /* cube.metal in Sources */,
+				A983C46F2C5EBEBA001AD35D /* Shader3D.metal in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

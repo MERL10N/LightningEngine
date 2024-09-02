@@ -10,7 +10,7 @@
 #include <imgui.h>
 #include <backends/imgui_impl_metal.h>
 #include <backends/imgui_impl_osx.h>
-
+#include <System/ImageLoader.h>
 
 bool Editor::Init(MTK::View* view)
 {

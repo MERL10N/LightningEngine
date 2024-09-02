@@ -22,10 +22,12 @@ int main()
     autoReleasePool->release();
     
 #else
+    /*
     Application app;
     app.init();
     app.run();
     app.release();
+     */
 #endif
     
     return 0;
