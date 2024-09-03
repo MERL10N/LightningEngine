@@ -29,7 +29,6 @@ bool Editor::Init(MTK::View* view)
     // Setup Platform/Renderer backends
     ImGui_ImplOSX_Init(view);
     
-   io.Fonts->AddFontDefault();
    mainFont = io.Fonts->AddFontFromFileTTF("assets/Fonts/NaturalMonoRegular-9YBeK.ttf", 16.f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     assert(mainFont != nullptr);
     
@@ -176,13 +175,12 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
                 show_another_window = false;
             ImGui::End();
         }
-
-        ImGui::Begin("Game Scene");
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        ImTextureID imguiTexture = ImTextureID(renderPassDescriptor->colorAttachments()->object(0)->resolveTexture()); // pass in the resolved texture from imageLoader.GetResolveTeture()
-        ImGui::Image(imguiTexture, viewportPanelSize);
-        ImGui::End();
     
+    ImGui::Begin("Game Scene");
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    ImTextureID imguiTexture = ImTextureID(renderPassDescriptor->colorAttachments()->object(0)->resolveTexture()); // pass in the resolved texture from imageLoader.GetResolveTeture()
+    ImGui::Image(imguiTexture, viewportPanelSize);
+    ImGui::End();
 
     ImGui::End();
     
