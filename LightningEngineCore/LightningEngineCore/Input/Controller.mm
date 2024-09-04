@@ -123,7 +123,7 @@ bool Controller::isLeftMouseClicked()
 {
     return ([NSEvent pressedMouseButtons] & ((1 << 0))) != 0;
 }
-bool Controller::isRightMouseClicked()
+bool Controller::IsRightMouseClicked()
 {
     return ([NSEvent pressedMouseButtons] & ((1 << 1))) != 0;
 }

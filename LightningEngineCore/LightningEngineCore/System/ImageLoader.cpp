@@ -40,21 +40,21 @@ using namespace std;
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
  */
-CImageLoader::CImageLoader(void)
+ImageLoader::ImageLoader(void)
 {
 }
 
 /**
  @brief Destructor This destructor has protected access modifier as this class will be a Singleton
  */
-CImageLoader::~CImageLoader(void)
+ImageLoader::~ImageLoader(void)
 {
 }
 
 /**
 @brief Init Initialise this instance
 */
-bool CImageLoader::Init(void)
+bool ImageLoader::Init(void)
 {
     return false;
 }
@@ -64,7 +64,7 @@ bool CImageLoader::Init(void)
  @brief Load an image into the graphics card and return its ID.
  @param filename A const char* storing the name of the image file
  */
-void CImageLoader::LoadTexture(const char* filename, MTL::Device* device)
+void ImageLoader::LoadTexture(const char* filename, MTL::Device* device)
 {
     int width, height, channels;
 
@@ -90,97 +90,17 @@ void CImageLoader::LoadTexture(const char* filename, MTL::Device* device)
     std::cout << "Texture loaded" << std::endl;
 }
 
-void CImageLoader::Destroy()
+void ImageLoader::Destroy()
 {
     texture->release();
-    msaaRenderTargetTexture->release();
-    depthTexture->release();
-    resolvedTexture->release();
 }
 
-MTL::Texture* CImageLoader::GetTexture()
+MTL::Texture* ImageLoader::GetTexture()
 {
     return texture;
 }
 
-MTL::Texture* CImageLoader::GetTargetTexture()
-{
-    return msaaRenderTargetTexture;
-}
 
-MTL::Texture* CImageLoader::GetDepthTexture()
-{
-    return depthTexture;
-}
-
-MTL::Texture* CImageLoader::GetResolvedTexture()
-{
-    return resolvedTexture;
-}
-
-void CImageLoader::CreateDepthAndMSAATextures(float &width, float &height, CGSize &size, MTL::Device* device)
-{
-    width = size.width;
-    height = size.height;
-    
-    // Deallocate the already existing target textures to avoid memory leak
-    if (msaaRenderTargetTexture)
-    {
-        msaaRenderTargetTexture->release();
-    }
-    if (depthTexture)
-    {
-        depthTexture->release();
-    }
-    
-    MTL::TextureDescriptor* msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
-    msaaTextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    msaaTextureDescriptor->setWidth(width);
-    msaaTextureDescriptor->setHeight(height);
-    msaaTextureDescriptor->setSampleCount(4);
-    msaaTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
-    msaaTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-    
-    msaaRenderTargetTexture = device->newTexture(msaaTextureDescriptor);
-
-    MTL::TextureDescriptor* depthTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    depthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
-    depthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
-    depthTextureDescriptor->setWidth(width);
-    depthTextureDescriptor->setHeight(height);
-    depthTextureDescriptor->setSampleCount(4);
-    depthTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
-    depthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-
-
-    depthTexture = device->newTexture(depthTextureDescriptor);
-
-    msaaTextureDescriptor->release();
-    depthTextureDescriptor->release();
-}
-
-void CImageLoader::CreateResolveTexture(float &width, float &height, CGSize &size, MTL::Device* device)
-{
-    width = size.width;
-    height = size.height;
-    
-    if (resolvedTexture)
-    {
-        resolvedTexture->release();
-    }
-    
-    MTL::TextureDescriptor* resolvedTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
-    resolvedTextureDescriptor->setTextureType(MTL::TextureType2D);
-    resolvedTextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    resolvedTextureDescriptor->setWidth(width);
-    resolvedTextureDescriptor->setHeight(height);
-    resolvedTextureDescriptor->setStorageMode(MTL::StorageModeManaged);
-    resolvedTextureDescriptor->setUsage(MTL::TextureUsageShaderRead);
-
-    resolvedTexture = device->newTexture(resolvedTextureDescriptor);
-    resolvedTextureDescriptor->release();
-}
 #else
 
 /**

@@ -15,14 +15,15 @@
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 #include "Primitives/MeshBuilder.h"
-#include <CoreGraphics/CoreGraphics.h>
 #include <TimeControl/Timer.h>
 #include <Input/Controller.h>
 #include <System/ImageLoader.h>
+#include "MetalFrameBuffer.h"
 #include <iostream>
 
 static CShaderManager shaderManager;
-static CImageLoader imageLoader;
+static ImageLoader imageLoader;
+MetalFrameBuffer frameBuffer;
 
 MetalRenderer::MetalRenderer(MTK::View* view)
 : view(view)
@@ -33,17 +34,19 @@ MetalRenderer::MetalRenderer(MTK::View* view)
 , nearZ(0.1f)
 , farZ(100.f)
 , translationMatrix(matrix4x4_translation(0.f, 0.f,-10.f))
+, drawableSize(view->drawableSize())
 {
     if(!metalDefaultLibrary)
     {
         std::cerr << "Failed to load default library.";
         std::exit(-1);
     }
-    
+    width = drawableSize.width;
+    height = drawableSize.height;
     // Initialise the shader
     shaderManager.Add("Shader3D", "Shaders/Shader3D.metal", view);
     imageLoader.Init();
-    
+    frameBuffer.InitialiseFrameBuffer(width, height, view->device(), 4);
    // Render the cube
     CreateCube();
 }
@@ -99,6 +102,7 @@ void MetalRenderer::Destroy()
     transformationBuffer->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
+    frameBuffer.DeallocateFrameBuffer();
 }
 
 void MetalRenderer::CreateCube()
@@ -114,36 +118,30 @@ void MetalRenderer::Draw(MTK::View* view)
     metalCommandBuffer = metalCommandQueue->commandBuffer();
     renderPassDescriptor = view->currentRenderPassDescriptor();
 
-    CGSize drawableSize = view->drawableSize();
+    drawableSize = view->drawableSize();
     
-    // Only recreate texture when the drawable size has changed. Otherwise reuse old textures to save CPU performance.
-    if (width != drawableSize.width|| height != drawableSize.height)
+    if (width != drawableSize.width || height != drawableSize.height)
     {
-        imageLoader.CreateDepthAndMSAATextures(width, height, drawableSize, view->device());
-        imageLoader.CreateResolveTexture(width, height, drawableSize, view->device());
+        frameBuffer.ResizeFrameBuffer(width, height, drawableSize, view->device(), 4);
     }
     
     view->setPreferredFramesPerSecond(120);
     
     depthAttachment = renderPassDescriptor->depthAttachment();
-    depthAttachment->setTexture(imageLoader.GetDepthTexture());
+    depthAttachment->setTexture(frameBuffer.GetDepthTexture());
     depthAttachment->setLoadAction(MTL::LoadActionClear);
     depthAttachment->setStoreAction(MTL::StoreActionDontCare);
     depthAttachment->setClearDepth(1.0);
 
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
 
-    renderPassDescriptor->colorAttachments()->object(0)->setTexture(imageLoader.GetTargetTexture());
-    renderPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
+    renderPassDescriptor->colorAttachments()->object(0)->setTexture(frameBuffer.GetTargetTexture());
+    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(frameBuffer.GetResolvedTexture());
+    renderPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStoreAndMultisampleResolve);
     renderPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionLoad);
     renderPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor(view->clearColor().red, view->clearColor().blue, view->clearColor().green, view->clearColor().alpha));
-    renderPassDescriptor->depthAttachment()->setTexture(imageLoader.GetDepthTexture());
+    renderPassDescriptor->depthAttachment()->setTexture(frameBuffer.GetDepthTexture());
     
-    renderPassDescriptor->colorAttachments()->object(0)->setResolveTexture(imageLoader.GetResolvedTexture());
-    
-#ifdef DEBUG
-    editor.Render(renderPassDescriptor, metalCommandBuffer, renderCommandEncoder, view);
-#endif
 
     angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45.f;
     angleInRadians = angleInDegrees * M_PI / 180.0f;
@@ -153,7 +151,7 @@ void MetalRenderer::Draw(MTK::View* view)
     modelMatrix = simd_mul(translationMatrix, rotationMatrix);
     viewMatrix = camera.GetViewMatrix();
     
-    aspectRatio = (drawableSize.width / drawableSize.height);
+    aspectRatio = (width / height);
     perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
 
     TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
@@ -185,7 +183,7 @@ void MetalRenderer::ProcessInput()
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
     
-    if (Controller::isRightMouseClicked())
+    if (Controller::IsRightMouseClicked())
     {
         mouseX = Controller::GetMousePosition().x;
         mouseY = Controller::GetMousePosition().y;
@@ -208,7 +206,6 @@ void MetalRenderer::ProcessInput()
         firstMouse = true;
     }
     
-        
     if (Controller::IsWKeyDown())
         camera.ProcessKeyboard(FORWARD, deltaTime);
         
@@ -239,4 +236,3 @@ void MetalRenderer::UpdateMousePosition(float &x, float &y)
 
        camera.ProcessMouseMovement(xoffset, yoffset, false);
 }
-

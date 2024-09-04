@@ -24,13 +24,13 @@ namespace MTK
     class View;
 }
 
-class CImageLoader;
+class MetalFrameBuffer;
 
 class Editor
 {
 public:
     bool Init(MTK::View * view);
-    void Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view);
+    void Render(MTK::View* view);
     
     void RenderDockSpace();
     

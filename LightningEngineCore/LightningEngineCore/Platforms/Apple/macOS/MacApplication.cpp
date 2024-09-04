@@ -110,13 +110,19 @@ void MacApplication::applicationDidFinishLaunching( NS::Notification* notificati
     metalKitView->setSampleCount(4);
     metalKitView->setClearColor(MTL::ClearColor(editor.GetClearColor(0), editor.GetClearColor(1), editor.GetClearColor(2), editor.GetClearColor(3)));
     metalKitView->setDevice(metalDevice); // Set the device on the Metal Kit View
+    metalKitView->setMultisampleColorAttachmentTextureUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageRenderTarget);
+    metalKitView->setDepthStencilPixelFormat(MTL::PixelFormatDepth32Float);
     
     viewDelegate = new ViewDelegate(metalKitView);
     metalKitView->setDelegate( viewDelegate );
+    metalKitView->setFramebufferOnly(false);
     
     appWindow->setContentView( metalKitView );
     appWindow->setTitle(NS::String::string( "Lightning Engine", NS::StringEncoding::UTF8StringEncoding));
     
+#ifdef DEBUG
+    editor.Render(metalKitView);
+#endif
 
     appWindow->makeKeyAndOrderFront( nullptr );
 

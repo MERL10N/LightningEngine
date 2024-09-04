@@ -31,14 +31,14 @@ struct CGSize;
     #endif
 #endif
 
-class CImageLoader
+class ImageLoader
 {
 public:
     // Constructor
-    CImageLoader(void);
+    ImageLoader(void);
 
     // Destructor
-    virtual ~CImageLoader(void);
+    virtual ~ImageLoader(void);
     
     // Init
     bool Init(void);
@@ -46,12 +46,7 @@ public:
     
     // Load an image and return as a Texture ID
     void LoadTexture(const char* filename, MTL::Device* device);
-    void CreateDepthAndMSAATextures(float &width, float &height, CGSize &size, MTL::Device* device);
-    void CreateResolveTexture(float &width, float &height, CGSize &size, MTL::Device* device);
     MTL::Texture*  GetTexture();
-    MTL::Texture*  GetTargetTexture();
-    MTL::Texture*  GetDepthTexture();
-    MTL::Texture*  GetResolvedTexture();
     void Destroy();
 #else
     // Load an image and return as unsigned char*
@@ -67,9 +62,6 @@ private:
 #ifdef __APPLE__
     MTL::Device* device;
     MTL::Texture* texture;
-    MTL::Texture* msaaRenderTargetTexture = nullptr;
-    MTL::Texture* depthTexture;
-    MTL::Texture* resolvedTexture;
 #endif
 
 };

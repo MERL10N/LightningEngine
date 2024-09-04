@@ -75,7 +75,7 @@ public:
     static void HideCursor();
     static void ShowCursor();
     static bool isLeftMouseClicked();
-    static bool isRightMouseClicked();
+    static bool IsRightMouseClicked();
 
 };
 

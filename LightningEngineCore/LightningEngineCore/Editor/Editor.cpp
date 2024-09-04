@@ -10,7 +10,7 @@
 #include <imgui.h>
 #include <backends/imgui_impl_metal.h>
 #include <backends/imgui_impl_osx.h>
-#include <System/ImageLoader.h>
+#include <Renderer/Metal/MetalRenderer.h>
 
 bool Editor::Init(MTK::View* view)
 {
@@ -60,13 +60,12 @@ int Editor::GetFrameRate()
     return fps;
 }
 
-void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::CommandBuffer *metalCommandBuffer, MTL::RenderCommandEncoder *renderCommandEncoder, MTK::View* view)
+void Editor::Render(MTK::View* view)
 {
     // Start the Dear ImGui frame
-    ImGui_ImplMetal_NewFrame(renderPassDescriptor);
+    ImGui_ImplMetal_NewFrame(view->currentRenderPassDescriptor());
     ImGui_ImplOSX_NewFrame(view);
     ImGui::NewFrame();
-
 
     ImGui::PushFont(mainFont);
     
@@ -110,8 +109,8 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
     
     ImGui::Begin("DockSpace Demo", &opt_fullscreen, window_flags);
         
-        if (!opt_padding)
-            ImGui::PopStyleVar();
+       if (!opt_padding)
+           ImGui::PopStyleVar();
 
         if (opt_fullscreen)
             ImGui::PopStyleVar(2);
@@ -128,9 +127,6 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
         {
             if (ImGui::BeginMenu("Menu"))
             {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Fullscreen", nullptr, &opt_fullscreen);
                 ImGui::MenuItem("Padding", nullptr, &opt_padding);
                 ImGui::Separator();
                 ImGui::EndMenu();
@@ -178,8 +174,7 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
     
     ImGui::Begin("Game Scene");
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    ImTextureID imguiTexture = ImTextureID(renderPassDescriptor->colorAttachments()->object(0)->resolveTexture()); // pass in the resolved texture from imageLoader.GetResolveTeture()
-    ImGui::Image(imguiTexture, viewportPanelSize);
+    ImGui::Image((void*)view->currentDrawable()->texture(), viewportPanelSize);
     ImGui::End();
 
     ImGui::End();
@@ -190,7 +185,7 @@ void Editor::Render(MTL::RenderPassDescriptor *renderPassDescriptor, MTL::Comman
     
     // Rendering
     ImGui::Render();
-    ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), metalCommandBuffer, renderCommandEncoder);
+    //ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), metalCommandBuffer, renderCommandEncoder);
     
 }
 

@@ -11,6 +11,7 @@
 
 #include <Camera/Camera.h>
 #include <Editor/Editor.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 namespace MTL
 {
@@ -29,17 +30,13 @@ namespace MTL
     class TextureDescriptor;
 }
 
-namespace NS
-{
-    class AutoreleasePool;
-}
 namespace MTK
 {
     class View;
 }
 
 struct CGSize;
-class CImageLoader;
+class ImageLoader;
 
 class MetalRenderer
 {
@@ -48,7 +45,6 @@ public:
     ~MetalRenderer();
     
     void Init(MTK::View* view);
-    
     void Draw(MTK::View* view);
     
     void Destroy();
@@ -71,15 +67,14 @@ private:
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment;
-    
-    MTL::Texture* msaaRenderTargetTexture = nullptr;
-    MTL::Texture* depthTexture = nullptr;
+
     
     float width;
     float height;
     
     //Editor
     Editor editor;
+    CGSize drawableSize;
     
     Camera camera;
     float mouseX;
