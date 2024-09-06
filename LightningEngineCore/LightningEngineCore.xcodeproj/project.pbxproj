@@ -14,6 +14,7 @@
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
 		A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
 		A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97C89B32C765C30002E27DC /* QuartzCore.framework */; };
+		A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681492C70291800987BA7 /* metal_implementation.cpp */; };
 		A9F682272C70291800987BA7 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681252C70291800987BA7 /* Camera.cpp */; };
 		A9F682282C70291800987BA7 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681262C70291800987BA7 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F682292C70291800987BA7 /* SingletonTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681282C70291800987BA7 /* SingletonTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -25,11 +26,6 @@
 		A9F682352C70291800987BA7 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6813D2C70291800987BA7 /* Controller.mm */; };
 		A9F682362C70291800987BA7 /* AAPLMathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F6813F2C70291800987BA7 /* AAPLMathUtilities.cpp */; };
 		A9F682372C70291800987BA7 /* AAPLMathUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681402C70291800987BA7 /* AAPLMathUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9F6823C2C70291800987BA7 /* MacApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681472C70291800987BA7 /* MacApplication.cpp */; };
-		A9F6823D2C70291800987BA7 /* MacApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681482C70291800987BA7 /* MacApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A9F6823E2C70291800987BA7 /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681492C70291800987BA7 /* metal_implementation.cpp */; };
-		A9F682412C70291800987BA7 /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F6814D2C70291800987BA7 /* ViewDelegate.cpp */; };
-		A9F682422C70291800987BA7 /* ViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6814E2C70291800987BA7 /* ViewDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F682432C70291800987BA7 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681512C70291800987BA7 /* MeshBuilder.cpp */; };
 		A9F682442C70291800987BA7 /* MeshBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681522C70291800987BA7 /* MeshBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F682452C70291800987BA7 /* VertexData.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681532C70291800987BA7 /* VertexData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -193,11 +189,7 @@
 		A9F6813D2C70291800987BA7 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
 		A9F6813F2C70291800987BA7 /* AAPLMathUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AAPLMathUtilities.cpp; sourceTree = "<group>"; };
 		A9F681402C70291800987BA7 /* AAPLMathUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; };
-		A9F681472C70291800987BA7 /* MacApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MacApplication.cpp; sourceTree = "<group>"; };
-		A9F681482C70291800987BA7 /* MacApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacApplication.h; sourceTree = "<group>"; };
 		A9F681492C70291800987BA7 /* metal_implementation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = metal_implementation.cpp; sourceTree = "<group>"; };
-		A9F6814D2C70291800987BA7 /* ViewDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ViewDelegate.cpp; sourceTree = "<group>"; };
-		A9F6814E2C70291800987BA7 /* ViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDelegate.h; sourceTree = "<group>"; };
 		A9F681512C70291800987BA7 /* MeshBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBuilder.cpp; sourceTree = "<group>"; };
 		A9F681522C70291800987BA7 /* MeshBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshBuilder.h; sourceTree = "<group>"; };
 		A9F681532C70291800987BA7 /* VertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexData.h; sourceTree = "<group>"; };
@@ -461,34 +453,6 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
-		A9F6814C2C70291800987BA7 /* macOS */ = {
-			isa = PBXGroup;
-			children = (
-				A9F681472C70291800987BA7 /* MacApplication.cpp */,
-				A9F681482C70291800987BA7 /* MacApplication.h */,
-				A9F681492C70291800987BA7 /* metal_implementation.cpp */,
-			);
-			path = macOS;
-			sourceTree = "<group>";
-		};
-		A9F6814F2C70291800987BA7 /* Apple */ = {
-			isa = PBXGroup;
-			children = (
-				A9F6814C2C70291800987BA7 /* macOS */,
-				A9F6814D2C70291800987BA7 /* ViewDelegate.cpp */,
-				A9F6814E2C70291800987BA7 /* ViewDelegate.h */,
-			);
-			path = Apple;
-			sourceTree = "<group>";
-		};
-		A9F681502C70291800987BA7 /* Platforms */ = {
-			isa = PBXGroup;
-			children = (
-				A9F6814F2C70291800987BA7 /* Apple */,
-			);
-			path = Platforms;
-			sourceTree = "<group>";
-		};
 		A9F681542C70291800987BA7 /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,6 +466,7 @@
 		A9F681582C70291800987BA7 /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				A9F681492C70291800987BA7 /* metal_implementation.cpp */,
 				A9F681552C70291800987BA7 /* MetalRenderer.cpp */,
 				A9F681562C70291800987BA7 /* MetalRenderer.h */,
 				A9F681572C70291800987BA7 /* MetalShader.h */,
@@ -844,7 +809,6 @@
 				A9F681322C70291800987BA7 /* GameControl */,
 				A9F6813E2C70291800987BA7 /* Input */,
 				A9F681412C70291800987BA7 /* Math */,
-				A9F681502C70291800987BA7 /* Platforms */,
 				A9F681542C70291800987BA7 /* Primitives */,
 				A9F6815D2C70291800987BA7 /* Renderer */,
 				A9F681602C70291800987BA7 /* stb */,
@@ -908,7 +872,6 @@
 				A9F682A12C70291800987BA7 /* NSURL.hpp in Headers */,
 				A9F682F52C70291800987BA7 /* MTKView.hpp in Headers */,
 				A9F682A22C70291800987BA7 /* Metal.hpp in Headers */,
-				A9F6823D2C70291800987BA7 /* MacApplication.h in Headers */,
 				A906F0D52C87C56000DB8541 /* MetalFrameBuffer.h in Headers */,
 				A9F682E22C70291800987BA7 /* CADefines.hpp in Headers */,
 				A9F682E42C70291800987BA7 /* CAMetalLayer.hpp in Headers */,
@@ -934,7 +897,6 @@
 				A9F6829B2C70291800987BA7 /* NSProcessInfo.hpp in Headers */,
 				A9F682C42C70291800987BA7 /* MTLIndirectCommandEncoder.hpp in Headers */,
 				A9F682842C70291800987BA7 /* ImGuizmo.h in Headers */,
-				A9F682422C70291800987BA7 /* ViewDelegate.h in Headers */,
 				A9F682D62C70291800987BA7 /* MTLSampler.hpp in Headers */,
 				A9F682F02C70291800987BA7 /* NSRunningApplication.hpp in Headers */,
 				A9F682AE2C70291800987BA7 /* MTLCommandBuffer.hpp in Headers */,
@@ -1091,16 +1053,14 @@
 				A9F682712C70291800987BA7 /* imgui_draw.cpp in Sources */,
 				A9F682432C70291800987BA7 /* MeshBuilder.cpp in Sources */,
 				A9F682FD2C70291800987BA7 /* Timer.cpp in Sources */,
+				A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */,
 				A906F0D62C87C56000DB8541 /* MetalFrameBuffer.cpp in Sources */,
-				A9F6823E2C70291800987BA7 /* metal_implementation.cpp in Sources */,
 				A9F6827D2C70291800987BA7 /* GraphEditor.cpp in Sources */,
 				A9F6824F2C70291800987BA7 /* ImageLoader.cpp in Sources */,
-				A9F6823C2C70291800987BA7 /* MacApplication.cpp in Sources */,
 				A9F682462C70291800987BA7 /* MetalRenderer.cpp in Sources */,
 				A9F682272C70291800987BA7 /* Camera.cpp in Sources */,
 				A9F682832C70291800987BA7 /* ImGuizmo.cpp in Sources */,
 				A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */,
-				A9F682412C70291800987BA7 /* ViewDelegate.cpp in Sources */,
 				A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */,
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
 				A9F682742C70291800987BA7 /* imgui_widgets.cpp in Sources */,

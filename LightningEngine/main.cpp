@@ -1,11 +1,10 @@
 //  main.cpp
 //  Lightning Engine
 #ifdef __APPLE__
-    #include <LightningEngineCore/MacApplication.h>
+    #include "Source/Platforms/Apple/macOS/MacApplication.h"
 #else
     #include "Application.h"
 #endif
-#include <iostream>
 
 int main()
 {

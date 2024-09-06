@@ -46,7 +46,7 @@ MetalRenderer::MetalRenderer(MTK::View* view)
     // Initialise the shader
     shaderManager.Add("Shader3D", "Shaders/Shader3D.metal", view);
     imageLoader.Init();
-    frameBuffer.InitialiseFrameBuffer(width, height, view->device(), 4);
+    frameBuffer.Init(width, height, view->device(), 4);
    // Render the cube
     CreateCube();
 }
@@ -102,7 +102,7 @@ void MetalRenderer::Destroy()
     transformationBuffer->release();
     renderPassDescriptor->release();
     renderCommandEncoder->release();
-    frameBuffer.DeallocateFrameBuffer();
+    frameBuffer.Release();
 }
 
 void MetalRenderer::CreateCube()

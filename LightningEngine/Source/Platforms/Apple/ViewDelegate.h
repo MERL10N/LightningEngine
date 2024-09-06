@@ -27,13 +27,8 @@
 #define VIEW_DELEGATE_H
 #include <MetalKit/MetalKit.hpp>
 
-namespace MTL
-{
-    class Device;
-}
-
-#include "MetalRenderer.h"
-
+//#include "../../Scene/GameScene.h"
+class MetalRenderer;
 class ViewDelegate : public MTK::ViewDelegate
 {
     public:
@@ -41,7 +36,8 @@ class ViewDelegate : public MTK::ViewDelegate
         virtual ~ViewDelegate() override;
         virtual void drawInMTKView( MTK::View* view ) override;
 private:
-    MetalRenderer renderer;
+    //GameScene scene;
+    MetalRenderer* renderer;
     MTK::View* view;
 };
 

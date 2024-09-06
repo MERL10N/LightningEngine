@@ -6,20 +6,24 @@
 
 
 #include "ViewDelegate.h"
+#include <LightningEngineCore/MetalRenderer.h>
 
 ViewDelegate::ViewDelegate(MTK::View* view )
 : MTK::ViewDelegate()
-, renderer(MetalRenderer(view))
+, renderer(new MetalRenderer(view))
 {
+    //scene.Init(view);
 }
 
 ViewDelegate::~ViewDelegate()
 {
-    renderer.Destroy();
+    //scene.Release();
+    delete renderer;
 }
 
 void ViewDelegate::drawInMTKView( MTK::View *view )
 {
-    renderer.Draw(view);
+    //scene.Render(view);
+    renderer->Draw(view);
 }
 

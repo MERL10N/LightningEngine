@@ -9,7 +9,7 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <Metal/Metal.hpp>
 
-void MetalFrameBuffer::InitialiseFrameBuffer(float &width, float &height, MTL::Device *device, const int &sampleCount)
+void MetalFrameBuffer::Init(float &width, float &height, MTL::Device *device, const int &sampleCount)
 {
     msaaTextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     msaaTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
@@ -47,7 +47,7 @@ void MetalFrameBuffer::InitialiseFrameBuffer(float &width, float &height, MTL::D
     resolvedTextureDescriptor->release();
 }
 
-void MetalFrameBuffer::DeallocateFrameBuffer()
+void MetalFrameBuffer::Release()
 {
     if (msaaRenderTargetTexture)
         msaaRenderTargetTexture->release();

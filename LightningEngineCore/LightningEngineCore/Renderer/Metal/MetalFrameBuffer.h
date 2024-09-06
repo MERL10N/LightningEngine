@@ -30,8 +30,8 @@ struct CGSize;
 class MetalFrameBuffer
 {
 public:
-    void InitialiseFrameBuffer(float &width, float &height, MTL::Device* device, const int &sampleCount);
-    void DeallocateFrameBuffer();
+    void Init(float &width, float &height, MTL::Device* device, const int &sampleCount);
+    void Release();
     void ResizeFrameBuffer(float &width, float &height, CGSize &size, MTL::Device* device, const int &sampleCount);
     MTL::Texture*  GetTargetTexture();
     MTL::Texture*  GetDepthTexture();

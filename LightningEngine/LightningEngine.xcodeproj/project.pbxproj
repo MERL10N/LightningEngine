@@ -21,6 +21,9 @@
 		A983C4702C5EBEBA001AD35D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E56AB66297E0E6E00DB5F4F /* main.cpp */; };
 		A9889DD42C605BBA00245914 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908282C5EEA49000B2197 /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		A9889DD52C605BC700245914 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C908112C5EE970000B2197 /* GameController.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9A7227E2C8B9A420001B72F /* MacApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A722762C8B9A420001B72F /* MacApplication.cpp */; };
+		A9A7227F2C8B9A420001B72F /* ViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A722792C8B9A420001B72F /* ViewDelegate.cpp */; };
+		A9A722832C8B9AB10001B72F /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A722812C8B9AB10001B72F /* GameScene.cpp */; };
 		A9F683282C70327D00987BA7 /* LightningEngineCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F6830C2C702CEE00987BA7 /* LightningEngineCore.framework */; };
 		A9F683292C70327D00987BA7 /* LightningEngineCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F6830C2C702CEE00987BA7 /* LightningEngineCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -63,6 +66,12 @@
 		A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9A722762C8B9A420001B72F /* MacApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MacApplication.cpp; sourceTree = "<group>"; };
+		A9A722772C8B9A420001B72F /* MacApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacApplication.h; sourceTree = "<group>"; };
+		A9A722792C8B9A420001B72F /* ViewDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ViewDelegate.cpp; sourceTree = "<group>"; };
+		A9A7227A2C8B9A420001B72F /* ViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewDelegate.h; sourceTree = "<group>"; };
+		A9A722812C8B9AB10001B72F /* GameScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
+		A9A722822C8B9AB10001B72F /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightningEngine.entitlements; sourceTree = "<group>"; };
 		A9C9080F2C5EE968000B2197 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9C908112C5EE970000B2197 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.5.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
@@ -96,6 +105,7 @@
 		3E56AB5A297E0E6E00DB5F4F = {
 			isa = PBXGroup;
 			children = (
+				A9A7227D2C8B9A420001B72F /* Source */,
 				3E56AB65297E0E6E00DB5F4F /* LightningEngine */,
 				3E56AB64297E0E6E00DB5F4F /* Products */,
 				3E581F1429871D3000E5CDF6 /* Frameworks */,
@@ -166,6 +176,51 @@
 				A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		A9A722782C8B9A420001B72F /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				A9A722762C8B9A420001B72F /* MacApplication.cpp */,
+				A9A722772C8B9A420001B72F /* MacApplication.h */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		A9A7227B2C8B9A420001B72F /* Apple */ = {
+			isa = PBXGroup;
+			children = (
+				A9A722782C8B9A420001B72F /* macOS */,
+				A9A722792C8B9A420001B72F /* ViewDelegate.cpp */,
+				A9A7227A2C8B9A420001B72F /* ViewDelegate.h */,
+			);
+			path = Apple;
+			sourceTree = "<group>";
+		};
+		A9A7227C2C8B9A420001B72F /* Platforms */ = {
+			isa = PBXGroup;
+			children = (
+				A9A7227B2C8B9A420001B72F /* Apple */,
+			);
+			path = Platforms;
+			sourceTree = "<group>";
+		};
+		A9A7227D2C8B9A420001B72F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				A9A722802C8B9A960001B72F /* Scene */,
+				A9A7227C2C8B9A420001B72F /* Platforms */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		A9A722802C8B9A960001B72F /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				A9A722812C8B9AB10001B72F /* GameScene.cpp */,
+				A9A722822C8B9AB10001B72F /* GameScene.h */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +297,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A722832C8B9AB10001B72F /* GameScene.cpp in Sources */,
+				A9A7227E2C8B9A420001B72F /* MacApplication.cpp in Sources */,
+				A9A7227F2C8B9A420001B72F /* ViewDelegate.cpp in Sources */,
 				A983C46F2C5EBEBA001AD35D /* Shader3D.metal in Sources */,
 				A983C4702C5EBEBA001AD35D /* main.cpp in Sources */,
 			);
