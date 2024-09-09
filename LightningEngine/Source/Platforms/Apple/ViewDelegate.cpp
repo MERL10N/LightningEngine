@@ -12,18 +12,15 @@ ViewDelegate::ViewDelegate(MTK::View* view )
 : MTK::ViewDelegate()
 , renderer(new MetalRenderer(view))
 {
-    //scene.Init(view);
 }
 
 ViewDelegate::~ViewDelegate()
 {
-    //scene.Release();
     delete renderer;
 }
 
 void ViewDelegate::drawInMTKView( MTK::View *view )
 {
-    //scene.Render(view);
     renderer->Draw(view);
 }
 

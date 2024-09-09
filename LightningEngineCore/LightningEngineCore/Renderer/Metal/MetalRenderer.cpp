@@ -54,9 +54,7 @@ MetalRenderer::MetalRenderer(MTK::View* view)
 MetalRenderer::~MetalRenderer()
 {
     shaderManager.Destroy();
-    
     imageLoader.Destroy();
-    
     metalCommandQueue->release();
     cubeVertexBuffer->release();
     transformationBuffer->release();
@@ -219,7 +217,7 @@ void MetalRenderer::ProcessInput()
         camera.ProcessKeyboard(RIGHT, deltaTime);
      
     if (Controller::LeftThumbstickX() || Controller::LeftThumbstickY())
-        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::LeftThumbstickX(), Controller::LeftThumbstickX());
+        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::LeftThumbstickX(), Controller::LeftThumbstickY());
     
     if (Controller::RightThumbstickX() || Controller::RightThumbstickY())
         camera.ProcessGamepadRightJoystick(Controller::RightThumbstickX(), Controller::RightThumbstickY(), true);
