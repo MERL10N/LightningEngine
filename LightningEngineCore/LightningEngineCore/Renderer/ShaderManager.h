@@ -40,7 +40,7 @@ namespace MTK
 #include "Shader.h"
 #endif
 
-class CShaderManager
+class ShaderManager
 {
 	//friend SingletonTemplate<CShaderManager>;
 public:
@@ -76,9 +76,9 @@ public:
 #endif
 
 	// Constructor
-	CShaderManager();
+	ShaderManager();
     // Destructor
-    ~CShaderManager();
+    ~ShaderManager();
 
 protected:
 

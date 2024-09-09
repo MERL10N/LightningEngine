@@ -11,12 +11,11 @@ int main()
 
 #ifdef __APPLE__
     
-    MacApplication del;
-
-    NS::Application* pApp = NS::Application::sharedApplication();
-    pApp->setDelegate( &del );
-    pApp->run();
-    pApp->release();
+    MacApplication macApp;
+    NS::Application* app = NS::Application::sharedApplication();
+    app->setDelegate(&macApp);
+    app->run();
+    app->release();
 
 #else
     /*

@@ -23,9 +23,6 @@ void GameScene::Init(MTK::View *view)
     fov = camera.GetZoom() * (M_PI / 180.0f);
     nearZ = 0.1f;
     farZ = 100.f;
-    //imageLoader.Init();
-    //shaderManager.Add("Shader3D", "../../Shaders/Shader3D.metal", view);
-    //renderer = new MetalRenderer(view);
     
 }
 
@@ -99,7 +96,7 @@ void GameScene::ProcessInput()
         camera.ProcessKeyboard(RIGHT, deltaTime);
      
     if (Controller::LeftThumbstickX() || Controller::LeftThumbstickY())
-        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::LeftThumbstickX(), Controller::LeftThumbstickX());
+        camera.ProcessGamepadLeftJoystick(deltaTime, Controller::LeftThumbstickX(), Controller::LeftThumbstickY());
     
     if (Controller::RightThumbstickX() || Controller::RightThumbstickY())
         camera.ProcessGamepadRightJoystick(Controller::RightThumbstickX(), Controller::RightThumbstickY(), true);

@@ -19,7 +19,6 @@ using namespace std;
 // Include Metal
 #ifdef __APPLE__
 #include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
 #else
 
     #ifndef GLEW_STATIC
@@ -34,7 +33,7 @@ using namespace std;
 #ifndef STB_IMAGE_IMPLEMENTATION
     #define STB_IMAGE_IMPLEMENTATION
 #endif
-#include <stb/stb_image.h>
+#include <ThirdParty/stb/stb_image.h>
 
 
 /**
@@ -67,6 +66,7 @@ bool ImageLoader::Init(void)
 void ImageLoader::LoadTexture(const char* filename, MTL::Device* device)
 {
     int width, height, channels;
+    this->device = device;
 
     stbi_set_flip_vertically_on_load(true);
     unsigned char* image = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);

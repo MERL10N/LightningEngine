@@ -15,6 +15,7 @@
 class MetalRenderer;
 struct TransformationData;
 struct VertexData;
+
 namespace MTK
 {
     class View;
@@ -48,7 +49,7 @@ private:
     Camera camera;
     MetalRenderer* renderer;
     ImageLoader imageLoader;
-    CShaderManager shaderManager;
+    ShaderManager shaderManager;
     
     
     float fov;

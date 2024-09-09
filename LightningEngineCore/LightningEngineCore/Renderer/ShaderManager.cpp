@@ -13,7 +13,7 @@
 /**
  @brief Constructor
  */
-CShaderManager::CShaderManager(void) 
+ShaderManager::ShaderManager(void) 
 	: activeShader(nullptr)
 {
 }
@@ -21,7 +21,7 @@ CShaderManager::CShaderManager(void)
 /**
  @brief Destructor
  */
-CShaderManager::~CShaderManager(void)
+ShaderManager::~ShaderManager(void)
 {
 	// Clear the memory
 	Destroy();
@@ -30,7 +30,7 @@ CShaderManager::~CShaderManager(void)
 /**
  @brief Exit by deleting the shader
  */
-void CShaderManager::Destroy(void)
+void ShaderManager::Destroy(void)
 {
 #ifdef __APPLE__
     // Delete all scenes stored and empty the entire map
@@ -52,7 +52,7 @@ void CShaderManager::Destroy(void)
 }
 
 #ifdef __APPLE__
-void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTK::View* view)
+void ShaderManager::Add(const std::string& _name, const char* shaderPath, MTK::View* view)
 {
     // Check if there is already a similar shader name in the map
     if (Check(_name))
@@ -83,7 +83,7 @@ void CShaderManager::Add(const std::string& _name, const char* shaderPath, MTK::
 }
 
 // Implementation
-MTL::RenderPipelineDescriptor* CShaderManager::getRenderPipelineDescriptor(const std::string& shaderName) const
+MTL::RenderPipelineDescriptor* ShaderManager::getRenderPipelineDescriptor(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
@@ -92,7 +92,7 @@ MTL::RenderPipelineDescriptor* CShaderManager::getRenderPipelineDescriptor(const
     return nullptr;
 }
 
-void CShaderManager::setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const
+void ShaderManager::setRenderPipelineState(const std::string& shaderName, MTL::RenderPipelineState* metalRenderPSO) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
@@ -100,7 +100,7 @@ void CShaderManager::setRenderPipelineState(const std::string& shaderName, MTL::
     }
 }
 
-MTL::RenderPipelineState* CShaderManager::GetRenderPipelineState(const std::string& shaderName) const
+MTL::RenderPipelineState* ShaderManager::GetRenderPipelineState(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
@@ -109,7 +109,7 @@ MTL::RenderPipelineState* CShaderManager::GetRenderPipelineState(const std::stri
     return nullptr;
 }
 
-MTL::DepthStencilState* CShaderManager::GetDepthStencilState(const std::string& shaderName) const
+MTL::DepthStencilState* ShaderManager::GetDepthStencilState(const std::string& shaderName) const
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second)
@@ -120,7 +120,7 @@ MTL::DepthStencilState* CShaderManager::GetDepthStencilState(const std::string& 
 }
 
 
-void CShaderManager::BindResources(const std::string &shaderName, MTL::RenderCommandEncoder *encoder, MTL::Buffer* buffer)
+void ShaderManager::BindResources(const std::string &shaderName, MTL::RenderCommandEncoder *encoder, MTL::Buffer* buffer)
 {
     auto it = shaderMap.find(shaderName);
     if (it != shaderMap.end() && it->second) {
@@ -169,7 +169,7 @@ void CShaderManager::Add(	const std::string& _name,
  @brief Remove a Shader from this Shader Manager
  @param  _name  std::string& variable which contains the name of the shader
  */
-void CShaderManager::Remove(const std::string& _name)
+void ShaderManager::Remove(const std::string& _name)
 {
 	// Does nothing if it does not exist
 	if (!Check(_name))
@@ -192,7 +192,7 @@ void CShaderManager::Remove(const std::string& _name)
 @brief Use a Shader
 @param _name  const std::string& variable which contains the name of the shader
 */
-void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* commandEncoder)
+void ShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* commandEncoder)
 {
     assert(!Check(_name));
 
@@ -210,7 +210,7 @@ void CShaderManager::Use(const std::string& _name, MTL::RenderCommandEncoder* co
  @param _name const std::string& variable which contains the name of the shader
  @return true if the shader name exists in the map, else false
  */
-bool CShaderManager::Check(const std::string& _name)
+bool ShaderManager::Check(const std::string& _name)
 {
 	return shaderMap.count(_name) != 0;
 }

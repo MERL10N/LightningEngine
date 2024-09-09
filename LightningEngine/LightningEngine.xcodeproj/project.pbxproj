@@ -105,7 +105,6 @@
 		3E56AB5A297E0E6E00DB5F4F = {
 			isa = PBXGroup;
 			children = (
-				A9A7227D2C8B9A420001B72F /* Source */,
 				3E56AB65297E0E6E00DB5F4F /* LightningEngine */,
 				3E56AB64297E0E6E00DB5F4F /* Products */,
 				3E581F1429871D3000E5CDF6 /* Frameworks */,
@@ -126,6 +125,7 @@
 				A9AC1D6D2C196E910042B302 /* LightningEngine.entitlements */,
 				3E9F222329A060A600383DCA /* assets */,
 				A908D4172B6CE1B000C845F2 /* Shaders */,
+				A9A7227D2C8B9A420001B72F /* Source */,
 				3E56AB66297E0E6E00DB5F4F /* main.cpp */,
 			);
 			name = LightningEngine;

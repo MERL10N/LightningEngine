@@ -6,31 +6,23 @@
 #include <Cocoa/Cocoa.h>
 #include <iostream>
 
-Controller::Controller()
-{
-}
 
-Controller::~Controller()
-{
-}
-
-
-bool Controller::isLeftArrowDown() const
+bool Controller::IsLeftArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeLeftArrow].pressed;
 }
 
-bool Controller::isRightArrowDown() const
+bool Controller::IsRightArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeRightArrow].pressed;
 }
 
-bool Controller::isUpArrowDown() const
+bool Controller::IsUpArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeUpArrow].pressed;
 }
 
-bool Controller::isDownArrowDown() const
+bool Controller::IsDownArrowDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeDownArrow].pressed;
 }
@@ -55,8 +47,7 @@ bool Controller::IsDKeyDown()
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeKeyD].pressed;
 }
 
-
-bool Controller::isSpacebarDown() const
+bool Controller::IsSpacebarDown() const
 {
     return [GCKeyboard.coalescedKeyboard.keyboardInput buttonForKeyCode:GCKeyCodeSpacebar].pressed;
 }

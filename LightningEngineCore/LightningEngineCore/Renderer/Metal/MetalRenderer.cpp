@@ -21,7 +21,7 @@
 #include "MetalFrameBuffer.h"
 #include <iostream>
 
-static CShaderManager shaderManager;
+static ShaderManager shaderManager;
 static ImageLoader imageLoader;
 MetalFrameBuffer frameBuffer;
 

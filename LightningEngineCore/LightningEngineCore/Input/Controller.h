@@ -44,16 +44,16 @@ public:
     Controller();
     ~Controller();
     
-    bool isLeftArrowDown() const;
-    bool isRightArrowDown() const;
-    bool isUpArrowDown() const;
-    bool isDownArrowDown() const;
+    bool IsLeftArrowDown() const;
+    bool IsRightArrowDown() const;
+    bool IsUpArrowDown() const;
+    bool IsDownArrowDown() const;
     
     void setHapticIntensity(float intensity) const;
     
     void  renderOverlay(MTL::RenderCommandEncoder* pEnc);
     bool isButtonADown() const;
-    bool isSpacebarDown() const;
+    bool IsSpacebarDown() const;
     simd::float3 accelerometerData() const;
 
     // Below are functions I have added to the class
