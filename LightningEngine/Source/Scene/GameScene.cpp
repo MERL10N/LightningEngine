@@ -19,47 +19,18 @@
 
 void GameScene::Init(MTK::View *view)
 {
-    camera = Camera();
-    fov = camera.GetZoom() * (M_PI / 180.0f);
-    nearZ = 0.1f;
-    farZ = 100.f;
-    
+    //camera = Camera();
+   // fov = camera.GetZoom() * (M_PI / 180.0f);
+    //nearZ = 0.1f;
+    //farZ = 100.f;
 }
 
-void GameScene::Render(MTK::View *view) 
+void GameScene::Update(float &deltaTime)
 {
-    angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45.f;
+    angleInDegrees = deltaTime * 0.5f * 45.f;
     angleInRadians = angleInDegrees * M_PI / 180.0f;
     
-    rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
-
-    modelMatrix = simd_mul(translationMatrix, rotationMatrix);
-    viewMatrix = camera.GetViewMatrix();
-    
-    aspectRatio = (width / height);
-    perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
-    
-    TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
-    
-    //renderer->Draw(view, "Shader3D");
-    memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
-    
-    ProcessInput();
-}
-
-void GameScene::Release() 
-{
-    //imageLoader.Destroy();
-    //shaderManager.Destroy();
-    //delete renderer;
-}
-
-void GameScene::ProcessInput()
-{
-    currentFrame = Timer::GetTimeInSeconds();
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-    
+    // Input
     if (Controller::IsRightMouseClicked())
     {
         mouseX = Controller::GetMousePosition().x;
@@ -100,19 +71,47 @@ void GameScene::ProcessInput()
     
     if (Controller::RightThumbstickX() || Controller::RightThumbstickY())
         camera.ProcessGamepadRightJoystick(Controller::RightThumbstickX(), Controller::RightThumbstickY(), true);
-     
 }
+
 
 void GameScene::UpdateMousePosition(float &x, float &y)
 {
-       float xoffset = x - lastX;
-       float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
+       xOffset = x - lastX;
+       yOffset = lastY - y; // reversed since y-coordinates go from bottom to top
 
        lastX = x;
        lastY = y;
 
-       camera.ProcessMouseMovement(xoffset, yoffset, false);
+       camera.ProcessMouseMovement(xOffset, yOffset, false);
 }
+
+void GameScene::Render(MTK::View *view) 
+{
+    angleInDegrees = Timer::GetTimeInSeconds() * 0.5f * 45.f;
+    angleInRadians = angleInDegrees * M_PI / 180.0f;
+    
+    rotationMatrix = matrix4x4_rotation(angleInRadians, 0.0, 1.0, 0.0);
+
+    modelMatrix = simd_mul(translationMatrix, rotationMatrix);
+    viewMatrix = camera.GetViewMatrix();
+    
+    aspectRatio = (width / height);
+    perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
+    
+    //TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
+    
+    //renderer->Draw(view, "Shader3D");
+    //memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
+    
+}
+
+void GameScene::Release() 
+{
+    //imageLoader.Destroy();
+    //shaderManager.Destroy();
+    //delete renderer;
+}
+
 
 
 

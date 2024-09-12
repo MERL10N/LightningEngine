@@ -35,8 +35,6 @@ namespace MTK
     class View;
 }
 
-struct CGSize;
-class ImageLoader;
 
 class MetalRenderer
 {
@@ -45,6 +43,7 @@ public:
     ~MetalRenderer();
     
     void Init(MTK::View* view);
+    void Update(float &deltaTime);
     void Draw(MTK::View* view);
     
     void Destroy();

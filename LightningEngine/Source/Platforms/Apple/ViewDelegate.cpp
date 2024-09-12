@@ -8,7 +8,7 @@
 #include "ViewDelegate.h"
 #include <LightningEngineCore/MetalRenderer.h>
 
-ViewDelegate::ViewDelegate(MTK::View* view )
+ViewDelegate::ViewDelegate(MTK::View* view)
 : MTK::ViewDelegate()
 , renderer(new MetalRenderer(view))
 {
@@ -19,7 +19,7 @@ ViewDelegate::~ViewDelegate()
     delete renderer;
 }
 
-void ViewDelegate::drawInMTKView( MTK::View *view )
+void ViewDelegate::drawInMTKView(MTK::View *view)
 {
     renderer->Draw(view);
 }

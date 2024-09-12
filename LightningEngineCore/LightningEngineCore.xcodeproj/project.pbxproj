@@ -14,6 +14,12 @@
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
 		A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
 		A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97C89B32C765C30002E27DC /* QuartzCore.framework */; };
+		A9A322A92C9247CD00F26EA1 /* flecs.c in Sources */ = {isa = PBXBuildFile; fileRef = A9A322A72C9247CD00F26EA1 /* flecs.c */; };
+		A9A322AA2C9247CD00F26EA1 /* flecs.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322A82C9247CD00F26EA1 /* flecs.h */; };
+		A9A322AD2C92497C00F26EA1 /* EntityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322AC2C92497C00F26EA1 /* EntityManager.h */; };
+		A9A322AE2C92497C00F26EA1 /* EntityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */; };
+		A9A322B22C928B5C00F26EA1 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B12C928B5C00F26EA1 /* Scene.h */; };
+		A9A322B32C928B5C00F26EA1 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A322B02C928B5C00F26EA1 /* Scene.cpp */; };
 		A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681492C70291800987BA7 /* metal_implementation.cpp */; };
 		A9F682272C70291800987BA7 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681252C70291800987BA7 /* Camera.cpp */; };
 		A9F682282C70291800987BA7 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681262C70291800987BA7 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -177,6 +183,12 @@
 		A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalFrameBuffer.cpp; sourceTree = "<group>"; };
 		A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalFrameBuffer.h; sourceTree = "<group>"; };
 		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A9A322A72C9247CD00F26EA1 /* flecs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = flecs.c; sourceTree = "<group>"; };
+		A9A322A82C9247CD00F26EA1 /* flecs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flecs.h; sourceTree = "<group>"; };
+		A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntityManager.cpp; sourceTree = "<group>"; };
+		A9A322AC2C92497C00F26EA1 /* EntityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntityManager.h; sourceTree = "<group>"; };
+		A9A322B02C928B5C00F26EA1 /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		A9A322B12C928B5C00F26EA1 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		A9F6811B2C70281700987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F681252C70291800987BA7 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		A9F681262C70291800987BA7 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
@@ -383,6 +395,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A9A322A52C923FE900F26EA1 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */,
+				A9A322AC2C92497C00F26EA1 /* EntityManager.h */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		A9A322A62C9247A100F26EA1 /* ECS */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322A72C9247CD00F26EA1 /* flecs.c */,
+				A9A322A82C9247CD00F26EA1 /* flecs.h */,
+			);
+			path = ECS;
+			sourceTree = "<group>";
+		};
+		A9A322AF2C928B3F00F26EA1 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322B02C928B5C00F26EA1 /* Scene.cpp */,
+				A9A322B12C928B5C00F26EA1 /* Scene.h */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 		A9F681112C70281700987BA7 = {
 			isa = PBXGroup;
 			children = (
@@ -783,6 +822,7 @@
 		A9F682222C70291800987BA7 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				A9A322A62C9247A100F26EA1 /* ECS */,
 				A9F681602C70291800987BA7 /* stb */,
 				A9F681942C70291800987BA7 /* imgui */,
 				A9F681A52C70291800987BA7 /* ImGuizmo */,
@@ -804,6 +844,8 @@
 		A9F682262C70291800987BA7 /* LightningEngineCore */ = {
 			isa = PBXGroup;
 			children = (
+				A9A322AF2C928B3F00F26EA1 /* Scene */,
+				A9A322A52C923FE900F26EA1 /* Entities */,
 				A9F681272C70291800987BA7 /* Camera */,
 				A9F681292C70291800987BA7 /* DesignPatterns */,
 				A9F6812C2C70291800987BA7 /* Editor */,
@@ -862,6 +904,7 @@
 				A9F6828E2C70291800987BA7 /* NSBundle.hpp in Headers */,
 				A9F682872C70291800987BA7 /* ImZoomSlider.h in Headers */,
 				A9F682C82C70291800987BA7 /* MTLIOCompressor.hpp in Headers */,
+				A9A322AA2C9247CD00F26EA1 /* flecs.h in Headers */,
 				A9F6829C2C70291800987BA7 /* NSRange.hpp in Headers */,
 				A9F682C62C70291800987BA7 /* MTLIOCommandBuffer.hpp in Headers */,
 				A9F682A82C70291800987BA7 /* MTLBinaryArchive.hpp in Headers */,
@@ -873,6 +916,7 @@
 				A9F682F52C70291800987BA7 /* MTKView.hpp in Headers */,
 				A9F682A22C70291800987BA7 /* Metal.hpp in Headers */,
 				A906F0D52C87C56000DB8541 /* MetalFrameBuffer.h in Headers */,
+				A9A322B22C928B5C00F26EA1 /* Scene.h in Headers */,
 				A9F682E22C70291800987BA7 /* CADefines.hpp in Headers */,
 				A9F682E42C70291800987BA7 /* CAMetalLayer.hpp in Headers */,
 				A9F682AB2C70291800987BA7 /* MTLBuffer.hpp in Headers */,
@@ -937,6 +981,7 @@
 				A9F682DE2C70291800987BA7 /* MTLFXDefines.hpp in Headers */,
 				A9F682C12C70291800987BA7 /* MTLHeaderBridge.hpp in Headers */,
 				A9F682792C70291800987BA7 /* imstb_truetype.h in Headers */,
+				A9A322AD2C92497C00F26EA1 /* EntityManager.h in Headers */,
 				A9F682802C70291800987BA7 /* ImCurveEdit.h in Headers */,
 				A9F6828B2C70291800987BA7 /* Foundation.hpp in Headers */,
 				A9F682822C70291800987BA7 /* ImGradient.h in Headers */,
@@ -1050,6 +1095,7 @@
 				A9F682812C70291800987BA7 /* ImGradient.cpp in Sources */,
 				A9F6822A2C70291800987BA7 /* Editor.cpp in Sources */,
 				A9F682352C70291800987BA7 /* Controller.mm in Sources */,
+				A9A322B32C928B5C00F26EA1 /* Scene.cpp in Sources */,
 				A9F682712C70291800987BA7 /* imgui_draw.cpp in Sources */,
 				A9F682432C70291800987BA7 /* MeshBuilder.cpp in Sources */,
 				A9F682FD2C70291800987BA7 /* Timer.cpp in Sources */,
@@ -1061,6 +1107,8 @@
 				A9F682272C70291800987BA7 /* Camera.cpp in Sources */,
 				A9F682832C70291800987BA7 /* ImGuizmo.cpp in Sources */,
 				A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */,
+				A9A322A92C9247CD00F26EA1 /* flecs.c in Sources */,
+				A9A322AE2C92497C00F26EA1 /* EntityManager.cpp in Sources */,
 				A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */,
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
 				A9F682742C70291800987BA7 /* imgui_widgets.cpp in Sources */,

@@ -13,7 +13,6 @@
 #include <LightningEngineCore/ShaderManager.h>
 
 class MetalRenderer;
-struct TransformationData;
 struct VertexData;
 
 namespace MTK
@@ -29,10 +28,11 @@ class GameScene
 {
 public:
     void Init(MTK::View* view);
+    void Update(float &deltaTime);
     void Render(MTK::View * view);
     void Release();
     
-    void ProcessInput();
+    void ProcessInput(float &deltaTime);
     void UpdateMousePosition(float &x, float &y);
 private:
     
@@ -46,6 +46,9 @@ private:
     float currentFrame;
     float lastFrame;
     float deltaTime;
+    float xOffset;
+    float yOffset;
+    
     Camera camera;
     MetalRenderer* renderer;
     ImageLoader imageLoader;
@@ -66,8 +69,6 @@ private:
     matrix_float4x4 modelMatrix;
     matrix_float4x4 viewMatrix;
     
-    MTL::Buffer* meshVertexBuffer;
-    MTL::Buffer* transformationBuffer;
 };
 
 

@@ -81,11 +81,10 @@ void MetalRenderer::Init(MTK::View* view)
     }
     
     // Initialise the shader
-     shaderManager.Add("Cube",
+    shaderManager.Add("Cube",
                        "Shaders/cube.metal",
                         view);
     
-    imageLoader.Init();
     
     // Render the cube
     CreateCube();
