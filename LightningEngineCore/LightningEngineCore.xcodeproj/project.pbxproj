@@ -14,12 +14,81 @@
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
 		A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
 		A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97C89B32C765C30002E27DC /* QuartzCore.framework */; };
-		A9A322A92C9247CD00F26EA1 /* flecs.c in Sources */ = {isa = PBXBuildFile; fileRef = A9A322A72C9247CD00F26EA1 /* flecs.c */; };
-		A9A322AA2C9247CD00F26EA1 /* flecs.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322A82C9247CD00F26EA1 /* flecs.h */; };
-		A9A322AD2C92497C00F26EA1 /* EntityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322AC2C92497C00F26EA1 /* EntityManager.h */; };
-		A9A322AE2C92497C00F26EA1 /* EntityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */; };
 		A9A322B22C928B5C00F26EA1 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B12C928B5C00F26EA1 /* Scene.h */; };
 		A9A322B32C928B5C00F26EA1 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A322B02C928B5C00F26EA1 /* Scene.cpp */; };
+		A9A3230A2C92C79B00F26EA1 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B42C92C79B00F26EA1 /* config.h */; };
+		A9A3230B2C92C79B00F26EA1 /* macro.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B52C92C79B00F26EA1 /* macro.h */; };
+		A9A3230C2C92C79B00F26EA1 /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B62C92C79B00F26EA1 /* version.h */; };
+		A9A3230D2C92C79B00F26EA1 /* dense_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B82C92C79B00F26EA1 /* dense_map.hpp */; };
+		A9A3230E2C92C79B00F26EA1 /* dense_set.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B92C92C79B00F26EA1 /* dense_set.hpp */; };
+		A9A3230F2C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322BA2C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323102C92C79B00F26EA1 /* algorithm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322BC2C92C79B00F26EA1 /* algorithm.hpp */; };
+		A9A323112C92C79B00F26EA1 /* any.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322BD2C92C79B00F26EA1 /* any.hpp */; };
+		A9A323122C92C79B00F26EA1 /* attribute.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322BE2C92C79B00F26EA1 /* attribute.h */; };
+		A9A323132C92C79B00F26EA1 /* compressed_pair.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322BF2C92C79B00F26EA1 /* compressed_pair.hpp */; };
+		A9A323142C92C79B00F26EA1 /* enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C02C92C79B00F26EA1 /* enum.hpp */; };
+		A9A323152C92C79B00F26EA1 /* family.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C12C92C79B00F26EA1 /* family.hpp */; };
+		A9A323162C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C22C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323172C92C79B00F26EA1 /* hashed_string.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C32C92C79B00F26EA1 /* hashed_string.hpp */; };
+		A9A323182C92C79B00F26EA1 /* ident.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C42C92C79B00F26EA1 /* ident.hpp */; };
+		A9A323192C92C79B00F26EA1 /* iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C52C92C79B00F26EA1 /* iterator.hpp */; };
+		A9A3231A2C92C79B00F26EA1 /* memory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C62C92C79B00F26EA1 /* memory.hpp */; };
+		A9A3231B2C92C79B00F26EA1 /* monostate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C72C92C79B00F26EA1 /* monostate.hpp */; };
+		A9A3231C2C92C79B00F26EA1 /* tuple.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C82C92C79B00F26EA1 /* tuple.hpp */; };
+		A9A3231D2C92C79B00F26EA1 /* type_info.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322C92C92C79B00F26EA1 /* type_info.hpp */; };
+		A9A3231E2C92C79B00F26EA1 /* type_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322CA2C92C79B00F26EA1 /* type_traits.hpp */; };
+		A9A3231F2C92C79B00F26EA1 /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322CB2C92C79B00F26EA1 /* utility.hpp */; };
+		A9A323202C92C79B00F26EA1 /* component.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322CD2C92C79B00F26EA1 /* component.hpp */; };
+		A9A323212C92C79B00F26EA1 /* entity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322CE2C92C79B00F26EA1 /* entity.hpp */; };
+		A9A323222C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322CF2C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323232C92C79B00F26EA1 /* group.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D02C92C79B00F26EA1 /* group.hpp */; };
+		A9A323242C92C79B00F26EA1 /* handle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D12C92C79B00F26EA1 /* handle.hpp */; };
+		A9A323252C92C79B00F26EA1 /* helper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D22C92C79B00F26EA1 /* helper.hpp */; };
+		A9A323262C92C79B00F26EA1 /* mixin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D32C92C79B00F26EA1 /* mixin.hpp */; };
+		A9A323272C92C79B00F26EA1 /* observer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D42C92C79B00F26EA1 /* observer.hpp */; };
+		A9A323282C92C79B00F26EA1 /* organizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D52C92C79B00F26EA1 /* organizer.hpp */; };
+		A9A323292C92C79B00F26EA1 /* registry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D62C92C79B00F26EA1 /* registry.hpp */; };
+		A9A3232A2C92C79B00F26EA1 /* runtime_view.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D72C92C79B00F26EA1 /* runtime_view.hpp */; };
+		A9A3232B2C92C79B00F26EA1 /* snapshot.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D82C92C79B00F26EA1 /* snapshot.hpp */; };
+		A9A3232C2C92C79B00F26EA1 /* sparse_set.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322D92C92C79B00F26EA1 /* sparse_set.hpp */; };
+		A9A3232D2C92C79B00F26EA1 /* storage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322DA2C92C79B00F26EA1 /* storage.hpp */; };
+		A9A3232E2C92C79B00F26EA1 /* view.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322DB2C92C79B00F26EA1 /* view.hpp */; };
+		A9A3232F2C92C79B00F26EA1 /* adjacency_matrix.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322DD2C92C79B00F26EA1 /* adjacency_matrix.hpp */; };
+		A9A323302C92C79B00F26EA1 /* dot.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322DE2C92C79B00F26EA1 /* dot.hpp */; };
+		A9A323312C92C79B00F26EA1 /* flow.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322DF2C92C79B00F26EA1 /* flow.hpp */; };
+		A9A323322C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E02C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323332C92C79B00F26EA1 /* locator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E22C92C79B00F26EA1 /* locator.hpp */; };
+		A9A323342C92C79B00F26EA1 /* adl_pointer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E42C92C79B00F26EA1 /* adl_pointer.hpp */; };
+		A9A323352C92C79B00F26EA1 /* container.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E52C92C79B00F26EA1 /* container.hpp */; };
+		A9A323362C92C79B00F26EA1 /* context.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E62C92C79B00F26EA1 /* context.hpp */; };
+		A9A323372C92C79B00F26EA1 /* factory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E72C92C79B00F26EA1 /* factory.hpp */; };
+		A9A323382C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E82C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323392C92C79B00F26EA1 /* meta.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322E92C92C79B00F26EA1 /* meta.hpp */; };
+		A9A3233A2C92C79B00F26EA1 /* node.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322EA2C92C79B00F26EA1 /* node.hpp */; };
+		A9A3233B2C92C79B00F26EA1 /* pointer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322EB2C92C79B00F26EA1 /* pointer.hpp */; };
+		A9A3233C2C92C79B00F26EA1 /* policy.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322EC2C92C79B00F26EA1 /* policy.hpp */; };
+		A9A3233D2C92C79B00F26EA1 /* range.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322ED2C92C79B00F26EA1 /* range.hpp */; };
+		A9A3233E2C92C79B00F26EA1 /* resolve.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322EE2C92C79B00F26EA1 /* resolve.hpp */; };
+		A9A3233F2C92C79B00F26EA1 /* template.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322EF2C92C79B00F26EA1 /* template.hpp */; };
+		A9A323402C92C79B00F26EA1 /* type_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F02C92C79B00F26EA1 /* type_traits.hpp */; };
+		A9A323412C92C79B00F26EA1 /* utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F12C92C79B00F26EA1 /* utility.hpp */; };
+		A9A323422C92C79B00F26EA1 /* android-ndk-r17.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F32C92C79B00F26EA1 /* android-ndk-r17.hpp */; };
+		A9A323432C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F52C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323442C92C79B00F26EA1 /* poly.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F62C92C79B00F26EA1 /* poly.hpp */; };
+		A9A323452C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F82C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323462C92C79B00F26EA1 /* process.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322F92C92C79B00F26EA1 /* process.hpp */; };
+		A9A323472C92C79B00F26EA1 /* scheduler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322FA2C92C79B00F26EA1 /* scheduler.hpp */; };
+		A9A323482C92C79B00F26EA1 /* cache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322FC2C92C79B00F26EA1 /* cache.hpp */; };
+		A9A323492C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322FD2C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A3234A2C92C79B00F26EA1 /* loader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322FE2C92C79B00F26EA1 /* loader.hpp */; };
+		A9A3234B2C92C79B00F26EA1 /* resource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A322FF2C92C79B00F26EA1 /* resource.hpp */; };
+		A9A3234C2C92C79B00F26EA1 /* delegate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323012C92C79B00F26EA1 /* delegate.hpp */; };
+		A9A3234D2C92C79B00F26EA1 /* dispatcher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323022C92C79B00F26EA1 /* dispatcher.hpp */; };
+		A9A3234E2C92C79B00F26EA1 /* emitter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323032C92C79B00F26EA1 /* emitter.hpp */; };
+		A9A3234F2C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323042C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323502C92C79B00F26EA1 /* sigh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323052C92C79B00F26EA1 /* sigh.hpp */; };
+		A9A323512C92C79B00F26EA1 /* entt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323072C92C79B00F26EA1 /* entt.hpp */; };
+		A9A323522C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323082C92C79B00F26EA1 /* fwd.hpp */; };
 		A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681492C70291800987BA7 /* metal_implementation.cpp */; };
 		A9F682272C70291800987BA7 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681252C70291800987BA7 /* Camera.cpp */; };
 		A9F682282C70291800987BA7 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681262C70291800987BA7 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -183,12 +252,81 @@
 		A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalFrameBuffer.cpp; sourceTree = "<group>"; };
 		A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalFrameBuffer.h; sourceTree = "<group>"; };
 		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		A9A322A72C9247CD00F26EA1 /* flecs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = flecs.c; sourceTree = "<group>"; };
-		A9A322A82C9247CD00F26EA1 /* flecs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flecs.h; sourceTree = "<group>"; };
-		A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntityManager.cpp; sourceTree = "<group>"; };
-		A9A322AC2C92497C00F26EA1 /* EntityManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntityManager.h; sourceTree = "<group>"; };
 		A9A322B02C928B5C00F26EA1 /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
 		A9A322B12C928B5C00F26EA1 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		A9A322B42C92C79B00F26EA1 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		A9A322B52C92C79B00F26EA1 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
+		A9A322B62C92C79B00F26EA1 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		A9A322B82C92C79B00F26EA1 /* dense_map.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dense_map.hpp; sourceTree = "<group>"; };
+		A9A322B92C92C79B00F26EA1 /* dense_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dense_set.hpp; sourceTree = "<group>"; };
+		A9A322BA2C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322BC2C92C79B00F26EA1 /* algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = algorithm.hpp; sourceTree = "<group>"; };
+		A9A322BD2C92C79B00F26EA1 /* any.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = any.hpp; sourceTree = "<group>"; };
+		A9A322BE2C92C79B00F26EA1 /* attribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attribute.h; sourceTree = "<group>"; };
+		A9A322BF2C92C79B00F26EA1 /* compressed_pair.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = compressed_pair.hpp; sourceTree = "<group>"; };
+		A9A322C02C92C79B00F26EA1 /* enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = enum.hpp; sourceTree = "<group>"; };
+		A9A322C12C92C79B00F26EA1 /* family.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = family.hpp; sourceTree = "<group>"; };
+		A9A322C22C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322C32C92C79B00F26EA1 /* hashed_string.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hashed_string.hpp; sourceTree = "<group>"; };
+		A9A322C42C92C79B00F26EA1 /* ident.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ident.hpp; sourceTree = "<group>"; };
+		A9A322C52C92C79B00F26EA1 /* iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iterator.hpp; sourceTree = "<group>"; };
+		A9A322C62C92C79B00F26EA1 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
+		A9A322C72C92C79B00F26EA1 /* monostate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = monostate.hpp; sourceTree = "<group>"; };
+		A9A322C82C92C79B00F26EA1 /* tuple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tuple.hpp; sourceTree = "<group>"; };
+		A9A322C92C92C79B00F26EA1 /* type_info.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_info.hpp; sourceTree = "<group>"; };
+		A9A322CA2C92C79B00F26EA1 /* type_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_traits.hpp; sourceTree = "<group>"; };
+		A9A322CB2C92C79B00F26EA1 /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
+		A9A322CD2C92C79B00F26EA1 /* component.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = component.hpp; sourceTree = "<group>"; };
+		A9A322CE2C92C79B00F26EA1 /* entity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entity.hpp; sourceTree = "<group>"; };
+		A9A322CF2C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322D02C92C79B00F26EA1 /* group.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = group.hpp; sourceTree = "<group>"; };
+		A9A322D12C92C79B00F26EA1 /* handle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = handle.hpp; sourceTree = "<group>"; };
+		A9A322D22C92C79B00F26EA1 /* helper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = helper.hpp; sourceTree = "<group>"; };
+		A9A322D32C92C79B00F26EA1 /* mixin.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mixin.hpp; sourceTree = "<group>"; };
+		A9A322D42C92C79B00F26EA1 /* observer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = observer.hpp; sourceTree = "<group>"; };
+		A9A322D52C92C79B00F26EA1 /* organizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = organizer.hpp; sourceTree = "<group>"; };
+		A9A322D62C92C79B00F26EA1 /* registry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = registry.hpp; sourceTree = "<group>"; };
+		A9A322D72C92C79B00F26EA1 /* runtime_view.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = runtime_view.hpp; sourceTree = "<group>"; };
+		A9A322D82C92C79B00F26EA1 /* snapshot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = snapshot.hpp; sourceTree = "<group>"; };
+		A9A322D92C92C79B00F26EA1 /* sparse_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sparse_set.hpp; sourceTree = "<group>"; };
+		A9A322DA2C92C79B00F26EA1 /* storage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = storage.hpp; sourceTree = "<group>"; };
+		A9A322DB2C92C79B00F26EA1 /* view.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = view.hpp; sourceTree = "<group>"; };
+		A9A322DD2C92C79B00F26EA1 /* adjacency_matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = adjacency_matrix.hpp; sourceTree = "<group>"; };
+		A9A322DE2C92C79B00F26EA1 /* dot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dot.hpp; sourceTree = "<group>"; };
+		A9A322DF2C92C79B00F26EA1 /* flow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = flow.hpp; sourceTree = "<group>"; };
+		A9A322E02C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322E22C92C79B00F26EA1 /* locator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = locator.hpp; sourceTree = "<group>"; };
+		A9A322E42C92C79B00F26EA1 /* adl_pointer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = adl_pointer.hpp; sourceTree = "<group>"; };
+		A9A322E52C92C79B00F26EA1 /* container.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = container.hpp; sourceTree = "<group>"; };
+		A9A322E62C92C79B00F26EA1 /* context.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = context.hpp; sourceTree = "<group>"; };
+		A9A322E72C92C79B00F26EA1 /* factory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = factory.hpp; sourceTree = "<group>"; };
+		A9A322E82C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322E92C92C79B00F26EA1 /* meta.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = meta.hpp; sourceTree = "<group>"; };
+		A9A322EA2C92C79B00F26EA1 /* node.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = node.hpp; sourceTree = "<group>"; };
+		A9A322EB2C92C79B00F26EA1 /* pointer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pointer.hpp; sourceTree = "<group>"; };
+		A9A322EC2C92C79B00F26EA1 /* policy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = policy.hpp; sourceTree = "<group>"; };
+		A9A322ED2C92C79B00F26EA1 /* range.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = range.hpp; sourceTree = "<group>"; };
+		A9A322EE2C92C79B00F26EA1 /* resolve.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = resolve.hpp; sourceTree = "<group>"; };
+		A9A322EF2C92C79B00F26EA1 /* template.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = template.hpp; sourceTree = "<group>"; };
+		A9A322F02C92C79B00F26EA1 /* type_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_traits.hpp; sourceTree = "<group>"; };
+		A9A322F12C92C79B00F26EA1 /* utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utility.hpp; sourceTree = "<group>"; };
+		A9A322F32C92C79B00F26EA1 /* android-ndk-r17.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "android-ndk-r17.hpp"; sourceTree = "<group>"; };
+		A9A322F52C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322F62C92C79B00F26EA1 /* poly.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = poly.hpp; sourceTree = "<group>"; };
+		A9A322F82C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322F92C92C79B00F26EA1 /* process.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = process.hpp; sourceTree = "<group>"; };
+		A9A322FA2C92C79B00F26EA1 /* scheduler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = scheduler.hpp; sourceTree = "<group>"; };
+		A9A322FC2C92C79B00F26EA1 /* cache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cache.hpp; sourceTree = "<group>"; };
+		A9A322FD2C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A322FE2C92C79B00F26EA1 /* loader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = loader.hpp; sourceTree = "<group>"; };
+		A9A322FF2C92C79B00F26EA1 /* resource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = resource.hpp; sourceTree = "<group>"; };
+		A9A323012C92C79B00F26EA1 /* delegate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = delegate.hpp; sourceTree = "<group>"; };
+		A9A323022C92C79B00F26EA1 /* dispatcher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dispatcher.hpp; sourceTree = "<group>"; };
+		A9A323032C92C79B00F26EA1 /* emitter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = emitter.hpp; sourceTree = "<group>"; };
+		A9A323042C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A323052C92C79B00F26EA1 /* sigh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sigh.hpp; sourceTree = "<group>"; };
+		A9A323072C92C79B00F26EA1 /* entt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entt.hpp; sourceTree = "<group>"; };
+		A9A323082C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
 		A9F6811B2C70281700987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F681252C70291800987BA7 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		A9F681262C70291800987BA7 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
@@ -398,19 +536,8 @@
 		A9A322A52C923FE900F26EA1 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				A9A322AB2C92497C00F26EA1 /* EntityManager.cpp */,
-				A9A322AC2C92497C00F26EA1 /* EntityManager.h */,
 			);
 			path = Entities;
-			sourceTree = "<group>";
-		};
-		A9A322A62C9247A100F26EA1 /* ECS */ = {
-			isa = PBXGroup;
-			children = (
-				A9A322A72C9247CD00F26EA1 /* flecs.c */,
-				A9A322A82C9247CD00F26EA1 /* flecs.h */,
-			);
-			path = ECS;
 			sourceTree = "<group>";
 		};
 		A9A322AF2C928B3F00F26EA1 /* Scene */ = {
@@ -420,6 +547,182 @@
 				A9A322B12C928B5C00F26EA1 /* Scene.h */,
 			);
 			path = Scene;
+			sourceTree = "<group>";
+		};
+		A9A322B72C92C79B00F26EA1 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322B42C92C79B00F26EA1 /* config.h */,
+				A9A322B52C92C79B00F26EA1 /* macro.h */,
+				A9A322B62C92C79B00F26EA1 /* version.h */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		A9A322BB2C92C79B00F26EA1 /* container */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322B82C92C79B00F26EA1 /* dense_map.hpp */,
+				A9A322B92C92C79B00F26EA1 /* dense_set.hpp */,
+				A9A322BA2C92C79B00F26EA1 /* fwd.hpp */,
+			);
+			path = container;
+			sourceTree = "<group>";
+		};
+		A9A322CC2C92C79B00F26EA1 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322BC2C92C79B00F26EA1 /* algorithm.hpp */,
+				A9A322BD2C92C79B00F26EA1 /* any.hpp */,
+				A9A322BE2C92C79B00F26EA1 /* attribute.h */,
+				A9A322BF2C92C79B00F26EA1 /* compressed_pair.hpp */,
+				A9A322C02C92C79B00F26EA1 /* enum.hpp */,
+				A9A322C12C92C79B00F26EA1 /* family.hpp */,
+				A9A322C22C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322C32C92C79B00F26EA1 /* hashed_string.hpp */,
+				A9A322C42C92C79B00F26EA1 /* ident.hpp */,
+				A9A322C52C92C79B00F26EA1 /* iterator.hpp */,
+				A9A322C62C92C79B00F26EA1 /* memory.hpp */,
+				A9A322C72C92C79B00F26EA1 /* monostate.hpp */,
+				A9A322C82C92C79B00F26EA1 /* tuple.hpp */,
+				A9A322C92C92C79B00F26EA1 /* type_info.hpp */,
+				A9A322CA2C92C79B00F26EA1 /* type_traits.hpp */,
+				A9A322CB2C92C79B00F26EA1 /* utility.hpp */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		A9A322DC2C92C79B00F26EA1 /* entity */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322CD2C92C79B00F26EA1 /* component.hpp */,
+				A9A322CE2C92C79B00F26EA1 /* entity.hpp */,
+				A9A322CF2C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322D02C92C79B00F26EA1 /* group.hpp */,
+				A9A322D12C92C79B00F26EA1 /* handle.hpp */,
+				A9A322D22C92C79B00F26EA1 /* helper.hpp */,
+				A9A322D32C92C79B00F26EA1 /* mixin.hpp */,
+				A9A322D42C92C79B00F26EA1 /* observer.hpp */,
+				A9A322D52C92C79B00F26EA1 /* organizer.hpp */,
+				A9A322D62C92C79B00F26EA1 /* registry.hpp */,
+				A9A322D72C92C79B00F26EA1 /* runtime_view.hpp */,
+				A9A322D82C92C79B00F26EA1 /* snapshot.hpp */,
+				A9A322D92C92C79B00F26EA1 /* sparse_set.hpp */,
+				A9A322DA2C92C79B00F26EA1 /* storage.hpp */,
+				A9A322DB2C92C79B00F26EA1 /* view.hpp */,
+			);
+			path = entity;
+			sourceTree = "<group>";
+		};
+		A9A322E12C92C79B00F26EA1 /* graph */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322DD2C92C79B00F26EA1 /* adjacency_matrix.hpp */,
+				A9A322DE2C92C79B00F26EA1 /* dot.hpp */,
+				A9A322DF2C92C79B00F26EA1 /* flow.hpp */,
+				A9A322E02C92C79B00F26EA1 /* fwd.hpp */,
+			);
+			path = graph;
+			sourceTree = "<group>";
+		};
+		A9A322E32C92C79B00F26EA1 /* locator */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322E22C92C79B00F26EA1 /* locator.hpp */,
+			);
+			path = locator;
+			sourceTree = "<group>";
+		};
+		A9A322F22C92C79B00F26EA1 /* meta */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322E42C92C79B00F26EA1 /* adl_pointer.hpp */,
+				A9A322E52C92C79B00F26EA1 /* container.hpp */,
+				A9A322E62C92C79B00F26EA1 /* context.hpp */,
+				A9A322E72C92C79B00F26EA1 /* factory.hpp */,
+				A9A322E82C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322E92C92C79B00F26EA1 /* meta.hpp */,
+				A9A322EA2C92C79B00F26EA1 /* node.hpp */,
+				A9A322EB2C92C79B00F26EA1 /* pointer.hpp */,
+				A9A322EC2C92C79B00F26EA1 /* policy.hpp */,
+				A9A322ED2C92C79B00F26EA1 /* range.hpp */,
+				A9A322EE2C92C79B00F26EA1 /* resolve.hpp */,
+				A9A322EF2C92C79B00F26EA1 /* template.hpp */,
+				A9A322F02C92C79B00F26EA1 /* type_traits.hpp */,
+				A9A322F12C92C79B00F26EA1 /* utility.hpp */,
+			);
+			path = meta;
+			sourceTree = "<group>";
+		};
+		A9A322F42C92C79B00F26EA1 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322F32C92C79B00F26EA1 /* android-ndk-r17.hpp */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		A9A322F72C92C79B00F26EA1 /* poly */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322F52C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322F62C92C79B00F26EA1 /* poly.hpp */,
+			);
+			path = poly;
+			sourceTree = "<group>";
+		};
+		A9A322FB2C92C79B00F26EA1 /* process */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322F82C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322F92C92C79B00F26EA1 /* process.hpp */,
+				A9A322FA2C92C79B00F26EA1 /* scheduler.hpp */,
+			);
+			path = process;
+			sourceTree = "<group>";
+		};
+		A9A323002C92C79B00F26EA1 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322FC2C92C79B00F26EA1 /* cache.hpp */,
+				A9A322FD2C92C79B00F26EA1 /* fwd.hpp */,
+				A9A322FE2C92C79B00F26EA1 /* loader.hpp */,
+				A9A322FF2C92C79B00F26EA1 /* resource.hpp */,
+			);
+			path = resource;
+			sourceTree = "<group>";
+		};
+		A9A323062C92C79B00F26EA1 /* signal */ = {
+			isa = PBXGroup;
+			children = (
+				A9A323012C92C79B00F26EA1 /* delegate.hpp */,
+				A9A323022C92C79B00F26EA1 /* dispatcher.hpp */,
+				A9A323032C92C79B00F26EA1 /* emitter.hpp */,
+				A9A323042C92C79B00F26EA1 /* fwd.hpp */,
+				A9A323052C92C79B00F26EA1 /* sigh.hpp */,
+			);
+			path = signal;
+			sourceTree = "<group>";
+		};
+		A9A323092C92C79B00F26EA1 /* entt */ = {
+			isa = PBXGroup;
+			children = (
+				A9A322B72C92C79B00F26EA1 /* config */,
+				A9A322BB2C92C79B00F26EA1 /* container */,
+				A9A322CC2C92C79B00F26EA1 /* core */,
+				A9A322DC2C92C79B00F26EA1 /* entity */,
+				A9A322E12C92C79B00F26EA1 /* graph */,
+				A9A322E32C92C79B00F26EA1 /* locator */,
+				A9A322F22C92C79B00F26EA1 /* meta */,
+				A9A322F42C92C79B00F26EA1 /* platform */,
+				A9A322F72C92C79B00F26EA1 /* poly */,
+				A9A322FB2C92C79B00F26EA1 /* process */,
+				A9A323002C92C79B00F26EA1 /* resource */,
+				A9A323062C92C79B00F26EA1 /* signal */,
+				A9A323072C92C79B00F26EA1 /* entt.hpp */,
+				A9A323082C92C79B00F26EA1 /* fwd.hpp */,
+			);
+			path = entt;
 			sourceTree = "<group>";
 		};
 		A9F681112C70281700987BA7 = {
@@ -822,7 +1125,7 @@
 		A9F682222C70291800987BA7 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				A9A322A62C9247A100F26EA1 /* ECS */,
+				A9A323092C92C79B00F26EA1 /* entt */,
 				A9F681602C70291800987BA7 /* stb */,
 				A9F681942C70291800987BA7 /* imgui */,
 				A9F681A52C70291800987BA7 /* ImGuizmo */,
@@ -883,19 +1186,31 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A3234C2C92C79B00F26EA1 /* delegate.hpp in Headers */,
 				A9F682922C70291800987BA7 /* NSDictionary.hpp in Headers */,
+				A9A323412C92C79B00F26EA1 /* utility.hpp in Headers */,
+				A9A323372C92C79B00F26EA1 /* factory.hpp in Headers */,
 				A9F682862C70291800987BA7 /* ImSequencer.h in Headers */,
 				A9F682BD2C70291800987BA7 /* MTLFunctionDescriptor.hpp in Headers */,
 				A9F682B92C70291800987BA7 /* MTLDynamicLibrary.hpp in Headers */,
 				A9F6829E2C70291800987BA7 /* NSSharedPtr.hpp in Headers */,
+				A9A323332C92C79B00F26EA1 /* locator.hpp in Headers */,
+				A9A323392C92C79B00F26EA1 /* meta.hpp in Headers */,
 				A9F682BF2C70291800987BA7 /* MTLFunctionLog.hpp in Headers */,
 				A9F6829F2C70291800987BA7 /* NSString.hpp in Headers */,
+				A9A323442C92C79B00F26EA1 /* poly.hpp in Headers */,
 				A9F682772C70291800987BA7 /* imstb_rectpack.h in Headers */,
+				A9A3231C2C92C79B00F26EA1 /* tuple.hpp in Headers */,
+				A9A323292C92C79B00F26EA1 /* registry.hpp in Headers */,
 				A9F682782C70291800987BA7 /* imstb_textedit.h in Headers */,
+				A9A323132C92C79B00F26EA1 /* compressed_pair.hpp in Headers */,
+				A9A3230E2C92C79B00F26EA1 /* dense_set.hpp in Headers */,
 				A9F682DC2C70291800987BA7 /* MTLVisibleFunctionTable.hpp in Headers */,
 				A9F682912C70291800987BA7 /* NSDefines.hpp in Headers */,
 				A9F682CF2C70291800987BA7 /* MTLRasterizationRate.hpp in Headers */,
 				A9F682AA2C70291800987BA7 /* MTLBlitPass.hpp in Headers */,
+				A9A3230F2C92C79B00F26EA1 /* fwd.hpp in Headers */,
+				A9A323362C92C79B00F26EA1 /* context.hpp in Headers */,
 				A9F682292C70291800987BA7 /* SingletonTemplate.h in Headers */,
 				A9F682B32C70291800987BA7 /* MTLComputePipeline.hpp in Headers */,
 				A9F682B02C70291800987BA7 /* MTLCommandQueue.hpp in Headers */,
@@ -904,92 +1219,142 @@
 				A9F6828E2C70291800987BA7 /* NSBundle.hpp in Headers */,
 				A9F682872C70291800987BA7 /* ImZoomSlider.h in Headers */,
 				A9F682C82C70291800987BA7 /* MTLIOCompressor.hpp in Headers */,
-				A9A322AA2C9247CD00F26EA1 /* flecs.h in Headers */,
 				A9F6829C2C70291800987BA7 /* NSRange.hpp in Headers */,
+				A9A3233C2C92C79B00F26EA1 /* policy.hpp in Headers */,
 				A9F682C62C70291800987BA7 /* MTLIOCommandBuffer.hpp in Headers */,
 				A9F682A82C70291800987BA7 /* MTLBinaryArchive.hpp in Headers */,
 				A9F682A32C70291800987BA7 /* MTLAccelerationStructure.hpp in Headers */,
+				A9A3233B2C92C79B00F26EA1 /* pointer.hpp in Headers */,
 				A9F682D82C70291800987BA7 /* MTLTexture.hpp in Headers */,
 				A9F682C22C70291800987BA7 /* MTLHeap.hpp in Headers */,
+				A9A3230D2C92C79B00F26EA1 /* dense_map.hpp in Headers */,
+				A9A323302C92C79B00F26EA1 /* dot.hpp in Headers */,
 				A9F682EF2C70291800987BA7 /* NSMenuItem.hpp in Headers */,
 				A9F682A12C70291800987BA7 /* NSURL.hpp in Headers */,
 				A9F682F52C70291800987BA7 /* MTKView.hpp in Headers */,
+				A9A3234E2C92C79B00F26EA1 /* emitter.hpp in Headers */,
 				A9F682A22C70291800987BA7 /* Metal.hpp in Headers */,
 				A906F0D52C87C56000DB8541 /* MetalFrameBuffer.h in Headers */,
+				A9A323212C92C79B00F26EA1 /* entity.hpp in Headers */,
+				A9A323342C92C79B00F26EA1 /* adl_pointer.hpp in Headers */,
 				A9A322B22C928B5C00F26EA1 /* Scene.h in Headers */,
 				A9F682E22C70291800987BA7 /* CADefines.hpp in Headers */,
 				A9F682E42C70291800987BA7 /* CAMetalLayer.hpp in Headers */,
 				A9F682AB2C70291800987BA7 /* MTLBuffer.hpp in Headers */,
+				A9A323242C92C79B00F26EA1 /* handle.hpp in Headers */,
+				A9A323122C92C79B00F26EA1 /* attribute.h in Headers */,
 				A9F682DB2C70291800987BA7 /* MTLVertexDescriptor.hpp in Headers */,
+				A9A3234D2C92C79B00F26EA1 /* dispatcher.hpp in Headers */,
+				A9A323462C92C79B00F26EA1 /* process.hpp in Headers */,
+				A9A323162C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682C32C70291800987BA7 /* MTLIndirectCommandBuffer.hpp in Headers */,
+				A9A323322C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682CD2C70291800987BA7 /* MTLPixelFormat.hpp in Headers */,
 				A9F6827E2C70291800987BA7 /* GraphEditor.h in Headers */,
 				A9F682992C70291800987BA7 /* NSObject.hpp in Headers */,
+				A9A323482C92C79B00F26EA1 /* cache.hpp in Headers */,
+				A9A323182C92C79B00F26EA1 /* ident.hpp in Headers */,
+				A9A323402C92C79B00F26EA1 /* type_traits.hpp in Headers */,
 				A9F682F32C70291800987BA7 /* MetalKit.hpp in Headers */,
 				A9F682342C70291800987BA7 /* Controller.h in Headers */,
+				A9A323282C92C79B00F26EA1 /* organizer.hpp in Headers */,
 				A9F682E32C70291800987BA7 /* CAMetalDrawable.hpp in Headers */,
 				A9F682902C70291800987BA7 /* NSDate.hpp in Headers */,
 				A9F682DD2C70291800987BA7 /* MetalFX.hpp in Headers */,
+				A9A3232B2C92C79B00F26EA1 /* snapshot.hpp in Headers */,
+				A9A3233A2C92C79B00F26EA1 /* node.hpp in Headers */,
 				A9F682DA2C70291800987BA7 /* MTLVersion.hpp in Headers */,
+				A9A323502C92C79B00F26EA1 /* sigh.hpp in Headers */,
 				A9F682AD2C70291800987BA7 /* MTLCaptureScope.hpp in Headers */,
 				A9F682C72C70291800987BA7 /* MTLIOCommandQueue.hpp in Headers */,
+				A9A323352C92C79B00F26EA1 /* container.hpp in Headers */,
+				A9A3232D2C92C79B00F26EA1 /* storage.hpp in Headers */,
 				A9F682472C70291800987BA7 /* MetalRenderer.h in Headers */,
 				A9F682EE2C70291800987BA7 /* NSMenu.hpp in Headers */,
 				A9F6826F2C70291800987BA7 /* imconfig.h in Headers */,
 				A9F6824B2C70291800987BA7 /* ShaderManager.h in Headers */,
 				A9F682CE2C70291800987BA7 /* MTLPrivate.hpp in Headers */,
+				A9A323112C92C79B00F26EA1 /* any.hpp in Headers */,
+				A9A323262C92C79B00F26EA1 /* mixin.hpp in Headers */,
 				A9F6829B2C70291800987BA7 /* NSProcessInfo.hpp in Headers */,
+				A9A3233D2C92C79B00F26EA1 /* range.hpp in Headers */,
+				A9A3230B2C92C79B00F26EA1 /* macro.h in Headers */,
 				A9F682C42C70291800987BA7 /* MTLIndirectCommandEncoder.hpp in Headers */,
+				A9A323492C92C79B00F26EA1 /* fwd.hpp in Headers */,
+				A9A323512C92C79B00F26EA1 /* entt.hpp in Headers */,
 				A9F682842C70291800987BA7 /* ImGuizmo.h in Headers */,
+				A9A3230C2C92C79B00F26EA1 /* version.h in Headers */,
 				A9F682D62C70291800987BA7 /* MTLSampler.hpp in Headers */,
 				A9F682F02C70291800987BA7 /* NSRunningApplication.hpp in Headers */,
 				A9F682AE2C70291800987BA7 /* MTLCommandBuffer.hpp in Headers */,
+				A9A3231A2C92C79B00F26EA1 /* memory.hpp in Headers */,
+				A9A3233E2C92C79B00F26EA1 /* resolve.hpp in Headers */,
 				A9F6824D2C70291800987BA7 /* stb_image.h in Headers */,
 				A9F682A62C70291800987BA7 /* MTLArgument.hpp in Headers */,
 				A9F682BC2C70291800987BA7 /* MTLFunctionConstantValues.hpp in Headers */,
+				A9A323232C92C79B00F26EA1 /* group.hpp in Headers */,
 				A9F682E02C70291800987BA7 /* MTLFXSpatialScaler.hpp in Headers */,
 				A9F6828F2C70291800987BA7 /* NSData.hpp in Headers */,
 				A9F682BA2C70291800987BA7 /* MTLEvent.hpp in Headers */,
 				A9F682EC2C70291800987BA7 /* AppKitPrivate.hpp in Headers */,
+				A9A3234B2C92C79B00F26EA1 /* resource.hpp in Headers */,
 				A9F682942C70291800987BA7 /* NSError.hpp in Headers */,
 				A9F682D92C70291800987BA7 /* MTLTypes.hpp in Headers */,
 				A9F682A92C70291800987BA7 /* MTLBlitCommandEncoder.hpp in Headers */,
 				A9F682442C70291800987BA7 /* MeshBuilder.h in Headers */,
 				A9F6828D2C70291800987BA7 /* NSAutoreleasePool.hpp in Headers */,
+				A9A3231E2C92C79B00F26EA1 /* type_traits.hpp in Headers */,
+				A9A323472C92C79B00F26EA1 /* scheduler.hpp in Headers */,
+				A9A323102C92C79B00F26EA1 /* algorithm.hpp in Headers */,
 				A9F682D12C70291800987BA7 /* MTLRenderPass.hpp in Headers */,
+				A9A323252C92C79B00F26EA1 /* helper.hpp in Headers */,
+				A9A3231D2C92C79B00F26EA1 /* type_info.hpp in Headers */,
 				A9F682F22C70291800987BA7 /* NSWindow.hpp in Headers */,
 				A9F682B52C70291800987BA7 /* MTLDefines.hpp in Headers */,
 				A9F682BE2C70291800987BA7 /* MTLFunctionHandle.hpp in Headers */,
+				A9A323522C92C79B00F26EA1 /* fwd.hpp in Headers */,
+				A9A323172C92C79B00F26EA1 /* hashed_string.hpp in Headers */,
+				A9A323422C92C79B00F26EA1 /* android-ndk-r17.hpp in Headers */,
+				A9A323222C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682BB2C70291800987BA7 /* MTLFence.hpp in Headers */,
+				A9A3231F2C92C79B00F26EA1 /* utility.hpp in Headers */,
 				A9F6822F2C70291800987BA7 /* Settings.h in Headers */,
 				A9F682502C70291800987BA7 /* ImageLoader.h in Headers */,
 				A9F682CA2C70291800987BA7 /* MTLLinkedFunctions.hpp in Headers */,
 				A9F682B82C70291800987BA7 /* MTLDrawable.hpp in Headers */,
+				A9A3234A2C92C79B00F26EA1 /* loader.hpp in Headers */,
 				A9F682A72C70291800987BA7 /* MTLArgumentEncoder.hpp in Headers */,
 				A9F682D52C70291800987BA7 /* MTLResourceStatePass.hpp in Headers */,
+				A9A323432C92C79B00F26EA1 /* fwd.hpp in Headers */,
+				A9A3232A2C92C79B00F26EA1 /* runtime_view.hpp in Headers */,
+				A9A3234F2C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682F12C70291800987BA7 /* NSView.hpp in Headers */,
 				A9F682A52C70291800987BA7 /* MTLAccelerationStructureTypes.hpp in Headers */,
 				A9F682E12C70291800987BA7 /* MTLFXTemporalScaler.hpp in Headers */,
 				A9F6829A2C70291800987BA7 /* NSPrivate.hpp in Headers */,
 				A9F6822B2C70291800987BA7 /* Editor.h in Headers */,
 				A9F682452C70291800987BA7 /* VertexData.h in Headers */,
+				A9A323142C92C79B00F26EA1 /* enum.hpp in Headers */,
 				A9F682CC2C70291800987BA7 /* MTLPipeline.hpp in Headers */,
 				A9F682B12C70291800987BA7 /* MTLComputeCommandEncoder.hpp in Headers */,
 				A9F682372C70291800987BA7 /* AAPLMathUtilities.h in Headers */,
 				A9F682B22C70291800987BA7 /* MTLComputePass.hpp in Headers */,
 				A9F6829D2C70291800987BA7 /* NSSet.hpp in Headers */,
 				A9F682DE2C70291800987BA7 /* MTLFXDefines.hpp in Headers */,
+				A9A323452C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682C12C70291800987BA7 /* MTLHeaderBridge.hpp in Headers */,
 				A9F682792C70291800987BA7 /* imstb_truetype.h in Headers */,
-				A9A322AD2C92497C00F26EA1 /* EntityManager.h in Headers */,
 				A9F682802C70291800987BA7 /* ImCurveEdit.h in Headers */,
 				A9F6828B2C70291800987BA7 /* Foundation.hpp in Headers */,
 				A9F682822C70291800987BA7 /* ImGradient.h in Headers */,
 				A9F682D32C70291800987BA7 /* MTLResource.hpp in Headers */,
+				A9A3232C2C92C79B00F26EA1 /* sparse_set.hpp in Headers */,
+				A9A3232F2C92C79B00F26EA1 /* adjacency_matrix.hpp in Headers */,
 				A9F682982C70291800987BA7 /* NSObjCRuntime.hpp in Headers */,
 				A9F682482C70291800987BA7 /* MetalShader.h in Headers */,
 				A9F682C02C70291800987BA7 /* MTLFunctionStitching.hpp in Headers */,
 				A9F682B62C70291800987BA7 /* MTLDepthStencil.hpp in Headers */,
+				A9A323152C92C79B00F26EA1 /* family.hpp in Headers */,
 				A9F682D02C70291800987BA7 /* MTLRenderCommandEncoder.hpp in Headers */,
 				A9F682D42C70291800987BA7 /* MTLResourceStateCommandEncoder.hpp in Headers */,
 				A9F682B72C70291800987BA7 /* MTLDevice.hpp in Headers */,
@@ -998,16 +1363,21 @@
 				A9F682ED2C70291800987BA7 /* NSApplication.hpp in Headers */,
 				A9F682E62C70291800987BA7 /* QuartzCore.hpp in Headers */,
 				A9F682D72C70291800987BA7 /* MTLStageInputOutputDescriptor.hpp in Headers */,
+				A9A323192C92C79B00F26EA1 /* iterator.hpp in Headers */,
 				A9F682972C70291800987BA7 /* NSNumber.hpp in Headers */,
 				A9F682E52C70291800987BA7 /* CAPrivate.hpp in Headers */,
 				A9F682A02C70291800987BA7 /* NSTypes.hpp in Headers */,
+				A9A323382C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682282C70291800987BA7 /* Camera.h in Headers */,
 				A9F682EB2C70291800987BA7 /* AppKit.hpp in Headers */,
+				A9A3230A2C92C79B00F26EA1 /* config.h in Headers */,
 				A9F682722C70291800987BA7 /* imgui_internal.h in Headers */,
 				A9F682932C70291800987BA7 /* NSEnumerator.hpp in Headers */,
 				A9F682762C70291800987BA7 /* imgui.h in Headers */,
 				A9F682A42C70291800987BA7 /* MTLAccelerationStructureCommandEncoder.hpp in Headers */,
+				A9A323272C92C79B00F26EA1 /* observer.hpp in Headers */,
 				A9F682962C70291800987BA7 /* NSNotification.hpp in Headers */,
+				A9A3231B2C92C79B00F26EA1 /* monostate.hpp in Headers */,
 				A9F682DF2C70291800987BA7 /* MTLFXPrivate.hpp in Headers */,
 				A9F682AF2C70291800987BA7 /* MTLCommandEncoder.hpp in Headers */,
 				A9F682C52C70291800987BA7 /* MTLIntersectionFunctionTable.hpp in Headers */,
@@ -1015,8 +1385,12 @@
 				A97C89AF2C75DF26002E27DC /* imgui_impl_metal.h in Headers */,
 				A9F682C92C70291800987BA7 /* MTLLibrary.hpp in Headers */,
 				A9F682B42C70291800987BA7 /* MTLCounters.hpp in Headers */,
+				A9A323312C92C79B00F26EA1 /* flow.hpp in Headers */,
 				A9F682952C70291800987BA7 /* NSLock.hpp in Headers */,
+				A9A323202C92C79B00F26EA1 /* component.hpp in Headers */,
+				A9A3232E2C92C79B00F26EA1 /* view.hpp in Headers */,
 				A9F682FE2C70291800987BA7 /* Timer.h in Headers */,
+				A9A3233F2C92C79B00F26EA1 /* template.hpp in Headers */,
 				A9F682AC2C70291800987BA7 /* MTLCaptureManager.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1107,8 +1481,6 @@
 				A9F682272C70291800987BA7 /* Camera.cpp in Sources */,
 				A9F682832C70291800987BA7 /* ImGuizmo.cpp in Sources */,
 				A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */,
-				A9A322A92C9247CD00F26EA1 /* flecs.c in Sources */,
-				A9A322AE2C92497C00F26EA1 /* EntityManager.cpp in Sources */,
 				A9F682702C70291800987BA7 /* imgui_demo.cpp in Sources */,
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
 				A9F682742C70291800987BA7 /* imgui_widgets.cpp in Sources */,
@@ -1129,7 +1501,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1161,7 +1533,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1198,7 +1570,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1230,7 +1602,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1272,6 +1644,7 @@
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp-extensions",
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp",
 					"$(PROJECT_DIR)/LightningEngineCore",
+					"$(PROJECT_DIR)/LightningEngineCore/entt",
 				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(PROJECT_DIR)/Build";
@@ -1309,6 +1682,7 @@
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp-extensions",
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp",
 					"$(PROJECT_DIR)/LightningEngineCore",
+					"$(PROJECT_DIR)/LightningEngineCore/entt",
 				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(PROJECT_DIR)/Build";

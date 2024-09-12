@@ -8,14 +8,17 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include "ThirdParty/ECS/flecs.h"
+#include <ThirdParty/entt/entt.hpp>
 
 class Scene
 {
+public:
     Scene();
     ~Scene();
+    
+    entt::entity CreateEntity();
 private:
-    flecs::world registry;
+    entt::registry registry;
 };
 
 #endif /* Scene_h */

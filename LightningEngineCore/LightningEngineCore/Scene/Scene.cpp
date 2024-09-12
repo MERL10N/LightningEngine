@@ -10,26 +10,50 @@
 
 Scene::Scene() 
 {
+    struct MeshComponent {};
     struct TransformComponent
     {
         simd::float4x4 Transform;
         
         TransformComponent() = default;
         TransformComponent(const TransformComponent&) = default;
-        TransformComponent(const simd::float4x4 &transform)
-                :Transform(transform) {}
+        TransformComponent(const simd::float4x4& transform)
+        :Transform(transform) {}
         
         operator simd::float4x4& () { return Transform; }
-        operator const simd::float4x4() const { return Transform; }
+        operator const simd::float4x4& () { return Transform; }
     };
-    flecs::entity entity = registry.entity();
+    
+    entt::entity entity = registry.create();
     
     registry.emplace<TransformComponent>(entity, simd::float4x4(1.0f));
     
-    //TransformComponent& transform = registry.get<TransformComponent>(entity);
+    if (registry.all_of<TransformComponent>(entity))
+        TransformComponent& transform = registry.get<TransformComponent>(entity);
+    
+    auto view = registry.view<TransformComponent>();
+    for (auto entity : view)
+    {
+        TransformComponent &transform = view.get<TransformComponent>(entity);
+    }
+    
+    auto group = registry.group<TransformComponent>(entt::get<MeshComponent>);
+    for (auto entity : group)
+    {
+        //a//uto&[transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
+        
+        //transform
+    }
+    
 }
 
 Scene::~Scene() 
 {
 }
+
+entt::entity Scene::CreateEntity() 
+{
+    return registry.create();
+}
+
 
