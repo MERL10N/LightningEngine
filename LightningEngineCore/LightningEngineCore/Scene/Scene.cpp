@@ -6,11 +6,17 @@
 //
 
 #include "Scene.h"
+#include "Entities/Entity.h"
 #include <simd/simd.h>
 
 Scene::Scene() 
 {
-    struct MeshComponent {};
+    struct MeshComponent
+    {
+        bool data = false;
+        float value = 0.f;
+        MeshComponent() = default;
+    };
     struct TransformComponent
     {
         simd::float4x4 Transform;
@@ -38,11 +44,10 @@ Scene::Scene()
     }
     
     auto group = registry.group<TransformComponent>(entt::get<MeshComponent>);
+    
     for (auto entity : group)
     {
-        //a//uto&[transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
-        
-        //transform
+        //auto&[transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
     }
     
 }
@@ -51,9 +56,9 @@ Scene::~Scene()
 {
 }
 
-entt::entity Scene::CreateEntity() 
+Entity Scene::CreateEntity()
 {
-    return registry.create();
+    return {registry.create(), this};
 }
 
 

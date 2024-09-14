@@ -14,6 +14,8 @@
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
 		A97C89B22C7658A6002E27DC /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817F2C70291800987BA7 /* imgui_impl_osx.mm */; };
 		A97C89B42C765C30002E27DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97C89B32C765C30002E27DC /* QuartzCore.framework */; };
+		A9961E2E2C94F1FD001C3E31 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9961E2C2C94F1FD001C3E31 /* Mesh.cpp */; };
+		A9961E2F2C94F1FD001C3E31 /* Mesh.h in Headers */ = {isa = PBXBuildFile; fileRef = A9961E2D2C94F1FD001C3E31 /* Mesh.h */; };
 		A9A322B22C928B5C00F26EA1 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B12C928B5C00F26EA1 /* Scene.h */; };
 		A9A322B32C928B5C00F26EA1 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A322B02C928B5C00F26EA1 /* Scene.cpp */; };
 		A9A3230A2C92C79B00F26EA1 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A322B42C92C79B00F26EA1 /* config.h */; };
@@ -89,6 +91,8 @@
 		A9A323502C92C79B00F26EA1 /* sigh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323052C92C79B00F26EA1 /* sigh.hpp */; };
 		A9A323512C92C79B00F26EA1 /* entt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323072C92C79B00F26EA1 /* entt.hpp */; };
 		A9A323522C92C79B00F26EA1 /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A9A323082C92C79B00F26EA1 /* fwd.hpp */; };
+		A9A323552C93899800F26EA1 /* Entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A323542C93899800F26EA1 /* Entity.h */; };
+		A9A323562C93899800F26EA1 /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9A323532C93899800F26EA1 /* Entity.cpp */; };
 		A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681492C70291800987BA7 /* metal_implementation.cpp */; };
 		A9F682272C70291800987BA7 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9F681252C70291800987BA7 /* Camera.cpp */; };
 		A9F682282C70291800987BA7 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681262C70291800987BA7 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -252,6 +256,8 @@
 		A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalFrameBuffer.cpp; sourceTree = "<group>"; };
 		A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalFrameBuffer.h; sourceTree = "<group>"; };
 		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A9961E2C2C94F1FD001C3E31 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		A9961E2D2C94F1FD001C3E31 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		A9A322B02C928B5C00F26EA1 /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
 		A9A322B12C928B5C00F26EA1 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		A9A322B42C92C79B00F26EA1 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
@@ -327,6 +333,8 @@
 		A9A323052C92C79B00F26EA1 /* sigh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sigh.hpp; sourceTree = "<group>"; };
 		A9A323072C92C79B00F26EA1 /* entt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = entt.hpp; sourceTree = "<group>"; };
 		A9A323082C92C79B00F26EA1 /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = "<group>"; };
+		A9A323532C93899800F26EA1 /* Entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
+		A9A323542C93899800F26EA1 /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		A9F6811B2C70281700987BA7 /* LightningEngineCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LightningEngineCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F681252C70291800987BA7 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		A9F681262C70291800987BA7 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
@@ -536,6 +544,8 @@
 		A9A322A52C923FE900F26EA1 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				A9A323532C93899800F26EA1 /* Entity.cpp */,
+				A9A323542C93899800F26EA1 /* Entity.h */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -801,6 +811,8 @@
 				A9F681512C70291800987BA7 /* MeshBuilder.cpp */,
 				A9F681522C70291800987BA7 /* MeshBuilder.h */,
 				A9F681532C70291800987BA7 /* VertexData.h */,
+				A9961E2C2C94F1FD001C3E31 /* Mesh.cpp */,
+				A9961E2D2C94F1FD001C3E31 /* Mesh.h */,
 			);
 			path = Primitives;
 			sourceTree = "<group>";
@@ -1302,6 +1314,7 @@
 				A9F682D92C70291800987BA7 /* MTLTypes.hpp in Headers */,
 				A9F682A92C70291800987BA7 /* MTLBlitCommandEncoder.hpp in Headers */,
 				A9F682442C70291800987BA7 /* MeshBuilder.h in Headers */,
+				A9A323552C93899800F26EA1 /* Entity.h in Headers */,
 				A9F6828D2C70291800987BA7 /* NSAutoreleasePool.hpp in Headers */,
 				A9A3231E2C92C79B00F26EA1 /* type_traits.hpp in Headers */,
 				A9A323472C92C79B00F26EA1 /* scheduler.hpp in Headers */,
@@ -1340,6 +1353,7 @@
 				A9F682372C70291800987BA7 /* AAPLMathUtilities.h in Headers */,
 				A9F682B22C70291800987BA7 /* MTLComputePass.hpp in Headers */,
 				A9F6829D2C70291800987BA7 /* NSSet.hpp in Headers */,
+				A9961E2F2C94F1FD001C3E31 /* Mesh.h in Headers */,
 				A9F682DE2C70291800987BA7 /* MTLFXDefines.hpp in Headers */,
 				A9A323452C92C79B00F26EA1 /* fwd.hpp in Headers */,
 				A9F682C12C70291800987BA7 /* MTLHeaderBridge.hpp in Headers */,
@@ -1463,6 +1477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9961E2E2C94F1FD001C3E31 /* Mesh.cpp in Sources */,
 				A9F682362C70291800987BA7 /* AAPLMathUtilities.cpp in Sources */,
 				A9F6827F2C70291800987BA7 /* ImCurveEdit.cpp in Sources */,
 				A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */,
@@ -1485,6 +1500,7 @@
 				A9F6824A2C70291800987BA7 /* ShaderManager.cpp in Sources */,
 				A9F682742C70291800987BA7 /* imgui_widgets.cpp in Sources */,
 				A9F6822E2C70291800987BA7 /* Settings.cpp in Sources */,
+				A9A323562C93899800F26EA1 /* Entity.cpp in Sources */,
 				A9F682732C70291800987BA7 /* imgui_tables.cpp in Sources */,
 				A9F682852C70291800987BA7 /* ImSequencer.cpp in Sources */,
 				A9F682752C70291800987BA7 /* imgui.cpp in Sources */,
@@ -1552,6 +1568,10 @@
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/imgui",
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp-extensions",
 				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../LightningEngine/Shaders",
+					"$(PROJECT_DIR)/../LightningEngine/assets",
+				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1615,6 +1635,10 @@
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/imgui",
 					"$(PROJECT_DIR)/LightningEngineCore/ThirdParty/metal-cpp-extensions",
 				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../LightningEngine/Shaders",
+					"$(PROJECT_DIR)/../LightningEngine/assets",
+				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1651,6 +1675,8 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+					"$(PROJECT_DIR)/../LightningEngine/Shaders",
+					"$(PROJECT_DIR)/../LightningEngine/assets",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
@@ -1689,6 +1715,8 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+					"$(PROJECT_DIR)/../LightningEngine/Shaders",
+					"$(PROJECT_DIR)/../LightningEngine/assets",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;

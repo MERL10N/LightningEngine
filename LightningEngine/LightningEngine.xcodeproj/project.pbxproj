@@ -66,6 +66,7 @@
 		A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9961E302C9507DD001C3E31 /* Light.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Light.metal; sourceTree = "<group>"; };
 		A9A722762C8B9A420001B72F /* MacApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MacApplication.cpp; sourceTree = "<group>"; };
 		A9A722772C8B9A420001B72F /* MacApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacApplication.h; sourceTree = "<group>"; };
 		A9A722792C8B9A420001B72F /* ViewDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ViewDelegate.cpp; sourceTree = "<group>"; };
@@ -165,6 +166,7 @@
 			children = (
 				3E76CD7129876E7600178E19 /* Shader2D.metal */,
 				A9D700202C502B7B002A50BA /* Shader3D.metal */,
+				A9961E302C9507DD001C3E31 /* Light.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";

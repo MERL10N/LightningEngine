@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-               BuildableName = "LightningEngine - macOS.app"
-               BlueprintName = "LightningEngine - macOS"
-               ReferencedContainer = "container:LightningEngine.xcodeproj">
+               BlueprintIdentifier = "A9F6811A2C70281700987BA7"
+               BuildableName = "LightningEngineCore.framework"
+               BlueprintName = "LightningEngineCore"
+               ReferencedContainer = "container:LightningEngineCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,45 +36,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "$(PROJECT_DIR)"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      enableGPUFrameCaptureMode = "3"
-      enableGPUValidationMode = "1"
-      showGraphicsOverview = "Yes"
-      allowLocationSimulation = "YES"
-      consoleMode = "0"
-      structuredConsoleMode = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-            BuildableName = "LightningEngine - macOS.app"
-            BlueprintName = "LightningEngine - macOS"
-            ReferencedContainer = "container:LightningEngine.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
+      allowLocationSimulation = "YES">
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      savedToolIdentifier = "Leaks"
+      savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      customWorkingDirectory = "$(PROJECT_DIR)"
-      ignoresPersistentStateOnLaunch = "YES"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A983C4412C5EBDB1001AD35D"
-            BuildableName = "LightningEngine - macOS.app"
-            BlueprintName = "LightningEngine - macOS"
-            ReferencedContainer = "container:LightningEngine.xcodeproj">
+            BlueprintIdentifier = "A9F6811A2C70281700987BA7"
+            BuildableName = "LightningEngineCore.framework"
+            BlueprintName = "LightningEngineCore"
+            ReferencedContainer = "container:LightningEngineCore.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

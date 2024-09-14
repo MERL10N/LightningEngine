@@ -8,7 +8,9 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include <ThirdParty/entt/entt.hpp>
+#include "entt.hpp"
+
+class Entity;
 
 class Scene
 {
@@ -16,9 +18,10 @@ public:
     Scene();
     ~Scene();
     
-    entt::entity CreateEntity();
+   Entity CreateEntity();
 private:
     entt::registry registry;
+    friend class Entity;
 };
 
 #endif /* Scene_h */
