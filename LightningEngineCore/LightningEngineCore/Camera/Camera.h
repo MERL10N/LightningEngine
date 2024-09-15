@@ -58,7 +58,7 @@ public:
     
     float GetZoom();
     
-    float3 GetCameraLocation();
+    inline float3& GetCameraPosition() { return Position; }
 
 private:
     

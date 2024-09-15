@@ -45,10 +45,12 @@ MetalRenderer::MetalRenderer(MTK::View* view)
     height = drawableSize.height;
     // Initialise the shader
     shaderManager.Add("Shader3D", "Shaders/Shader3D.metal", view);
+    shaderManager.Add("Light"   , "Shaders/Light.metal"   , view);
     imageLoader.Init();
     frameBuffer.Init(width, height, view->device(), 4);
    // Render the cube
     CreateCube();
+    CreateLight();
 }
 
 MetalRenderer::~MetalRenderer()
@@ -109,6 +111,61 @@ void MetalRenderer::CreateCube()
     imageLoader.LoadTexture("assets/mc_grass.png", view->device());
 }
 
+void MetalRenderer::CreateLight()
+{
+    VertexData lightSource[] = {
+            // Front face            // Normals
+            {{-0.5,-0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            {{ 0.5,-0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            {{ 0.5, 0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            {{ 0.5, 0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            {{-0.5,-0.5, 0.5, 1.0}, {0.0, 0.0, 1.0, 1.0}},
+            
+            // Back face
+            {{ 0.5,-0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+            {{-0.5,-0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+            {{-0.5, 0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+            {{-0.5, 0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+            {{ 0.5, 0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+            {{ 0.5,-0.5,-0.5, 1.0}, {0.0, 0.0,-1.0, 1.0}},
+
+            // Top face
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+            {{ 0.5, 0.5, 0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+            {{ 0.5, 0.5,-0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+            {{ 0.5, 0.5,-0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+            {{-0.5, 0.5,-0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {0.0, 1.0, 0.0, 1.0}},
+
+            // Bottom face
+            {{-0.5,-0.5,-0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+            {{ 0.5,-0.5,-0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+            {{ 0.5,-0.5, 0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+            {{ 0.5,-0.5, 0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+            {{-0.5,-0.5, 0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+            {{-0.5,-0.5,-0.5, 1.0}, {0.0,-1.0, 0.0, 1.0}},
+
+            // Left face
+            {{-0.5,-0.5,-0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+            {{-0.5,-0.5, 0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+            {{-0.5, 0.5, 0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+            {{-0.5, 0.5,-0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+            {{-0.5,-0.5,-0.5, 1.0}, {-1.0,0.0, 0.0, 1.0}},
+
+            // Right face
+            {{ 0.5,-0.5, 0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+            {{ 0.5,-0.5,-0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+            {{ 0.5, 0.5,-0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+            {{ 0.5, 0.5,-0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+            {{ 0.5, 0.5, 0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+            {{ 0.5,-0.5, 0.5, 1.0}, {1.0, 0.0, 0.0, 1.0}},
+        };
+        
+        lightVertexBuffer = view->device()->newBuffer(&lightSource, sizeof(lightSource), MTL::ResourceStorageModeShared);
+}
+
 
 void MetalRenderer::Draw(MTK::View* view)
 {
@@ -150,6 +207,9 @@ void MetalRenderer::Draw(MTK::View* view)
     
     aspectRatio = (width / height);
     perspectiveMatrix = matrix_perspective_right_hand(fov, aspectRatio, nearZ, farZ);
+    
+    simd_float4 lightColor = simd_make_float4(1.0, 1.0, 1.0, 1.0);
+    simd_float4 lightPosition = simd_make_float4(2 * cos(Timer::GetTimeInSeconds()), 0.6,0.0, 1);
 
     TransformationData transformationData = { modelMatrix, viewMatrix, perspectiveMatrix };
     memcpy(transformationBuffer->contents(), &transformationData, sizeof(transformationData));
@@ -164,8 +224,27 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
+    renderCommandEncoder->setFragmentBytes(&lightColor, sizeof(lightColor), 1);
+    renderCommandEncoder->setFragmentBytes(&lightPosition, sizeof(lightPosition), 2);
+    renderCommandEncoder->setFragmentBytes(&camera.GetCameraPosition(), sizeof(camera.GetCameraPosition()), 3);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
+    
+    matrix_float4x4 scaleMatrix = matrix4x4_scale(0.3f, 0.3f, 0.3f);
+    matrix_float4x4 translationMatrix = matrix4x4_translation(lightPosition.xyz);
+    
+    modelMatrix = matrix_identity_float4x4;
+    modelMatrix = matrix_multiply(scaleMatrix, modelMatrix);
+    modelMatrix = matrix_multiply(translationMatrix, modelMatrix);
+    renderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
 
+    lightRenderPSO = shaderManager.GetRenderPipelineState("Light");
+    renderCommandEncoder->setRenderPipelineState(lightRenderPSO);
+    renderCommandEncoder->setVertexBuffer(lightVertexBuffer, 0, 0);
+    renderCommandEncoder->setVertexBytes(&modelMatrix, sizeof(modelMatrix), 1);
+    renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
+    renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
+    renderCommandEncoder->setFragmentBytes(&lightColor, sizeof(lightColor), 0);
+    renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
     ProcessInput();
 
     renderCommandEncoder->endEncoding();

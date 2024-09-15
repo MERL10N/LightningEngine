@@ -131,11 +131,6 @@ float Camera::GetZoom()
     return Zoom;
 }
 
-float3 Camera::GetCameraLocation()
-{
-    return Position;
-}
-
 void Camera::ProcessGamepadRightJoystick(const float &axisXValue, const float &axisYValue, const bool &constraintPitch)
 {
     Yaw += (axisXValue);

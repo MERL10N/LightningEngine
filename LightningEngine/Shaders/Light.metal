@@ -8,32 +8,26 @@
 #include <metal_stdlib>
 using namespace metal;
 
-struct LightVertexData
+struct VertexData
 {
     float4 position [[position]];
     float4 normal;
 };
 
-struct TransformationData
+vertex VertexData vertexShader(uint vertexID [[vertex_id]],
+             constant VertexData* vertexData,
+             constant float4x4& modelMatrix [[buffer(1)]],
+             constant float4x4& viewMatrix [[buffer(2)]],
+             constant float4x4& perspectiveMatrix [[buffer(3)]])
 {
-    float4x4 modelMatrix;
-    float4x4 viewMatrix;
-    float4x4 perspectiveMatrix;
-};
-
-
-vertex LightVertexData vertexShader(uint vertexID[[vertex_id]],
-                                    constant LightVertexData* vertexData,
-                                    constant TransformationData* transformationData)
-{
-    LightVertexData out = vertexData[vertexID];
+    VertexData out = vertexData[vertexID];
     
-    out.position = transformationData->perspectiveMatrix * transformationData->viewMatrix * transformationData->modelMatrix * vertexData[vertexID].position;
-    
+    out.position = perspectiveMatrix * viewMatrix * modelMatrix * vertexData[vertexID].position;
     return out;
 }
 
-fragment float4 fragmentShader(LightVertexData in [[stage_in]], constant float4& lightColor [[buffer(0)]])
+fragment float4 fragmentShader(VertexData in [[stage_in]],
+                                    constant float4& lightColor [[ buffer(0) ]]) 
 {
     return lightColor;
 }

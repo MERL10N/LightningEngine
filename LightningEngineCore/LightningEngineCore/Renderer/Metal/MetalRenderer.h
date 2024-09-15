@@ -51,6 +51,7 @@ public:
 private:
     
     void CreateCube();
+    void CreateLight();
     void ProcessInput();
     void UpdateMousePosition(float &x, float &y);
     
@@ -61,8 +62,11 @@ private:
     MTL::CommandQueue* metalCommandQueue;
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPipelineState* metalRenderPSO;
+    MTL::RenderPipelineState* lightRenderPSO;
     MTL::Buffer* cubeVertexBuffer;
+    MTL::Buffer* lightVertexBuffer;
     MTL::Buffer* transformationBuffer;
+    MTL::Buffer* lightTransformationBuffer;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassDescriptor* renderPassDescriptor;
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment;
