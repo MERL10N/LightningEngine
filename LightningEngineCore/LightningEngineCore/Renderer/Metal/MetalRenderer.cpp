@@ -220,10 +220,10 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setRenderPipelineState(metalRenderPSO);
     renderCommandEncoder->setDepthStencilState(shaderManager.GetDepthStencilState("Shader3D"));
     shaderManager.BindResources("Shader3D", renderCommandEncoder, cubeVertexBuffer);
-    renderCommandEncoder->setFragmentTexture(imageLoader.GetTexture(), 0);
     renderCommandEncoder->setVertexBuffer(transformationBuffer, 0, 1);
     renderCommandEncoder->setVertexBytes(&viewMatrix, sizeof(viewMatrix), 2);
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
+    renderCommandEncoder->setFragmentTexture(imageLoader.GetTexture(), 0);
     renderCommandEncoder->setFragmentBytes(&lightColor, sizeof(lightColor), 1);
     renderCommandEncoder->setFragmentBytes(&lightPosition, sizeof(lightPosition), 2);
     renderCommandEncoder->setFragmentBytes(&camera.GetCameraPosition(), sizeof(camera.GetCameraPosition()), 3);
@@ -245,6 +245,7 @@ void MetalRenderer::Draw(MTK::View* view)
     renderCommandEncoder->setVertexBytes(&perspectiveMatrix, sizeof(perspectiveMatrix), 3);
     renderCommandEncoder->setFragmentBytes(&lightColor, sizeof(lightColor), 0);
     renderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(36));
+    
     ProcessInput();
 
     renderCommandEncoder->endEncoding();

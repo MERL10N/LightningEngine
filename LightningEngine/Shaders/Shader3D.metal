@@ -52,21 +52,21 @@ fragment float4 fragmentShader(VertexOut in [[stage_in]],
                                       min_filter::linear);
     
     // Ambient
-       float ambientStrength = 0.2f;
-       float4 ambient = ambientStrength * lightColor;
-       
-       // Diffuse
-       float3 norm = normalize(in.normal.xyz);
-       float4 lightDir = normalize(lightPosition - in.fragmentPosition);
-       float diff = max(dot(norm, lightDir.xyz), 0.0);
-       float4 diffuse = diff * lightColor;
-       
-       // Specular
-       float specularStrength = 0.5f;
-       float4 viewDir = normalize(float4(cameraPosition, 1.0) - in.fragmentPosition);
-       float4 reflectDir = reflect(-lightDir, float4(norm, 1));
-       float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-       float4 specular = specularStrength * spec * lightColor;
+   float ambientStrength = 0.2f;
+   float4 ambient = ambientStrength * lightColor;
+   
+   // Diffuse
+   float3 norm = normalize(in.normal.xyz);
+   float4 lightDir = normalize(lightPosition - in.fragmentPosition);
+   float diff = max(dot(norm, lightDir.xyz), 0.0);
+   float4 diffuse = diff * lightColor;
+   
+   // Specular
+   float specularStrength = 0.5f;
+   float4 viewDir = normalize(float4(cameraPosition, 1.0) - in.fragmentPosition);
+   float4 reflectDir = reflect(-lightDir, float4(norm, 1));
+   float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+   float4 specular = specularStrength * spec * lightColor;
     
     // Sample the texture to obtain a color
     const float4 finalColor = (ambient + diffuse + specular) * colorTexture.sample(textureSampler, in.textureCoordinate);
