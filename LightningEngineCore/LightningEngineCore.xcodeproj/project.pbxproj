@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A906F0D52C87C56000DB8541 /* MetalFrameBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */; };
 		A906F0D62C87C56000DB8541 /* MetalFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */; };
+		A94F982C2CB3AB9F00A4AC99 /* MetalShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A94F982B2CB3AB9F00A4AC99 /* MetalShader.cpp */; };
 		A97C89AF2C75DF26002E27DC /* imgui_impl_metal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F681792C70291800987BA7 /* imgui_impl_metal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A97C89B02C75DF2D002E27DC /* imgui_impl_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F6817E2C70291800987BA7 /* imgui_impl_osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A97C89B12C765896002E27DC /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9F6817A2C70291800987BA7 /* imgui_impl_metal.mm */; };
@@ -255,6 +256,7 @@
 /* Begin PBXFileReference section */
 		A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalFrameBuffer.cpp; sourceTree = "<group>"; };
 		A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalFrameBuffer.h; sourceTree = "<group>"; };
+		A94F982B2CB3AB9F00A4AC99 /* MetalShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalShader.cpp; sourceTree = "<group>"; };
 		A97C89B32C765C30002E27DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A9961E2C2C94F1FD001C3E31 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		A9961E2D2C94F1FD001C3E31 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
@@ -824,6 +826,7 @@
 				A9F681552C70291800987BA7 /* MetalRenderer.cpp */,
 				A9F681562C70291800987BA7 /* MetalRenderer.h */,
 				A9F681572C70291800987BA7 /* MetalShader.h */,
+				A94F982B2CB3AB9F00A4AC99 /* MetalShader.cpp */,
 				A906F0D32C87C56000DB8541 /* MetalFrameBuffer.cpp */,
 				A906F0D42C87C56000DB8541 /* MetalFrameBuffer.h */,
 			);
@@ -1487,6 +1490,7 @@
 				A9A322B32C928B5C00F26EA1 /* Scene.cpp in Sources */,
 				A9F682712C70291800987BA7 /* imgui_draw.cpp in Sources */,
 				A9F682432C70291800987BA7 /* MeshBuilder.cpp in Sources */,
+				A94F982C2CB3AB9F00A4AC99 /* MetalShader.cpp in Sources */,
 				A9F682FD2C70291800987BA7 /* Timer.cpp in Sources */,
 				A9A7226C2C8B99750001B72F /* metal_implementation.cpp in Sources */,
 				A906F0D62C87C56000DB8541 /* MetalFrameBuffer.cpp in Sources */,

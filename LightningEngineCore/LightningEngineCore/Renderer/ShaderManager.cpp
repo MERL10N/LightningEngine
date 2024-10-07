@@ -6,6 +6,7 @@
  */
 #include "ShaderManager.h"
 #include <stdexcept>      // std::invalid_argument
+#include <iostream>
 #ifdef __APPLE__
 #include "MetalShader.h"
 #endif
