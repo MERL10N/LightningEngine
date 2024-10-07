@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A97C89A62C75489D002E27DC /* mc_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E9F222429A060BA00383DCA /* mc_grass.png */; };
-		A97C89A72C754D1D002E27DC /* AovelSansRounded-rdDL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A97C89A32C752FCF002E27DC /* AovelSansRounded-rdDL.ttf */; };
 		A97C89A82C754D1D002E27DC /* NaturalMonoRegular-9YBeK.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */; };
 		A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A98297F02C5ED6D900211F0E /* Assets.xcassets */; };
 		A983C4562C5EBE0C001AD35D /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93531F22B621E7E00347F4A /* MetalKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -62,7 +61,6 @@
 		3E9F222429A060BA00383DCA /* mc_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mc_grass.png; path = assets/mc_grass.png; sourceTree = SOURCE_ROOT; };
 		A93531F02B621E7A00347F4A /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A93531F22B621E7E00347F4A /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		A97C89A32C752FCF002E27DC /* AovelSansRounded-rdDL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AovelSansRounded-rdDL.ttf"; path = "../../../../Users/kianmarvi/Documents/LightningEngine/LightningEngine/assets/Fonts/AovelSansRounded-rdDL.ttf"; sourceTree = DEVELOPER_DIR; };
 		A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NaturalMonoRegular-9YBeK.ttf"; sourceTree = "<group>"; };
 		A98297F02C5ED6D900211F0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A983C4422C5EBDB1001AD35D /* LightningEngine - macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LightningEngine - macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,7 +172,6 @@
 		A97C89A52C752FCF002E27DC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				A97C89A32C752FCF002E27DC /* AovelSansRounded-rdDL.ttf */,
 				A97C89A42C752FCF002E27DC /* NaturalMonoRegular-9YBeK.ttf */,
 			);
 			path = Fonts;
@@ -285,7 +282,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A97C89A72C754D1D002E27DC /* AovelSansRounded-rdDL.ttf in Resources */,
 				A97C89A82C754D1D002E27DC /* NaturalMonoRegular-9YBeK.ttf in Resources */,
 				A97C89A62C75489D002E27DC /* mc_grass.png in Resources */,
 				A98297F12C5ED6D900211F0E /* Assets.xcassets in Resources */,
