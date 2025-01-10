@@ -11,3 +11,9 @@ CMakeFiles/
 LightningEngine.xcodeproj/
 
 CMakeScripts/
+
+bin/
+
+build/
+
+lib/
