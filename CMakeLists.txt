@@ -32,7 +32,7 @@ foreach(file IN LISTS ENGINE_FILES)
 endforeach()
 
 file(GLOB SOURCE_FILES
-      LightningEngine/main.cpp)
+        LightningEngine/Source/main.cpp)
 
 # Create a library for the core engine (optional for workspace modularity)
 add_library(LightningEngineCore STATIC ${ENGINE_FILES})

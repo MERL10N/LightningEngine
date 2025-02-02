@@ -22,7 +22,7 @@ namespace MTL
 class MetalShader
 {
     public:
-      MetalShader(const std::string &filePath, MTL::Device* device);
+    MetalShader(const std::string &filePath, MTL::Device* device);
     
     private:
     MTL::Device* device;
@@ -38,7 +38,7 @@ class MetalShader
     bool bResult;
     
     
-     std::string LoadShaderFile(const std::string& path);
+    std::string LoadShaderFile(const std::string& path);
     
      bool isValid;
 };

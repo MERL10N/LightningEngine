@@ -23,8 +23,9 @@ class MetalRenderer
 {
 public:
     explicit MetalRenderer(MTL::Device* metalDevice);
-    void Draw(const MTK::View* metalKitView);
-    void Clean();
+    void InitMetal(MTL::Device* metalDevice);
+    void RenderMetal(const MTK::View* metalKitView);
+    void CleanMetal();
 
 private:
     MTL::Device* metalDevice;
@@ -32,6 +33,7 @@ private:
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPassDescriptor* renderPassDescriptor;
     MTL::RenderCommandEncoder* renderCommandEncoder;
+    MTK::View* metalKitView;
 };
 
 

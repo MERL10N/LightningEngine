@@ -37,12 +37,6 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
         std::cerr << "Error: Metal is not supported on this device.\n";
         return;
     }
-    
-    if (!device)
-    {
-        std::cerr << "Error: Metal is not supported on this device." << std::endl;
-        return;
-    }
 
     std::string shaderSrc = LoadShaderFile(filePath);
     if (shaderSrc.empty())

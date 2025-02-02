@@ -12,10 +12,10 @@ MetalKitViewDelegate::MetalKitViewDelegate(MTL::Device *metalDevice)
 
 MetalKitViewDelegate::~MetalKitViewDelegate()
 {
-    metalRenderer.Clean();
+    metalRenderer.CleanMetal();
 }
 
 void MetalKitViewDelegate::drawInMTKView(MTK::View *metalKitView)
 {
-    metalRenderer.Draw(metalKitView);
+    metalRenderer.RenderMetal(metalKitView);
 }

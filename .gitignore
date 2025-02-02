@@ -1,19 +1,14 @@
 
 ._*
 .DS_Store
-
 CMakeCache.txt
-
 cmake_install.cmake
-
 CMakeFiles/
-
 LightningEngine.xcodeproj/
-
 CMakeScripts/
-
 bin/
-
 build/
-
 lib/
+cmake-build-debug/
+
+.idea/

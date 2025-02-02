@@ -15,7 +15,17 @@ MetalRenderer::MetalRenderer(MTL::Device *metalDevice)
 {
 }
 
-void MetalRenderer::Clean()
+void MetalRenderer::InitMetal(MTL::Device* metalDevice)
+{
+    this->metalDevice = metalDevice;
+    metalCommandQueue = metalDevice->newCommandQueue();
+    metalCommandBuffer = nullptr;
+    renderPassDescriptor = nullptr;
+    renderCommandEncoder = nullptr;
+}
+
+
+void MetalRenderer::CleanMetal()
 {
     if (metalDevice)
     {
@@ -30,7 +40,7 @@ void MetalRenderer::Clean()
     }
 }
 
-void MetalRenderer::Draw(const MTK::View *metalKitView)
+void MetalRenderer::RenderMetal(const MTK::View *metalKitView)
 {
     metalCommandBuffer = metalCommandQueue->commandBuffer();
     renderPassDescriptor = metalKitView->currentRenderPassDescriptor();
