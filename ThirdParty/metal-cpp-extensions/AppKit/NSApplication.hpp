@@ -62,13 +62,14 @@ namespace NS
 		ActivationPolicyProhibited
 	};
 
+    template<typename AppDelegate>
 	class ApplicationDelegate
 	{
 		public:
-			virtual					~ApplicationDelegate() { }
-			virtual void			applicationWillFinishLaunching( Notification* pNotification ) { }
-			virtual void			applicationDidFinishLaunching( Notification* pNotification ) { }
-			virtual bool			applicationShouldTerminateAfterLastWindowClosed( class Application* pSender ) { return false; }
+				  				~ApplicationDelegate() { }
+			 void			applicationWillFinishLaunching( Notification* pNotification ) { }
+			 void			applicationDidFinishLaunching( Notification* pNotification ) { }
+			 bool			applicationShouldTerminateAfterLastWindowClosed( class Application* pSender ) { return false; }
 	};
 
 	class Application : public NS::Referencing< Application >
@@ -76,7 +77,8 @@ namespace NS
 		public:
 			static Application*		sharedApplication();
 
-			void 					setDelegate( const ApplicationDelegate* pDelegate );
+            template<typename AppDelegate>
+			void 					setDelegate( const AppDelegate* pDelegate );
 
 			bool					setActivationPolicy( ActivationPolicy activationPolicy );
 
@@ -98,7 +100,8 @@ _NS_INLINE NS::Application* NS::Application::sharedApplication()
 	return Object::sendMessage< Application* >( _APPKIT_PRIVATE_CLS( NSApplication ), _APPKIT_PRIVATE_SEL( sharedApplication ) );
 }
 
-_NS_INLINE void NS::Application::setDelegate( const ApplicationDelegate* pAppDelegate )
+template<typename AppDelegate>
+_NS_INLINE void NS::Application::setDelegate( const AppDelegate* pAppDelegate )
 {
 	// TODO: Use a more suitable Object instead of NS::Value?
 	// NOTE: this pWrapper is only held with a weak reference
@@ -107,17 +110,17 @@ _NS_INLINE void NS::Application::setDelegate( const ApplicationDelegate* pAppDel
 	typedef void (*DispatchFunction)( NS::Value*, SEL, void* );
 	
 	DispatchFunction willFinishLaunching = []( Value* pSelf, SEL, void* pNotification ){
-		auto pDel = reinterpret_cast< NS::ApplicationDelegate* >( pSelf->pointerValue() );
+		auto pDel = reinterpret_cast<AppDelegate*>( pSelf->pointerValue() );
 		pDel->applicationWillFinishLaunching( (NS::Notification *)pNotification );
 	};
 
 	DispatchFunction didFinishLaunching = []( Value* pSelf, SEL, void* pNotification ){
-		auto pDel = reinterpret_cast< NS::ApplicationDelegate* >( pSelf->pointerValue() );
+		auto pDel = reinterpret_cast< AppDelegate* >( pSelf->pointerValue() );
 		pDel->applicationDidFinishLaunching( (NS::Notification *)pNotification );
 	};
 
 	DispatchFunction shouldTerminateAfterLastWindowClosed = []( Value* pSelf, SEL, void* pApplication ){
-		auto pDel = reinterpret_cast< NS::ApplicationDelegate* >( pSelf->pointerValue() );
+		auto pDel = reinterpret_cast<AppDelegate* >( pSelf->pointerValue() );
 		pDel->applicationShouldTerminateAfterLastWindowClosed( (NS::Application *)pApplication );
 	};
 

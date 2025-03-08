@@ -18,16 +18,16 @@ namespace MTL
 
 class MetalKitViewDelegate;
 
-class MacApplication : public NS::ApplicationDelegate
+class MacApplication : public NS::ApplicationDelegate<MacApplication>
 {
 public:
-    ~MacApplication() override;
+    ~MacApplication();
 
     static NS::Menu* createMenuBar();
 
-    void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
-    void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
-    bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
+    void applicationWillFinishLaunching( NS::Notification* pNotification );
+    void applicationDidFinishLaunching( NS::Notification* pNotification );
+    bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender );
 
 private:
     NS::Window* window;

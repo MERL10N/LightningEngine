@@ -29,12 +29,19 @@
 #include <Foundation/NSObject.hpp>
 #include <CoreGraphics/CGGeometry.h>
 
+namespace CA {
+	class MetalLayer;
+}
+
 namespace NS
 {
 	class View : public NS::Referencing< View >
 	{
 		public:
 			View*		init( CGRect frame );
+			void		setLayer ( CA::MetalLayer* layer );
+			void		setOpaque ( bool opaque );
+			void		setWantsLayer ( bool wantsLayer );
 	};
 }
 
@@ -43,3 +50,19 @@ _NS_INLINE NS::View* NS::View::init( CGRect frame )
 {
 	return Object::sendMessage< View* >( _APPKIT_PRIVATE_CLS( NSView ), _APPKIT_PRIVATE_SEL( initWithFrame_ ), frame );
 }
+
+_NS_INLINE void NS::View::setLayer( CA::MetalLayer* layer )
+{
+	return Object::sendMessage< void >( this, _APPKIT_PRIVATE_SEL( setLayer_ ), layer );
+}
+
+_NS_INLINE void NS::View::setOpaque( bool opaque )
+{
+	return Object::sendMessage< void >( this, _APPKIT_PRIVATE_SEL( setOpaque_ ), opaque );
+}
+
+_NS_INLINE void NS::View::setWantsLayer( bool wantsLayer )
+{
+	return Object::sendMessage< void >( this, _APPKIT_PRIVATE_SEL( setWantsLayer_ ), wantsLayer );
+}
+
