@@ -23,6 +23,7 @@ class MetalShader
 {
     public:
     MetalShader(const std::string &filePath, MTL::Device* device);
+    ~MetalShader();
     
     private:
     MTL::Device* device;
@@ -40,7 +41,7 @@ class MetalShader
     
     std::string LoadShaderFile(const std::string& path);
     
-     bool isValid;
+    bool isValid;
 };
 
 

@@ -3,8 +3,8 @@
 //
 
 #include "MetalRenderer.h"
-#include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
+#include "Metal/Metal.hpp"
+#include "MetalKit/MetalKit.hpp"
 
 MetalRenderer::MetalRenderer(MTL::Device *metalDevice)
     : metalDevice(metalDevice),

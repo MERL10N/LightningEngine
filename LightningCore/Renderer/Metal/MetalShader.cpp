@@ -8,7 +8,7 @@
 #include <MetalKit/MetalKit.hpp>
 #include <iostream>
 #include <fstream>
-#include <string.h>
+#include <string>
 
 
 std::string MetalShader::LoadShaderFile(const std::string &path)
@@ -30,7 +30,7 @@ std::string MetalShader::LoadShaderFile(const std::string &path)
 
 MetalShader::MetalShader(const std::string& path, MTL::Device* device)
 : device(device),
-  filePath(filePath)
+  filePath(path)
 {
     if (!device)
     {
@@ -87,7 +87,6 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
     renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatDepth32Float);
     renderPipelineDescriptor->setSampleCount(4);
     renderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
-    //SetRenderPipelineState(metalRenderPSO);
     
     metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
     
@@ -107,4 +106,9 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
     vertexFunction->release();
     fragmentFunction->release();
 
+}
+
+MetalShader::~MetalShader()
+{
+    metalRenderPSO->release();
 }

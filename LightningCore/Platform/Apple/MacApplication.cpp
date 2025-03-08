@@ -41,13 +41,13 @@ NS::Menu* MacApplication::createMenuBar()
         auto pApp = NS::Application::sharedApplication();
         pApp->windows()->object<NS::Window>(0)->close();
     });
-    NS::MenuItem* pCloseWindowItem = pWindowMenu->addItem( NS::String::string( "Close Window", UTF8StringEncoding ), closeWindowCb, NS::String::string( "w", UTF8StringEncoding ) );
+    NS::MenuItem* pCloseWindowItem = pWindowMenu->addItem( NS::String::string( "Close Window", UTF8StringEncoding ), closeWindowCb, NS::String::string( "w", UTF8StringEncoding));
     pCloseWindowItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
 
-    pWindowMenuItem->setSubmenu( pWindowMenu );
+    pWindowMenuItem->setSubmenu(pWindowMenu);
 
-    pMainMenu->addItem( pAppMenuItem );
-    pMainMenu->addItem( pWindowMenuItem );
+    pMainMenu->addItem(pAppMenuItem);
+    pMainMenu->addItem(pWindowMenuItem);
 
     pAppMenuItem->release();
     pWindowMenuItem->release();
@@ -57,38 +57,37 @@ NS::Menu* MacApplication::createMenuBar()
     return pMainMenu->autorelease();
 }
 
-void MacApplication::applicationWillFinishLaunching( NS::Notification* pNotification )
+void MacApplication::applicationWillFinishLaunching(NS::Notification* pNotification)
 {
     NS::Menu* pMenu = createMenuBar();
-    NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
-    pApp->setMainMenu( pMenu );
-    pApp->setActivationPolicy( NS::ActivationPolicy::ActivationPolicyRegular );
+    NS::Application* pApp = reinterpret_cast< NS::Application*>(pNotification->object());
+    pApp->setMainMenu(pMenu);
+    pApp->setActivationPolicy(NS::ActivationPolicy::ActivationPolicyRegular);
 }
 
-void MacApplication::applicationDidFinishLaunching( NS::Notification* pNotification )
+void MacApplication::applicationDidFinishLaunching(NS::Notification* pNotification)
 {
-    constexpr auto frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
+    auto frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
 
     window = NS::Window::alloc()->init(
         frame,
         NS::WindowStyleMaskClosable
         |NS::WindowStyleMaskTitled
-       |NS::WindowStyleMaskResizable,
+        |NS::WindowStyleMaskResizable,
         NS::BackingStoreBuffered, false);
 
     metalDevice = MTL::CreateSystemDefaultDevice();
 
     metalKitView = MTK::View::alloc()->init( frame, metalDevice );
-    metalKitView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
-    metalKitView->setClearColor( MTL::ClearColor::Make( 0.1f, 0.1f, 0.1f, 1.0 ) );
+    metalKitView->setColorPixelFormat(MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB);
+    metalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
 
     metalKitViewDelegate = new MetalKitViewDelegate( metalDevice );
     metalKitView->setDelegate( metalKitViewDelegate );
 
     window->setContentView( metalKitView );
-    window->setTitle( NS::String::string( "Lightning Engine (Reborn)", NS::StringEncoding::UTF8StringEncoding ) );
-
-    window->makeKeyAndOrderFront( nullptr );
+    window->setTitle( NS::String::string("Lightning Engine (Reborn)", NS::StringEncoding::UTF8StringEncoding));
+    window->makeKeyAndOrderFront(nullptr);
 
     NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
     pApp->activateIgnoringOtherApps( true );

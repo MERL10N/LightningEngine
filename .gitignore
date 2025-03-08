@@ -12,3 +12,7 @@ lib/
 cmake-build-debug/
 
 .idea/
+
+*.pbxproj
+*.xcodeproj
+*.xcworkspace

@@ -1,4 +1,4 @@
-#include "../../LightningCore/Platform/Apple/MacApplication.h"
+#include <Platform/Apple/MacApplication.h>
 
 int main()
 {

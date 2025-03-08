@@ -12,51 +12,23 @@
 template <class Derived>
 class Renderer
 {
-    enum class RENDER_API
-    {
-        API_METAL = 0,
-        API_VULKAN,
-        NONE
-    };
-
-RENDER_API renderAPI = NONE;
 public:
     Renderer() = default;
 
     template<typename RenderDevice>
     void Init(RenderDevice* renderDevice)
     {
-        switch (renderAPI)
-        {
-            case API_METAL:
-              static_cast<Derived*>(this)->InitMetal(renderDevice);
-              break;
-            case API_VULKAN:
-                static_cast<Derived*>(this)->InitVulkan(renderDevice);
-                break;
-        default:
-            throw std::runtime_error("Renderer::Init: Invalid render API");
-        }
+        static_cast<Derived*>(this)->Initalise(renderDevice);
     }
     
-    void Render()
+    void Draw()
     {
-        static_cast<Derived*>(this)->Render(auto *view);
+        static_cast<Derived*>(this)->Render();
     }
     
     void Clean()
     {
-        switch (renderAPI)
-        {
-        case RENDER_API::API_METAL:
-            static_cast<Derived*>(this)->CleanMetal();
-            break;
-        case RENDER_API::API_VULKAN:
-            static_cast<Derived*>(this)->CleanVulkan();
-            break;
-        default:
-            throw std::runtime_error("Renderer::Render: Invalid render API");
-        }
+        static_cast<Derived*>(this)->CleanRenderer(renderDevice);
     }
 };
 
