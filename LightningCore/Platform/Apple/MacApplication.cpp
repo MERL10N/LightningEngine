@@ -82,11 +82,11 @@ void MacApplication::applicationDidFinishLaunching(NS::Notification* pNotificati
 
     metalDevice = MTL::CreateSystemDefaultDevice();
 
-    metalKitView = MTK::View::alloc()->init( frame, metalDevice );
+    metalKitView = MTK::View::alloc()->init( frame, metalDevice);
     metalKitView->setColorPixelFormat(MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB);
     metalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
 
-    metalKitViewDelegate = new MetalKitViewDelegate( metalDevice );
+    metalKitViewDelegate = new MetalKitViewDelegate(metalDevice);
     metalKitView->setDelegate( metalKitViewDelegate );
 
     window->setContentView( metalKitView );

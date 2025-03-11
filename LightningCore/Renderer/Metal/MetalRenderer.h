@@ -25,6 +25,8 @@ namespace MTK
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
+    MetalRenderer(MTL::Device* metalDevice);
+    ~MetalRenderer();
     void Initialise(MTL::Device* metalDevice);
     void Draw(const MTK::View* metalKitView);
     void Destroy();

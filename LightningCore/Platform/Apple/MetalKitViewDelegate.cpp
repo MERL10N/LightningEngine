@@ -8,18 +8,13 @@
 MetalKitViewDelegate::MetalKitViewDelegate(MTL::Device *metalDevice)
     : ViewDelegate()
 {
-    metalRenderer = new MetalRenderer;
-    metalRenderer->Init(metalDevice);
+    metalRenderer = new MetalRenderer(metalDevice);
 }
 
 MetalKitViewDelegate::~MetalKitViewDelegate()
 {
-    metalRenderer->Clean();
-    if (metalRenderer != nullptr)
-    {
+    if (metalRenderer)
         delete metalRenderer;
-        metalRenderer = nullptr;
-    }
 }
 
 void MetalKitViewDelegate::drawInMTKView(MTK::View *metalKitView)
