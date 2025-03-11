@@ -12,6 +12,7 @@ namespace MTL
     class CommandBuffer;
     class RenderPassDescriptor;
     class RenderCommandEncoder;
+    class RenderPassColorAttachmentDescriptor;
 }
 
 namespace MTK
@@ -19,13 +20,14 @@ namespace MTK
     class View;
 }
 
-class MetalRenderer
+#include "../Renderer.h"
+
+class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
-    explicit MetalRenderer(MTL::Device* metalDevice);
-    void InitMetal(MTL::Device* metalDevice);
-    void RenderMetal(const MTK::View* metalKitView);
-    void CleanMetal();
+    void Initialise(MTL::Device* metalDevice);
+    void Draw(const MTK::View* metalKitView);
+    void Destroy();
 
 private:
     MTL::Device* metalDevice;
@@ -33,6 +35,8 @@ private:
     MTL::CommandBuffer* metalCommandBuffer;
     MTL::RenderPassDescriptor* renderPassDescriptor;
     MTL::RenderCommandEncoder* renderCommandEncoder;
+    MTL::RenderPassColorAttachmentDescriptor* renderPassColorAttachmentDescriptor;
+    
     MTK::View* metalKitView;
 };
 

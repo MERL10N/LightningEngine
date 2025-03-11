@@ -12,7 +12,11 @@ MacApplication::~MacApplication()
     metalKitView->release();
     window->release();
     metalDevice->release();
-    delete metalKitViewDelegate;
+    if (metalKitViewDelegate)
+    {
+        delete metalKitViewDelegate;
+        metalKitViewDelegate = nullptr;
+    }
 }
 
 NS::Menu* MacApplication::createMenuBar()

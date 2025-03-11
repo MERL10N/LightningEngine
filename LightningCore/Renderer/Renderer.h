@@ -18,17 +18,18 @@ public:
     template<typename RenderDevice>
     void Init(RenderDevice* renderDevice)
     {
-        static_cast<Derived*>(this)->Initalise(renderDevice);
+        static_cast<Derived*>(this)->Initialise(renderDevice);
     }
     
-    void Draw()
+    template<typename RenderView>
+    void Render(RenderView* renderView)
     {
-        static_cast<Derived*>(this)->Render();
+        static_cast<Derived*>(this)->Draw(renderView);
     }
     
     void Clean()
     {
-        static_cast<Derived*>(this)->CleanRenderer(renderDevice);
+        static_cast<Derived*>(this)->Destroy();
     }
 };
 

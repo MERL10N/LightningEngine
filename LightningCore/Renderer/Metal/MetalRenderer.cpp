@@ -6,16 +6,7 @@
 #include "Metal/Metal.hpp"
 #include "MetalKit/MetalKit.hpp"
 
-MetalRenderer::MetalRenderer(MTL::Device *metalDevice)
-    : metalDevice(metalDevice),
-      metalCommandQueue(metalDevice->newCommandQueue()),
-      metalCommandBuffer(nullptr),
-      renderPassDescriptor(nullptr),
-      renderCommandEncoder(nullptr)
-{
-}
-
-void MetalRenderer::InitMetal(MTL::Device* metalDevice)
+void MetalRenderer::Initialise(MTL::Device* metalDevice)
 {
     this->metalDevice = metalDevice;
     metalCommandQueue = metalDevice->newCommandQueue();
@@ -24,8 +15,17 @@ void MetalRenderer::InitMetal(MTL::Device* metalDevice)
     renderCommandEncoder = nullptr;
 }
 
+void MetalRenderer::Draw(const MTK::View *metalKitView)
+{
+    metalCommandBuffer = metalCommandQueue->commandBuffer();
+    renderPassDescriptor = metalKitView->currentRenderPassDescriptor();
+    renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
+    renderCommandEncoder->endEncoding();
+    metalCommandBuffer->presentDrawable(metalKitView->currentDrawable());
+    metalCommandBuffer->commit();
+}
 
-void MetalRenderer::CleanMetal()
+void MetalRenderer::Destroy()
 {
     if (metalDevice)
     {
@@ -38,16 +38,6 @@ void MetalRenderer::CleanMetal()
         metalCommandQueue->release();
         metalCommandQueue = nullptr;
     }
-}
-
-void MetalRenderer::RenderMetal(const MTK::View *metalKitView)
-{
-    metalCommandBuffer = metalCommandQueue->commandBuffer();
-    renderPassDescriptor = metalKitView->currentRenderPassDescriptor();
-    renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
-    renderCommandEncoder->endEncoding();
-    metalCommandBuffer->presentDrawable(metalKitView->currentDrawable());
-    metalCommandBuffer->commit();
 }
 
 
