@@ -6,6 +6,7 @@
 #define MACAPPLICATION_H
 
 #include <AppKit/AppKit.hpp>
+#include <memory>
 
 namespace MTK
 {
@@ -18,16 +19,16 @@ namespace MTL
 
 class MetalKitViewDelegate;
 
-class MacApplication : public NS::ApplicationDelegate<MacApplication>
+class MacApplication : public NS::ApplicationDelegate
 {
 public:
     ~MacApplication();
 
     static NS::Menu* createMenuBar();
 
-    void applicationWillFinishLaunching( NS::Notification* pNotification );
-    void applicationDidFinishLaunching( NS::Notification* pNotification );
-    bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender );
+    virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
+    virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
+    virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
 
 private:
     NS::Window* window;

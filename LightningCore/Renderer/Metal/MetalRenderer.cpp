@@ -11,8 +11,11 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
   metalCommandQueue(metalDevice->newCommandQueue()),
   metalCommandBuffer(nullptr),
   renderPassDescriptor(nullptr),
-  renderCommandEncoder(nullptr)
+  renderCommandEncoder(nullptr),
+  shader("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Shaders/Triangle.metal", metalDevice),
+  timer(Timer())
 {
+    CreateTriangle();
 }
 
 MetalRenderer::~MetalRenderer()
@@ -28,15 +31,30 @@ MetalRenderer::~MetalRenderer()
         metalCommandQueue->release();
         metalCommandQueue = nullptr;
     }
+    
+    if (triangleVertexBuffer)
+    {
+        triangleVertexBuffer->release();
+        triangleVertexBuffer = nullptr;
+    }
 }
 
-void MetalRenderer::Draw(const MTK::View *metalKitView)
+void MetalRenderer::CreateTriangle()
+{
+    triangleVertexBuffer = MeshBuilder::GenerateTriangle(metalDevice);
+}
+
+void MetalRenderer::Render(const MTK::View *metalKitView)
 {
     metalCommandBuffer = metalCommandQueue->commandBuffer();
     renderPassDescriptor = metalKitView->currentRenderPassDescriptor();
     renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
+    
+    renderCommandEncoder->setRenderPipelineState(shader.GetRenderPSO());
+    renderCommandEncoder->setVertexBuffer(triangleVertexBuffer, 0, 0);
+    renderCommandEncoder->drawPrimitives(MTL::PrimitiveType::PrimitiveTypeTriangle, NS::UInteger{0}, NS::UInteger{3});
+    
     renderCommandEncoder->endEncoding();
-    metalCommandBuffer->presentDrawable(metalKitView->currentDrawable());
+    metalCommandBuffer->presentDrawable( metalKitView->currentDrawable());
     metalCommandBuffer->commit();
 }
-

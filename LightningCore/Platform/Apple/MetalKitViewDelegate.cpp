@@ -6,15 +6,14 @@
 #include "../../Renderer/Metal/MetalRenderer.h"
 
 MetalKitViewDelegate::MetalKitViewDelegate(MTL::Device *metalDevice)
-    : ViewDelegate()
+    : ViewDelegate(),
+      metalRenderer(new MetalRenderer(metalDevice))
 {
-    metalRenderer = new MetalRenderer(metalDevice);
 }
 
 MetalKitViewDelegate::~MetalKitViewDelegate()
 {
-    if (metalRenderer)
-        delete metalRenderer;
+    delete metalRenderer;
 }
 
 void MetalKitViewDelegate::drawInMTKView(MTK::View *metalKitView)

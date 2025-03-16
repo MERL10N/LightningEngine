@@ -13,6 +13,7 @@ namespace MTL
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class RenderPassColorAttachmentDescriptor;
+    class Buffer;
 }
 
 namespace MTK
@@ -20,16 +21,25 @@ namespace MTK
     class View;
 }
 
+namespace CA
+{
+    class MetalDrawable;
+}
+
+
 #include "../Renderer.h"
+#include "MetalShader.h"
+#include "../../Primitives/MeshBuilder.h"
+#include "../../Timer/Timer.h"
 
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
     MetalRenderer(MTL::Device* metalDevice);
     ~MetalRenderer();
-    void Initialise(MTL::Device* metalDevice);
-    void Draw(const MTK::View* metalKitView);
-    void Destroy();
+
+    void CreateTriangle();
+    void Render(const MTK::View* metalKitView);
 
 private:
     MTL::Device* metalDevice;
@@ -38,10 +48,14 @@ private:
     MTL::RenderPassDescriptor* renderPassDescriptor;
     MTL::RenderCommandEncoder* renderCommandEncoder;
     MTL::RenderPassColorAttachmentDescriptor* renderPassColorAttachmentDescriptor;
-    
+    MTL::Buffer* triangleVertexBuffer;
     MTK::View* metalKitView;
+    CA::MetalDrawable* metalDrawable;
+    
+    MetalShader shader;
+    MeshBuilder meshBuilder;
+    
+    Timer timer;
+    
 };
-
-
-
 #endif //METALRENDERER_H

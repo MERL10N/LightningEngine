@@ -16,8 +16,8 @@ class MetalKitViewDelegate : public MTK::ViewDelegate
 {
 public:
     explicit MetalKitViewDelegate( MTL::Device* metalDevice );
-    ~MetalKitViewDelegate() override;
-    void drawInMTKView( MTK::View* metalKitView ) override;
+    virtual ~MetalKitViewDelegate() override;
+    virtual void drawInMTKView(MTK::View* metalKitView ) override;
 
 private:
     Renderer<MetalRenderer>* metalRenderer;

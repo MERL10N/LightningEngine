@@ -36,19 +36,30 @@ project "LightningGame"
     links { "LightningCore" }
 
     filter "system:macosx"
-        targetextension ".app"
+    filter "system:macosx"
+    targetextension ".app"
+    xcodebuildsettings {
+        ["INFOPLIST_FILE"] = "Info.plist",
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
+        ["ARCHS"] = "arm64",
+        ["VALID_ARCHS"] = "arm64",
+        ["ONLY_ACTIVE_ARCH"] = "YES",
+        ["SKIP_INSTALL"] = "YES",
+        ["ENABLE_BITCODE"] = "NO"
+    }
+
+    -- Enable profiling & debugging only for Debug builds
+    filter "configurations:Debug"
+        symbols "On"
+        optimize "Off"
         xcodebuildsettings {
-            ["INFOPLIST_FILE"] = "Info.plist",  -- Explicitly set the Info.plist path
-            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
-            ["ARCHS"] = "arm64",
-            ["VALID_ARCHS"] = "arm64",
-            ["ONLY_ACTIVE_ARCH"] = "YES",
-            ["CODE_SIGN_IDENTITY"] = "-",
+            ["CODE_SIGN_IDENTITY"] = "Apple Development",
             ["CODE_SIGN_STYLE"] = "Automatic",
-            ["CODE_SIGNING_REQUIRED"] = "NO",
-            ["CODE_SIGNING_ALLOWED"] = "NO",
-            ["SKIP_INSTALL"] = "YES",
-            ["ENABLE_BITCODE"] = "NO"
+            ["CODE_SIGNING_REQUIRED"] = "YES",
+            ["CODE_SIGNING_ALLOWED"] = "YES",
+            ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements",
+            ["ENABLE_HARDENED_RUNTIME"] = "NO",
+            ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
         }
 
         -- Link Apple frameworks
@@ -85,17 +96,28 @@ location "LightningEditor"
         targetextension ".app"
         xcodebuildsettings {
             ["INFOPLIST_FILE"] = "Info.plist",  -- Explicitly set the Info.plist path
-            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
+            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
             ["ARCHS"] = "arm64",
             ["VALID_ARCHS"] = "arm64",
             ["ONLY_ACTIVE_ARCH"] = "YES",
-            ["CODE_SIGN_IDENTITY"] = "-",
-            ["CODE_SIGN_STYLE"] = "Automatic",
-            ["CODE_SIGNING_REQUIRED"] = "NO",
-            ["CODE_SIGNING_ALLOWED"] = "NO",
             ["SKIP_INSTALL"] = "YES",
             ["ENABLE_BITCODE"] = "NO"
         }
+
+        -- Enable profiling & debugging only for Debug builds
+        filter "configurations:Debug"
+            symbols "On"
+            optimize "Off"
+            xcodebuildsettings {
+                ["CODE_SIGN_IDENTITY"] = "Apple Development",
+                ["CODE_SIGN_STYLE"] = "Automatic",
+                ["CODE_SIGNING_REQUIRED"] = "YES",
+                ["CODE_SIGNING_ALLOWED"] = "YES",
+                ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements", -- Allows Instruments profiling
+                ["ENABLE_HARDENED_RUNTIME"] = "NO",  -- Allows debugging tools
+                ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
+            }
+
 
         -- Link Apple frameworks
         linkoptions { 

@@ -9,28 +9,19 @@
 #define RENDERER_H
 #include <stdexcept>
 
-template <class Derived>
+template <class RenderAPI>
 class Renderer
 {
 public:
     Renderer() = default;
+    ~Renderer() = default;
 
-    template<typename RenderDevice>
-    void Init(RenderDevice* renderDevice)
-    {
-        static_cast<Derived*>(this)->Initialise(renderDevice);
-    }
-    
     template<typename RenderView>
     void Render(RenderView* renderView)
     {
-        static_cast<Derived*>(this)->Draw(renderView);
+        static_cast<RenderAPI*>(this)->Render(renderView);
     }
     
-    void Clean()
-    {
-        static_cast<Derived*>(this)->Destroy();
-    }
 };
 
 #endif /* Renderer_hpp */

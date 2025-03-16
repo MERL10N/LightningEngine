@@ -9,9 +9,24 @@
 
 MacApplication::~MacApplication()
 {
-    metalKitView->release();
-    window->release();
-    metalDevice->release();
+    if (metalKitView)
+    {
+        metalKitView->release();
+        metalKitView = nullptr;
+    }
+   
+    if (window)
+    {
+        window->release();
+        window = nullptr;
+    }
+    
+    if (metalDevice)
+    {
+        metalDevice->release();
+        metalDevice = nullptr;
+    }
+    
     if (metalKitViewDelegate)
     {
         delete metalKitViewDelegate;
@@ -82,9 +97,10 @@ void MacApplication::applicationDidFinishLaunching(NS::Notification* pNotificati
 
     metalDevice = MTL::CreateSystemDefaultDevice();
 
-    metalKitView = MTK::View::alloc()->init( frame, metalDevice);
-    metalKitView->setColorPixelFormat(MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB);
+    metalKitView = MTK::View::alloc()->init(frame, metalDevice);
+    metalKitView->setColorPixelFormat(MTL::PixelFormatBGRA8Unorm);
     metalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
+    metalKitView->setPreferredFramesPerSecond(120);
 
     metalKitViewDelegate = new MetalKitViewDelegate(metalDevice);
     metalKitView->setDelegate( metalKitViewDelegate );

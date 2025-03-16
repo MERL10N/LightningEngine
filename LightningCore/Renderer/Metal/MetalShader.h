@@ -17,6 +17,7 @@ namespace MTL
    class Library;
    class DepthStencilState;
    class DepthStencilDescriptor;
+   class RenderCommandEncoder;
 }
 
 class MetalShader
@@ -24,6 +25,14 @@ class MetalShader
     public:
     MetalShader(const std::string &filePath, MTL::Device* device);
     ~MetalShader();
+    
+    template <typename T>
+    void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
+    
+    template <typename T>
+    void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
+    
+    MTL::RenderPipelineState* GetRenderPSO();
     
     private:
     MTL::Device* device;

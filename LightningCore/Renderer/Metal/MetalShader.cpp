@@ -84,9 +84,9 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
     renderPipelineDescriptor->setVertexFunction(vertexFunction);
     renderPipelineDescriptor->setFragmentFunction(fragmentFunction);
     assert(renderPipelineDescriptor);
-    renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatDepth32Float);
-    renderPipelineDescriptor->setSampleCount(4);
-    renderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
+    renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    //renderPipelineDescriptor->setSampleCount(4);
+    //renderPipelineDescriptor->setAtt(MTL::PixelFormatBGRA8Unorm);
     
     metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
     
@@ -95,13 +95,13 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
         std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
     }
     
-    depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
-    depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
-    depthStencilDescriptor->setDepthWriteEnabled(true);
-    depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
+   // depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
+   // depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
+    //depthStencilDescriptor->setDepthWriteEnabled(true);
+   // depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
 
     renderPipelineDescriptor->release();
-    depthStencilDescriptor->release();
+   // depthStencilDescriptor->release();
     library->release();
     vertexFunction->release();
     fragmentFunction->release();
@@ -111,4 +111,21 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
 MetalShader::~MetalShader()
 {
     metalRenderPSO->release();
+}
+
+template <typename T>
+void MetalShader::SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+{
+    encoder->setFragmentBytes(value, sizeof(value), index);
+}
+
+template <typename T>
+void MetalShader::SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+{
+    encoder->setVertexBytes(value, sizeof(value), index);
+}
+
+MTL::RenderPipelineState* MetalShader::GetRenderPSO()
+{
+    return metalRenderPSO;
 }

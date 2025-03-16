@@ -8,4 +8,5 @@ int main()
 
     sharedApplication->setDelegate(&macApp);
     sharedApplication->run();
+    sharedApplication->release();
 }
