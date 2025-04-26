@@ -113,7 +113,7 @@ location "LightningEditor"
                 ["CODE_SIGN_STYLE"] = "Automatic",
                 ["CODE_SIGNING_REQUIRED"] = "YES",
                 ["CODE_SIGNING_ALLOWED"] = "YES",
-                ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements", -- Allows Instruments profiling
+               -- ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements", -- Allows Instruments profiling
                 ["ENABLE_HARDENED_RUNTIME"] = "NO",  -- Allows debugging tools
                 ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
             }

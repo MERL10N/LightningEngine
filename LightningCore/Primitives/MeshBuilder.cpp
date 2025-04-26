@@ -92,7 +92,7 @@ MTL::Buffer* MeshBuilder::GenerateCube(MTL::Device* metalDevice)
 
 MTL::Buffer* MeshBuilder::GenerateTriangle(MTL::Device* metalDevice)
 {
-    simd::float3 triangleVertices[] =
+    constexpr simd::float3 triangleVertices[] =
     {
            {-0.5f, -0.5f, 0.0f},
            { 0.5f, -0.5f, 0.0f},

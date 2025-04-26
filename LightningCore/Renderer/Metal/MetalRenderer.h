@@ -50,7 +50,6 @@ private:
     MTL::RenderPassColorAttachmentDescriptor* renderPassColorAttachmentDescriptor;
     MTL::Buffer* triangleVertexBuffer;
     MTK::View* metalKitView;
-    CA::MetalDrawable* metalDrawable;
     
     MetalShader shader;
     MeshBuilder meshBuilder;

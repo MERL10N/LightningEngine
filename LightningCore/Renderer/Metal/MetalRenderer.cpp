@@ -12,7 +12,7 @@ MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
   metalCommandBuffer(nullptr),
   renderPassDescriptor(nullptr),
   renderCommandEncoder(nullptr),
-  shader("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Shaders/Triangle.metal", metalDevice),
+  shader("Shaders/Triangle.metal", metalDevice),
   timer(Timer())
 {
     CreateTriangle();
