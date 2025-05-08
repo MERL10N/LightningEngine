@@ -18,12 +18,14 @@ namespace MTL
    class DepthStencilState;
    class DepthStencilDescriptor;
    class RenderCommandEncoder;
+   class RenderPassDescriptor;
+   class VertexDescriptor;
 }
 
 class MetalShader
 {
     public:
-    MetalShader(const std::string &filePath, MTL::Device* device);
+    MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice);
     ~MetalShader();
     
     template <typename T>
@@ -32,25 +34,26 @@ class MetalShader
     template <typename T>
     void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
     
-    MTL::RenderPipelineState* GetRenderPSO();
+    MTL::RenderPipelineState* GetRenderPipelineState();
     
     private:
-    MTL::Device* device;
-    MTL::Library* library;
-    MTL::Function* vertexFunction;
-    MTL::Function* fragmentFunction;
-    MTL::RenderPipelineDescriptor* renderPipelineDescriptor;
-    MTL::RenderPipelineState* metalRenderPSO;
-    MTL::DepthStencilState* depthStencilState;
-    MTL::DepthStencilDescriptor* depthStencilDescriptor;
+    MTL::Device* m_MetalDevice;
+    MTL::Library* m_Library;
+    MTL::Function* m_VertexFunction;
+    MTL::Function* m_FragmentFunction;
+    MTL::RenderPipelineDescriptor* m_RenderPipelineDescriptor;
+    MTL::RenderPipelineState* m_RenderPipelineState;
+    MTL::DepthStencilState* m_DepthStencilState;
+    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
     MTL::Texture* targetTexture;
-    std::string filePath;
-    bool bResult;
+    MTL::VertexDescriptor* m_VertexDescriptor;
+    std::string m_FilePath;
+    bool b_Result;
     
     
     std::string LoadShaderFile(const std::string& path);
     
-    bool isValid;
+    bool b_IsValid;
 };
 
 

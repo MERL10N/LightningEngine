@@ -3,58 +3,63 @@
 //
 
 #include "MetalRenderer.h"
-#include "Metal/Metal.hpp"
-#include "MetalKit/MetalKit.hpp"
+#include <Metal/Metal.hpp>
+#include <MetalKit/MetalKit.hpp>
+#include "MeshBuilder.h"
+#include "MetalBuffer.h"
 
-MetalRenderer::MetalRenderer(MTL::Device* metalDevice)
-: metalDevice(metalDevice),
-  metalCommandQueue(metalDevice->newCommandQueue()),
-  metalCommandBuffer(nullptr),
-  renderPassDescriptor(nullptr),
-  renderCommandEncoder(nullptr),
-  shader("Shaders/Triangle.metal", metalDevice),
-  timer(Timer())
+MetalRenderer::MetalRenderer(MTL::Device* p_metalDevice)
+: m_MetalDevice(p_metalDevice),
+  m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
+  m_MetalCommandBuffer(nullptr),
+  m_RenderPassDescriptor(nullptr),
+  m_RenderCommandEncoder(nullptr),
+  m_Shader("Shaders/Shader.metal", m_MetalDevice),
+  m_Timer(Timer())
 {
     CreateTriangle();
+    
 }
 
 MetalRenderer::~MetalRenderer()
 {
-    if (metalDevice)
+    if (m_MetalDevice)
     {
-        metalDevice->release();
-        metalDevice = nullptr;
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
     }
 
-    if (metalCommandQueue)
+    if (m_MetalCommandQueue)
     {
-        metalCommandQueue->release();
-        metalCommandQueue = nullptr;
+        m_MetalCommandQueue->release();
+        m_MetalCommandQueue = nullptr;
     }
     
-    if (triangleVertexBuffer)
+    if (m_VertexBuffer)
     {
-        triangleVertexBuffer->release();
-        triangleVertexBuffer = nullptr;
+        delete m_VertexBuffer;
+        m_VertexBuffer = nullptr;
     }
 }
 
 void MetalRenderer::CreateTriangle()
 {
-    triangleVertexBuffer = MeshBuilder::GenerateTriangle(metalDevice);
+    m_VertexBuffer = MeshBuilder::GenerateTriangle(m_MetalDevice);
 }
 
-void MetalRenderer::Render(const MTK::View *metalKitView)
+
+void MetalRenderer::Render(const MTK::View* p_MetalKitView)
 {
-    metalCommandBuffer = metalCommandQueue->commandBuffer();
-    renderPassDescriptor = metalKitView->currentRenderPassDescriptor();
-    renderCommandEncoder = metalCommandBuffer->renderCommandEncoder(renderPassDescriptor);
+    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    m_RenderPassDescriptor = p_MetalKitView->currentRenderPassDescriptor();
+    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     
-    renderCommandEncoder->setRenderPipelineState(shader.GetRenderPSO());
-    renderCommandEncoder->setVertexBuffer(triangleVertexBuffer, 0, 0);
-    renderCommandEncoder->drawPrimitives(MTL::PrimitiveType::PrimitiveTypeTriangle, NS::UInteger{0}, NS::UInteger{3});
+    m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
+    m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
+
+    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger{0}, NS::UInteger{3});
     
-    renderCommandEncoder->endEncoding();
-    metalCommandBuffer->presentDrawable( metalKitView->currentDrawable());
-    metalCommandBuffer->commit();
+    m_RenderCommandEncoder->endEncoding();
+    m_MetalCommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
+    m_MetalCommandBuffer->commit();
 }

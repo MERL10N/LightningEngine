@@ -11,7 +11,6 @@
 
 class MetalRenderer;
 
-
 class MetalKitViewDelegate : public MTK::ViewDelegate
 {
 public:

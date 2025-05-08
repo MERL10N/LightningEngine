@@ -1,34 +1,19 @@
 //
-//  MeshBuilder.h
+//  MeshBuilder.hpp
 //  LightningCore
 //
-//  Created by Kian Marvi on 3/13/25.
+//  Created by Kian Marvi on 5/6/25.
 //
 
 #ifndef MeshBuilder_hpp
 #define MeshBuilder_hpp
-
-#include <stdio.h>
-
-namespace MTL
-{
-    class Buffer;
-    class Device;
-    class RenderCommandEncoder;
-}
-
-class MetalShader;
-
+#ifdef __APPLE__
+    class MetalVertexBuffer;
+    using VertexBuffer = MetalVertexBuffer;
+#endif
 class MeshBuilder
 {
 public:
-    // Generate a quad
-    static MTL::Buffer* GenerateQuad(MTL::Device* metalDevice);
-    static MTL::Buffer* GenerateCube(MTL::Device* metalDevice);
-    static MTL::Buffer* GenerateTriangle(MTL::Device* metalDevice);
-    
-    void GenerateTriangle(MTL::RenderCommandEncoder* encoder, MetalShader& shader);
+    static VertexBuffer* GenerateTriangle(void* p_Device);
 };
-
-
 #endif /* MeshBuilder_hpp */

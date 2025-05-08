@@ -2,121 +2,26 @@
 //  MeshBuilder.cpp
 //  LightningCore
 //
-//  Created by Kian Marvi on 3/13/25.
+//  Created by Kian Marvi on 5/6/25.
 //
 
 #include "MeshBuilder.h"
-#include "VertexData.h"
-#include <Metal/Metal.hpp>
-#include "../Renderer/Metal/MetalShader.h"
 
-/**
- @brief Generate a quad and load it into Metal
- @param metalDevice A metal compatible device (Either mac or iOS)
- */
+#ifdef __APPLE__
+    #include "../Renderer/Metal/MetalBuffer.h"
+#endif
 
-MTL::Buffer* MeshBuilder::GenerateQuad(MTL::Device* metalDevice)
+VertexBuffer* MeshBuilder::GenerateTriangle(void* p_Device)
 {
-    VertexData squareVertices[]
-    {
-            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-            {{-0.5,  0.5,  0.5, 1.0f}, {0.0f, 1.0f}},
-            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5, -0.5,  0.5, 1.0f}, {0.0f, 0.0f}},
-            {{ 0.5,  0.5,  0.5, 1.0f}, {1.0f, 1.0f}},
-            {{ 0.5, -0.5,  0.5, 1.0f}, {1.0f, 0.0f}}
-    };
-    
-    MTL::Buffer* quadVertexBuffer = metalDevice->newBuffer(&squareVertices, sizeof(squareVertices), MTL::ResourceStorageModeShared);
-    return quadVertexBuffer;
-}
-
-MTL::Buffer* MeshBuilder::GenerateCube(MTL::Device* metalDevice)
-{
-    VertexData cubeVertices[] =
-    {
-            // Front face              // Normals            // Texture Coordinate
-            {{-0.5, -0.5, 0.5, 1.0}  , {0.0, 0.0, 1.0, 1.0}, {0.0, 0.0}},
-            {{0.5, -0.5, 0.5, 1.0}   , {0.0, 0.0, 1.0, 1.0}, {1.0, 0.0}},
-            {{0.5, 0.5, 0.5, 1.0}    , {0.0, 0.0, 1.0, 1.0}, {1.0, 1.0}},
-            {{0.5, 0.5, 0.5, 1.0}    , {0.0, 0.0, 1.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, 0.5, 0.5, 1.0}   , {0.0, 0.0, 1.0, 1.0}, {0.0, 1.0}},
-            {{-0.5, -0.5, 0.5, 1.0}  , {0.0, 0.0, 1.0, 1.0}, {0.0, 0.0}},
-
-            // Back face
-            {{0.5, -0.5, -0.5, 1.0}  ,  {0.0, 0.0,-1.0, 1.0}, {0.0, 0.0}},
-            {{-0.5, -0.5, -0.5, 1.0} ,  {0.0, 0.0,-1.0, 1.0}, {1.0, 0.0}},
-            {{-0.5, 0.5, -0.5, 1.0}  ,  {0.0, 0.0,-1.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, 0.5, -0.5, 1.0}  ,  {0.0, 0.0,-1.0, 1.0}, {1.0, 1.0}},
-            {{0.5, 0.5, -0.5, 1.0}   ,  {0.0, 0.0,-1.0, 1.0}, {0.0, 1.0}},
-            {{0.5, -0.5, -0.5, 1.0}  ,  {0.0, 0.0,-1.0, 1.0}, {0.0, 0.0}},
-
-            // Top face
-            {{-0.5, 0.5, 0.5, 1.0}   , {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0}},
-            {{0.5, 0.5, 0.5, 1.0}    , {0.0, 1.0, 0.0, 1.0}, {1.0, 0.0}},
-            {{0.5, 0.5, -0.5, 1.0}   , {0.0, 1.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{0.5, 0.5, -0.5, 1.0}   , {0.0, 1.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, 0.5, -0.5, 1.0}  , {0.0, 1.0, 0.0, 1.0}, {0.0, 1.0}},
-            {{-0.5, 0.5, 0.5, 1.0}   , {0.0, 1.0, 0.0, 1.0}, {0.0, 0.0}},
-
-            // Bottom face
-            {{-0.5, -0.5, -0.5, 1.0} , {0.0,-1.0, 0.0, 1.0}, {0.0, 0.0}},
-            {{0.5, -0.5, -0.5, 1.0}  , {0.0,-1.0, 0.0, 1.0}, {1.0, 0.0}},
-            {{0.5, -0.5, 0.5, 1.0}   , {0.0,-1.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{0.5, -0.5, 0.5, 1.0}   , {0.0,-1.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, -0.5, 0.5, 1.0}  , {0.0,-1.0, 0.0, 1.0}, {0.0, 1.0}},
-            {{-0.5, -0.5, -0.5, 1.0} , {0.0,-1.0, 0.0, 1.0}, {0.0, 0.0}},
-
-            // Left face
-            {{-0.5, -0.5, -0.5, 1.0} ,  {-1.0,0.0, 0.0, 1.0}, {0.0, 0.0}},
-            {{-0.5, -0.5, 0.5, 1.0}  ,  {-1.0,0.0, 0.0, 1.0}, {1.0, 0.0}},
-            {{-0.5, 0.5, 0.5, 1.0}   ,  {-1.0,0.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, 0.5, 0.5, 1.0}   ,  {-1.0,0.0, 0.0, 1.0}, {1.0, 1.0}},
-            {{-0.5, 0.5, -0.5, 1.0}  ,  {-1.0,0.0, 0.0, 1.0}, {0.0, 1.0}},
-            {{-0.5, -0.5, -0.5, 1.0} ,  {-1.0,0.0, 0.0, 1.0}, {0.0, 0.0}},
-
-            // Right face
-           {{0.5, -0.5, 0.5, 1.0}    ,  {1.0, 0.0, 0.0, 1.0}, {0.0, 0.0}},
-           {{0.5, -0.5, -0.5, 1.0}   ,  {1.0, 0.0, 0.0, 1.0}, {1.0, 0.0}},
-           {{0.5, 0.5, -0.5, 1.0}    ,  {1.0, 0.0, 0.0, 1.0}, {1.0, 1.0}},
-           {{0.5, 0.5, -0.5, 1.0}    ,  {1.0, 0.0, 0.0, 1.0}, {1.0, 1.0}},
-           {{0.5, 0.5, 0.5, 1.0}     ,  {1.0, 0.0, 0.0, 1.0}, {0.0, 1.0}},
-           {{0.5, -0.5, 0.5, 1.0}    ,  {1.0, 0.0, 0.0, 1.0}, {0.0, 0.0}},
-        };
-    
-    MTL::Buffer* cubeVertexBuffer = metalDevice->newBuffer(&cubeVertices,
-                                                            sizeof(cubeVertices),
-                                                            MTL::ResourceStorageModeShared);
-    return cubeVertexBuffer;
-}
-
-MTL::Buffer* MeshBuilder::GenerateTriangle(MTL::Device* metalDevice)
-{
-    constexpr simd::float3 triangleVertices[] =
-    {
-           {-0.5f, -0.5f, 0.0f},
-           { 0.5f, -0.5f, 0.0f},
-           { 0.0f,  0.5f, 0.0f}
-    };
-
-
-    MTL::Buffer* triangleVertexBuffer = metalDevice->newBuffer(&triangleVertices,
-                                                     sizeof(triangleVertices),
-                                                     MTL::ResourceStorageModeShared);
-    
-    return triangleVertexBuffer;
-}
-
-void MeshBuilder::GenerateTriangle(MTL::RenderCommandEncoder *encoder, MetalShader& shader)
-{
-    float vertices[] =
+    constexpr float vertices[] =
     {
         // positions         // colors
          0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
         -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
          0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
     };
-    encoder->setVertexBytes(vertices, sizeof(vertices), 0);
-    //shader.SetVertexShaderUniform(encoder, &vertices, 0);
+    
+#ifdef __APPLE__
+    return new MetalVertexBuffer(vertices, sizeof(vertices), static_cast<MTL::Device*>(p_Device));
+#endif
 }
-

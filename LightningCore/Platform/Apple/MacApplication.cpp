@@ -86,7 +86,7 @@ void MacApplication::applicationWillFinishLaunching(NS::Notification* pNotificat
 
 void MacApplication::applicationDidFinishLaunching(NS::Notification* pNotification)
 {
-    auto frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
+    constexpr auto frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
 
     window = NS::Window::alloc()->init(
         frame,

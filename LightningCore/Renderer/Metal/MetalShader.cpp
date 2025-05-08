@@ -5,7 +5,6 @@
 #include "MetalShader.h"
 
 #include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -28,17 +27,17 @@ std::string MetalShader::LoadShaderFile(const std::string &path)
     return std::string(buffer.begin(), buffer.end());
 }
 
-MetalShader::MetalShader(const std::string& path, MTL::Device* device)
-: device(device),
-  filePath(path)
+MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_FilePath(p_FilePath)
 {
-    if (!device)
+    if (!p_MetalDevice)
     {
         std::cerr << "Error: Metal is not supported on this device.\n";
         return;
     }
 
-    std::string shaderSrc = LoadShaderFile(filePath);
+    std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -47,16 +46,16 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
     
     NS::Error* error = nullptr;
     
-    library = device->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
-    if (!library)
+    m_Library = p_MetalDevice->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
+    if (!m_Library)
     {
         __builtin_printf( "%s", error->localizedDescription()->utf8String() );
         assert( false );
     }
 
-    vertexFunction = library->newFunction(NS::String::string("vertexShader", NS::UTF8StringEncoding)); // Load the vertex function
+    m_VertexFunction = m_Library->newFunction(NS::String::string("vertexShader", NS::UTF8StringEncoding)); // Load the vertex function
     
-    if (!vertexFunction)
+    if (!m_VertexFunction)
     {
         std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
         std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
@@ -66,51 +65,64 @@ MetalShader::MetalShader(const std::string& path, MTL::Device* device)
         std::cout << "Vertex function successfully found and loaded" << std::endl;
     }
     
-    fragmentFunction = library->newFunction(NS::String::string("fragmentShader", NS::UTF8StringEncoding)); // Load the fragment function
+    m_FragmentFunction = m_Library->newFunction(NS::String::string("fragmentShader", NS::UTF8StringEncoding)); // Load the fragment function
     
-    if (!fragmentFunction)
+    if (!m_FragmentFunction)
     {
         std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
         std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
     }
     else
     {
-        std::cout << "Fragment function successfully found and loaded" << std::endl;
+        std::println( "Fragment function successfully found and loaded");
     }
     
-    bResult = true;
+    b_Result = true;
 
-    renderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-    renderPipelineDescriptor->setVertexFunction(vertexFunction);
-    renderPipelineDescriptor->setFragmentFunction(fragmentFunction);
-    assert(renderPipelineDescriptor);
-    renderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-    //renderPipelineDescriptor->setSampleCount(4);
-    //renderPipelineDescriptor->setAtt(MTL::PixelFormatBGRA8Unorm);
+    m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+    m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
+    m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
+    assert(m_RenderPipelineDescriptor);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+
+    // Initialise vertex descriptor
+    m_VertexDescriptor = MTL::VertexDescriptor::vertexDescriptor();
+    // Set attribute 0: position (float3 = 3 floats)
+    m_VertexDescriptor->attributes()->object(0)->setFormat(MTL::VertexFormatFloat3);
+    m_VertexDescriptor->attributes()->object(0)->setOffset(0);
+    m_VertexDescriptor->attributes()->object(0)->setBufferIndex(0);
     
-    metalRenderPSO = device->newRenderPipelineState(renderPipelineDescriptor, &error);
     
-    if (!metalRenderPSO)
+    // Set attribute 1: color
+    m_VertexDescriptor->attributes()->object(1)->setFormat(MTL::VertexFormatFloat3);
+    m_VertexDescriptor->attributes()->object(1)->setOffset(sizeof(float) * 3);
+    m_VertexDescriptor->attributes()->object(1)->setBufferIndex(0);
+
+    // Set layout for buffer 0
+    m_VertexDescriptor->layouts()->object(0)->setStride(sizeof(float) * 6);
+    m_VertexDescriptor->layouts()->object(0)->setStepFunction(MTL::VertexStepFunctionPerVertex);
+
+    m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
+    
+    m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    
+    if (!m_RenderPipelineState)
     {
         std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
     }
     
-   // depthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
-   // depthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
-    //depthStencilDescriptor->setDepthWriteEnabled(true);
-   // depthStencilState = device->newDepthStencilState(depthStencilDescriptor);
 
-    renderPipelineDescriptor->release();
-   // depthStencilDescriptor->release();
-    library->release();
-    vertexFunction->release();
-    fragmentFunction->release();
+    m_RenderPipelineDescriptor->release();
+    m_Library->release();
+    m_VertexFunction->release();
+    m_FragmentFunction->release();
 
 }
 
 MetalShader::~MetalShader()
 {
-    metalRenderPSO->release();
+    m_RenderPipelineState->release();
+    m_VertexDescriptor->release();
 }
 
 template <typename T>
@@ -125,7 +137,7 @@ void MetalShader::SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, con
     encoder->setVertexBytes(value, sizeof(value), index);
 }
 
-MTL::RenderPipelineState* MetalShader::GetRenderPSO()
+MTL::RenderPipelineState* MetalShader::GetRenderPipelineState()
 {
-    return metalRenderPSO;
+    return m_RenderPipelineState;
 }

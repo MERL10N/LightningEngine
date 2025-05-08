@@ -29,32 +29,35 @@ namespace CA
 
 #include "../Renderer.h"
 #include "MetalShader.h"
-#include "../../Primitives/MeshBuilder.h"
 #include "../../Timer/Timer.h"
+#include "../../Primitives/MeshBuilder.h"
+#include <simd/simd.h>
+
+class MetalVertexBuffer;
 
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
-    MetalRenderer(MTL::Device* metalDevice);
+    MetalRenderer(MTL::Device* p_MetalDevice);
     ~MetalRenderer();
 
     void CreateTriangle();
-    void Render(const MTK::View* metalKitView);
+    void Render(const MTK::View* p_MetalKitView);
 
 private:
-    MTL::Device* metalDevice;
-    MTL::CommandQueue* metalCommandQueue;
-    MTL::CommandBuffer* metalCommandBuffer;
-    MTL::RenderPassDescriptor* renderPassDescriptor;
-    MTL::RenderCommandEncoder* renderCommandEncoder;
-    MTL::RenderPassColorAttachmentDescriptor* renderPassColorAttachmentDescriptor;
-    MTL::Buffer* triangleVertexBuffer;
+    MTL::Device* m_MetalDevice;
+    MTL::CommandQueue* m_MetalCommandQueue;
+    MTL::CommandBuffer* m_MetalCommandBuffer;
+    MTL::RenderPassDescriptor* m_RenderPassDescriptor;
+    MTL::RenderCommandEncoder* m_RenderCommandEncoder;
+    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor;
+    MetalVertexBuffer* m_VertexBuffer;
     MTK::View* metalKitView;
     
-    MetalShader shader;
-    MeshBuilder meshBuilder;
+    MetalShader m_Shader;
+
     
-    Timer timer;
+    Timer m_Timer;
     
 };
 #endif //METALRENDERER_H
