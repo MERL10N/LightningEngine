@@ -12,5 +12,7 @@ class MeshBuilder
 {
 public:
     static void GenerateTriangle(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder);
+    
+    static void GenerateQuad(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder);
 };
 #endif /* MeshBuilder_hpp */

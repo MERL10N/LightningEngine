@@ -43,7 +43,7 @@ MetalRenderer::~MetalRenderer()
 
 void MetalRenderer::CreateTriangle()
 {
-    MeshBuilder::GenerateTriangle(m_MetalDevice, m_VertexBuffer, m_RenderCommandEncoder);
+    MeshBuilder::GenerateQuad(m_MetalDevice, m_VertexBuffer, m_RenderCommandEncoder);
 }
 
 
@@ -56,7 +56,7 @@ void MetalRenderer::Render(MTK::View* p_MetalKitView)
     CreateTriangle();
     
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangle, NS::UInteger{0}, NS::UInteger{3});
+    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger{0}, NS::UInteger{4});
     
     m_RenderCommandEncoder->endEncoding();
     m_MetalCommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
