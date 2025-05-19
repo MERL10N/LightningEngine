@@ -42,7 +42,7 @@ public:
     ~MetalRenderer();
 
     void CreateTriangle();
-    void Render(const MTK::View* p_MetalKitView);
+    void Render(MTK::View* p_MetalKitView);
 
 private:
     MTL::Device* m_MetalDevice;

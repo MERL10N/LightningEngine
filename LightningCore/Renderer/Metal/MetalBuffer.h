@@ -20,14 +20,14 @@ namespace MTL
 class MetalVertexBuffer
 {
 public:
-
-    MetalVertexBuffer(const float* p_Vertices, uint32_t p_Size, MTL::Device* p_MetalDevice);
+    MetalVertexBuffer() = default;
+    MetalVertexBuffer(MTL::Device* p_MetalDevice);
     ~MetalVertexBuffer();
-    
-    MTL::Buffer* GetVertexBuffer();
+    void BindBuffer(const float* p_Vertices, uint32_t p_Size, MTL::RenderCommandEncoder* p_Encoder);
     
 private:
     MTL::Buffer* m_VertexBuffer;
+    MTL::Device* m_MetalDevice;
     
 };
 

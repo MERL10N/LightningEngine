@@ -7,13 +7,10 @@
 
 #ifndef MeshBuilder_hpp
 #define MeshBuilder_hpp
-#ifdef __APPLE__
-    class MetalVertexBuffer;
-    using VertexBuffer = MetalVertexBuffer;
-#endif
+
 class MeshBuilder
 {
 public:
-    static VertexBuffer* GenerateTriangle(void* p_Device);
+    static void GenerateTriangle(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder);
 };
 #endif /* MeshBuilder_hpp */

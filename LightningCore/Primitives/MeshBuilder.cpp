@@ -11,7 +11,7 @@
     #include "../Renderer/Metal/MetalBuffer.h"
 #endif
 
-VertexBuffer* MeshBuilder::GenerateTriangle(void* p_Device)
+void MeshBuilder::GenerateTriangle(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder)
 {
     constexpr float vertices[] =
     {
@@ -22,6 +22,6 @@ VertexBuffer* MeshBuilder::GenerateTriangle(void* p_Device)
     };
     
 #ifdef __APPLE__
-    return new MetalVertexBuffer(vertices, sizeof(vertices), static_cast<MTL::Device*>(p_Device));
+    return static_cast<MetalVertexBuffer*>(p_VertexBuffer)->BindBuffer(vertices, sizeof(vertices), static_cast<MTL::RenderCommandEncoder*>(p_RenderEncoder));
 #endif
 }
