@@ -7,7 +7,17 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 Metal is the main focus since my main development machine is a Macbook. 
 
 > [!NOTE]
-> This game engine is currently very primitive and is not intended for commercial use. 
+> This game engine is currently very primitive and is not intended for commercial use.
+>
+
+
+> [!TIP]
+> Here is how to setup Lightning Engine on your local machine
+>
+> Step 1: Clone the repository in your terminal window using git clone --recurse-submodules <Github clone link>
+>
+> Step 2: Once the project is sucessfully cloned, in the project root directory, enter './premake5 xcode4' to generate XCode project files using Premake
+
 
 
 ## Checklist
@@ -20,10 +30,3 @@ Metal is the main focus since my main development machine is a Macbook.
 - [ ] Camera
 - [ ] Native Scripting System
 - [ ] ECS
-
-> [!TIP]
-> Here is how to setup Lightning Engine on your local machine
->
-> Step 1: Clone the repository in your terminal window using git clone --recurse-submodules <Github clone link>
->
-> Step 2: Once the project is sucessfully cloned, in the project root directory, enter './premake5 xcode4' to generate XCode project files using Premake
