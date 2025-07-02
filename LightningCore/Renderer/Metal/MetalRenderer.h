@@ -12,7 +12,6 @@ namespace MTL
     class CommandBuffer;
     class RenderPassDescriptor;
     class RenderCommandEncoder;
-    class RenderPassColorAttachmentDescriptor;
     class Buffer;
 }
 
@@ -29,11 +28,11 @@ namespace CA
 
 #include "../Renderer.h"
 #include "MetalShader.h"
-#include "../../Timer/Timer.h"
 #include "../../Primitives/MeshBuilder.h"
 #include <simd/simd.h>
 
 class MetalVertexBuffer;
+class MetalTexture;
 
 class MetalRenderer : public Renderer<MetalRenderer>
 {
@@ -50,14 +49,15 @@ private:
     MTL::CommandBuffer* m_MetalCommandBuffer;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder;
-    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor;
     MetalVertexBuffer* m_VertexBuffer;
     MTK::View* metalKitView;
     
     MetalShader m_Shader;
+    
+    MetalTexture* m_Texture;
 
     
-    Timer m_Timer;
+    //Timer m_Timer;
     
 };
 #endif //METALRENDERER_H

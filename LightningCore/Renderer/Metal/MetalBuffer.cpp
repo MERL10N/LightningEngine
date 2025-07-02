@@ -14,16 +14,14 @@ MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
 {
 }
 
-void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size, MTL::RenderCommandEncoder* p_Encoder)
+void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size)
 {
     assert(m_MetalDevice);
-    assert(p_Encoder);
+    
     if (!m_VertexBuffer)
     {
-        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, p_Size, MTL::ResourceStorageModeManaged);
+        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, p_Size, MTL::ResourceStorageModeShared);
     }
-
-    p_Encoder->setVertexBuffer(m_VertexBuffer, 0, 0);
     
 }
 
@@ -37,5 +35,10 @@ MetalVertexBuffer::~MetalVertexBuffer()
    {
        m_MetalDevice->release();
    }
+}
+
+MTL::Buffer* MetalVertexBuffer::GetVertexBuffer()
+{
+    return m_VertexBuffer;
 }
 

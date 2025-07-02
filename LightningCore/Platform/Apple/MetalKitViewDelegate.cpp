@@ -3,20 +3,18 @@
 //
 
 #include "MetalKitViewDelegate.h"
-#include "../../Renderer/Metal/MetalRenderer.h"
 
 MetalKitViewDelegate::MetalKitViewDelegate(MTL::Device *metalDevice)
     : ViewDelegate(),
-      metalRenderer(new MetalRenderer(metalDevice))
+      metalRenderer(MetalRenderer(metalDevice))
 {
 }
 
 MetalKitViewDelegate::~MetalKitViewDelegate()
 {
-    delete metalRenderer;
 }
 
 void MetalKitViewDelegate::drawInMTKView(MTK::View *metalKitView)
 {
-    metalRenderer->Render(metalKitView);
+    metalRenderer.Render(metalKitView);
 }

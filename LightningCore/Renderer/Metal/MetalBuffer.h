@@ -23,11 +23,14 @@ public:
     MetalVertexBuffer() = default;
     MetalVertexBuffer(MTL::Device* p_MetalDevice);
     ~MetalVertexBuffer();
-    void BindBuffer(const float* p_Vertices, uint32_t p_Size, MTL::RenderCommandEncoder* p_Encoder);
+    void BindBuffer(const float* p_Vertices, uint32_t p_Size);
+    
+    MTL::Buffer* GetVertexBuffer();
     
 private:
     MTL::Buffer* m_VertexBuffer;
     MTL::Device* m_MetalDevice;
+    bool b_IsSet;
     
 };
 

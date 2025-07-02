@@ -6,7 +6,6 @@
 #define MACAPPLICATION_H
 
 #include <AppKit/AppKit.hpp>
-#include <memory>
 
 namespace MTK
 {
