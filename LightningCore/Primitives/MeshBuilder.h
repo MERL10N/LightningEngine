@@ -8,11 +8,18 @@
 #ifndef MeshBuilder_hpp
 #define MeshBuilder_hpp
 
+class SpriteAnimation;
+
 class MeshBuilder
 {
 public:
-    static void GenerateTriangle(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder);
+    static void GenerateTriangle(void* p_Device, void* p_VertexBuffer);
     
-    static void GenerateQuad(void* p_Device, void* p_VertexBuffer, void* p_RenderEncoder);
+    static void GenerateQuad(void* p_Device, void* p_VertexBuffer);
+    
+    
+    
+private:
+    
 };
 #endif /* MeshBuilder_hpp */

@@ -13,8 +13,7 @@ workspace "LightningEngine"
         toolset "clang"
         defines { "PLATFORM_MAC" }
         buildoptions { "-std=c++23 -fobjc-arc" }
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions" }
-
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb"}
     filter {}
 
 -- Lightning Application
@@ -35,7 +34,6 @@ project "LightningGame"
     libdirs { "bin/%{cfg.buildcfg}" }
     links { "LightningCore" }
 
-    filter "system:macosx"
     filter "system:macosx"
     targetextension ".app"
     xcodebuildsettings {
@@ -72,7 +70,7 @@ project "LightningGame"
             "-framework AppKit"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/"}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb"}
 
     filter {}
 
@@ -129,7 +127,7 @@ location "LightningEditor"
             "-framework AppKit"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/imgui"}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/imgui",  "ThirdParty/stb"}
 
     filter {}
 

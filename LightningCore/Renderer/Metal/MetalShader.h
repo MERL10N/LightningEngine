@@ -20,6 +20,7 @@ namespace MTL
    class RenderCommandEncoder;
    class RenderPassDescriptor;
    class VertexDescriptor;
+   class RenderPipelineColorAttachmentDescriptor;
 }
 
 class MetalShader
@@ -45,8 +46,8 @@ class MetalShader
     MTL::RenderPipelineState* m_RenderPipelineState;
     MTL::DepthStencilState* m_DepthStencilState;
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
-    MTL::Texture* targetTexture;
     MTL::VertexDescriptor* m_VertexDescriptor;
+    MTL::RenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor;
     std::string m_FilePath;
     bool b_Result;
     

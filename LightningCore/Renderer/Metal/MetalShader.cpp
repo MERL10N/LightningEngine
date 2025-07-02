@@ -74,7 +74,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     }
     else
     {
-        std::println( "Fragment function successfully found and loaded");
+        std::println("Fragment function successfully found and loaded");
     }
     
     b_Result = true;
@@ -82,8 +82,21 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    
     assert(m_RenderPipelineDescriptor);
-    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    
+    colorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
+    colorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+
+    colorAttachmentDescriptor->setBlendingEnabled(true);
+    colorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
+    colorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);
+    colorAttachmentDescriptor->setSourceRGBBlendFactor(MTL::BlendFactorSourceAlpha);
+    colorAttachmentDescriptor->setSourceAlphaBlendFactor(MTL::BlendFactorSourceAlpha);
+    colorAttachmentDescriptor->setDestinationRGBBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
+    colorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
+
 
     // Initialise vertex descriptor
     m_VertexDescriptor = MTL::VertexDescriptor::vertexDescriptor();
@@ -97,10 +110,17 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_VertexDescriptor->attributes()->object(1)->setFormat(MTL::VertexFormatFloat3);
     m_VertexDescriptor->attributes()->object(1)->setOffset(sizeof(float) * 3);
     m_VertexDescriptor->attributes()->object(1)->setBufferIndex(0);
+    
+    // Set Attribute 2: Texture
+    m_VertexDescriptor->attributes()->object(2)->setFormat(MTL::VertexFormatFloat3);
+    m_VertexDescriptor->attributes()->object(2)->setOffset(sizeof(float) * 6);
+    m_VertexDescriptor->attributes()->object(2)->setBufferIndex(0);
 
     // Set layout for buffer 0
-    m_VertexDescriptor->layouts()->object(0)->setStride(sizeof(float) * 6);
+    m_VertexDescriptor->layouts()->object(0)->setStride(sizeof(float) * 8);
     m_VertexDescriptor->layouts()->object(0)->setStepFunction(MTL::VertexStepFunctionPerVertex);
+    
+    assert(m_VertexDescriptor);
 
     m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
     
@@ -110,9 +130,8 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     {
         std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
     }
+    assert(m_RenderPipelineState);
     
-
-    m_RenderPipelineDescriptor->release();
     m_Library->release();
     m_VertexFunction->release();
     m_FragmentFunction->release();
@@ -123,6 +142,8 @@ MetalShader::~MetalShader()
 {
     m_RenderPipelineState->release();
     m_VertexDescriptor->release();
+    m_RenderPipelineDescriptor->release();
+    colorAttachmentDescriptor->release();
 }
 
 template <typename T>

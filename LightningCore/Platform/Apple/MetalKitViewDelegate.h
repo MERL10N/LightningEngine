@@ -7,7 +7,7 @@
 
 #include <MetalKit/MTKView.hpp>
 
-#include "../../Renderer/Renderer.h"
+#include "../../Renderer/Metal/MetalRenderer.h"
 
 class MetalRenderer;
 
@@ -19,7 +19,7 @@ public:
     virtual void drawInMTKView(MTK::View* metalKitView ) override;
 
 private:
-    Renderer<MetalRenderer>* metalRenderer;
+    MetalRenderer metalRenderer;
 };
 
 
