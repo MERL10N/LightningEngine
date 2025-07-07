@@ -27,7 +27,7 @@ private:
     MTL::TextureDescriptor* m_TextureDescriptor;
     MTL::Device* m_MetalDevice;
     const char* m_Filepath;
-    int width, height, channels;
+    int m_Width, m_Height, m_Channels;
 };
 
 #endif /* MetalTexture_hpp */

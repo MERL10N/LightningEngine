@@ -86,16 +86,16 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     
     assert(m_RenderPipelineDescriptor);
     
-    colorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
-    colorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
+    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
 
-    colorAttachmentDescriptor->setBlendingEnabled(true);
-    colorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
-    colorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);
-    colorAttachmentDescriptor->setSourceRGBBlendFactor(MTL::BlendFactorSourceAlpha);
-    colorAttachmentDescriptor->setSourceAlphaBlendFactor(MTL::BlendFactorSourceAlpha);
-    colorAttachmentDescriptor->setDestinationRGBBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
-    colorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
+    m_ColorAttachmentDescriptor->setBlendingEnabled(true);
+    m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
+    m_ColorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);
+    m_ColorAttachmentDescriptor->setSourceRGBBlendFactor(MTL::BlendFactorSourceAlpha);
+    m_ColorAttachmentDescriptor->setSourceAlphaBlendFactor(MTL::BlendFactorSourceAlpha);
+    m_ColorAttachmentDescriptor->setDestinationRGBBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
+    m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
 
     // Initialise vertex descriptor
@@ -143,7 +143,7 @@ MetalShader::~MetalShader()
     m_RenderPipelineState->release();
     m_VertexDescriptor->release();
     m_RenderPipelineDescriptor->release();
-    colorAttachmentDescriptor->release();
+    m_ColorAttachmentDescriptor->release();
 }
 
 template <typename T>

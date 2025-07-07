@@ -47,7 +47,7 @@ class MetalShader
     MTL::DepthStencilState* m_DepthStencilState;
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
     MTL::VertexDescriptor* m_VertexDescriptor;
-    MTL::RenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor;
+    MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor;
     std::string m_FilePath;
     bool b_Result;
     

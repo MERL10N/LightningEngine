@@ -19,7 +19,7 @@ m_MetalDevice(p_MetalDevice),
 {
    
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* image = stbi_load(p_Filepath, &width, &height, &channels, STBI_rgb_alpha);
+    unsigned char* image = stbi_load(p_Filepath, &m_Width, &m_Height, &m_Channels, STBI_rgb_alpha);
     assert(image != nullptr);
     
     if (image)
@@ -29,13 +29,13 @@ m_MetalDevice(p_MetalDevice),
     
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     
-    m_TextureDescriptor->setWidth(width);
-    m_TextureDescriptor->setHeight(height);
+    m_TextureDescriptor->setWidth(m_Width);
+    m_TextureDescriptor->setHeight(m_Height);
 
     m_Texture = m_MetalDevice->newTexture(m_TextureDescriptor);
 
-    MTL::Region region = MTL::Region(0, 0, 0, width, height, 1);
-    NS::UInteger bytesPerRow = 4 * width;
+    MTL::Region region = MTL::Region(0, 0, 0, m_Width, m_Height, 1);
+    NS::UInteger bytesPerRow = 4 * m_Width;
 
     m_Texture->replaceRegion(region, 0, image, bytesPerRow);
 
