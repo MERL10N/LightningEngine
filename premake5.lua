@@ -26,9 +26,10 @@ project "LightningGame"
         ["Header Files/*"] = { "LightningGame/Source/**.h"},
         ["Source Files/*"] = {"LightningGame/Source/**.cpp"},
         ["Shaders/*"] = { "LightningGame/Shaders/**.metal"},
+        ["Assets/*"] = {"LightningGame/Assets/*.png"},
     }
 
-    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/**.metal" }
+    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/**.metal",  "LightningGame/Assets/*.png"}
 
     includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
     libdirs { "bin/%{cfg.buildcfg}" }
@@ -51,7 +52,7 @@ project "LightningGame"
         symbols "On"
         optimize "Off"
         xcodebuildsettings {
-            ["CODE_SIGN_IDENTITY"] = "Apple Development",
+            ["CODE_SIGN_IDENTITY"] = "Sign to Run Locally",
             ["CODE_SIGN_STYLE"] = "Automatic",
             ["CODE_SIGNING_REQUIRED"] = "YES",
             ["CODE_SIGNING_ALLOWED"] = "YES",
@@ -75,47 +76,49 @@ project "LightningGame"
     filter {}
 
 project "LightningEditor"
-kind "WindowedApp"
-location "LightningEditor"
 
-    vpaths 
+    kind "WindowedApp"
+    location "LightningEditor"
+
+   vpaths 
     {
         ["Header Files/*"] = { "LightningEditor/Source/**.h"},
-        ["Source Files/*"] = {"LightningaEditor/Source/**.cpp"},
+        ["Source Files/*"] = {"LightningEditor/Source/**.cpp"},
+        ["Shaders/*"] = { "LightningGame/Shaders/**.metal"},
+        ["Assets/*"] = {"LightningGame/Assets/*.png"},
     }
 
-    files { "LightningEditor/Source/**.h", "LightningEditor/Source/**.cpp" }
+    files { "LightningEditor/Source/**.h", "LightningEditor/Source/**.cpp", "LightningGame/Shaders/**.metal", "LightningGame/Assets/*.png"}
 
     includedirs { "ThirdParty", "LightningEditor/Source", "LightningCore" }
     libdirs { "bin/%{cfg.buildcfg}" }
     links { "LightningCore" }
 
     filter "system:macosx"
-        targetextension ".app"
+    targetextension ".app"
+    xcodebuildsettings {
+        ["INFOPLIST_FILE"] = "Info.plist",
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
+        ["ARCHS"] = "arm64",
+        ["VALID_ARCHS"] = "arm64",
+        ["ONLY_ACTIVE_ARCH"] = "YES",
+        ["SKIP_INSTALL"] = "YES",
+        ["ENABLE_BITCODE"] = "NO"
+    }
+
+    -- Enable profiling & debugging only for Debug builds
+    filter "configurations:Debug"
+        symbols "On"
+        optimize "Off"
         xcodebuildsettings {
-            ["INFOPLIST_FILE"] = "Info.plist",  -- Explicitly set the Info.plist path
-            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
-            ["ARCHS"] = "arm64",
-            ["VALID_ARCHS"] = "arm64",
-            ["ONLY_ACTIVE_ARCH"] = "YES",
-            ["SKIP_INSTALL"] = "YES",
-            ["ENABLE_BITCODE"] = "NO"
+            ["CODE_SIGN_IDENTITY"] = "Sign to Run Locally",
+            ["CODE_SIGN_STYLE"] = "Automatic",
+            ["CODE_SIGNING_REQUIRED"] = "YES",
+            ["CODE_SIGNING_ALLOWED"] = "YES",
+            ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements",
+            ["ENABLE_HARDENED_RUNTIME"] = "NO",
+            ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
         }
-
-        -- Enable profiling & debugging only for Debug builds
-        filter "configurations:Debug"
-            symbols "On"
-            optimize "Off"
-            xcodebuildsettings {
-                ["CODE_SIGN_IDENTITY"] = "Apple Development",
-                ["CODE_SIGN_STYLE"] = "Automatic",
-                ["CODE_SIGNING_REQUIRED"] = "YES",
-                ["CODE_SIGNING_ALLOWED"] = "YES",
-               -- ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements", -- Allows Instruments profiling
-                ["ENABLE_HARDENED_RUNTIME"] = "NO",  -- Allows debugging tools
-                ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
-            }
-
 
         -- Link Apple frameworks
         linkoptions { 
@@ -127,7 +130,7 @@ location "LightningEditor"
             "-framework AppKit"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/imgui",  "ThirdParty/stb"}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb"}
 
     filter {}
 

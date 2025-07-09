@@ -98,7 +98,7 @@ void MacApplicationDelegate::applicationDidFinishLaunching(NS::Notification* pNo
     metalDevice = MTL::CreateSystemDefaultDevice();
 
     metalKitView = MTK::View::alloc()->init(frame, metalDevice);
-    metalKitView->setColorPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    metalKitView->setColorPixelFormat(MTL::PixelFormatRGBA8Unorm);
     metalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
     metalKitView->setPreferredFramesPerSecond(120);
 

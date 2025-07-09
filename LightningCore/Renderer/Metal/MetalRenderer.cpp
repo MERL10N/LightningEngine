@@ -15,9 +15,9 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice)
   m_MetalCommandBuffer(nullptr),
   m_RenderPassDescriptor(nullptr),
   m_RenderCommandEncoder(nullptr),
-  m_Shader("Shaders/Shader.metal", m_MetalDevice),
+  m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice),
   m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
-  m_Texture(new MetalTexture("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Assets/megaman.png", m_MetalDevice))
+  m_Texture(new MetalTexture("../LightningGame/Assets/megaman.png", m_MetalDevice))
 {
     assert(m_MetalDevice);
     CreateTriangle();
