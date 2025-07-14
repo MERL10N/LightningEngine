@@ -49,8 +49,3 @@ MetalTexture::~MetalTexture()
     m_Texture->release();
 }
 
-
-MTL::Texture* MetalTexture::GetTexture()
-{
-    return m_Texture;
-}

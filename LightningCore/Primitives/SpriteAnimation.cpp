@@ -6,3 +6,8 @@
 //
 
 #include "SpriteAnimation.h"
+
+#ifdef __APPLE__
+#include "../Renderer/Metal/MetalTexture.h"
+#endif
+

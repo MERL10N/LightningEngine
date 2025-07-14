@@ -157,8 +157,3 @@ void MetalShader::SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, con
 {
     encoder->setVertexBytes(value, sizeof(value), index);
 }
-
-MTL::RenderPipelineState* MetalShader::GetRenderPipelineState()
-{
-    return m_RenderPipelineState;
-}

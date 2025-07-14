@@ -1,9 +1,12 @@
 //
-// Created by Kian Marvi on 11/24/24.
+//  MacEditorDelegate.hpp
+//  LightningCore
+//
+//  Created by Kian Marvi on 7/13/25.
 //
 
-#ifndef MACAPPLICATION_H
-#define MACAPPLICATION_H
+#ifndef MacEditorDelegate_hpp
+#define MacEditorDelegate_hpp
 
 #include <AppKit/AppKit.hpp>
 
@@ -16,25 +19,20 @@ namespace MTL
     class Device;
 }
 
-class MetalKitViewDelegate;
+class MacEditor;
 
-class MacApplicationDelegate : public NS::ApplicationDelegate
+class MacEditorDelegate : public NS::ApplicationDelegate
 {
 public:
     //MacApplicationDelegate() = default;
-    MacApplicationDelegate(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
-    ~MacApplicationDelegate();
+    MacEditorDelegate(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
+    ~MacEditorDelegate();
 
     NS::Menu* createMenuBar();
 
     virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
     virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
     virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
-    
-    inline MTK::View* GetMetalKitView() { return m_MetalKitView; }
-    inline MTL::Device* GetDevice() { return m_MetalDevice; }
-    
-    inline MetalKitViewDelegate* GetMTKViewDelegate() { return m_MetalKitViewDelegate; }
 
 private:
     
@@ -43,20 +41,20 @@ private:
     
     MTK::View* m_MetalKitView;
     MTL::Device* m_MetalDevice;
-    MetalKitViewDelegate* m_MetalKitViewDelegate = nullptr;
+    MacEditor* m_MacEditor = nullptr;
     
     NS::Window* m_Window;
-    NS::Application* pApp;
+    NS::Application* m_App;
     
     NS::Menu* m_Menu;
-    NS::Menu* pMainMenu;
-    NS::Menu* pAppMenu;
+    NS::Menu* m_MainMenu;
+    NS::Menu* m_AppMenu;
     NS::Menu* pWindowMenu;
     
-    NS::String* appName;
+    NS::String* m_AppName;
     NS::String* quitItemName;
     
-    NS::MenuItem* pAppMenuItem;
+    NS::MenuItem* m_AppMenuItem;
     NS::MenuItem* pAppQuitItem;
     NS::MenuItem* pWindowMenuItem;
     NS::MenuItem* pCloseWindowItem;
@@ -64,4 +62,4 @@ private:
  
 };
 
-#endif //MACAPPLICATION_H
+#endif /* MacEditorDelegate_hpp */

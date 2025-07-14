@@ -16,11 +16,10 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice)
   m_RenderPassDescriptor(nullptr),
   m_RenderCommandEncoder(nullptr),
   m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice),
-  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
-  m_Texture(new MetalTexture("../LightningGame/Assets/megaman.png", m_MetalDevice))
+  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice))
 {
     assert(m_MetalDevice);
-    CreateTriangle();
+    CreateQuad("../LightningGame/Assets/megaman.png");
 }
 
 MetalRenderer::~MetalRenderer()
@@ -49,35 +48,42 @@ MetalRenderer::~MetalRenderer()
         delete m_Texture;
         m_Texture = nullptr;
     }
+    
+    if (m_MTKView)
+    {
+        m_MTKView->release();
+        m_MTKView = nullptr;
+    }
 }
 
-void MetalRenderer::CreateTriangle()
+void MetalRenderer::CreateQuad(const char* p_TextureFilePath)
 {
+    m_Texture = new MetalTexture(p_TextureFilePath, m_MetalDevice);
+    
     MeshBuilder::GenerateQuad(m_MetalDevice, m_VertexBuffer);
 }
 
 
 void MetalRenderer::Render(MTK::View* p_MetalKitView)
 {
+    m_MTKView = p_MetalKitView;
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
-    m_RenderPassDescriptor = p_MetalKitView->currentRenderPassDescriptor();
-    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
-
-    assert(m_RenderCommandEncoder);
-    assert(m_MetalCommandQueue);
-    assert(m_RenderPassDescriptor);
-    assert(m_MetalCommandBuffer);
-    assert(m_RenderCommandEncoder);
-    assert(m_Shader.GetRenderPipelineState());
+    m_RenderPassDescriptor = m_MTKView->currentRenderPassDescriptor();
     
+    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);
     m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
-    
     m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
+
+}
+
+void MetalRenderer::Commit()
+{
     m_RenderCommandEncoder->endEncoding();
     
-    m_MetalCommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
+    m_MetalCommandBuffer->presentDrawable(m_MTKView->currentDrawable());
     m_MetalCommandBuffer->commit();
+    m_MetalCommandBuffer->waitUntilCompleted();
 }

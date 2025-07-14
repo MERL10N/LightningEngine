@@ -7,30 +7,47 @@
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 
+MacApplicationDelegate::MacApplicationDelegate(float p_Width, float p_Height, const char *p_Title)
+: m_Width(p_Width),
+  m_Height(p_Height),
+  m_Title(p_Title),
+  m_MetalDevice(MTL::CreateSystemDefaultDevice())
+{
+    frame = (CGRect){ {100.0, 100.0}, {static_cast<CGFloat>(m_Width), static_cast<CGFloat>(m_Height)} };
+    m_MetalKitView = MTK::View::alloc()->init(frame, m_MetalDevice);
+    m_MetalKitView->setColorPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_MetalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
+    m_MetalKitView->setPreferredFramesPerSecond(60);
+    
+    m_MetalKitViewDelegate = new MetalKitViewDelegate(m_MetalKitView);
+}
+
+
+
 MacApplicationDelegate::~MacApplicationDelegate()
 {
-    if (metalKitView)
+    if (m_MetalKitView)
     {
-        metalKitView->release();
-        metalKitView = nullptr;
+        m_MetalKitView->release();
+        m_MetalKitView = nullptr;
     }
    
-    if (window)
+    if (m_Window)
     {
-        window->release();
-        window = nullptr;
+        m_Window->release();
+        m_Window = nullptr;
     }
     
-    if (metalDevice)
+    if (m_MetalDevice)
     {
-        metalDevice->release();
-        metalDevice = nullptr;
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
     }
     
-    if (metalKitViewDelegate)
+    if (m_MetalKitViewDelegate)
     {
-        delete metalKitViewDelegate;
-        metalKitViewDelegate = nullptr;
+        delete m_MetalKitViewDelegate;
+        m_MetalKitViewDelegate = nullptr;
     }
 }
 
@@ -38,29 +55,30 @@ NS::Menu* MacApplicationDelegate::createMenuBar()
 {
     using NS::StringEncoding::UTF8StringEncoding;
 
-    NS::Menu* pMainMenu = NS::Menu::alloc()->init();
-    NS::MenuItem* pAppMenuItem = NS::MenuItem::alloc()->init();
-    NS::Menu* pAppMenu = NS::Menu::alloc()->init( NS::String::string( "Appname", UTF8StringEncoding ) );
+    pMainMenu = NS::Menu::alloc()->init();
+    pAppMenuItem = NS::MenuItem::alloc()->init();
+    pAppMenu = NS::Menu::alloc()->init( NS::String::string( "Appname", UTF8StringEncoding ) );
 
-    NS::String* appName = NS::RunningApplication::currentApplication()->localizedName();
-    NS::String* quitItemName = NS::String::string( "Quit ", UTF8StringEncoding )->stringByAppendingString( appName );
+    appName = NS::RunningApplication::currentApplication()->localizedName();
+    quitItemName = NS::String::string( "Quit ", UTF8StringEncoding )->stringByAppendingString( appName );
     SEL quitCb = NS::MenuItem::registerActionCallback( "appQuit", [](void*,SEL,const NS::Object* pSender){
         auto pApp = NS::Application::sharedApplication();
         pApp->terminate( pSender );
     } );
 
-    NS::MenuItem* pAppQuitItem = pAppMenu->addItem( quitItemName, quitCb, NS::String::string( "q", UTF8StringEncoding ) );
+    pAppQuitItem = pAppMenu->addItem( quitItemName, quitCb, NS::String::string( "q", UTF8StringEncoding ) );
     pAppQuitItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
     pAppMenuItem->setSubmenu( pAppMenu );
 
-    NS::MenuItem* pWindowMenuItem = NS::MenuItem::alloc()->init();
-    NS::Menu* pWindowMenu = NS::Menu::alloc()->init( NS::String::string( "Window", UTF8StringEncoding ) );
+    pWindowMenuItem = NS::MenuItem::alloc()->init();
+    pWindowMenu = NS::Menu::alloc()->init( NS::String::string( "Window", UTF8StringEncoding ) );
 
     SEL closeWindowCb = NS::MenuItem::registerActionCallback("windowClose", [](void *, SEL, const NS::Object *) {
         auto pApp = NS::Application::sharedApplication();
         pApp->windows()->object<NS::Window>(0)->close();
     });
-    NS::MenuItem* pCloseWindowItem = pWindowMenu->addItem( NS::String::string( "Close Window", UTF8StringEncoding ), closeWindowCb, NS::String::string( "w", UTF8StringEncoding));
+    
+    pCloseWindowItem = pWindowMenu->addItem( NS::String::string( "Close Window", UTF8StringEncoding ), closeWindowCb, NS::String::string( "w", UTF8StringEncoding));
     pCloseWindowItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
 
     pWindowMenuItem->setSubmenu(pWindowMenu);
@@ -78,36 +96,27 @@ NS::Menu* MacApplicationDelegate::createMenuBar()
 
 void MacApplicationDelegate::applicationWillFinishLaunching(NS::Notification* pNotification)
 {
-    NS::Menu* pMenu = createMenuBar();
-    NS::Application* pApp = reinterpret_cast< NS::Application*>(pNotification->object());
-    pApp->setMainMenu(pMenu);
+    m_Menu = createMenuBar();
+    pApp = reinterpret_cast< NS::Application*>(pNotification->object());
+    pApp->setMainMenu(m_Menu);
     pApp->setActivationPolicy(NS::ActivationPolicy::ActivationPolicyRegular);
 }
 
 void MacApplicationDelegate::applicationDidFinishLaunching(NS::Notification* pNotification)
 {
-    constexpr auto frame = (CGRect){ {100.0, 100.0}, {1280.0, 720.0} };
-
-    window = NS::Window::alloc()->init(
+    m_Window = NS::Window::alloc()->init(
         frame,
         NS::WindowStyleMaskClosable
         |NS::WindowStyleMaskTitled
         |NS::WindowStyleMaskResizable,
         NS::BackingStoreBuffered, false);
 
-    metalDevice = MTL::CreateSystemDefaultDevice();
+   
+    m_MetalKitView->setDelegate( m_MetalKitViewDelegate );
 
-    metalKitView = MTK::View::alloc()->init(frame, metalDevice);
-    metalKitView->setColorPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    metalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
-    metalKitView->setPreferredFramesPerSecond(120);
-
-    metalKitViewDelegate = new MetalKitViewDelegate(metalDevice);
-    metalKitView->setDelegate( metalKitViewDelegate );
-
-    window->setContentView( metalKitView );
-    window->setTitle( NS::String::string("Lightning Engine (Reborn)", NS::StringEncoding::UTF8StringEncoding));
-    window->makeKeyAndOrderFront(nullptr);
+    m_Window->setContentView( m_MetalKitView );
+    m_Window->setTitle(NS::String::string(m_Title, NS::StringEncoding::UTF8StringEncoding));
+    m_Window->makeKeyAndOrderFront(nullptr);
 
     NS::Application* pApp = reinterpret_cast< NS::Application* >( pNotification->object() );
     pApp->activateIgnoringOtherApps( true );
@@ -117,3 +126,4 @@ bool MacApplicationDelegate::applicationShouldTerminateAfterLastWindowClosed( NS
 {
     return true;
 }
+

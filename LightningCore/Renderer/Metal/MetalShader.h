@@ -35,7 +35,10 @@ class MetalShader
     template <typename T>
     void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
     
-    MTL::RenderPipelineState* GetRenderPipelineState();
+    inline MTL::RenderPipelineState* GetRenderPipelineState()
+    {
+        return m_RenderPipelineState;
+    }
     
     private:
     MTL::Device* m_MetalDevice;

@@ -1,12 +1,12 @@
 //
-//  SpriteAnimation.hpp
+//  SpriteAnimation.h
 //  LightningCore
 //
 //  Created by Kian Marvi on 7/1/25.
 //
 
-#ifndef SpriteAnimation_h
-#define SpriteAnimation_h
+#ifndef SPRITEANIMATION_H
+#define SPRITEANIMATION_H
 
 #include <vector>
 class MetalTexture;
@@ -14,7 +14,7 @@ class MetalTexture;
 class SpriteAnimator
 {
 public:
- // SpriteAnimator(const MetalTexture* p_Texture, )
+    SpriteAnimator(const MetalTexture* p_SpriteSheet, int p_Frames, int p_Speed);
 private:
     std::vector<int> m_Frames;
     int m_RepeatCount = 0;
@@ -24,4 +24,4 @@ private:
     bool b_IsAnimationActive = false;
 };
 
-#endif /* SpriteAnimation_hpp */
+#endif /* SPRITEANIMATION_H */

@@ -5,11 +5,11 @@
 //  Created by Kian Marvi on 3/8/25.
 //
 
-#include <Platform/Apple/MacApplication.h>
+#include "MacEditorApplication.h"
 
 int main()
 {
-    MacApplication macApp;
+    auto pEditorApp = MacEditorApplication(1920, 1080, "Lightning Editor");
+    pEditorApp.Update();
     
-    macApp.Update();
 }
