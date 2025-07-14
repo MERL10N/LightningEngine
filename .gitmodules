@@ -7,3 +7,7 @@
 [submodule "ThirdParty/entt"]
 	path = ThirdParty/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "ThirdParty/spdlog"]
+	path = ThirdParty/spdlog
+	url = https://github.com/gabime/spdlog.git
+

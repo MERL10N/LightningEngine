@@ -2,11 +2,6 @@
 
 int main()
 {
-    MacApplication macApp;
-
-    NS::Application* sharedApplication = NS::Application::sharedApplication();
-
-    sharedApplication->setDelegate(&macApp);
-    sharedApplication->run();
-    sharedApplication->release();
+    auto macApp = MacApplication(1920.f, 1080.f, "Lightning Game");
+    macApp.Update();
 }

@@ -35,7 +35,10 @@ class MetalShader
     template <typename T>
     void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
     
-    MTL::RenderPipelineState* GetRenderPipelineState();
+    inline MTL::RenderPipelineState* GetRenderPipelineState()
+    {
+        return m_RenderPipelineState;
+    }
     
     private:
     MTL::Device* m_MetalDevice;
@@ -47,7 +50,7 @@ class MetalShader
     MTL::DepthStencilState* m_DepthStencilState;
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
     MTL::VertexDescriptor* m_VertexDescriptor;
-    MTL::RenderPipelineColorAttachmentDescriptor* colorAttachmentDescriptor;
+    MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor;
     std::string m_FilePath;
     bool b_Result;
     

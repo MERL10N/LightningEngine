@@ -1,39 +1,27 @@
 //
-// Created by Kian Marvi on 11/24/24.
+//  MacApplication.hpp
+//  LightningCore
+//
+//  Created by Kian Marvi on 7/3/25.
 //
 
-#ifndef MACAPPLICATION_H
-#define MACAPPLICATION_H
+#ifndef MacApplication_hpp
+#define MacApplication_hpp
 
-#include <AppKit/AppKit.hpp>
+#include "MacApplicationDelegate.h"
+#include "../Window.h"
 
-namespace MTK
-{
-    class View;
-}
-namespace MTL
-{
-    class Device;
-}
 
-class MetalKitViewDelegate;
-
-class MacApplication : public NS::ApplicationDelegate
+class MacApplication : public Window
 {
 public:
+    MacApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
     ~MacApplication();
-
-    static NS::Menu* createMenuBar();
-
-    virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
-    virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
-    virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
+    void Update();
 
 private:
-    NS::Window* window;
-    MTK::View* metalKitView;
-    MTL::Device* metalDevice;
-    MetalKitViewDelegate* metalKitViewDelegate = nullptr;
+    NS::Application* m_SharedApplication;
+    MacApplicationDelegate macAppDelegate;
 };
 
-#endif //MACAPPLICATION_H
+#endif /* MacApplication_hpp */

@@ -21,13 +21,17 @@ public:
     MetalTexture(const char* p_Filepath, MTL::Device* p_MetalDevice);
     ~MetalTexture();
     
-    MTL::Texture* GetTexture();
+    inline MTL::Texture* GetTexture()
+    {
+        return m_Texture;
+    }
+    
 private:
     MTL::Texture* m_Texture;
     MTL::TextureDescriptor* m_TextureDescriptor;
     MTL::Device* m_MetalDevice;
     const char* m_Filepath;
-    int width, height, channels;
+    int m_Width, m_Height, m_Channels;
 };
 
 #endif /* MetalTexture_hpp */

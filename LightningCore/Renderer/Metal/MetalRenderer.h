@@ -40,8 +40,18 @@ public:
     MetalRenderer(MTL::Device* p_MetalDevice);
     ~MetalRenderer();
 
-    void CreateTriangle();
+    void CreateQuad(const char* p_TextureFilePath);
     void Render(MTK::View* p_MetalKitView);
+    
+    void Commit();
+    
+    inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
+    
+    inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
+    
+    inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    
+    inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
 
 private:
     MTL::Device* m_MetalDevice;
@@ -50,7 +60,7 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder;
     MetalVertexBuffer* m_VertexBuffer;
-    MTK::View* metalKitView;
+    MTK::View* m_MTKView;
     
     MetalShader m_Shader;
     

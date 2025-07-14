@@ -9,14 +9,14 @@
 
 #include "../../Renderer/Metal/MetalRenderer.h"
 
-class MetalRenderer;
-
 class MetalKitViewDelegate : public MTK::ViewDelegate
 {
 public:
-    explicit MetalKitViewDelegate( MTL::Device* metalDevice );
+    explicit MetalKitViewDelegate(MTK::View* p_MetalKitView );
     virtual ~MetalKitViewDelegate() override;
-    virtual void drawInMTKView(MTK::View* metalKitView ) override;
+    virtual void drawInMTKView(MTK::View* p_MetalKitView ) override;
+    
+    inline MetalRenderer GetRenderer() { return metalRenderer; }
 
 private:
     MetalRenderer metalRenderer;
