@@ -23,12 +23,12 @@ Metal is the main focus since my main development machine is a Macbook.
 ## Checklist
 - [x] Render a window :tada:
 - [x] Render Basic Shapes (Triangle, Quad) :tada:
-- [x] Textures
+- [x] Textures :tada:
+- [x] DearImGui support :tada:
 - [ ] Sprite Animation (WIP)
+- [ ] Camera
 - [ ] Input System
 - [ ] Physics
-- [ ] DearImGui support
 - [ ] Argument Buffers
-- [ ] Camera
 - [ ] Native Scripting System
 - [ ] ECS
