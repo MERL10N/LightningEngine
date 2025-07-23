@@ -22,7 +22,7 @@ MacEditorDelegate::MacEditorDelegate(float p_Width, float p_Height, const char *
     m_Frame = (CGRect){ {100.0, 100.0}, {static_cast<CGFloat>(m_Width), static_cast<CGFloat>(m_Height)} };
     m_MetalKitView = MTK::View::alloc()->init(m_Frame, m_MetalDevice);
     m_MetalKitView->setColorPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    m_MetalKitView->setClearColor(MTL::ClearColor::Make(0.1f, 0.1f, 0.1f, 1.0 ));
+    m_MetalKitView->setClearColor(MTL::ClearColor::Make(0.0, 0.0, 0.0, 0.0 ));
     m_MetalKitView->setPreferredFramesPerSecond(120);
 }
 

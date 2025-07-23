@@ -134,7 +134,8 @@ project "LightningEditor"
             "-framework MetalKit",
             "-framework QuartzCore",
             "-framework Cocoa",
-            "-framework AppKit"
+            "-framework AppKit",
+            "-framework GameController"
         }
 
         externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/spdlog/include", "ThirdParty/imgui"}
@@ -146,7 +147,7 @@ project "LightningCore"
     kind "StaticLib"
     staticruntime "on"
     location "LightningCore"
-    files { "LightningCore/**.h", "LightningCore/**.cpp", "LightningCore/**.cpp"}
+    files { "LightningCore/**.h", "LightningCore/**.cpp", "LightningCore/**.mm"}
     libdirs { "bin/%{cfg.buildcfg}" }
     links {"ImGui" }
     filter "system:macosx"

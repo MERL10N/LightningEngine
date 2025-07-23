@@ -9,7 +9,7 @@
 
 int main()
 {
-    auto pEditorApp = MacEditorApplication(1920, 1080, "Lightning Editor");
+    auto pEditorApp = MacEditorApplication();
     pEditorApp.Update();
     
 }

@@ -15,7 +15,7 @@
 class MacApplication : public Window
 {
 public:
-    MacApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
+    MacApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Game");
     ~MacApplication();
     void Update();
 

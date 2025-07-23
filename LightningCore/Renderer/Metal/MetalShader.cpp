@@ -138,6 +138,77 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
 }
 
+MetalShader::MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, const char* p_VertexFunction, const char* p_FragmentFunction)
+: m_MetalDevice(p_MetalDevice),
+  m_FilePath(p_FilePath)
+{
+    if (!p_MetalDevice)
+    {
+        std::cerr << "Error: Metal is not supported on this device.\n";
+        return;
+    }
+
+    std::string shaderSrc = LoadShaderFile(m_FilePath);
+    if (shaderSrc.empty())
+    {
+        std::cerr << "Error: metal shader is empty" << std::endl;
+        return;
+    }
+    
+    NS::Error* error = nullptr;
+    
+    m_Library = p_MetalDevice->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
+    if (!m_Library)
+    {
+        __builtin_printf( "%s", error->localizedDescription()->utf8String() );
+        assert( false );
+    }
+
+    m_VertexFunction = m_Library->newFunction(NS::String::string(p_VertexFunction, NS::UTF8StringEncoding)); // Load the vertex function
+    
+    if (!m_VertexFunction)
+    {
+        std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
+        std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
+    }
+    else
+    {
+        std::cout << "Vertex function successfully found and loaded" << std::endl;
+    }
+    
+    m_FragmentFunction = m_Library->newFunction(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding)); // Load the fragment function
+    
+    if (!m_FragmentFunction)
+    {
+        std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
+        std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
+    }
+    else
+    {
+        std::println("Fragment function successfully found and loaded");
+    }
+    
+    b_Result = true;
+
+    m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+    m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
+    m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    
+    m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    
+    if (!m_RenderPipelineState)
+    {
+        std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
+    }
+    assert(m_RenderPipelineState);
+    
+    m_Library->release();
+    m_VertexFunction->release();
+    m_FragmentFunction->release();
+
+}
+
 MetalShader::~MetalShader()
 {
     m_RenderPipelineState->release();

@@ -39,11 +39,16 @@ class MetalRenderer : public Renderer<MetalRenderer>
 public:
     MetalRenderer(MTL::Device* p_MetalDevice);
     ~MetalRenderer();
+    
+    void BeginFrame();
 
     void CreateQuad(const char* p_TextureFilePath);
+    
     void Render(MTK::View* p_MetalKitView);
     
-    void Commit();
+    void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
+    
+    void Commit(const bool p_Present);
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
     
@@ -59,6 +64,7 @@ private:
     MTL::CommandBuffer* m_MetalCommandBuffer;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder;
+    MTL::RenderPipelineState* m_RenderToTexturePipelineState;
     MetalVertexBuffer* m_VertexBuffer;
     MTK::View* m_MTKView;
     

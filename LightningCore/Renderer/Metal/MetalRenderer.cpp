@@ -63,14 +63,31 @@ void MetalRenderer::CreateQuad(const char* p_TextureFilePath)
     MeshBuilder::GenerateQuad(m_MetalDevice, m_VertexBuffer);
 }
 
+void MetalRenderer::BeginFrame()
+{
+    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+}
 
 void MetalRenderer::Render(MTK::View* p_MetalKitView)
 {
     m_MTKView = p_MetalKitView;
-    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
     m_RenderPassDescriptor = m_MTKView->currentRenderPassDescriptor();
     
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
+    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+    m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
+    m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0); 
+    m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
+    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
+
+}
+
+void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
+{
+    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    m_RenderPassDescriptor = p_RenderPassDescriptor;
+    
+    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(p_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);
@@ -79,11 +96,14 @@ void MetalRenderer::Render(MTK::View* p_MetalKitView)
 
 }
 
-void MetalRenderer::Commit()
+void MetalRenderer::Commit(const bool p_Present)
 {
     m_RenderCommandEncoder->endEncoding();
     
-    m_MetalCommandBuffer->presentDrawable(m_MTKView->currentDrawable());
+    if (p_Present && m_MTKView && m_MTKView->currentDrawable())
+    {
+        m_MetalCommandBuffer->presentDrawable(m_MTKView->currentDrawable());
+    }
     m_MetalCommandBuffer->commit();
     m_MetalCommandBuffer->waitUntilCompleted();
 }

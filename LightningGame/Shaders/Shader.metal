@@ -7,6 +7,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#pragma mark - Shader for standard 2D Render Pipeline
 // Vertex input with position and color
 struct VertexIn
 {

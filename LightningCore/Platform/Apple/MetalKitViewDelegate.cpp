@@ -16,8 +16,7 @@ MetalKitViewDelegate::~MetalKitViewDelegate()
 
 void MetalKitViewDelegate::drawInMTKView(MTK::View *p_MetalKitView)
 {
+    metalRenderer.BeginFrame();
     metalRenderer.Render(p_MetalKitView);
-    metalRenderer.GetMetalRenderCommandEncoder()->endEncoding();
-    metalRenderer.GetMetalCommandBuffer()->presentDrawable(p_MetalKitView->currentDrawable());
-    metalRenderer.GetMetalCommandBuffer()->commit();
+    metalRenderer.Commit(true);
 }

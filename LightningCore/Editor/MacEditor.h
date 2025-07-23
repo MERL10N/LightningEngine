@@ -14,7 +14,13 @@ namespace MTK
 }
 
 #include <MetalKit/MetalKit.hpp>
+#include <../imgui/imgui.h>
 #include "../Renderer/Metal/MetalRenderer.h"
+
+#include <simd/simd.h>
+
+class MetalFrameBuffer;
+
 
 class MacEditor : public MTK::ViewDelegate
 {
@@ -26,7 +32,9 @@ public:
 private:
     NS::Application* m_SharedApplication;
     MetalRenderer m_MetalRenderer;
+    MetalFrameBuffer* m_MetalFrameBuffer;
     bool show_another_window;
+    simd::float2 m_ViewportSize;
 };
 
 

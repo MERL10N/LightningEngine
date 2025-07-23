@@ -2,6 +2,6 @@
 
 int main()
 {
-    auto macApp = MacApplication(1920.f, 1080.f, "Lightning Game");
+    auto macApp = MacApplication();
     macApp.Update();
 }
