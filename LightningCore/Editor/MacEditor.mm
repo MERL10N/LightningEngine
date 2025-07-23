@@ -81,7 +81,7 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     {
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
       
-        if (m_ViewportSize.x != viewportPanelSize.x && m_ViewportSize.y != viewportPanelSize.y)
+        if (m_ViewportSize.x != viewportPanelSize.x || m_ViewportSize.y != viewportPanelSize.y)
         {
             m_ViewportSize.x = viewportPanelSize.x;
             m_ViewportSize.y = viewportPanelSize.y;

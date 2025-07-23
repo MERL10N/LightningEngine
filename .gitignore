@@ -17,3 +17,5 @@ cmake-build-debug/
 *.xcodeproj
 *.xcworkspace
 ThirdParty/imgui
+
+LightningEditor/imgui.ini
