@@ -16,10 +16,10 @@ public:
     virtual ~MetalKitViewDelegate() override;
     virtual void drawInMTKView(MTK::View* p_MetalKitView ) override;
     
-    inline MetalRenderer GetRenderer() { return metalRenderer; }
+    inline MetalRenderer GetRenderer() { return m_MetalRenderer; }
 
 private:
-    MetalRenderer metalRenderer;
+    MetalRenderer m_MetalRenderer;
 };
 
 

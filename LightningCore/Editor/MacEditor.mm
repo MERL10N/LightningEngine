@@ -19,9 +19,10 @@
 #include "MacEditor.h"
 #include <iostream>
 
+
 MacEditor::MacEditor(MTK::View* p_MetalKitView)
 : ViewDelegate(),
-  m_MetalRenderer(MetalRenderer(p_MetalKitView->device())),
+  m_MetalRenderer(MetalRenderer(p_MetalKitView->device(), MTL::PixelFormatDepth32Float)),
   m_MetalFrameBuffer(MetalFrameBuffer(p_MetalKitView))
 {
     assert(p_MetalKitView != nullptr);
@@ -76,8 +77,9 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     ImGui::Text("Coming when it's ready");
     ImGui::End();
     
+    // Prevent crashes when compiling for the first time
     if (m_ViewportSize.x == 0.0f || m_ViewportSize.y == 0.0f)
-        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(1920, 1200), ImGuiCond_FirstUseEver);
     
     ImGui::Begin("Game Scene");
     {
@@ -99,9 +101,8 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     
     // Render Game Viewport
     m_MetalRenderer.BeginFrame();
-  //  assert(m_MetalRenderer.GetMetalRenderPassDescriptor() != nullptr);
     m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
-    m_MetalRenderer.Commit(false);
+    m_MetalRenderer.Commit(true);
 
     // Render ImGui UI
     m_MetalRenderer.BeginFrame();
