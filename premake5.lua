@@ -186,8 +186,10 @@ project "LightningCore"
 		systemversion "latest"
 		cppdialect "C++23"
 		staticruntime "On"
-
+    
     filter "system:macosx"
+     buildoptions  { "-std=c++23", "-fobjc-arc" }
+
         xcodebuildsettings {
             ["SKIP_INSTALL"] = "YES",
             ["ENABLE_BITCODE"] = "NO",
