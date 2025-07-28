@@ -9,8 +9,6 @@
 #include <fstream>
 #include <string>
 
-// Test commit to make sure my correct email address is reflected on github for stats accuracy
-
 
 std::string MetalShader::LoadShaderFile(const std::string &path)
 {
