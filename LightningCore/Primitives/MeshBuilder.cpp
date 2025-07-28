@@ -11,7 +11,7 @@
     #include "../Renderer/Metal/MetalBuffer.h"
 #endif
 
-void MeshBuilder::GenerateTriangle(void* p_Device, void* p_VertexBuffer)
+void MeshBuilder::GenerateTriangle(void* p_VertexBuffer)
 {
     constexpr float vertices[] =
     {
@@ -26,7 +26,7 @@ void MeshBuilder::GenerateTriangle(void* p_Device, void* p_VertexBuffer)
 #endif
 }
 
-void MeshBuilder::GenerateQuad(void* p_Device, void* p_VertexBuffer)
+void MeshBuilder::GenerateQuad(void* p_VertexBuffer)
 {
     constexpr float vertices[] =
     {

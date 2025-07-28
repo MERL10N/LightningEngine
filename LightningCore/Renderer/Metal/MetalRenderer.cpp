@@ -60,7 +60,7 @@ void MetalRenderer::CreateQuad(const char* p_TextureFilePath)
 {
     m_Texture = new MetalTexture(p_TextureFilePath, m_MetalDevice);
     
-    MeshBuilder::GenerateQuad(m_MetalDevice, m_VertexBuffer);
+    MeshBuilder::GenerateQuad(m_VertexBuffer);
 }
 
 void MetalRenderer::BeginFrame()
