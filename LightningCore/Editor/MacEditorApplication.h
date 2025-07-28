@@ -8,7 +8,7 @@
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
 
-#include "Editor/MacEditorDelegate.hpp"
+#include "MacEditorDelegate.h"
 
 class MacEditorApplication
 {

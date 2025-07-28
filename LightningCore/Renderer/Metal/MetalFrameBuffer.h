@@ -53,7 +53,6 @@ private:
     MTL::TextureDescriptor* m_DepthTextureDescriptor;
     MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor;
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor;
-    MTL::RenderCommandEncoder* m_RenderCommandEncoder;
     
     float m_Width, m_Height;
 };

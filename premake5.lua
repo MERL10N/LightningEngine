@@ -84,8 +84,7 @@ project "LightningEditor"
 
    vpaths 
     {
-        ["Header Files/*"] = { "LightningEditor/Source/**.h"},
-        ["Source Files/*"] = {"LightningEditor/Source/**.cpp"},
+        ["Source/*"] = {"LightningEditor/Source/**.h", "LightningEditor/Source/**.cpp"},
         ["Shaders/*"] = { "LightningGame/Shaders/Shader.metal"},
         ["Assets/*"] = {"LightningGame/Assets/*.png"},
     }
@@ -97,7 +96,7 @@ project "LightningEditor"
         "LightningGame/Assets/*.png"
     }
 
-    includedirs { "ThirdParty", "LightningEditor/Source", "LightningCore", "" }
+    includedirs { "ThirdParty", "LightningEditor/Source", "LightningCore"}
     libdirs { "bin/%{cfg.buildcfg}" }
     links { "LightningCore", "ImGui" }
 

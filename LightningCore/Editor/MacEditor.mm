@@ -24,6 +24,7 @@ MacEditor::MacEditor(MTK::View* p_MetalKitView)
   m_MetalRenderer(MetalRenderer(p_MetalKitView->device())),
   m_MetalFrameBuffer(MetalFrameBuffer(p_MetalKitView))
 {
+    assert(p_MetalKitView != nullptr);
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -37,6 +38,8 @@ MacEditor::MacEditor(MTK::View* p_MetalKitView)
     ImGui_ImplMetal_Init((__bridge id<MTLDevice>)(p_MetalKitView->device()));
     ImGui_ImplOSX_Init(((__bridge NSView*)(p_MetalKitView)));
     io.Fonts->AddFontDefault();
+    
+    m_MetalFrameBuffer.Create(p_MetalKitView->drawableSize().width, p_MetalKitView->drawableSize().height);
 }
 
 MacEditor::~MacEditor()
@@ -48,6 +51,7 @@ MacEditor::~MacEditor()
 
 void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
 {
+    assert(p_MetalKitView);
 
     ImGuiIO& io = ImGui::GetIO();
     ImGui_ImplMetal_NewFrame((__bridge MTLRenderPassDescriptor*)(p_MetalKitView->currentRenderPassDescriptor()));
@@ -72,6 +76,9 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     ImGui::Text("Coming when it's ready");
     ImGui::End();
     
+    if (m_ViewportSize.x == 0.0f || m_ViewportSize.y == 0.0f)
+        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+    
     ImGui::Begin("Game Scene");
     {
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -92,6 +99,7 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     
     // Render Game Viewport
     m_MetalRenderer.BeginFrame();
+  //  assert(m_MetalRenderer.GetMetalRenderPassDescriptor() != nullptr);
     m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
     m_MetalRenderer.Commit(false);
 
