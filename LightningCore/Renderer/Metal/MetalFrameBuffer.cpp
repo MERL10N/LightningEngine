@@ -39,8 +39,6 @@ MetalFrameBuffer::~MetalFrameBuffer()
     if (m_DepthTexture)
         m_DepthTexture->release();
     
-    if (m_DepthTextureDescriptor)
-        m_DepthTextureDescriptor->release();
  
 }
 
@@ -78,7 +76,15 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_DepthAttachmentDescriptor->setClearDepth(1.0);
     m_DepthAttachmentDescriptor->setStoreAction(MTL::StoreActionDontCare);
     
-    m_TextureDescriptor->release();
+    
+    if (m_DepthTextureDescriptor)
+    {
+        m_DepthTextureDescriptor->release();
+    }
+    if (m_TextureDescriptor)
+    {
+        m_TextureDescriptor->release();
+    }
 
 }
 
