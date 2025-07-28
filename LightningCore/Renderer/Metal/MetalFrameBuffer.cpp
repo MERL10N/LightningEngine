@@ -104,8 +104,11 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
     if (m_RenderPassDescriptor)
         m_RenderPassDescriptor->release();
     
-    if (p_Width <= 0 || p_Height <= 0)
-        return;
+    if (p_Width <= 1 || p_Height <= 1)
+    {
+        p_Width = 1;
+        p_Height = 1;
+    }
     
     
     m_Width = p_Width;
