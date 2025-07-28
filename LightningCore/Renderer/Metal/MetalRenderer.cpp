@@ -9,13 +9,13 @@
 #include "MetalBuffer.h"
 #include "MetalTexture.h"
 
-MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice)
+MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_MetalCommandBuffer(nullptr),
   m_RenderPassDescriptor(nullptr),
   m_RenderCommandEncoder(nullptr),
-  m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice),
+  m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice, p_DepthAttachmentPixelFormat),
   m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice))
 {
     assert(m_MetalDevice);
@@ -72,7 +72,6 @@ void MetalRenderer::Render(MTK::View* p_MetalKitView)
 {
     m_MTKView = p_MetalKitView;
     m_RenderPassDescriptor = m_MTKView->currentRenderPassDescriptor();
-    
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());

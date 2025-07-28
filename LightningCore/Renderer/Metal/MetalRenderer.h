@@ -37,7 +37,7 @@ class MetalTexture;
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
-    MetalRenderer(MTL::Device* p_MetalDevice);
+    MetalRenderer(MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat = MTL::PixelFormatInvalid);
     ~MetalRenderer();
     
     void BeginFrame();

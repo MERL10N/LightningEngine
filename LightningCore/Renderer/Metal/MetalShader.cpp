@@ -27,9 +27,10 @@ std::string MetalShader::LoadShaderFile(const std::string &path)
     return std::string(buffer.begin(), buffer.end());
 }
 
-MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice)
+MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
-  m_FilePath(p_FilePath)
+  m_FilePath(p_FilePath),
+  m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
 {
     if (!p_MetalDevice)
     {
@@ -83,7 +84,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
+    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
     
     assert(m_RenderPipelineDescriptor);
     
@@ -170,7 +171,6 @@ MetalShader::MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevi
     if (!m_VertexFunction)
     {
         std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
-        std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
     }
     else
     {
@@ -182,7 +182,6 @@ MetalShader::MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevi
     if (!m_FragmentFunction)
     {
         std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
-        std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
     }
     else
     {
