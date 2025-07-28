@@ -14,8 +14,8 @@ namespace MTK
 }
 
 #include <MetalKit/MetalKit.hpp>
-#include <../imgui/imgui.h>
 #include "../Renderer/Metal/MetalRenderer.h"
+#include "../Renderer/Metal/MetalFrameBuffer.h"
 
 #include <simd/simd.h>
 
@@ -32,7 +32,7 @@ public:
 private:
     NS::Application* m_SharedApplication;
     MetalRenderer m_MetalRenderer;
-    MetalFrameBuffer* m_MetalFrameBuffer;
+    MetalFrameBuffer m_MetalFrameBuffer;
     bool show_another_window;
     simd::float2 m_ViewportSize;
 };

@@ -17,6 +17,7 @@ MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
 void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size)
 {
     assert(m_MetalDevice);
+    assert (p_Size != 0);
     
     if (!m_VertexBuffer)
     {
@@ -35,10 +36,5 @@ MetalVertexBuffer::~MetalVertexBuffer()
    {
        m_MetalDevice->release();
    }
-}
-
-MTL::Buffer* MetalVertexBuffer::GetVertexBuffer()
-{
-    return m_VertexBuffer;
 }
 

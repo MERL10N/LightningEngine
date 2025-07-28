@@ -33,14 +33,14 @@ public:
     MetalFrameBuffer(MTK::View* p_MetalKitView);;
     ~MetalFrameBuffer();
     
-    void Create(uint32_t p_Width, uint32_t p_Height);
-    void Resize(uint32_t p_Width, uint32_t p_Height);
+    void Create(float p_Width, float p_Height);
+    void Resize(float p_Width, float p_Height);
     
     void UpdateViewport(MTL::RenderCommandEncoder* p_Encoder);
     
     inline MTL::Texture* GetAttachmentTexture() { return m_AttachmentTexture; }
     inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() { return m_RenderPassDescriptor; }
-    
+
 private:
     MTL::Device* m_MetalDevice;
     MTK::View* m_MetalKitView;
@@ -55,7 +55,7 @@ private:
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder;
     
-    uint32_t m_Width, m_Height;
+    float m_Width, m_Height;
 };
 
 #endif /* MetalFrameBuffer_hpp */

@@ -9,19 +9,42 @@
 #define SPRITEANIMATION_H
 
 #include <vector>
-class MetalTexture;
+#include <stdint.h>
 
-class SpriteAnimator
+class MetalTexture;
+class MetalShader;
+
+class SpriteAnimation
 {
 public:
-    SpriteAnimator(const MetalTexture* p_SpriteSheet, int p_Frames, int p_Speed);
+    struct SpriteInfo
+    {
+        uint16_t m_PixelX = 0;
+        uint16_t m_PixelY = 0;
+        uint16_t m_SpriteRow = 0;
+        uint16_t m_SpriteCol = 0;
+        uint16_t m_SpriteWidth = 0;
+    };
+    
+    SpriteAnimation(MetalTexture &p_SpriteSheet, uint8_t p_NumSpritesX, uint8_t p_NumSpritesY, float p_WindowWidth, float p_WindowHeight);
+    
+    void Render(const std::vector<SpriteInfo>& p_Sprites);
+    
+    void RenderAll();
+    
 private:
-    std::vector<int> m_Frames;
-    int m_RepeatCount = 0;
-    float m_AnimationTime = 0.f;
-
-    bool b_HasEnded = false;
-    bool b_IsAnimationActive = false;
+    const char* m_FileName = nullptr;
+    
+    uint8_t m_NumSpritesX;
+    uint8_t m_NumSpritesY;
+    
+    float m_WindowWidth;
+    float m_WindowHeight;
+    float m_SpriteAspectRatio;
+    float m_TexUSize;
+    float m_TexVSize;
+    
+    MetalTexture &m_SpriteSheet;
 };
 
 #endif /* SPRITEANIMATION_H */

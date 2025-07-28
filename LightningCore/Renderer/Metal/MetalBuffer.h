@@ -25,7 +25,7 @@ public:
     ~MetalVertexBuffer();
     void BindBuffer(const float* p_Vertices, uint32_t p_Size);
     
-    MTL::Buffer* GetVertexBuffer();
+    inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }
     
 private:
     MTL::Buffer* m_VertexBuffer;

@@ -5,6 +5,7 @@
 //  Created by Kian Marvi on 7/9/25.
 //
 
+#include <../imgui/imgui.h>
 #include <../imgui/backends/imgui_impl_metal.h>
 #include <../imgui/backends/imgui_impl_osx.h>
 
@@ -14,8 +15,6 @@
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 
-#include "../Renderer/Metal/MetalFrameBuffer.h"
-
 
 #include "MacEditor.h"
 #include <iostream>
@@ -23,7 +22,7 @@
 MacEditor::MacEditor(MTK::View* p_MetalKitView)
 : ViewDelegate(),
   m_MetalRenderer(MetalRenderer(p_MetalKitView->device())),
-  m_MetalFrameBuffer(new MetalFrameBuffer(p_MetalKitView))
+  m_MetalFrameBuffer(MetalFrameBuffer(p_MetalKitView))
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -45,21 +44,23 @@ MacEditor::~MacEditor()
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplOSX_Shutdown();
     ImGui::DestroyContext();
-    
+   
+    /*
     if (m_MetalFrameBuffer)
     {
         delete m_MetalFrameBuffer;
         m_MetalFrameBuffer = nullptr;
     }
+     */
 }
 
 void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
 {
+
     ImGuiIO& io = ImGui::GetIO();
     ImGui_ImplMetal_NewFrame((__bridge MTLRenderPassDescriptor*)(p_MetalKitView->currentRenderPassDescriptor()));
     ImGui_ImplOSX_NewFrame((__bridge NSView*)(p_MetalKitView));
     ImGui::NewFrame();
-    
     
     ImGui::Begin("Welcome to Lightning Engine!");
     ImGui::Text("This is a metal game engine written in C++");
@@ -74,8 +75,10 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
         ImGui::End();
     }
     ImGui::End();
-
-    m_MetalRenderer.BeginFrame();
+    
+    ImGui::Begin("File explorer");
+    ImGui::Text("Coming when it's ready");
+    ImGui::End();
     
     ImGui::Begin("Game Scene");
     {
@@ -85,37 +88,39 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
         {
             m_ViewportSize.x = viewportPanelSize.x;
             m_ViewportSize.y = viewportPanelSize.y;
-            m_MetalFrameBuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
+            m_MetalFrameBuffer.Resize(m_ViewportSize.x, m_ViewportSize.y);
         }
-        ImGui::Image(m_MetalFrameBuffer->GetAttachmentTexture(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2(1, 0), ImVec2(0, 1));
+        ImGui::Image(m_MetalFrameBuffer.GetAttachmentTexture(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2(1, 0), ImVec2(0, 1));
     }
     ImGui::End();
     
-    
-    m_MetalRenderer.Render(m_MetalFrameBuffer->GetRenderPassDescriptor());
-    m_MetalRenderer.Commit(false);
-    
-     // Rendering
-     ImGui::Render();
+    // Rendering
+    ImGui::Render();
 
+    
+    // Render Game Viewport
     m_MetalRenderer.BeginFrame();
-    auto* p_ScreenPassDescriptor = p_MetalKitView->currentRenderPassDescriptor();
-    auto* p_ImguiEncoder = m_MetalRenderer.GetMetalCommandBuffer()->renderCommandEncoder(p_ScreenPassDescriptor);
-    m_MetalFrameBuffer->UpdateViewport(p_ImguiEncoder);
-  
-   
-     ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(),
-     (__bridge id<MTLCommandBuffer>)(m_MetalRenderer.GetMetalCommandBuffer()),
-     (__bridge id<MTLRenderCommandEncoder>)(p_ImguiEncoder));
-    
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-    }
-   p_ImguiEncoder->endEncoding();
-   
+    m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
+    m_MetalRenderer.Commit(false);
 
+    // Render ImGui UI
+    m_MetalRenderer.BeginFrame();
+    auto* m_CommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
+    auto* m_CommandEncoder = m_CommandBuffer->renderCommandEncoder(p_MetalKitView->currentRenderPassDescriptor());
+    m_MetalFrameBuffer.UpdateViewport(m_CommandEncoder);
+   
+    ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), (__bridge id<MTLCommandBuffer>)(m_CommandBuffer), (__bridge id<MTLRenderCommandEncoder>)(m_CommandEncoder));
+    
+   if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+   {
+       ImGui::UpdatePlatformWindows();
+       ImGui::RenderPlatformWindowsDefault();
+   }
+
+    m_CommandEncoder->endEncoding();
+    m_CommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
+    m_CommandBuffer->commit();
+   
 }
 
 
