@@ -44,14 +44,6 @@ MacEditor::~MacEditor()
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplOSX_Shutdown();
     ImGui::DestroyContext();
-   
-    /*
-    if (m_MetalFrameBuffer)
-    {
-        delete m_MetalFrameBuffer;
-        m_MetalFrameBuffer = nullptr;
-    }
-     */
 }
 
 void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)

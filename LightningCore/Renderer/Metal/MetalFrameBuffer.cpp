@@ -92,6 +92,9 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
     if (m_AttachmentTexture)
         m_AttachmentTexture->release();
     
+    if (m_DepthTexture)
+        m_DepthTexture->release();
+    
     if (m_RenderPassDescriptor)
         m_RenderPassDescriptor->release();
     
