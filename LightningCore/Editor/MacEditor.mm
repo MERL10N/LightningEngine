@@ -59,6 +59,8 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     ImGui_ImplOSX_NewFrame((__bridge NSView*)(p_MetalKitView));
     ImGui::NewFrame();
     
+    
+    ImGui::DockSpaceOverViewport();
     ImGui::Begin("Welcome to Lightning Engine!");
     ImGui::Text("This is a metal game engine written in C++");
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -95,6 +97,21 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     }
     ImGui::End();
     
+    if (ImGui::BeginMainMenuBar()) {
+                  if (ImGui::BeginMenu("File")) {
+                       if (ImGui::MenuItem("New Scene")) {
+                       }
+                       if (ImGui::MenuItem("Open Scene", "Command+O")) {
+                       }
+                       if (ImGui::MenuItem("Save", "Command+S")) {
+                       }
+                       if (ImGui::MenuItem("Save as..")) {
+                        }
+                 ImGui::EndMenu();
+                 }
+                 ImGui::EndMainMenuBar();
+            }
+    
     // Rendering
     ImGui::Render();
 
@@ -102,7 +119,7 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     // Render Game Viewport
     m_MetalRenderer.BeginFrame();
     m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
-    m_MetalRenderer.Commit(true);
+    m_MetalRenderer.Commit();
 
     // Render ImGui UI
     m_MetalRenderer.BeginFrame();

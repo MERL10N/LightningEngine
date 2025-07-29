@@ -18,5 +18,5 @@ void MetalKitViewDelegate::drawInMTKView(MTK::View *p_MetalKitView)
 {
     m_MetalRenderer.BeginFrame();
     m_MetalRenderer.Render(p_MetalKitView);
-    m_MetalRenderer.Commit(true);
+    m_MetalRenderer.Commit();
 }

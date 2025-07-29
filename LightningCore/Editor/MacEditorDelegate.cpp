@@ -19,11 +19,11 @@ MacEditorDelegate::MacEditorDelegate(float p_Width, float p_Height, const char *
   m_Title(p_Title),
   m_MetalDevice(MTL::CreateSystemDefaultDevice())
 {
-    m_Frame = (CGRect){ {100.0, 100.0}, {static_cast<CGFloat>(m_Width), static_cast<CGFloat>(m_Height)} };
+    m_Frame = (CGRect){ {100.0, 100.0}, { static_cast<CGFloat>(m_Width), static_cast<CGFloat>(m_Height)} };
     m_MetalKitView = MTK::View::alloc()->init(m_Frame, m_MetalDevice);
     m_MetalKitView->setColorPixelFormat(MTL::PixelFormatRGBA8Unorm);
     m_MetalKitView->setClearColor(MTL::ClearColor::Make(0.0, 0.0, 0.0, 0.0));
-    m_MetalKitView->setPreferredFramesPerSecond(120);
+    m_MetalKitView->setPreferredFramesPerSecond(60);
 }
 
 

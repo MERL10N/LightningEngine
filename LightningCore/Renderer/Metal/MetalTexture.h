@@ -26,6 +26,16 @@ public:
         return m_Texture;
     }
     
+    inline int GetWidth()
+    {
+        return m_Width;
+    }
+    
+    inline int GetHeight()
+    {
+        return m_Height;
+    }
+    
 private:
     MTL::Texture* m_Texture;
     MTL::TextureDescriptor* m_TextureDescriptor;

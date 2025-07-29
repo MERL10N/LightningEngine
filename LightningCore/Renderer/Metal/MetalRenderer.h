@@ -48,13 +48,15 @@ public:
     
     void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
     
-    void Commit(const bool p_Present);
+    void Commit();
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
     
     inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
     
     inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    
+    inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
 

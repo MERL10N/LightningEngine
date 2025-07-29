@@ -23,7 +23,8 @@ Metal is the main focus since my main development machine is a Macbook.
 
 ## Current Progress
 
-<img width="2025" height="1259" alt="Screenshot 2025-07-27 at 8 08 48 PM (2)" src="https://github.com/user-attachments/assets/4f69872a-0f09-481b-b851-436ba27bbb43" />
+<img width="1512" height="886" alt="Screenshot 2025-07-28 at 9 19 18 PM" src="https://github.com/user-attachments/assets/5a0f7de6-b469-4a9e-b7cc-fddd58d70b09" />
+
 
 ## Checklist
 - [x] Render a window :tada:
@@ -34,6 +35,7 @@ Metal is the main focus since my main development machine is a Macbook.
 - [ ] Camera
 - [ ] Input System
 - [ ] Physics
+- [ ] Level Editor
 - [ ] Argument Buffers
 - [ ] Native Scripting System
 - [ ] ECS

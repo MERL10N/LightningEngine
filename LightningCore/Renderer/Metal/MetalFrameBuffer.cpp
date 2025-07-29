@@ -113,6 +113,9 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
     
     m_Width = p_Width;
     m_Height = p_Height;
+    
+    assert(m_Width >= 1);
+    assert(m_Height >= 1);
 
     Create(m_Width, m_Height);
 }
