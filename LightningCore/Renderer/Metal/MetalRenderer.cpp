@@ -95,11 +95,11 @@ void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
 
 }
 
-void MetalRenderer::Commit(const bool p_Present)
+void MetalRenderer::Commit()
 {
     m_RenderCommandEncoder->endEncoding();
     
-    if (p_Present && m_MTKView && m_MTKView->currentDrawable())
+    if (m_MTKView)
     {
         m_MetalCommandBuffer->presentDrawable(m_MTKView->currentDrawable());
     }

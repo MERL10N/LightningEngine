@@ -99,11 +99,11 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     
     if (ImGui::BeginMainMenuBar()) {
                   if (ImGui::BeginMenu("File")) {
-                       if (ImGui::MenuItem("Create")) {
+                       if (ImGui::MenuItem("New Scene")) {
                        }
-                       if (ImGui::MenuItem("Open", "Ctrl+O")) {
+                       if (ImGui::MenuItem("Open Scene", "Command+O")) {
                        }
-                       if (ImGui::MenuItem("Save", "Ctrl+S")) {
+                       if (ImGui::MenuItem("Save", "Command+S")) {
                        }
                        if (ImGui::MenuItem("Save as..")) {
                         }
@@ -119,7 +119,7 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     // Render Game Viewport
     m_MetalRenderer.BeginFrame();
     m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
-    m_MetalRenderer.Commit(true);
+    m_MetalRenderer.Commit();
 
     // Render ImGui UI
     m_MetalRenderer.BeginFrame();
