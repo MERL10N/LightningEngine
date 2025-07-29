@@ -30,7 +30,6 @@ public:
     virtual void drawInMTKView(MTK::View* p_MetalKitView) override;
 
 private:
-    NS::Application* m_SharedApplication;
     MetalRenderer m_MetalRenderer;
     MetalFrameBuffer m_MetalFrameBuffer;
     bool show_another_window;

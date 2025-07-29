@@ -11,40 +11,44 @@
 #include <vector>
 #include <stdint.h>
 
+#include <simd/simd.h>
 class MetalTexture;
-class MetalShader;
+class MeshBuilder;
+
+namespace MTL
+{
+    class Device;
+}
+
+enum AnimationType
+{
+    IDLE = 0,
+    PLAY,
+    JUMP,
+    ATTACK
+};
 
 class SpriteAnimation
 {
 public:
-    struct SpriteInfo
-    {
-        uint16_t m_PixelX = 0;
-        uint16_t m_PixelY = 0;
-        uint16_t m_SpriteRow = 0;
-        uint16_t m_SpriteCol = 0;
-        uint16_t m_SpriteWidth = 0;
-    };
+    SpriteAnimation(const char* p_FileName, MTL::Device* p_MetalDevice, void* p_VertexBuffer);
+    ~SpriteAnimation();
     
-    SpriteAnimation(MetalTexture &p_SpriteSheet, uint8_t p_NumSpritesX, uint8_t p_NumSpritesY, float p_WindowWidth, float p_WindowHeight);
+    void Play(const float p_DeltaTime);
     
-    void Render(const std::vector<SpriteInfo>& p_Sprites);
-    
-    void RenderAll();
+    void SetAnimationSpeed(const float p_NewSpeed);
     
 private:
     const char* m_FileName = nullptr;
     
-    uint8_t m_NumSpritesX;
-    uint8_t m_NumSpritesY;
+    int m_CurrentFrameIndex;
+    int m_FramesCount;
+
+    float m_Speed;
+    float m_AnimationCursor;
     
-    float m_WindowWidth;
-    float m_WindowHeight;
-    float m_SpriteAspectRatio;
-    float m_TexUSize;
-    float m_TexVSize;
-    
-    MetalTexture &m_SpriteSheet;
+    std::vector<simd::float4> m_Frames;
+    MetalTexture *m_SpriteSheet;
 };
 
 #endif /* SPRITEANIMATION_H */
