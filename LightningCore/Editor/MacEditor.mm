@@ -116,28 +116,28 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     ImGui::Render();
 
     
-    // Render Game Viewport
+    // Submit Framebuffer to Renderer
     m_MetalRenderer.BeginFrame();
     m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
     m_MetalRenderer.Commit();
 
-    // Render ImGui UI
-    m_MetalRenderer.BeginFrame();
-    auto* m_CommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
-    auto* m_CommandEncoder = m_CommandBuffer->renderCommandEncoder(p_MetalKitView->currentRenderPassDescriptor());
-    m_MetalFrameBuffer.UpdateViewport(m_CommandEncoder);
-   
-    ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), (__bridge id<MTLCommandBuffer>)(m_CommandBuffer), (__bridge id<MTLRenderCommandEncoder>)(m_CommandEncoder));
-    
-   if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-   {
-       ImGui::UpdatePlatformWindows();
-       ImGui::RenderPlatformWindowsDefault();
-   }
+    // Render ImGui UI and Viewport
+     m_MetalRenderer.BeginFrame();
+    auto* m_ImGuiCommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
+    auto* m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(p_MetalKitView->currentRenderPassDescriptor());
+    m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
 
-    m_CommandEncoder->endEncoding();
-    m_CommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
-    m_CommandBuffer->commit();
+    ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), (__bridge id<MTLCommandBuffer>)(m_ImGuiCommandBuffer), (__bridge id<MTLRenderCommandEncoder>)(m_ImGuiCommandEncoder));
+
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+    ImGui::UpdatePlatformWindows();
+    ImGui::RenderPlatformWindowsDefault();
+    }
+
+    m_ImGuiCommandEncoder->endEncoding();
+    m_ImGuiCommandBuffer->presentDrawable(p_MetalKitView->currentDrawable());
+    m_ImGuiCommandBuffer->commit();
    
 }
 
