@@ -30,6 +30,10 @@ MacEditor::MacEditor(MTK::View* p_MetalKitView)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
+    
+    m_Font = io.Fonts->AddFontFromFileTTF("Fonts/JetBrainsMono-Light.ttf", 16.0f, nullptr, io.Fonts->GetGlyphRangesDefault());
+    IM_ASSERT(m_Font);
+    
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable viewports
@@ -50,35 +54,34 @@ MacEditor::~MacEditor()
     ImGui::DestroyContext();
 }
 
-void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
+void MacEditor::DrawMenuBar()
 {
-    assert(p_MetalKitView);
+    if (ImGui::BeginMainMenuBar()) {
+                  if (ImGui::BeginMenu("File")) {
+                       if (ImGui::MenuItem("New Scene")) {
+                       }
+                       if (ImGui::MenuItem("Open Scene", "Command+O")) {
+                       }
+                       if (ImGui::MenuItem("Save", "Command+S")) {
+                       }
+                       if (ImGui::MenuItem("Save as..")) {
+                        }
+                 ImGui::EndMenu();
+                 }
+                 ImGui::EndMainMenuBar();
+            }
+}
 
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui_ImplMetal_NewFrame((__bridge MTLRenderPassDescriptor*)(p_MetalKitView->currentRenderPassDescriptor()));
-    ImGui_ImplOSX_NewFrame((__bridge NSView*)(p_MetalKitView));
-    ImGui::NewFrame();
-    
-    
-    ImGui::DockSpaceOverViewport();
-    ImGui::Begin("Welcome to Lightning Engine!");
-    ImGui::Text("This is a metal game engine written in C++");
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Checkbox("Message from developer", &show_another_window);
-    if (show_another_window)
-    {
-        ImGui::Begin("Message from developer", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("I can't wait to show you more of what is to come!");
-        if (ImGui::Button("Close"))
-            show_another_window = false;
-        ImGui::End();
-    }
-    ImGui::End();
-    
+void MacEditor::DrawContentBrowser()
+{
     ImGui::Begin("File explorer");
     ImGui::Text("Coming when it's ready");
+    ImGui::PopFont();
     ImGui::End();
-    
+}
+
+void MacEditor::DrawGameViewport()
+{
     // Prevent crashes when compiling for the first time
     if (m_ViewportSize.x == 0.0f || m_ViewportSize.y == 0.0f)
         ImGui::SetNextWindowSize(ImVec2(1920, 1200), ImGuiCond_FirstUseEver);
@@ -96,21 +99,43 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
         ImGui::Image(m_MetalFrameBuffer.GetAttachmentTexture(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2(1, 0), ImVec2(0, 1));
     }
     ImGui::End();
+}
+
+void MacEditor::DrawStatsBar()
+{
+    ImGui::Begin("Welcome to Lightning Engine!");
+    ImGui::Text("This is a metal game engine written in C++");
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Checkbox("Message from developer", &show_another_window);
+    if (show_another_window)
+    {
+        ImGui::Begin("Message from developer", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Text("I can't wait to show you more of what is to come!");
+        if (ImGui::Button("Close"))
+            show_another_window = false;
+        ImGui::End();
+    }
+    ImGui::End();
+}
+
+
+
+void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
+{
+    assert(p_MetalKitView);
+
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui_ImplMetal_NewFrame((__bridge MTLRenderPassDescriptor*)(p_MetalKitView->currentRenderPassDescriptor()));
+    ImGui_ImplOSX_NewFrame((__bridge NSView*)(p_MetalKitView));
+    ImGui::NewFrame();
     
-    if (ImGui::BeginMainMenuBar()) {
-                  if (ImGui::BeginMenu("File")) {
-                       if (ImGui::MenuItem("New Scene")) {
-                       }
-                       if (ImGui::MenuItem("Open Scene", "Command+O")) {
-                       }
-                       if (ImGui::MenuItem("Save", "Command+S")) {
-                       }
-                       if (ImGui::MenuItem("Save as..")) {
-                        }
-                 ImGui::EndMenu();
-                 }
-                 ImGui::EndMainMenuBar();
-            }
+    ImGui::DockSpaceOverViewport();
+    ImGui::PushFont(m_Font);
+    
+    DrawMenuBar();
+    DrawStatsBar();
+    DrawGameViewport();
+    DrawContentBrowser();
     
     // Rendering
     ImGui::Render();
@@ -131,8 +156,8 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
 
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
     }
 
     m_ImGuiCommandEncoder->endEncoding();
@@ -140,6 +165,5 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     m_ImGuiCommandBuffer->commit();
    
 }
-
 
 

@@ -21,12 +21,19 @@ namespace MTK
 
 class MetalFrameBuffer;
 
+struct ImFont;
 
 class MacEditor : public MTK::ViewDelegate
 {
 public:
     MacEditor(MTK::View* p_MetalKitView);
     virtual ~MacEditor() override;
+    
+    void DrawMenuBar();
+    void DrawContentBrowser();
+    void DrawGameViewport();
+    void DrawStatsBar();
+    
     virtual void drawInMTKView(MTK::View* p_MetalKitView) override;
 
 private:
@@ -34,6 +41,8 @@ private:
     MetalFrameBuffer m_MetalFrameBuffer;
     bool show_another_window;
     simd::float2 m_ViewportSize;
+    
+    ImFont* m_Font;
 };
 
 

@@ -42,7 +42,6 @@ MetalRenderer::~MetalRenderer()
         m_VertexBuffer = nullptr;
     }
     
-    
     if (m_Texture)
     {
         delete m_Texture;
@@ -71,7 +70,9 @@ void MetalRenderer::BeginFrame()
 void MetalRenderer::Render(MTK::View* p_MetalKitView)
 {
     m_MTKView = p_MetalKitView;
+    
     m_RenderPassDescriptor = m_MTKView->currentRenderPassDescriptor();
+    
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
@@ -84,6 +85,7 @@ void MetalRenderer::Render(MTK::View* p_MetalKitView)
 void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
 {
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    
     m_RenderPassDescriptor = p_RenderPassDescriptor;
     
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(p_RenderPassDescriptor);
