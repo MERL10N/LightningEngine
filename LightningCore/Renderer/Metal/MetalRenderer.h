@@ -67,8 +67,10 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder;
     MTL::RenderPipelineState* m_RenderToTexturePipelineState;
-    MetalVertexBuffer* m_VertexBuffer;
+    
     MTK::View* m_MTKView;
+    
+    MetalVertexBuffer* m_VertexBuffer;
     
     MetalShader m_Shader;
     

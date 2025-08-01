@@ -22,22 +22,40 @@ MetalFrameBuffer::MetalFrameBuffer(MTK::View* p_MetalKitView)
 MetalFrameBuffer::~MetalFrameBuffer()
 {
     if (m_AttachmentTexture)
+    {
         m_AttachmentTexture->release();
+        m_AttachmentTexture = nullptr;
+    }
     
     if (m_RenderPassDescriptor)
+    {
         m_RenderPassDescriptor->release();
+        m_RenderPassDescriptor = nullptr;
+    }
 
     if (m_MetalDevice)
+    {
         m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
     
     if (m_DepthAttachmentDescriptor)
+    {
         m_DepthAttachmentDescriptor->release();
+        m_DepthAttachmentDescriptor = nullptr;
+    }
     
     if (m_ColorAttachmentDescriptor)
+    {
         m_ColorAttachmentDescriptor->release();
+        m_ColorAttachmentDescriptor = nullptr;
+    }
     
     if (m_DepthTexture)
+    {
         m_DepthTexture->release();
+        m_DepthTexture = nullptr;
+    }
     
  
 }
