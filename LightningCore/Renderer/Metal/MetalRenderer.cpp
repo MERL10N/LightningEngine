@@ -9,8 +9,9 @@
 #include "MetalBuffer.h"
 #include "MetalTexture.h"
 
-MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
-: m_MetalDevice(p_MetalDevice),
+MetalRenderer::MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttachmentPixelFormat)
+: m_MetalDevice(p_MTKView->device()),
+  m_MTKView(p_MTKView),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_MetalCommandBuffer(nullptr),
   m_RenderPassDescriptor(nullptr),
@@ -42,7 +43,6 @@ MetalRenderer::~MetalRenderer()
         m_VertexBuffer = nullptr;
     }
     
-    
     if (m_Texture)
     {
         delete m_Texture;
@@ -68,25 +68,13 @@ void MetalRenderer::BeginFrame()
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
-void MetalRenderer::Render(MTK::View* p_MetalKitView)
-{
-    m_MTKView = p_MetalKitView;
-    m_RenderPassDescriptor = m_MTKView->currentRenderPassDescriptor();
-    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
-    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
-    m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-    m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0); 
-    m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
-    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
-
-}
-
 void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
 {
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    
     m_RenderPassDescriptor = p_RenderPassDescriptor;
     
-    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(p_RenderPassDescriptor);
+    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);

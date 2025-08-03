@@ -37,14 +37,12 @@ class MetalTexture;
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
-    MetalRenderer(MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat = MTL::PixelFormatInvalid);
+    MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttachmentPixelFormat = MTL::PixelFormatInvalid);
     ~MetalRenderer();
     
     void BeginFrame();
 
     void CreateQuad(const char* p_TextureFilePath);
-    
-    void Render(MTK::View* p_MetalKitView);
     
     void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
     

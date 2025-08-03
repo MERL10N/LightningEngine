@@ -6,7 +6,7 @@
 
 MetalKitViewDelegate::MetalKitViewDelegate(MTK::View* p_MetalKitView)
     : ViewDelegate(),
-      m_MetalRenderer(MetalRenderer(p_MetalKitView->device()))
+      m_MetalRenderer(MetalRenderer(p_MetalKitView))
 {
 }
 
@@ -17,6 +17,6 @@ MetalKitViewDelegate::~MetalKitViewDelegate()
 void MetalKitViewDelegate::drawInMTKView(MTK::View *p_MetalKitView)
 {
     m_MetalRenderer.BeginFrame();
-    m_MetalRenderer.Render(p_MetalKitView);
+    m_MetalRenderer.Render(p_MetalKitView->currentRenderPassDescriptor());
     m_MetalRenderer.Commit();
 }
