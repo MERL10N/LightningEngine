@@ -87,13 +87,15 @@ project "LightningEditor"
         ["Source/*"] = {"LightningEditor/Source/**.h", "LightningEditor/Source/**.cpp"},
         ["Shaders/*"] = { "LightningGame/Shaders/Shader.metal"},
         ["Assets/*"] = {"LightningGame/Assets/*.png"},
+        ["Fonts/*"] = {"LightningGame/Fonts/*.ttf"},
     }
 
     files { 
         "LightningEditor/Source/**.h", 
         "LightningEditor/Source/**.cpp", 
         "LightningGame/Shaders/Shader.metal", 
-        "LightningGame/Assets/*.png"
+        "LightningGame/Assets/*.png",
+        "LightningEditor/Fonts/*.ttf"
     }
 
     includedirs { "ThirdParty", "LightningEditor/Source", "LightningCore"}
