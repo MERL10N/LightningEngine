@@ -18,7 +18,7 @@ public:
     void Update();
 
 private:
-    NS::Application* m_SharedApplication;
+    NS::Application* m_SharedApplication = nullptr;
     MacEditorDelegate m_MacEditorApp;
 };
 

@@ -48,7 +48,7 @@ private:
     float m_AnimationCursor;
     
     std::vector<simd::float4> m_Frames;
-    MetalTexture *m_SpriteSheet;
+    MetalTexture *m_SpriteSheet = nullptr;
 };
 
 #endif /* SPRITEANIMATION_H */

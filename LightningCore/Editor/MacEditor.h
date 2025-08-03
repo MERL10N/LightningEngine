@@ -43,8 +43,8 @@ private:
     bool show_another_window;
     simd::float2 m_ViewportSize;
     
-    ImTextureRef* m_PlayButton;
-    ImFont* m_Font;
+    ImTextureRef* m_PlayButton = nullptr;
+    ImFont* m_Font = nullptr;
     
     float m_AspectRatio, m_FontScaleFactor;
 };

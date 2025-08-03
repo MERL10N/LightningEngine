@@ -46,16 +46,16 @@ class MetalShader
     }
     
 private:
-    MTL::Device* m_MetalDevice;
-    MTL::Library* m_Library;
-    MTL::Function* m_VertexFunction;
-    MTL::Function* m_FragmentFunction;
-    MTL::RenderPipelineDescriptor* m_RenderPipelineDescriptor;
-    MTL::RenderPipelineState* m_RenderPipelineState;
-    MTL::DepthStencilState* m_DepthStencilState;
-    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
-    MTL::VertexDescriptor* m_VertexDescriptor;
-    MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor;
+    MTL::Device* m_MetalDevice = nullptr;
+    MTL::Library* m_Library = nullptr;
+    MTL::Function* m_VertexFunction = nullptr;
+    MTL::Function* m_FragmentFunction = nullptr;
+    MTL::RenderPipelineDescriptor* m_RenderPipelineDescriptor = nullptr;
+    MTL::RenderPipelineState* m_RenderPipelineState = nullptr;
+    MTL::DepthStencilState* m_DepthStencilState = nullptr;
+    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
+    MTL::VertexDescriptor* m_VertexDescriptor = nullptr;
+    MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
     bool b_Result;

@@ -59,16 +59,16 @@ public:
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
 
 private:
-    MTL::Device* m_MetalDevice;
-    MTL::CommandQueue* m_MetalCommandQueue;
-    MTL::CommandBuffer* m_MetalCommandBuffer;
-    MTL::RenderPassDescriptor* m_RenderPassDescriptor;
-    MTL::RenderCommandEncoder* m_RenderCommandEncoder;
-    MTL::RenderPipelineState* m_RenderToTexturePipelineState;
+    MTL::Device* m_MetalDevice = nullptr;
+    MTL::CommandQueue* m_MetalCommandQueue = nullptr;
+    MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
+    MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
+    MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
+    MTL::RenderPipelineState* m_RenderToTexturePipelineState = nullptr;
     
-    MTK::View* m_MTKView;
+    MTK::View* m_MTKView = nullptr;
     
-    MetalVertexBuffer* m_VertexBuffer;
+    MetalVertexBuffer* m_VertexBuffer = nullptr;
     
     MetalShader m_Shader;
     

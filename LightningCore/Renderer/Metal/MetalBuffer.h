@@ -28,8 +28,8 @@ public:
     inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }
     
 private:
-    MTL::Buffer* m_VertexBuffer;
-    MTL::Device* m_MetalDevice;
+    MTL::Buffer* m_VertexBuffer = nullptr;
+    MTL::Device* m_MetalDevice = nullptr;
     bool b_IsSet;
     
 };

@@ -42,17 +42,17 @@ public:
     inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() { return m_RenderPassDescriptor; }
 
 private:
-    MTL::Device* m_MetalDevice;
-    MTK::View* m_MetalKitView;
+    MTL::Device* m_MetalDevice = nullptr;
+    MTK::View* m_MetalKitView = nullptr;
     
-    MTL::Texture* m_AttachmentTexture;
-    MTL::Texture* m_DepthTexture;
+    MTL::Texture* m_AttachmentTexture = nullptr;
+    MTL::Texture* m_DepthTexture = nullptr;
     
-    MTL::RenderPassDescriptor* m_RenderPassDescriptor;
-    MTL::TextureDescriptor* m_TextureDescriptor;
-    MTL::TextureDescriptor* m_DepthTextureDescriptor;
-    MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor;
-    MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor;
+    MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
+    MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
+    MTL::TextureDescriptor* m_DepthTextureDescriptor = nullptr;
+    MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
+    MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor = nullptr;
     
     float m_Width, m_Height;
 };

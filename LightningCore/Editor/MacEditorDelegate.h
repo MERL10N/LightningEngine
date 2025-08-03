@@ -39,25 +39,25 @@ private:
     float m_Width, m_Height;
     const char* m_Title;
     
-    MTK::View* m_MetalKitView;
-    MTL::Device* m_MetalDevice;
+    MTK::View* m_MetalKitView = nullptr;
+    MTL::Device* m_MetalDevice = nullptr;
     MacEditor* m_MacEditor = nullptr;
     
-    NS::Window* m_Window;
-    NS::Application* m_App;
+    NS::Window* m_Window = nullptr;
+    NS::Application* m_App = nullptr;
     
-    NS::Menu* m_Menu;
-    NS::Menu* m_MainMenu;
-    NS::Menu* m_AppMenu;
-    NS::Menu* pWindowMenu;
+    NS::Menu* m_Menu = nullptr;
+    NS::Menu* m_MainMenu = nullptr;
+    NS::Menu* m_AppMenu = nullptr;
+    NS::Menu* pWindowMenu = nullptr;
     
-    NS::String* m_AppName;
-    NS::String* quitItemName;
+    NS::String* m_AppName = nullptr;
+    NS::String* quitItemName = nullptr;
     
-    NS::MenuItem* m_AppMenuItem;
-    NS::MenuItem* pAppQuitItem;
-    NS::MenuItem* pWindowMenuItem;
-    NS::MenuItem* pCloseWindowItem;
+    NS::MenuItem* m_AppMenuItem = nullptr;
+    NS::MenuItem* pAppQuitItem = nullptr;
+    NS::MenuItem* pWindowMenuItem = nullptr;
+    NS::MenuItem* pCloseWindowItem = nullptr;
     CGRect frame;
  
 };
