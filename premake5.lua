@@ -14,7 +14,7 @@ workspace "LightningEngine"
         defines { "PLATFORM_MAC" }
         buildoptions { "-std=c++23" }
 
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui"}
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include"}
     filter {}
 
 -- Lightning Application

@@ -23,6 +23,7 @@ public:
     MetalVertexBuffer() = default;
     MetalVertexBuffer(MTL::Device* p_MetalDevice);
     ~MetalVertexBuffer();
+        
     void BindBuffer(const float* p_Vertices, uint32_t p_Size);
     
     inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }

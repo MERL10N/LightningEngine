@@ -10,7 +10,16 @@
 
 class EditorLayer
 {
+public:
+    EditorLayer();
+    ~EditorLayer();
     
+    void DrawStatsBar();
+    void DrawMenuBar();
+    void DrawContentBrowser();
+    
+private:
+    bool b_showAnotherWindow;
 };
 
 #endif /* EditorLayer_hpp */

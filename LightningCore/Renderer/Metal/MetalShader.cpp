@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <../spdlog/include/spdlog/spdlog.h>
 
 
 std::string MetalShader::LoadShaderFile(const std::string &path)
