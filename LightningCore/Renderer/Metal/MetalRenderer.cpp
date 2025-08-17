@@ -8,6 +8,7 @@
 #include "MeshBuilder.h"
 #include "MetalBuffer.h"
 #include "MetalTexture.h"
+#include "../../Primitives/SpriteAnimation.h"
 
 MetalRenderer::MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MTKView->device()),

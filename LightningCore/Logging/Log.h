@@ -11,12 +11,6 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 
-namespace spdlog
-{
-    class logger;
-}
-
-
 class Log
 {
 public:

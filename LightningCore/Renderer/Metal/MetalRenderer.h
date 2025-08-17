@@ -25,6 +25,8 @@ namespace CA
     class MetalDrawable;
 }
 
+class SpriteAnimation;
+
 
 #include "../Renderer.h"
 #include "MetalShader.h"
@@ -43,6 +45,10 @@ public:
     void BeginFrame();
 
     void CreateQuad(const char* p_TextureFilePath);
+    
+    void AddSprite(const SpriteAnimation &m_Sprite);
+    
+    void RemoveSprite(const SpriteAnimation &m_Sprite);
     
     void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
     
@@ -74,8 +80,8 @@ private:
     
     MetalTexture* m_Texture;
 
+   // std::vector<SpriteAnimation&> m_Queue;
     
-    //Timer m_Timer;
     
 };
 #endif //METALRENDERER_H
