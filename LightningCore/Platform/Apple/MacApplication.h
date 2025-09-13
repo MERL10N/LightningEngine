@@ -8,20 +8,20 @@
 #ifndef MacApplication_hpp
 #define MacApplication_hpp
 
-#include "MacApplicationDelegate.h"
+#include "MacWindow.h"
 #include "../Window.h"
 
 
-class MacApplication : public Window
+class MacApplication
 {
 public:
-    MacApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Game");
+    MacApplication(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "Lightning Game");
     ~MacApplication();
-    void Update();
+    void Update(float p_DeltaTime);
 
 private:
     NS::Application* m_SharedApplication;
-    MacApplicationDelegate macAppDelegate;
+    MacWindow macAppDelegate;
 };
 
 #endif /* MacApplication_hpp */

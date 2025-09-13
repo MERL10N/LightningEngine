@@ -72,7 +72,7 @@ void MacEditor::DrawGameViewport()
             m_ViewportSize.y = viewportPanelSize.y;
             m_MetalFrameBuffer.Resize(m_ViewportSize.x, m_ViewportSize.y);
         }
-        ImGui::Image(m_MetalFrameBuffer.GetAttachmentTexture(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2(1, 0), ImVec2(0, 1));
+        ImGui::Image(m_MetalFrameBuffer.GetAttachmentTexture(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2(0, 0), ImVec2(1, 1));
     }
     ImGui::End();
 }

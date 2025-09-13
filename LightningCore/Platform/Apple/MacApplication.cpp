@@ -8,15 +8,16 @@
 #include "MacApplication.h"
 
 
-MacApplication::MacApplication(float p_Width, float p_Height, const char* p_Title)
+MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
 : macAppDelegate(p_Width, p_Height, p_Title),
   m_SharedApplication(NS::Application::sharedApplication())
 {
-    m_SharedApplication->setDelegate(&macAppDelegate);
+   macAppDelegate.SetPreferredFramesPerSecond(120.f);
+   m_SharedApplication->setDelegate(&macAppDelegate);
 }
 
 
-void MacApplication::Update()
+void MacApplication::Update(float p_DeltaTime)
 {
     m_SharedApplication->run();
 }
@@ -24,11 +25,7 @@ void MacApplication::Update()
 
 MacApplication::~MacApplication()
 {
-    if (m_SharedApplication)
-    {
-        m_SharedApplication->release();
-        m_SharedApplication = nullptr;
-    }
+    m_SharedApplication->release();
 }
 
 

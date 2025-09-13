@@ -28,7 +28,7 @@ struct ImTextureRef;
 class MacEditor : public MTK::ViewDelegate
 {
 public:
-    MacEditor(MTK::View* p_MetalKitView);
+    explicit MacEditor(MTK::View* p_MetalKitView);
     virtual ~MacEditor() final;
     
     void DrawGameViewport();

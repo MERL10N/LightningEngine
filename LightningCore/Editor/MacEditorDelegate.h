@@ -25,7 +25,7 @@ class MacEditorDelegate : public NS::ApplicationDelegate
 {
 public:
     //MacApplicationDelegate() = default;
-    MacEditorDelegate(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
+    explicit MacEditorDelegate(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "");
     ~MacEditorDelegate();
 
     NS::Menu* createMenuBar();
@@ -49,15 +49,16 @@ private:
     NS::Menu* m_Menu = nullptr;
     NS::Menu* m_MainMenu = nullptr;
     NS::Menu* m_AppMenu = nullptr;
-    NS::Menu* pWindowMenu = nullptr;
+    NS::Menu* m_WindowMenu = nullptr;
     
     NS::String* m_AppName = nullptr;
-    NS::String* quitItemName = nullptr;
+    NS::String* m_QuitItemName = nullptr;
     
     NS::MenuItem* m_AppMenuItem = nullptr;
     NS::MenuItem* pAppQuitItem = nullptr;
     NS::MenuItem* pWindowMenuItem = nullptr;
-    NS::MenuItem* pCloseWindowItem = nullptr;
+    NS::MenuItem* m_CloseWindowItem = nullptr;
+    NS::MenuItem* m_SaveAllItem = nullptr;
     CGRect frame;
  
 };
