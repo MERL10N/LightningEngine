@@ -3,5 +3,5 @@
 int main()
 {
     auto macApp = MacApplication();
-    macApp.Update();
+    macApp.Update(60.f);
 }

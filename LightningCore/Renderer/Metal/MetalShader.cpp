@@ -219,6 +219,11 @@ MetalShader::~MetalShader()
     m_ColorAttachmentDescriptor->release();
 }
 
+void MetalShader::SetDevice(MTL::Device *p_MetalDevice)
+{
+    m_MetalDevice = p_MetalDevice;
+}
+
 template <typename T>
 void MetalShader::SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
 {
