@@ -15,9 +15,18 @@ struct VertexIn
     float3 color    [[attribute(2)]];
 }
 
-struct Uniforms
+struct VertexUniforms
 {
-    float4x4 projectionMatrix;
+    float uv_X;
+    float uv_Y;
+    float nx_Frames;
+    float ny_Frames;
+}
+
+struct FragmentUniforms
+{
+    float x_Dir;
+    float y_Dir;
 }
 
 struct VertexOut
@@ -28,7 +37,7 @@ struct VertexOut
 }
 
 vertex VertexOut vertexShader(VertexIn in [[stage_in]],
-                              constant Uniforms& uniforms [[buffer(1)]])
+                              constant VertexUniforms& uniforms [[buffer(1)]])
 {
     VertexOut out;
     float4 worldPos = float4(in.position, 1.0);
@@ -40,21 +49,16 @@ vertex VertexOut vertexShader(VertexIn in [[stage_in]],
 
 fragment float4 fragmentShader(VertexOut in [[stage_in]],
                                texture2d<float> spriteTexture [[texture(0)]],
-                               sampler spriteSampler [[sampler(0)]])
+                               sampler spriteSampler [[sampler(0)]],
+                               constant FragmentUnforms& f[[buffer(0)]])
 {
-    if (spriteTexture.get_width() == 0) {
-        // No texture bound, output vertex color only
-        return in.color;
-    }
-
-    float4 texColor = spriteTexture.sample(spriteSampler, in.texCoord);
-
-    // If texture sample is fully transparent (alpha == 0), fallback to vertex color
-    if (texColor.a == 0.0) {
-        return in.color;
-    }
-
-    return texColor * in.color;
+    float x = 1.0f / f.nx_Frames;
+    float y = 1.0f / f.ny_Frames;
+    
+    float2 uv = float2(in.texCoord.x * x, in.texCoord.y * y) + float2(x * f.uv_X, y * f.uv_Y);
+                                                                      
+                                                                    
+    returm spriteTexture.sample(spriteSampler, uv);
 }
 
 
