@@ -13,18 +13,21 @@
     #include "../Renderer/Metal/MetalTexture.h"
     #include "../Renderer/Metal/MetalBuffer.h"
     #include "../Renderer/Metal/MetalShader.h"
+#include "MeshBuilder.h"
+#include <Metal/Metal.hpp>
 #endif
 
 
 
-SpriteAnimation::SpriteAnimation(const char* p_FileName, MTL::Device* p_MetalDevice, void* p_VertexBuffer)
-: m_Size(100.f),
-  m_Rotation(0.f),
+SpriteAnimation::SpriteAnimation(const char* p_FileName, MTL::Device* p_Device, const Vector2 &p_Position, const Vector2 &p_Size, float p_Rotation)
+: m_Size(p_Size),
+  m_Rotation(p_Rotation),
   m_Color(Vector4{1.0f, 1.0f, 1.0f, 1.0f}),
-  m_SpriteSheet(new MetalTexture(p_FileName, p_MetalDevice)),
-  m_Shader(new MetalShader("../LightningGame/Shaders/Sprite.metal", p_MetalDevice, MTL::PixelFormat::PixelFormatDepth32Float))
+  m_Device(p_Device),
+  m_SpriteSheet(new MetalTexture(p_FileName)),
+  m_Shader(new MetalShader("../LightningGame/Shaders/Sprite.metal", m_Device ,"vertexShader", "fragmentShader"))
 {
-    MeshBuilder::GenerateQuad(p_VertexBuffer);
+    m_SpriteSheet->SetMetalDevice(m_Device);
 }
 
 SpriteAnimation::~SpriteAnimation()
@@ -33,5 +36,14 @@ SpriteAnimation::~SpriteAnimation()
     {
         delete m_SpriteSheet;
         m_SpriteSheet = nullptr;
+    }
+    if (m_Shader)
+    {
+        delete m_Shader;
+    }
+    if (m_Device)
+    {
+        m_Device->release();
+        m_Device = nullptr;
     }
 }

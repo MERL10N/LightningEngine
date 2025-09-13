@@ -20,6 +20,7 @@
     namespace MTL
     {
         class Device;
+        class Texture;
     }
 #endif
 
@@ -34,7 +35,7 @@ enum AnimationType
 class SpriteAnimation
 {
 public:
-    SpriteAnimation(const char* p_FileName, MTL::Device* p_MetalDevice, void* p_VertexBuffer);
+    explicit SpriteAnimation(const char* p_FileName, MTL::Device* p_Device, const Vector2 &p_Position, const Vector2 &p_Size, float p_Rotation);
     ~SpriteAnimation();
     
     inline void SetID(uint8_t p_ID)                    { m_ID = p_ID; }
@@ -48,6 +49,7 @@ public:
     inline float   GetRotation() { return m_Rotation; }
     inline Vector2 GetSize()     { return m_Size; }
     inline Vector4 GetColor()    { return m_Color; }
+    inline MetalTexture* GetTexture() { return m_SpriteSheet; }
 
     
 private:
@@ -60,8 +62,9 @@ private:
     float m_Rotation;
     uint8_t m_ID;
 
-    MetalTexture *m_SpriteSheet = nullptr;
-    MetalShader* m_Shader = nullptr;
+    MetalTexture* m_SpriteSheet = nullptr;
+    MetalShader*  m_Shader = nullptr;
+    MTL::Device*  m_Device;
 };
 
 #endif /* SPRITEANIMATION_H */
