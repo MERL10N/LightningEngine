@@ -44,7 +44,7 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_TextureFilePath);
+    void CreateQuad(const char* p_FilePath);
     
     void AddSprite(const SpriteAnimation &m_Sprite);
     
@@ -78,7 +78,7 @@ private:
     
     MetalShader m_Shader;
     
-    MetalTexture* m_Texture;
+    MetalTexture* m_Texture = nullptr;
 
    // std::vector<SpriteAnimation&> m_Queue;
     

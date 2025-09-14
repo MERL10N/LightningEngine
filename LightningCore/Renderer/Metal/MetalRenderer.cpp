@@ -7,6 +7,7 @@
 #include <MetalKit/MetalKit.hpp>
 #include "MeshBuilder.h"
 #include "../../Primitives/SpriteAnimation.h"
+#include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "../../Primitives/MeshBuilder.h"
 
@@ -54,10 +55,10 @@ MetalRenderer::~MetalRenderer()
     }
 }
 
-void MetalRenderer::CreateQuad(const char* p_TextureFilePath)
+void MetalRenderer::CreateQuad(const char* p_FilePath)
 {
-    m_Texture = MetalTexture(p_TextureFilePath);
-    m_Texture.SetMetalDevice(m_MetalDevice);
+    m_Texture = new MetalTexture(p_FilePath);
+    m_Texture->SetMetalDevice(m_MetalDevice);
     MeshBuilder::GenerateQuad(m_VertexBuffer);
 }
 
