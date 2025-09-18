@@ -14,7 +14,7 @@ workspace "LightningEngine"
         defines { "PLATFORM_MAC" }
         buildoptions { "-std=c++23" }
 
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include"}
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include", "ThirdParty/glfw/include"}
     filter {}
 
 -- Lightning Application
@@ -33,7 +33,7 @@ project "LightningGame"
     files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/Shader.metal",  "LightningGame/Assets/*.png"}
 
     includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
-    libdirs { "bin/%{cfg.buildcfg}" }
+    libdirs { "" }
     links { "LightningCore" }
 
     filter "system:macosx"
@@ -70,10 +70,14 @@ project "LightningGame"
             "-framework QuartzCore",
             "-framework Cocoa",
             "-framework AppKit",
-            "-framework GameController"
+            "-framework GameController",
+            "-framework IOKit",
+            "-framework CoreVideo"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb"}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include"}
+        libdirs { "ThirdParty/glfw/lib-universal" }
+        links { "glfw3" }
 
     filter {}
 
