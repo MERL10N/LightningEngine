@@ -7,19 +7,24 @@
 
 #include <MetalKit/MTKView.hpp>
 
+
+
 #include "../../Renderer/Metal/MetalRenderer.h"
+
 
 class MetalKitViewDelegate : public MTK::ViewDelegate
 {
 public:
-    explicit MetalKitViewDelegate(MTK::View* p_MetalKitView );
+    explicit MetalKitViewDelegate(MTK::View* p_MetalKitView);
     virtual ~MetalKitViewDelegate() override;
-    virtual void drawInMTKView(MTK::View* p_MetalKitView ) override;
+    virtual void drawInMTKView(MTK::View* p_MetalKitView) override;
     
-    inline MetalRenderer GetRenderer() { return m_MetalRenderer; }
+    //inline MetalRenderer GetRenderer() { return m_MetalRenderer; }
+    inline MTL::Device* GetMetalDevice() {return m_MetalRenderer.GetMetalDevice(); }
 
 private:
     MetalRenderer m_MetalRenderer;
+    MTL::Device* m_MetalDevice;
 };
 
 

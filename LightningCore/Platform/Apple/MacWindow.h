@@ -71,7 +71,7 @@ private:
     NS::String* m_QuitItemName;
     
     NS::MenuItem* m_AppMenuItem;
-    NS::MenuItem* pAppQuitItem;
+    NS::MenuItem* m_AppQuitItem;
     NS::MenuItem* m_WindowMenuItem;
     NS::MenuItem* m_CloseWindowItem;
     

@@ -22,7 +22,7 @@ namespace MTK
 
 namespace CA
 {
-    class MetalDrawable;
+    class MetalLayer;
 }
 
 class SpriteAnimation;
@@ -44,7 +44,7 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_FilePath);
+    void CreateQuad(const char* p_FilePath, float p_Width, float p_Height);
     
     void AddSprite(const SpriteAnimation &m_Sprite);
     
@@ -71,6 +71,7 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     MTL::RenderPipelineState* m_RenderToTexturePipelineState = nullptr;
+
     
     MTK::View* m_MTKView = nullptr;
     
@@ -79,6 +80,8 @@ private:
     MetalShader m_Shader;
     
     MetalTexture* m_Texture = nullptr;
+    
+    CA::MetalLayer* m_MetalLayer = nullptr;
 
    // std::vector<SpriteAnimation&> m_Queue;
     

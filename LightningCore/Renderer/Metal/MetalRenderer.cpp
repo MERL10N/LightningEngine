@@ -5,6 +5,7 @@
 #include "MetalRenderer.h"
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
+#include <QuartzCore/CAMetalLayer.hpp>
 #include "MeshBuilder.h"
 #include "../../Primitives/SpriteAnimation.h"
 #include "MetalTexture.h"
@@ -15,11 +16,13 @@ MetalRenderer::MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttac
 : m_MetalDevice(p_MTKView->device()),
   m_MTKView(p_MTKView),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
+  m_MetalLayer(m_MTKView->currentDrawable()->layer()),
   m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice, p_DepthAttachmentPixelFormat),
   m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice))
 {
     assert(m_MetalDevice);
-    CreateQuad("../LightningGame/Assets/megaman.png");
+    CreateQuad("../LightningGame/Assets/background.png", 2.0f, 2.0f);
+   
 }
 
 MetalRenderer::~MetalRenderer()
@@ -55,11 +58,11 @@ MetalRenderer::~MetalRenderer()
     }
 }
 
-void MetalRenderer::CreateQuad(const char* p_FilePath)
+void MetalRenderer::CreateQuad(const char* p_FilePath, float p_Width, float p_Height)
 {
     m_Texture = new MetalTexture(p_FilePath);
     m_Texture->SetMetalDevice(m_MetalDevice);
-    MeshBuilder::GenerateQuad(m_VertexBuffer);
+    MeshBuilder::GenerateQuad(m_VertexBuffer, p_Width, p_Height);
 }
 
 void MetalRenderer::BeginFrame()
@@ -73,9 +76,12 @@ void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-    m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);
-    m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
-    m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
+    if (m_Texture != nullptr)
+    {
+        m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);
+        m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
+        m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
+    }
 
 }
 

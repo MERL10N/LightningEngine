@@ -14,7 +14,6 @@
 MetalFrameBuffer::MetalFrameBuffer(MTK::View* p_MetalKitView)
 : m_Width(0.f),
   m_Height(0.f),
-  m_MetalKitView(p_MetalKitView),
   m_MetalDevice(p_MetalKitView->device())
 {
 }

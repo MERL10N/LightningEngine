@@ -71,8 +71,8 @@ NS::Menu* MacWindow::createMenuBar()
         pApp->terminate( pSender );
     } );
 
-    pAppQuitItem = m_AppMenu->addItem( m_QuitItemName, quitCb, NS::String::string( "q", UTF8StringEncoding ) );
-    pAppQuitItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
+    m_AppQuitItem = m_AppMenu->addItem( m_QuitItemName, quitCb, NS::String::string( "q", UTF8StringEncoding ) );
+    m_AppQuitItem->setKeyEquivalentModifierMask( NS::EventModifierFlagCommand );
     m_AppMenuItem->setSubmenu( m_AppMenu );
 
     m_WindowMenuItem = NS::MenuItem::alloc()->init();
@@ -117,14 +117,14 @@ void MacWindow::applicationDidFinishLaunching(NS::Notification* pNotification)
         NS::BackingStoreBuffered, false);
 
    
-    m_MetalKitView->setDelegate( m_MetalKitViewDelegate );
+    m_MetalKitView->setDelegate(m_MetalKitViewDelegate);
 
-    m_Window->setContentView( m_MetalKitView );
+    m_Window->setContentView(m_MetalKitView);
     m_Window->setTitle(NS::String::string(m_Title, NS::StringEncoding::UTF8StringEncoding));
     m_Window->makeKeyAndOrderFront(nullptr);
 
-    NS::Application* p_App = reinterpret_cast< NS::Application* >( pNotification->object() );
-    p_App->activateIgnoringOtherApps( true );
+    NS::Application* app = reinterpret_cast< NS::Application* >( pNotification->object() );
+    app->activateIgnoringOtherApps(true);
 }
 
 bool MacWindow::applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender )

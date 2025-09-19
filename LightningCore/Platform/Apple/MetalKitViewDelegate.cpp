@@ -4,7 +4,7 @@
 
 #include "MetalKitViewDelegate.h"
 
-MetalKitViewDelegate::MetalKitViewDelegate(MTK::View* p_MetalKitView)
+MetalKitViewDelegate::MetalKitViewDelegate(MTK::View *p_MetalKitView)
     : ViewDelegate(),
       m_MetalRenderer(MetalRenderer(p_MetalKitView))
 {

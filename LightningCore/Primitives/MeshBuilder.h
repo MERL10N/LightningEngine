@@ -15,7 +15,7 @@ class MeshBuilder
 public:
     
     static void GenerateTriangle(void* p_VertexBuffer);
-    static void GenerateQuad(void* p_VertexBuffer);
+    static void GenerateQuad(void* p_VertexBuffer, const float p_Width, const float p_Height);
     
 private:
     

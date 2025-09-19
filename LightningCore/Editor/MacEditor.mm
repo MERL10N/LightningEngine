@@ -23,7 +23,7 @@
 MacEditor::MacEditor(MTK::View* p_MetalKitView)
 : ViewDelegate(),
   m_EditorLayer(EditorLayer()),
-  m_MetalRenderer(MetalRenderer(p_MetalKitView, MTL::PixelFormatDepth32Float)),
+  m_MetalRenderer(MetalRenderer(p_MetalKitView)),
   m_MetalFrameBuffer(MetalFrameBuffer(p_MetalKitView)),
   m_AspectRatio(p_MetalKitView->drawableSize().width / p_MetalKitView->drawableSize().height),
   m_FontScaleFactor(10.f)

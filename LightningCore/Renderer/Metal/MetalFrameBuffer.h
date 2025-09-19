@@ -43,8 +43,7 @@ public:
 
 private:
     MTL::Device* m_MetalDevice = nullptr;
-    MTK::View* m_MetalKitView = nullptr;
-    
+
     MTL::Texture* m_AttachmentTexture = nullptr;
     MTL::Texture* m_DepthTexture = nullptr;
     
