@@ -14,7 +14,7 @@ workspace "LightningEngine"
         defines { "PLATFORM_MAC" }
         buildoptions { "-std=c++23" }
 
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include"}
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include", "ThirdParty/glfw/include"}
     filter {}
 
 -- Lightning Application
@@ -30,23 +30,31 @@ project "LightningGame"
         ["Assets/*"] = {"LightningGame/Assets/*.png"},
     }
 
-    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/Shader.metal",  "LightningGame/Assets/*.png"}
+    files 
+    { 
+        "LightningGame/Source/**.h", 
+        "LightningGame/Source/**.cpp", 
+        "LightningGame/Shaders/Shader.metal", 
+        "LightningGame/Assets/*.png",
+    }
 
     includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
-    libdirs { "bin/%{cfg.buildcfg}" }
-    links { "LightningCore" }
+    libdirs { "bin/%{cfg.buildcfg}"}
+    links { "LightningCore", "glfw3" }
 
     filter "system:macosx"
     targetextension ".app"
     xcodebuildsettings {
         ["INFOPLIST_FILE"] = "Info.plist",
-        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
+        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
         ["ARCHS"] = "arm64",
         ["VALID_ARCHS"] = "arm64",
         ["ONLY_ACTIVE_ARCH"] = "YES",
         ["SKIP_INSTALL"] = "YES",
         ["ENABLE_BITCODE"] = "NO"
     }
+
+    libdirs {"ThirdParty/glfw/lib-universal"}
 
     -- Enable profiling & debugging only for Debug builds
     filter "configurations:Debug"
@@ -70,10 +78,12 @@ project "LightningGame"
             "-framework QuartzCore",
             "-framework Cocoa",
             "-framework AppKit",
-            "-framework GameController"
+            "-framework GameController",
+            "-framework CoreGraphics",
+            "-framework IOKit"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb"}
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include", "ThirdParty/glfw/include"}
 
     filter {}
 
@@ -139,7 +149,7 @@ project "LightningEditor"
             "-framework GameController"
         }
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/spdlog/include", "ThirdParty/imgui"}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/spdlog/include", "ThirdParty/imgui", "ThirdParty/glfw"}
 
     filter {}
 
@@ -203,6 +213,8 @@ project "LightningCore"
 		    "ThirdParty/imgui/backends/imgui_impl_metal.mm",
 		    "ThirdParty/imgui/backends/imgui_impl_osx.h",
 		    "ThirdParty/imgui/backends/imgui_impl_osx.mm",
+            "ThirdParty/imgui/backends/imgui_impl_glfw.h",
+            "ThirdParty/imgui/backends/imgui_impl_glfw.cpp",
         }
 
 	filter "configurations:Debug"
