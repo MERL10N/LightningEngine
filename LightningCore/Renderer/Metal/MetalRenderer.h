@@ -24,7 +24,7 @@ namespace MTK
 namespace CA
 {
     class MetalLayer;
-class MetalDrawable;
+    class MetalDrawable;
 }
 
 class SpriteAnimation;
@@ -83,9 +83,5 @@ private:
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     CA::MetalDrawable* m_MetalDrawable = nullptr;
-
-   // std::vector<SpriteAnimation&> m_Queue;
-    
-    
 };
 #endif //METALRENDERER_H

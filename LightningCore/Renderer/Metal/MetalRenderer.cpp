@@ -15,12 +15,12 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat()),
+  m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat()),
   m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
   m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
-    CreateQuad("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Assets/background.png", 2.0f, 2.0f);
+    CreateQuad("../LightningGame/Assets/background.png", 2.0f, 2.0f);
    
 }
 

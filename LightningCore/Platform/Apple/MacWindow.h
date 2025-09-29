@@ -5,12 +5,6 @@
 #ifndef MACAPPLICATION_H
 #define MACAPPLICATION_H
 
-#include <Appkit/Appkit.h>
-
-namespace MTK
-{
-    class View;
-}
 namespace MTL
 {
     class Device;
@@ -59,7 +53,6 @@ private:
     CA::MetalLayer* m_MetalLayer;
     CA::MetalDrawable* m_MetalDrawable;
     GLFWwindow* m_GlfwWindow;
-    NSWindow* m_MetalWindow;
     MetalRenderer* m_MetalRenderer;
 };
 

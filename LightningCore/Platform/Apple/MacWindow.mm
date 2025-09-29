@@ -7,6 +7,7 @@
 #include <QuartzCore/QuartzCore.hpp>
 #include <QuartzCore/QuartzCore.h>
 #include "../../Renderer/Metal/MetalRenderer.h"
+#include <Appkit/Appkit.h>
 
 #define GLFW_INCLUDE_NONE
 #import <GLFW/glfw3.h>
@@ -34,7 +35,7 @@ MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     m_GlfwWindow = glfwCreateWindow(m_Width, m_Height, m_Title, nullptr, nullptr);
-    m_MetalWindow = glfwGetCocoaWindow(m_GlfwWindow);
+    NSWindow* m_MetalWindow = glfwGetCocoaWindow(m_GlfwWindow);
     m_MetalLayer = CA::MetalLayer::layer();
     m_MetalLayer->setDevice(m_MetalDevice);
     m_MetalLayer->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
