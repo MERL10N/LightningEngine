@@ -8,7 +8,7 @@
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
 
-#include "MacEditorDelegate.h"
+
 
 class MacEditorApplication
 {
@@ -18,8 +18,7 @@ public:
     void Update();
 
 private:
-    NS::Application* m_SharedApplication = nullptr;
-    MacEditorDelegate m_MacEditorDelagate;
+
 };
 
 #endif /* EditorApplication_hpp */

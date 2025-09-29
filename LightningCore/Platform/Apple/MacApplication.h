@@ -20,7 +20,7 @@ public:
     void Update(float p_DeltaTime);
 
 private:
-    MacWindow macAppDelegate;
+    MacWindow m_MacWindow;
 };
 
 #endif /* MacApplication_hpp */
