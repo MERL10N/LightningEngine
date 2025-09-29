@@ -9,23 +9,19 @@
 
 
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
-: macAppDelegate(p_Width, p_Height, p_Title),
-  m_SharedApplication(NS::Application::sharedApplication())
+: macAppDelegate(p_Width, p_Height, p_Title)
 {
-   macAppDelegate.SetPreferredFramesPerSecond(120.f);
-   m_SharedApplication->setDelegate(&macAppDelegate);
 }
 
 
 void MacApplication::Update(float p_DeltaTime)
 {
-    m_SharedApplication->run();
+    macAppDelegate.Update();
 }
 
 
 MacApplication::~MacApplication()
 {
-    m_SharedApplication->release();
 }
 
 

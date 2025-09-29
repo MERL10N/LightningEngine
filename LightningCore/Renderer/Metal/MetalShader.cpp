@@ -85,8 +85,8 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
-    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
+    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
     
     assert(m_RenderPipelineDescriptor);
     

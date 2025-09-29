@@ -23,7 +23,7 @@
 MacEditor::MacEditor(MTK::View* p_MetalKitView)
 : ViewDelegate(),
   m_EditorLayer(EditorLayer()),
-  m_MetalRenderer(MetalRenderer(p_MetalKitView)),
+  m_MetalRenderer(MetalRenderer(nullptr, nullptr)),
   m_MetalFrameBuffer(MetalFrameBuffer(p_MetalKitView)),
   m_AspectRatio(p_MetalKitView->drawableSize().width / p_MetalKitView->drawableSize().height),
   m_FontScaleFactor(10.f)
@@ -103,7 +103,7 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
     
     // Submit Framebuffer to Renderer
     m_MetalRenderer.BeginFrame();
-    m_MetalRenderer.Render(m_MetalFrameBuffer.GetRenderPassDescriptor());
+    m_MetalRenderer.Render();
     m_MetalRenderer.Commit();
 
     // Render ImGui UI and Viewport

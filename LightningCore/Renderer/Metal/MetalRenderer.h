@@ -13,6 +13,7 @@ namespace MTL
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class Buffer;
+    class RenderPassColorAttachmentDescriptor;
 }
 
 namespace MTK
@@ -23,6 +24,7 @@ namespace MTK
 namespace CA
 {
     class MetalLayer;
+class MetalDrawable;
 }
 
 class SpriteAnimation;
@@ -39,7 +41,7 @@ class MetalTexture;
 class MetalRenderer : public Renderer<MetalRenderer>
 {
 public:
-    MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttachmentPixelFormat = MTL::PixelFormatInvalid);
+    MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
     
     void BeginFrame();
@@ -50,7 +52,7 @@ public:
     
     void RemoveSprite(const SpriteAnimation &m_Sprite);
     
-    void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
+    void Render();
     
     void Commit();
     
@@ -69,11 +71,9 @@ private:
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
     MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
+    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     MTL::RenderPipelineState* m_RenderToTexturePipelineState = nullptr;
-
-    
-    MTK::View* m_MTKView = nullptr;
     
     MetalVertexBuffer* m_VertexBuffer = nullptr;
     
@@ -82,6 +82,7 @@ private:
     MetalTexture* m_Texture = nullptr;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
+    CA::MetalDrawable* m_MetalDrawable = nullptr;
 
    // std::vector<SpriteAnimation&> m_Queue;
     

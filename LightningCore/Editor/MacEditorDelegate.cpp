@@ -8,7 +8,7 @@
 #include "MacEditorDelegate.hpp"
 
 #include "MacEditor.h"
-#include "MetalKitViewDelegate.h"
+//#include "MetalKitViewDelegate.h"
 #include <Metal/Metal.hpp>
 #include <MetalKit/MetalKit.hpp>
 

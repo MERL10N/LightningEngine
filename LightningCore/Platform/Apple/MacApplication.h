@@ -20,7 +20,6 @@ public:
     void Update(float p_DeltaTime);
 
 private:
-    NS::Application* m_SharedApplication;
     MacWindow macAppDelegate;
 };
 

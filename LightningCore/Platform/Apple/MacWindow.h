@@ -5,7 +5,7 @@
 #ifndef MACAPPLICATION_H
 #define MACAPPLICATION_H
 
-#include <AppKit/NSApplication.hpp>
+#include <Appkit/Appkit.h>
 
 namespace MTK
 {
@@ -25,27 +25,28 @@ namespace NS
     class View;
 }
 
-class MetalKitViewDelegate;
+namespace CA
+{
+    class MetalLayer;
+    class MetalDrawable;
+}
 
-class MacWindow : public NS::ApplicationDelegate
+struct GLFWwindow;
+class MetalRenderer;
+
+class MacWindow
 {
 
 public:
     explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
-    void SetPreferredFramesPerSecond(float p_FPS);
+    void Update();
     ~MacWindow();
-
-    NS::Menu* createMenuBar();
-
-    virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
-    virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
-    virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
     
-    inline MTK::View* GetMetalKitView() { return m_MetalKitView; }
+    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
+    void resizeFrameBuffer(int width, int height);
+
+
     inline MTL::Device* GetDevice() { return m_MetalDevice; }
-    
-    inline MetalKitViewDelegate* GetMTKViewDelegate() { return m_MetalKitViewDelegate; }
-    
     inline unsigned int GetWidth() { return m_Width; }
     inline unsigned int GetHeight() { return m_Height; }
 
@@ -54,30 +55,12 @@ private:
     unsigned int m_Width, m_Height;
     const char* m_Title;
     
-    MTK::View* m_MetalKitView;
     MTL::Device* m_MetalDevice;
-    MetalKitViewDelegate* m_MetalKitViewDelegate = nullptr;
-    
-    NS::Window* m_Window;
-    NS::Application* m_Application;
-    NS::ApplicationDelegate* m_AppDelegate;
-    
-    NS::Menu* m_Menu;
-    NS::Menu* m_MainMenu;
-    NS::Menu* m_AppMenu;
-    NS::Menu* m_WindowMenu;
-    
-    NS::String* m_AppName;
-    NS::String* m_QuitItemName;
-    
-    NS::MenuItem* m_AppMenuItem;
-    NS::MenuItem* m_AppQuitItem;
-    NS::MenuItem* m_WindowMenuItem;
-    NS::MenuItem* m_CloseWindowItem;
-    
-    NS::View* m_View;
-    CGRect frame;
- 
+    CA::MetalLayer* m_MetalLayer;
+    CA::MetalDrawable* m_MetalDrawable;
+    GLFWwindow* m_GlfwWindow;
+    NSWindow* m_MetalWindow;
+    MetalRenderer* m_MetalRenderer;
 };
 
 #endif //MACAPPLICATION_H

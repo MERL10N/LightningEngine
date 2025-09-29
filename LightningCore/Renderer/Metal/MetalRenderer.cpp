@@ -4,7 +4,6 @@
 
 #include "MetalRenderer.h"
 #include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
 #include <QuartzCore/CAMetalLayer.hpp>
 #include "MeshBuilder.h"
 #include "../../Primitives/SpriteAnimation.h"
@@ -12,16 +11,16 @@
 #include "MetalBuffer.h"
 #include "../../Primitives/MeshBuilder.h"
 
-MetalRenderer::MetalRenderer(MTK::View* p_MTKView, MTL::PixelFormat p_DepthAttachmentPixelFormat)
-: m_MetalDevice(p_MTKView->device()),
-  m_MTKView(p_MTKView),
+MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
+: m_MetalDevice(p_MetalDevice),
+  m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_MetalLayer(m_MTKView->currentDrawable()->layer()),
-  m_Shader("../LightningGame/Shaders/Shader.metal", m_MetalDevice, p_DepthAttachmentPixelFormat),
-  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice))
+  m_Shader("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat()),
+  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
+  m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
-    CreateQuad("../LightningGame/Assets/background.png", 2.0f, 2.0f);
+    CreateQuad("/Users/kianmarvi/Documents/LightningEngine/LightningGame/Assets/background.png", 2.0f, 2.0f);
    
 }
 
@@ -50,12 +49,6 @@ MetalRenderer::~MetalRenderer()
         delete m_Texture;
         m_Texture = nullptr;
     }
-    
-    if (m_MTKView)
-    {
-        m_MTKView->release();
-        m_MTKView = nullptr;
-    }
 }
 
 void MetalRenderer::CreateQuad(const char* p_FilePath, float p_Width, float p_Height)
@@ -70,9 +63,14 @@ void MetalRenderer::BeginFrame()
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
-void MetalRenderer::Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor)
+void MetalRenderer::Render()
 {
-    m_RenderPassDescriptor = p_RenderPassDescriptor;
+    m_MetalDrawable = m_MetalLayer->nextDrawable();
+    m_RenderPassColorAttachmentDescriptor = m_RenderPassDescriptor->colorAttachments()->object(0);
+    m_RenderPassColorAttachmentDescriptor->setTexture(m_MetalDrawable->texture());
+    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(41.0f/255.0f, 42.0f/255.0f, 48.0f/255.0f, 1.0));
+    m_RenderPassColorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
+ 
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
@@ -89,10 +87,7 @@ void MetalRenderer::Commit()
 {
     m_RenderCommandEncoder->endEncoding();
     
-    if (m_MTKView)
-    {
-        m_MetalCommandBuffer->presentDrawable(m_MTKView->currentDrawable());
-    }
+    m_MetalCommandBuffer->presentDrawable(m_MetalDrawable);
     m_MetalCommandBuffer->commit();
     m_MetalCommandBuffer->waitUntilCompleted();
 }

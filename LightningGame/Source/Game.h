@@ -8,7 +8,7 @@
 #ifndef Game_hpp
 #define Game_hpp
 
-#include <Renderer/Metal/MetalBuffer.h>
+#include "Renderer/Metal/MetalBuffer.h"
 
 class Game
 {
