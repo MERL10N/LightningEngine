@@ -6,15 +6,14 @@
 //
 
 #include "MetalFrameBuffer.h"
-#include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
+#include "Metal/Metal.hpp"
 #include "MetalShader.h"
 #include <iostream>
 
 MetalFrameBuffer::MetalFrameBuffer(MTK::View* p_MetalKitView)
 : m_Width(0.f),
   m_Height(0.f),
-  m_MetalDevice(p_MetalKitView->device())
+  m_MetalDevice()
 {
 }
 

@@ -5,21 +5,21 @@
 //  Created by Kian Marvi on 7/9/25.
 //
 
-#include <../imgui/imgui.h>
-#include <../imgui/backends/imgui_impl_metal.h>
-#include <../imgui/backends/imgui_impl_osx.h>
+#include "imgui.h"
+#include "backends/imgui_impl_metal.h"
+#include "backends/imgui_impl_osx.h"
 
 #include <Metal/Metal.h>
 #include <MetalKit/MetalKit.h>
 
-#include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
+#include "Metal/Metal.hpp"
 
 
 #include "MacEditor.h"
 #include <iostream>
 
 
+/*
 MacEditor::MacEditor(MTK::View* p_MetalKitView)
 : ViewDelegate(),
   m_EditorLayer(EditorLayer()),
@@ -126,4 +126,4 @@ void MacEditor::drawInMTKView(MTK::View* p_MetalKitView)
    
 }
 
-
+*/

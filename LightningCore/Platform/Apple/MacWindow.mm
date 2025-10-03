@@ -3,16 +3,16 @@
 //
 
 #include "MacWindow.h"
-#include <Metal/Metal.hpp>
-#include <QuartzCore/QuartzCore.hpp>
+#include "Metal/Metal.hpp"
+#include "QuartzCore/QuartzCore.hpp"
 #include <QuartzCore/QuartzCore.h>
 #include "../../Renderer/Metal/MetalRenderer.h"
 #include <Appkit/Appkit.h>
 
 #define GLFW_INCLUDE_NONE
-#import <GLFW/glfw3.h>
+#import "GLFW/glfw3.h"
 #define GLFW_EXPOSE_NATIVE_COCOA
-#import <GLFW/glfw3native.h>
+#import "GLFW/glfw3native.h"
 
 void MacWindow::frameBufferSizeCallback(GLFWwindow *window, int width, int height)
 {

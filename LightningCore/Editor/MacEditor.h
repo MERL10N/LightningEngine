@@ -13,7 +13,7 @@ namespace MTK
     class View;
 }
 
-#include <MetalKit/MetalKit.hpp>
+/*
 #include "../Renderer/Metal/MetalRenderer.h"
 #include "../Renderer/Metal/MetalFrameBuffer.h"
 #include "EditorLayer.h"
@@ -25,7 +25,7 @@ class MetalFrameBuffer;
 struct ImFont;
 struct ImTextureRef;
 
-class MacEditor : public MTK::ViewDelegate
+class MacEditor :
 {
 public:
     explicit MacEditor(MTK::View* p_MetalKitView);
@@ -47,6 +47,6 @@ private:
     
     float m_AspectRatio, m_FontScaleFactor;
 };
-
+*/
 
 #endif /* MacEditor_hpp */

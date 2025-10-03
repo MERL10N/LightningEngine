@@ -6,7 +6,7 @@
 //
 
 #include "EditorLayer.h"
-#include <../imgui/imgui.h>
+#include "imgui.h"
 
 EditorLayer::EditorLayer()
 {

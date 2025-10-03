@@ -29,16 +29,13 @@ namespace CA
 
 class SpriteAnimation;
 
-
-#include "../Renderer.h"
 #include "MetalShader.h"
-#include "../../Primitives/MeshBuilder.h"
 #include <simd/simd.h>
 
 class MetalVertexBuffer;
 class MetalTexture;
 
-class MetalRenderer : public Renderer<MetalRenderer>
+class MetalRenderer
 {
 public:
     MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);

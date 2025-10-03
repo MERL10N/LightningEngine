@@ -4,18 +4,17 @@
 
 #include "MetalShader.h"
 
-#include <Metal/Metal.hpp>
+#include "Metal/Metal.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <../spdlog/include/spdlog/spdlog.h>
-#include "../../Logging/Log.h"
+
 
 std::string MetalShader::LoadShaderFile(const std::string &path)
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     if (!file.is_open()) {
-        Log::GetCoreLogger()->error("Cannot Open shader file");
+        //Log::GetCoreLogger()->error("Cannot Open shader file");
         return "";
     }
 
@@ -35,14 +34,13 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 {
     if (!p_MetalDevice)
     {
-        Log::GetCoreLogger()->error("Metal is not supported on this device.");
         return;
     }
 
     std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
-        Log::GetCoreLogger()->error("Metal Shader is empty");
+        //Log::GetCoreLogger()->error("Metal Shader is empty");
         std::cerr << "Error: metal shader is empty" << std::endl;
         return;
     }
@@ -130,10 +128,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     
     m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
     
-    if (!m_RenderPipelineState)
-    {
-        Log::GetCoreLogger()->error("Error occured when creating render pipeline state: ", error->localizedDescription()->utf8String());
-    }
     assert(m_RenderPipelineState);
     
     m_Library->release();

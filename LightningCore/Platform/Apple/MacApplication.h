@@ -9,7 +9,6 @@
 #define MacApplication_hpp
 
 #include "MacWindow.h"
-#include "../Window.h"
 
 
 class MacApplication

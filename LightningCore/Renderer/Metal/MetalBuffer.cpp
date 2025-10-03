@@ -6,16 +6,11 @@
 //
 
 #include "MetalBuffer.h"
-#include <Metal/Metal.hpp>
-#include "../../Logging/Log.h"
+#include "Metal/Metal.hpp"
 
 MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
 : m_MetalDevice(p_MetalDevice)
 {
-#ifdef DEBUG
-    Log::Init();
-    Log::GetCoreLogger()->warn("Initialise Vertex Buffer");
-#endif
 }
 
 void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size)

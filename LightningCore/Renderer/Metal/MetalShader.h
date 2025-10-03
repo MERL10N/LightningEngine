@@ -5,7 +5,7 @@
 #ifndef METALSHADER_H
 #define METALSHADER_H
 
-#include <Metal/MTLPixelFormat.hpp>
+#include "Metal/MTLPixelFormat.hpp"
 #include <string>
 
 namespace MTL

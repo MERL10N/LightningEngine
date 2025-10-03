@@ -8,9 +8,10 @@
 #ifndef Log_h
 #define Log_h
 
-#include <memory>
-#include <spdlog/spdlog.h>
+//#include <memory>
+//#include <spdlog/spdlog.h>
 
+/*
 class Log
 {
 public:
@@ -23,5 +24,5 @@ private:
     static std::shared_ptr<spdlog::logger>  s_CoreLogger;
     static std::shared_ptr<spdlog::logger>  s_ClientLogger;
 };
-
+*/
 #endif /* Log_h */

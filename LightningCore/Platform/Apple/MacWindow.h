@@ -35,9 +35,6 @@ public:
     explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
     void Update();
     ~MacWindow();
-    
-    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
-    void resizeFrameBuffer(int width, int height);
 
 
     inline MTL::Device* GetDevice() { return m_MetalDevice; }
@@ -45,6 +42,9 @@ public:
     inline unsigned int GetHeight() { return m_Height; }
 
 private:
+    
+    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
+    void resizeFrameBuffer(int width, int height);
     
     unsigned int m_Width, m_Height;
     const char* m_Title;
