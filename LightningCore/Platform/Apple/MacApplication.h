@@ -10,6 +10,8 @@
 
 #include "MacWindow.h"
 
+class MetalRenderer;
+
 
 class MacApplication
 {
@@ -20,6 +22,8 @@ public:
 
 private:
     MacWindow m_MacWindow;
+    MetalRenderer* m_MetalRenderer;
+    
 };
 
 #endif /* MacApplication_hpp */

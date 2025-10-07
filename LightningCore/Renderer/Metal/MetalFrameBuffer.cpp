@@ -10,10 +10,10 @@
 #include "MetalShader.h"
 #include <iostream>
 
-MetalFrameBuffer::MetalFrameBuffer(MTK::View* p_MetalKitView)
+MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 : m_Width(0.f),
   m_Height(0.f),
-  m_MetalDevice()
+  m_MetalDevice(p_MetalDevice)
 {
 }
 

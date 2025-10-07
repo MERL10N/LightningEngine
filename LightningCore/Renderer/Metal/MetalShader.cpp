@@ -210,7 +210,6 @@ MetalShader::~MetalShader()
     m_RenderPipelineState->release();
     m_VertexDescriptor->release();
     m_RenderPipelineDescriptor->release();
-    m_ColorAttachmentDescriptor->release();
 }
 
 void MetalShader::SetDevice(MTL::Device *p_MetalDevice)

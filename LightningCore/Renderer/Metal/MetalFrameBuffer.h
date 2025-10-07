@@ -30,7 +30,7 @@ class View;
 class MetalFrameBuffer
 {
 public:
-    MetalFrameBuffer(MTK::View* p_MetalKitView);;
+    MetalFrameBuffer(MTL::Device* p_MetalDevice);;
     ~MetalFrameBuffer();
     
     void Create(float p_Width, float p_Height);

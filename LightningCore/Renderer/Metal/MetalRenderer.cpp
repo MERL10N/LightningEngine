@@ -31,6 +31,12 @@ MetalRenderer::~MetalRenderer()
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
+    
+    if (m_MetalLayer)
+    {
+        m_MetalLayer->release();
+        m_MetalLayer = nullptr;
+    }
 
     if (m_MetalCommandQueue)
     {

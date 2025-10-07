@@ -44,19 +44,16 @@ MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_
     
     glfwSetWindowUserPointer(m_GlfwWindow, this);
     glfwSetFramebufferSizeCallback(m_GlfwWindow, frameBufferSizeCallback);
-    
-    m_MetalRenderer = new MetalRenderer(m_MetalDevice, m_MetalLayer);
 }
 
-void MacWindow::Update()
+bool MacWindow::Update()
 {
     while (!glfwWindowShouldClose(m_GlfwWindow))
     {
-           m_MetalRenderer->BeginFrame();
-           m_MetalRenderer->Render();
-           m_MetalRenderer->Commit();
-           glfwPollEvents();
+        glfwPollEvents();
+        return true;
     }
+    return false;
 }
 
 MacWindow::~MacWindow()

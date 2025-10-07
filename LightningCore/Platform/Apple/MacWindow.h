@@ -33,11 +33,12 @@ class MacWindow
 
 public:
     explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
-    void Update();
+    bool Update();
     ~MacWindow();
 
 
     inline MTL::Device* GetDevice() { return m_MetalDevice; }
+    inline CA::MetalLayer* GetMetalLayer() { return m_MetalLayer; }
     inline unsigned int GetWidth() { return m_Width; }
     inline unsigned int GetHeight() { return m_Height; }
 
