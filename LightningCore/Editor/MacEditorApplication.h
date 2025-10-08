@@ -8,7 +8,10 @@
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
 
+#include "EditorLayer.h"
+#include "Platform/Apple/MacWindow.h"
 
+class MetalRenderer;
 
 class MacEditorApplication
 {
@@ -19,6 +22,9 @@ public:
 
 private:
 
+   // EditorLayer m_EditorLayer;
+    MacWindow m_MacWindow;
+    MetalRenderer* m_MetalRenderer;
 };
 
 #endif /* EditorApplication_hpp */
