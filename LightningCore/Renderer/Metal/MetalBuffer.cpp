@@ -6,8 +6,7 @@
 //
 
 #include "MetalBuffer.h"
-#include <Metal/Metal.hpp>
-
+#include "Metal/Metal.hpp"
 
 MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
 : m_MetalDevice(p_MetalDevice)

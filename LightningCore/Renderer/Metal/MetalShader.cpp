@@ -4,7 +4,7 @@
 
 #include "MetalShader.h"
 
-#include <Metal/Metal.hpp>
+#include "Metal/Metal.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,7 +14,7 @@ std::string MetalShader::LoadShaderFile(const std::string &path)
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     if (!file.is_open()) {
-        std::cerr << "Error: Cannot open shader file." << std::endl;
+        //Log::GetCoreLogger()->error("Cannot Open shader file");
         return "";
     }
 
@@ -34,13 +34,13 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 {
     if (!p_MetalDevice)
     {
-        std::cerr << "Error: Metal is not supported on this device.\n";
         return;
     }
 
     std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
+        //Log::GetCoreLogger()->error("Metal Shader is empty");
         std::cerr << "Error: metal shader is empty" << std::endl;
         return;
     }
@@ -83,8 +83,8 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
-    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
+    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
     
     assert(m_RenderPipelineDescriptor);
     
@@ -128,10 +128,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     
     m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
     
-    if (!m_RenderPipelineState)
-    {
-        std::cerr << "Error occured when creating render pipeline state: " << error->localizedDescription()->utf8String() << std::endl;
-    }
     assert(m_RenderPipelineState);
     
     m_Library->release();
@@ -214,7 +210,11 @@ MetalShader::~MetalShader()
     m_RenderPipelineState->release();
     m_VertexDescriptor->release();
     m_RenderPipelineDescriptor->release();
-    m_ColorAttachmentDescriptor->release();
+}
+
+void MetalShader::SetDevice(MTL::Device *p_MetalDevice)
+{
+    m_MetalDevice = p_MetalDevice;
 }
 
 template <typename T>

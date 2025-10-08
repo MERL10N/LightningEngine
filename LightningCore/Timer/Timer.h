@@ -19,7 +19,7 @@ public:
         mach_timebase_info(&timebase);
     }
     
-    float GetElapsedTime()
+    inline float GetElapsedTime()
     {
         uint64_t elapsed = mach_absolute_time() - start;
         return (elapsed * timebase.numer) / (timebase.denom * 1.0e9);

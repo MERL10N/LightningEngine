@@ -18,8 +18,11 @@ namespace MTL
 class MetalTexture
 {
 public:
-    MetalTexture(const char* p_Filepath, MTL::Device* p_MetalDevice);
+    MetalTexture() = default;
+    explicit MetalTexture(const char* p_Filepath);
     ~MetalTexture();
+    
+    void SetMetalDevice(MTL::Device* p_MetalDevice);
     
     inline MTL::Texture* GetTexture()
     {
@@ -37,10 +40,10 @@ public:
     }
     
 private:
-    MTL::Texture* m_Texture;
-    MTL::TextureDescriptor* m_TextureDescriptor;
-    MTL::Device* m_MetalDevice;
-    const char* m_Filepath;
+    MTL::Texture* m_Texture = nullptr;
+    MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
+    MTL::Device* m_MetalDevice = nullptr;
+    const char* m_Filepath = nullptr;
     int m_Width, m_Height, m_Channels;
 };
 

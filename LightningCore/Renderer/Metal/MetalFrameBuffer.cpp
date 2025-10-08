@@ -6,38 +6,54 @@
 //
 
 #include "MetalFrameBuffer.h"
-#include <Metal/Metal.hpp>
-#include <MetalKit/MetalKit.hpp>
+#include "Metal/Metal.hpp"
 #include "MetalShader.h"
 #include <iostream>
 
-MetalFrameBuffer::MetalFrameBuffer(MTK::View* p_MetalKitView)
+MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 : m_Width(0.f),
   m_Height(0.f),
-  m_MetalKitView(p_MetalKitView),
-  m_MetalDevice(p_MetalKitView->device())
+  m_MetalDevice(p_MetalDevice)
 {
 }
 
 MetalFrameBuffer::~MetalFrameBuffer()
 {
     if (m_AttachmentTexture)
+    {
         m_AttachmentTexture->release();
+        m_AttachmentTexture = nullptr;
+    }
     
     if (m_RenderPassDescriptor)
+    {
         m_RenderPassDescriptor->release();
+        m_RenderPassDescriptor = nullptr;
+    }
 
     if (m_MetalDevice)
+    {
         m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
     
     if (m_DepthAttachmentDescriptor)
+    {
         m_DepthAttachmentDescriptor->release();
+        m_DepthAttachmentDescriptor = nullptr;
+    }
     
     if (m_ColorAttachmentDescriptor)
+    {
         m_ColorAttachmentDescriptor->release();
+        m_ColorAttachmentDescriptor = nullptr;
+    }
     
     if (m_DepthTexture)
+    {
         m_DepthTexture->release();
+        m_DepthTexture = nullptr;
+    }
     
  
 }

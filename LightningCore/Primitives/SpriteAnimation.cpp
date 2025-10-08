@@ -10,19 +10,24 @@
 #include "MeshBuilder.h"
 
 #ifdef __APPLE__
-#include "../Renderer/Metal/MetalTexture.h"
+    #include "../Renderer/Metal/MetalTexture.h"
+    #include "../Renderer/Metal/MetalBuffer.h"
+    #include "../Renderer/Metal/MetalShader.h"
+#include "MeshBuilder.h"
+#include "Metal/Metal.hpp"
 #endif
 
 
 
-SpriteAnimation::SpriteAnimation(const char* p_FileName, MTL::Device* p_MetalDevice, void* p_VertexBuffer)
-: m_AnimationCursor(0.f),
-  m_CurrentFrameIndex(0),
-  m_FramesCount((int)m_Frames.size()),
-  m_Speed(0.05f),
-  m_SpriteSheet(new MetalTexture(p_FileName, p_MetalDevice))
+SpriteAnimation::SpriteAnimation(const char* p_FileName, MTL::Device* p_Device, const Vector2 &p_Position, const Vector2 &p_Size, float p_Rotation)
+: m_Size(p_Size),
+  m_Rotation(p_Rotation),
+  m_Color(Vector4{1.0f, 1.0f, 1.0f, 1.0f}),
+  m_Device(p_Device),
+  m_SpriteSheet(new MetalTexture(p_FileName)),
+  m_Shader(new MetalShader("../LightningGame/Shaders/Sprite.metal", m_Device ,"vertexShader", "fragmentShader"))
 {
-    MeshBuilder::GenerateQuad(p_VertexBuffer);
+    m_SpriteSheet->SetMetalDevice(m_Device);
 }
 
 SpriteAnimation::~SpriteAnimation()
@@ -32,30 +37,13 @@ SpriteAnimation::~SpriteAnimation()
         delete m_SpriteSheet;
         m_SpriteSheet = nullptr;
     }
-}
-
-void SpriteAnimation::SetAnimationSpeed(const float p_NewSpeed)
-{
-    m_Speed = p_NewSpeed;
-}
-
-void SpriteAnimation::Play(const float p_DeltaTime)
-{ 
-    m_AnimationCursor += p_DeltaTime;
-    
-    if (m_AnimationCursor > m_Speed)
+    if (m_Shader)
     {
-        m_CurrentFrameIndex = (m_CurrentFrameIndex + 1) % m_FramesCount;
-        m_AnimationCursor = 0;
+        delete m_Shader;
     }
-    
-    simd::float4 p_Frame = m_Frames[m_CurrentFrameIndex];
-
-    // Normalise
-    p_Frame.x /= m_SpriteSheet->GetWidth();
-    p_Frame.y /= m_SpriteSheet->GetHeight();
-    p_Frame.z /= m_SpriteSheet->GetWidth();
-    p_Frame.w /= m_SpriteSheet->GetHeight();
+    if (m_Device)
+    {
+        m_Device->release();
+        m_Device = nullptr;
+    }
 }
-
-

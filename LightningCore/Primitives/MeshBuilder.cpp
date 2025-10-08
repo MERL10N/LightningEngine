@@ -26,15 +26,18 @@ void MeshBuilder::GenerateTriangle(void* p_VertexBuffer)
 #endif
 }
 
-void MeshBuilder::GenerateQuad(void* p_VertexBuffer)
+void MeshBuilder::GenerateQuad(void* p_VertexBuffer, const float p_Width, const float p_Height)
 {
-    constexpr float vertices[] =
+    const float halfWidth = p_Width * 0.5f;
+    const float halfHeight = p_Height * 0.5f;
+    
+    const float vertices[] =
     {
-        // positions          // colors           // texture coords
-          -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-          -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-           0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-           0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f    // bottom right
+           // positions                    // colors           // texture coords
+          -halfWidth,  halfHeight, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
+          -halfWidth, -halfHeight, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+           halfWidth,  halfHeight, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+           halfWidth, -halfHeight, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f    // bottom right
     };
     
 #ifdef __APPLE__
