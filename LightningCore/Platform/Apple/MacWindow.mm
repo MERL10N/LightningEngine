@@ -30,13 +30,13 @@ MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_
 : m_Width(p_Width),
   m_Height(p_Height),
   m_Title(p_Title),
-  m_MetalDevice(MTL::CreateSystemDefaultDevice())
+  m_MetalDevice(MTL::CreateSystemDefaultDevice()),
+  m_MetalLayer(CA::MetalLayer::layer())
 {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     m_GlfwWindow = glfwCreateWindow(m_Width, m_Height, m_Title, nullptr, nullptr);
     NSWindow* m_MetalWindow = glfwGetCocoaWindow(m_GlfwWindow);
-    m_MetalLayer = CA::MetalLayer::layer();
     m_MetalLayer->setDevice(m_MetalDevice);
     m_MetalLayer->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     m_MetalWindow.contentView.layer = (__bridge CAMetalLayer*)m_MetalLayer;

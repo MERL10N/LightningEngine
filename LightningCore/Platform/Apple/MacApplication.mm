@@ -11,9 +11,9 @@
 
 
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
-: m_MacWindow(p_Width, p_Height, p_Title)
+: m_MacWindow(p_Width, p_Height, p_Title),
+  m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()))
 {
-    m_MetalRenderer = new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer());
 }
 
 
