@@ -17,12 +17,15 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
 
 void MacEditorApplication::Update()
 {
-    while (m_MacWindow.Update())
-    {
-        m_MetalRenderer->BeginFrame();
-        m_MetalRenderer->Render();
-        m_MetalRenderer->Commit();
-    }
+        while (m_MacWindow.Update())
+        {
+            @autoreleasepool
+            {
+                m_MetalRenderer->BeginFrame();
+                m_MetalRenderer->Render();
+                m_MetalRenderer->Commit();
+            }
+        }
 }
 
 

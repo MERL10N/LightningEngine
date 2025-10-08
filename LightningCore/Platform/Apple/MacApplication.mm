@@ -21,9 +21,11 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
-        m_MetalRenderer->BeginFrame();
-        m_MetalRenderer->Render();
-        m_MetalRenderer->Commit();
+        @autoreleasepool {
+            m_MetalRenderer->BeginFrame();
+            m_MetalRenderer->Render();
+            m_MetalRenderer->Commit();
+        }
     }
 }
 
