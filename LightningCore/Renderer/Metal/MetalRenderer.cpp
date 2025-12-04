@@ -6,7 +6,6 @@
 #include "Metal/Metal.hpp"
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "MeshBuilder.h"
-#include "../../Primitives/SpriteAnimation.h"
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "../../Primitives/MeshBuilder.h"
@@ -15,12 +14,12 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
+  m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
   m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
   m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
-    CreateQuad("Assets/Background.png", 2.0f, 2.0f);
+    CreateQuad("../../../Assets/megaman.png", 1.0f, 1.0f);
    
 }
 
@@ -80,7 +79,8 @@ void MetalRenderer::Render()
     m_MetalDrawable = m_MetalLayer->nextDrawable();
     m_RenderPassColorAttachmentDescriptor = m_RenderPassDescriptor->colorAttachments()->object(0);
     m_RenderPassColorAttachmentDescriptor->setTexture(m_MetalDrawable->texture());
-    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(41.0f/255.0f, 42.0f/255.0f, 48.0f/255.0f, 1.0));
+    m_RenderPassColorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
+    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 1.0));
     m_RenderPassColorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
  
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
