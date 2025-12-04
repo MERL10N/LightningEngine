@@ -22,6 +22,13 @@ project "LightningCore"
         "LightningCore/**.mm",
         "ThirdParty/imgui/backends/imgui_impl_glfw.cpp",
         "ThirdParty/imgui/backends/imgui_impl_metal.mm",
+        "ThirdParty/imgui/backends/imgui_impl_glfw.h",
+        "ThirdParty/imgui/backends/imgui_impl_metal.h",
+        "ThirdParty/imgui/imgui.cpp",
+        "ThirdParty/imgui/imgui_draw.cpp",
+        "ThirdParty/imgui/imgui_tables.cpp",
+        "ThirdParty/imgui/imgui_widgets.cpp",
+        "ThirdParty/imgui/imgui_demo.cpp"
     }
 
     includedirs 
@@ -56,7 +63,7 @@ project "LightningCore"
             "Foundation.framework"
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
+        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
 
@@ -134,6 +141,11 @@ project "LightningGame"
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
         linkoptions  { "-stdlib=libc++" }
+         postbuildcommands
+        {
+            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders"
+        }
     filter {}
 
     filter "configurations:Debug"
@@ -208,6 +220,13 @@ project "LightningEditor"
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
         linkoptions  { "-stdlib=libc++" }
+
+        postbuildcommands
+        {
+            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders",
+            "cp -R ../LightningEditor/Fonts %{cfg.buildtarget.directory}/Fonts",
+        }
     filter {}
 
     filter "configurations:Debug"
