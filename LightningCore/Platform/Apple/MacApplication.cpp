@@ -1,7 +1,6 @@
 //
 //  MacApplication.cpp
 //  LightningCore
-//
 //  Created by Kian Marvi on 7/3/25.
 //
 
@@ -21,12 +20,13 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
-        @autoreleasepool
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         {
             m_MetalRenderer->BeginFrame();
             m_MetalRenderer->Render();
             m_MetalRenderer->Commit();
         }
+        m_Pool->release();
     }
 }
 

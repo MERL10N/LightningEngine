@@ -19,12 +19,13 @@ void MacEditorApplication::Update()
 {
         while (m_MacWindow.Update())
         {
-            @autoreleasepool
+            NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
                 m_MetalRenderer->BeginFrame();
                 m_MetalRenderer->Render();
                 m_MetalRenderer->Commit();
             }
+            m_Pool->release();
         }
 }
 
