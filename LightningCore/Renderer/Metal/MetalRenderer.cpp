@@ -19,7 +19,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
-    CreateQuad("../../../Assets/megaman.png");
    
 }
 

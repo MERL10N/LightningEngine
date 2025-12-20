@@ -12,6 +12,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()))
 {
+    m_MetalRenderer->CreateQuad("../../../Assets/megaman.png");
 }
 
 
