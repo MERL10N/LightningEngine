@@ -8,39 +8,47 @@
 #include "MeshBuilder.h"
 
 #ifdef __APPLE__
-    #include "../Renderer/Metal/MetalBuffer.h"
+    #include "Metal/Metal.hpp"
+#include "Renderer/Metal/MetalBuffer.h"
+#include "Renderer/Metal/MetalTexture.h"
 #endif
 
-void MeshBuilder::GenerateTriangle(void* p_VertexBuffer)
+Mesh MeshBuilder::GenerateQuad(MTL::Device *device, const char* textureFile)
 {
-    constexpr float vertices[] =
+    Vertex vertices[] =
     {
-        // positions         // colors
-         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
+        {{-0.75, -0.75, 0.0}, {1.0, 0.0, 0.0}, {0.0, 0.0}},
+        {{ 0.75, -0.75, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0}},
+        {{ 0.75,  0.75, 0.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}},
+        {{-0.75,  0.75, 0.0}, {0.0, 1.0, 0.0}, {0.0, 1.0}},
     };
     
-#ifdef __APPLE__
-    return static_cast<MetalVertexBuffer*>(p_VertexBuffer)->BindBuffer(vertices, sizeof(vertices));
-#endif
+    NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
+        
+    ushort indices[4] = {0, 1, 3, 2};
+    NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+        
+    //vertex buffer
+    m_Mesh.vertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.vertexBuffer->contents(), vertices, vertexBufferSize);
+        
+    //index buffer
+    m_Mesh.indexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.indexBuffer->contents(), indices, indexBufferSize);
+    
+    m_Mesh.texture = new MetalTexture(textureFile);
+    m_Mesh.texture->SetMetalDevice(device);
+    
+    return m_Mesh;
 }
 
-void MeshBuilder::GenerateQuad(void* p_VertexBuffer, const float p_Width, const float p_Height)
+MeshBuilder::~MeshBuilder()
 {
-    const float halfWidth = p_Width * 0.5f;
-    const float halfHeight = p_Height * 0.5f;
-    
-    const float vertices[] =
+    if (m_Mesh.texture)
     {
-           // positions                    // colors           // texture coords
-          -halfWidth,  halfHeight, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-          -halfWidth, -halfHeight, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-           halfWidth,  halfHeight, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-           halfWidth, -halfHeight, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f    // bottom right
-    };
-    
-#ifdef __APPLE__
-    return static_cast<MetalVertexBuffer*>(p_VertexBuffer)->BindBuffer(vertices, 4 * 8 * sizeof(vertices));
-#endif
+        delete m_Mesh.texture;
+        m_Mesh.texture = nullptr;
+    }
 }
+
+

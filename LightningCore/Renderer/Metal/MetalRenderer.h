@@ -31,6 +31,7 @@ class SpriteAnimation;
 
 #include "MetalShader.h"
 #include <simd/simd.h>
+#include "Primitives/MeshBuilder.h"
 
 class MetalVertexBuffer;
 class MetalTexture;
@@ -43,7 +44,7 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_FilePath, float p_Width, float p_Height);
+    void CreateQuad(const char* p_FilePath);
     
     void AddSprite(const SpriteAnimation &m_Sprite);
     
@@ -76,9 +77,10 @@ private:
     
     MetalShader m_Shader;
     
-    MetalTexture* m_Texture = nullptr;
-    
     CA::MetalLayer* m_MetalLayer = nullptr;
     CA::MetalDrawable* m_MetalDrawable = nullptr;
+    
+    Mesh m_QuadMesh;
+    MeshBuilder m_MeshBuilder;
 };
 #endif //METALRENDERER_H

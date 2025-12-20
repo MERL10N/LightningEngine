@@ -9,18 +9,18 @@
 #include "Metal/Metal.hpp"
 
 MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
-: m_MetalDevice(p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_VertexBuffer(nullptr)
 {
 }
 
-void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size)
+void MetalVertexBuffer::BindBuffer(const void* p_Vertices)
 {
     assert(m_MetalDevice);
-    assert (p_Size != 0);
     
     if (!m_VertexBuffer)
     {
-        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, p_Size, MTL::ResourceStorageModeShared);
+        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), MTL::ResourceStorageModeShared);
     }
     
 }
@@ -37,3 +37,10 @@ MetalVertexBuffer::~MetalVertexBuffer()
    }
 }
 
+
+
+MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_IndexBuffer(nullptr)
+{
+}
