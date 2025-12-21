@@ -1,7 +1,7 @@
-#include <Platform/Apple/MacApplication.h>
+#include "Platform/Apple/MacApplication.h"
 
 int main()
 {
     auto macApp = MacApplication();
-    macApp.Update();
+    macApp.Update(60.f);
 }

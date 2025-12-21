@@ -1,214 +1,240 @@
--- Lightning Engine Premake Setup
-
 workspace "LightningEngine"
     configurations { "Debug", "Release" }
-
-    -- Global compiler settings
-    language "C++"
-    cppdialect "C++23"
-    architecture "ARM64"
-
-    -- Platform-specific settings
     filter "system:macosx"
-        toolset "clang"
-        defines { "PLATFORM_MAC" }
-        buildoptions { "-std=c++23" }
-
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui"}
+        architecture "ARM64"
     filter {}
 
--- Lightning Application
-project "LightningGame"
-    kind "WindowedApp"
-    location "LightningGame"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-    vpaths 
-    {
-        ["Header Files/*"] = { "LightningGame/Source/**.h"},
-        ["Source Files/*"] = {"LightningGame/Source/**.cpp"},
-        ["Shaders/*"] = { "LightningGame/Shaders/Shader.metal"},
-        ["Assets/*"] = {"LightningGame/Assets/*.png"},
-    }
-
-    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/Shader.metal",  "LightningGame/Assets/*.png"}
-
-    includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
-    libdirs { "bin/%{cfg.buildcfg}" }
-    links { "LightningCore" }
-
-    filter "system:macosx"
-    targetextension ".app"
-    xcodebuildsettings {
-        ["INFOPLIST_FILE"] = "Info.plist",
-        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
-        ["ARCHS"] = "arm64",
-        ["VALID_ARCHS"] = "arm64",
-        ["ONLY_ACTIVE_ARCH"] = "YES",
-        ["SKIP_INSTALL"] = "YES",
-        ["ENABLE_BITCODE"] = "NO"
-    }
-
-    -- Enable profiling & debugging only for Debug builds
-    filter "configurations:Debug"
-        symbols "On"
-        optimize "Off"
-        xcodebuildsettings {
-            ["CODE_SIGN_IDENTITY"] = "Sign to Run Locally",
-            ["CODE_SIGN_STYLE"] = "Automatic",
-            ["CODE_SIGNING_REQUIRED"] = "YES",
-            ["CODE_SIGNING_ALLOWED"] = "YES",
-            ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements",
-            ["ENABLE_HARDENED_RUNTIME"] = "NO",
-            ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
-        }
-
-        -- Link Apple frameworks
-        linkoptions { 
-            "-framework Foundation",
-            "-framework Metal",
-            "-framework MetalKit",
-            "-framework QuartzCore",
-            "-framework Cocoa",
-            "-framework AppKit",
-            "-framework GameController"
-        }
-
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb"}
-
-    filter {}
-
-project "LightningEditor"
-
-    kind "WindowedApp"
-    location "LightningEditor"
-
-   vpaths 
-    {
-        ["Source/*"] = {"LightningEditor/Source/**.h", "LightningEditor/Source/**.cpp"},
-        ["Shaders/*"] = { "LightningGame/Shaders/Shader.metal"},
-        ["Assets/*"] = {"LightningGame/Assets/*.png"},
-        ["Fonts/*"] = {"LightningGame/Fonts/*.ttf"},
-    }
-
-    files { 
-        "LightningEditor/Source/**.h", 
-        "LightningEditor/Source/**.cpp", 
-        "LightningGame/Shaders/Shader.metal", 
-        "LightningGame/Assets/*.png",
-        "LightningEditor/Fonts/*.ttf"
-    }
-
-    includedirs { "ThirdParty", "LightningEditor/Source", "LightningCore"}
-    libdirs { "bin/%{cfg.buildcfg}" }
-    links { "LightningCore", "ImGui" }
-
-    filter "system:macosx"
-    targetextension ".app"
-    xcodebuildsettings {
-        ["INFOPLIST_FILE"] = "Info.plist",
-        ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
-        ["ARCHS"] = "arm64",
-        ["VALID_ARCHS"] = "arm64",
-        ["ONLY_ACTIVE_ARCH"] = "YES",
-        ["SKIP_INSTALL"] = "YES",
-        ["ENABLE_BITCODE"] = "NO"
-    }
-
-    -- Enable profiling & debugging only for Debug builds
-    filter "configurations:Debug"
-        symbols "On"
-        optimize "Off"
-        xcodebuildsettings {
-            ["CODE_SIGN_IDENTITY"] = "Sign to Run Locally",
-            ["CODE_SIGN_STYLE"] = "Automatic",
-            ["CODE_SIGNING_REQUIRED"] = "YES",
-            ["CODE_SIGNING_ALLOWED"] = "YES",
-            ["CODE_SIGN_ENTITLEMENTS"] = "Debug.entitlements",
-            ["ENABLE_HARDENED_RUNTIME"] = "NO",
-            ["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
-        }
-
-        -- Link Apple frameworks
-        linkoptions { 
-            "-framework Foundation",
-            "-framework Metal",
-            "-framework MetalKit",
-            "-framework QuartzCore",
-            "-framework Cocoa",
-            "-framework AppKit",
-            "-framework GameController"
-        }
-
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/spdlog/include", "ThirdParty/imgui"}
-
-    filter {}
-
--- Engine Core
+-- Lightning Core (static library)
 project "LightningCore"
-    kind "StaticLib"
-    staticruntime "on"
     location "LightningCore"
-    files { "LightningCore/**.h", "LightningCore/**.cpp", "LightningCore/**.mm"}
-    libdirs { "bin/%{cfg.buildcfg}" }
-    links {"ImGui" }
-    filter "system:macosx"
-        xcodebuildsettings {
-            ["SKIP_INSTALL"] = "YES",
-            ["ENABLE_BITCODE"] = "NO",
-            ["CLANG_ENABLE_MODULES"] = "NO"
-        }
+    kind "StaticLib"
+    language "C++"
 
- project "ImGui"
-	kind "StaticLib"
-	staticruntime "on"
-    location "ThirdParty/imgui"
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
-		"ThirdParty/imgui/imconfig.h",
-		"ThirdParty/imgui/imgui.h",
-		"ThirdParty/imgui/imgui.cpp",
-		"ThirdParty/imgui/imgui_draw.cpp",
-		"ThirdParty/imgui/imgui_internal.h",
-		"ThirdParty/imgui/imgui_widgets.cpp",
+    files 
+    { 
+        "LightningCore/**.h", 
+        "LightningCore/**.cpp",
+        "LightningCore/**.mm",
+        "ThirdParty/imgui/backends/imgui_impl_glfw.cpp",
+        "ThirdParty/imgui/backends/imgui_impl_metal.mm",
+        "ThirdParty/imgui/backends/imgui_impl_glfw.h",
+        "ThirdParty/imgui/backends/imgui_impl_metal.h",
+        "ThirdParty/imgui/imgui.cpp",
+        "ThirdParty/imgui/imgui_draw.cpp",
         "ThirdParty/imgui/imgui_tables.cpp",
-		"ThirdParty/imgui/imstb_rectpack.h",
-		"ThirdParty/imgui/imstb_textedit.h",
-		"ThirdParty/imgui/imstb_truetype.h",
-		"ThirdParty/imgui/imgui_demo.cpp"
-	}
+        "ThirdParty/imgui/imgui_widgets.cpp",
+        "ThirdParty/imgui/imgui_demo.cpp"
+    }
 
-	filter "system:windows"
-		systemversion "latest"
-		cppdialect "C++23"
-		staticruntime "On"
+    includedirs 
+    { 
+        "LightningCore",
+        "ThirdParty",
+        "ThirdParty/imgui",
+        "ThirdParty/glfw/include",
+        "ThirdParty/glm",
+        "ThirdParty/stb",
+        "ThirdParty/entt/single_include",
+        "ThirdParty/metal-cpp",
+    }
 
-	filter "system:linux"
-		pic "On"
-		systemversion "latest"
-		cppdialect "C++23"
-		staticruntime "On"
-    
     filter "system:macosx"
-     buildoptions  { "-std=c++23", "-fobjc-arc" }
+        cppdialect "C++23"
+        staticruntime "On"
 
-        xcodebuildsettings {
-            ["SKIP_INSTALL"] = "YES",
-            ["ENABLE_BITCODE"] = "NO",
-            ["CLANG_ENABLE_MODULES"] = "NO"
+     
+        links   
+        { 
+            "Metal.framework", 
+            "MetalKit.framework", 
+            "QuartzCore.framework",
+            "Cocoa.framework",
+            "AppKit.framework",
+            "GameController.framework",
+            "CoreGraphics.framework",
+            "CoreAnimation.framework",
+            "IOKit.framework",
+            "CoreVideo.framework",
+            "Foundation.framework"
         }
+
+        buildoptions { "-std=c++23", "-stdlib=libc++"}
+        linkoptions  { "-stdlib=libc++" }
+    filter {}
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }
+        symbols "On"
+    filter {}
+
+    filter "configurations:Release"
+        defines { "RELEASE" }
+        optimize "On"
+    filter {}
+
+-- Lightning Game (app)
+project "LightningGame"
+    location "LightningGame"
+    kind "WindowedApp"   
+    language "C++"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files 
+    {
+        "LightningGame/Source/**.h", 
+        "LightningGame/Source/**.cpp",
+        "LightningGame/Assets/**",
+        "LightningGame/Shaders/Shader.metal",
+    }
+
+    includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions" }
+
+    filter "system:macosx"
+        cppdialect "C++23"
+        staticruntime "On"
+        
         files
-        {
-            "ThirdParty/imgui/backends/imgui_impl_metal.h",
-		    "ThirdParty/imgui/backends/imgui_impl_metal.mm",
-		    "ThirdParty/imgui/backends/imgui_impl_osx.h",
-		    "ThirdParty/imgui/backends/imgui_impl_osx.mm",
+        { 
+            "LightningGame/Source/**.cpp",
+            "LightningGame/Source/**.h",
+            "LightningGame/Shaders/Shader.metal",
+            "LightningGame/Assets/**",
         }
 
-	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "on"
+        filter { "system:macosx", "files:LightningGame/Assets/**" }
+        buildaction "Resource"
+        filter { "system:macosx", "files:LightningGame/Shaders/**" }
+         buildaction "Resource"
+        filter {}
 
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "on"   
+        libdirs { "ThirdParty/glfw/lib-universal" }
+
+        links 
+        { 
+            "LightningCore",
+            "Metal.framework",
+            "MetalKit.framework",
+            "QuartzCore.framework",
+            "Cocoa.framework",
+            "AppKit.framework",
+            "GameController.framework",
+            "CoreGraphics.framework",
+            "IOKit.framework",
+            "CoreVideo.framework",
+            "Foundation.framework",
+        }
+
+        linkoptions { "-FThirdParty/glfw/lib-universal", "-lglfw3" }
+
+        xcodebuildsettings
+        {
+            ["GENERATE_INFOPLIST_FILE"] = "YES",
+            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame"
+        }
+
+        buildoptions { "-std=c++23", "-stdlib=libc++" }
+        linkoptions  { "-stdlib=libc++" }
+         postbuildcommands
+        {
+            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders"
+        }
+    filter {}
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }
+        symbols "On"
+    filter {}
+
+    filter "configurations:Release"
+        defines { "RELEASE" }
+        optimize "On"
+    filter {}
+
+    -- Lightning Editor (app)
+project "LightningEditor"
+    location "LightningEditor"
+    kind "WindowedApp"   
+    language "C++"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files 
+    {
+        "LightningEditor/Source/main.cpp", 
+        "LightningGame/Assets/**",
+        "LightningGame/Shaders/Shader.metal",
+    }
+
+    includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp" }
+
+    filter "system:macosx"
+        cppdialect "C++23"
+        staticruntime "On"
+        
+        files
+        { 
+            "LightningEditor/Source/main.cpp", 
+            "LightningGame/Shaders/Shader.metal",
+            "LightningGame/Assets/**",
+        }
+
+        filter { "system:macosx", "files:LightningGame/Assets/**" }
+        buildaction "Resource"
+        filter { "system:macosx", "files:LightningGame/Shaders/**" }
+         buildaction "Resource"
+        filter {}
+
+        libdirs { "ThirdParty/glfw/lib-universal" }
+
+        links 
+        { 
+            "LightningCore",
+            "Metal.framework",
+            "MetalKit.framework",
+            "QuartzCore.framework",
+            "Cocoa.framework",
+            "AppKit.framework",
+            "GameController.framework",
+            "CoreGraphics.framework",
+            "IOKit.framework",
+            "CoreVideo.framework",
+            "Foundation.framework",
+        }
+
+        linkoptions { "-FThirdParty/glfw/lib-universal", "-lglfw3" }
+
+        xcodebuildsettings
+        {
+            ["GENERATE_INFOPLIST_FILE"] = "YES",
+            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame"
+        }
+
+        buildoptions { "-std=c++23", "-stdlib=libc++" }
+        linkoptions  { "-stdlib=libc++" }
+
+        postbuildcommands
+        {
+            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders",
+            "cp -R ../LightningEditor/Fonts %{cfg.buildtarget.directory}/Fonts",
+        }
+    filter {}
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }
+        symbols "On"
+    filter {}
+
+    filter "configurations:Release"
+        defines { "RELEASE" }
+        optimize "On"
+    filter {}

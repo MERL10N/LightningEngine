@@ -14,14 +14,14 @@ public:
     
     virtual ~Window() {};
     
-    template<typename Self>
-    void Update(this Self&& self) { self.OnUpdate(); }
+    //template<typename Self>
+    //void Update(this Self&& self) { self.OnUpdate(); }
     
-    template<typename Self>
-    unsigned int GetWidth(this Self&& self) { self.OnGetWidth(); }
+    //template<typename Self>
+    //unsigned int GetWidth(this Self&& self) { self.OnGetWidth(); }
     
-    template<typename Self>
-    unsigned int GetHeight(this Self&& self) { self.OnGetHeight(); }
+    //template<typename Self>
+    //unsigned int GetHeight(this Self&& self) { self.OnGetHeight(); }
     
     // Window Attributes
     

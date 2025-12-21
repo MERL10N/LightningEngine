@@ -49,15 +49,15 @@ private:
     NS::Menu* m_Menu;
     NS::Menu* m_MainMenu;
     NS::Menu* m_AppMenu;
-    NS::Menu* pWindowMenu;
+    NS::Menu* m_WindowMenu;
     
     NS::String* m_AppName;
-    NS::String* quitItemName;
+    NS::String* m_QuitItemName;
     
     NS::MenuItem* m_AppMenuItem;
     NS::MenuItem* m_AppQuitItem;
     NS::MenuItem* m_WindowMenuItem;
-    NS::MenuItem* pCloseWindowItem;
+    NS::MenuItem* m_CloseWindowItem;
     CGRect m_Frame;
  
 };

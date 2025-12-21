@@ -13,6 +13,7 @@ namespace MTL
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class Buffer;
+    class RenderPassColorAttachmentDescriptor;
 }
 
 namespace MTK
@@ -22,37 +23,42 @@ namespace MTK
 
 namespace CA
 {
+    class MetalLayer;
     class MetalDrawable;
 }
 
+class SpriteAnimation;
 
-#include "../Renderer.h"
 #include "MetalShader.h"
-#include "../../Primitives/MeshBuilder.h"
 #include <simd/simd.h>
+#include "Primitives/MeshBuilder.h"
 
 class MetalVertexBuffer;
 class MetalTexture;
 
-class MetalRenderer : public Renderer<MetalRenderer>
+class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat = MTL::PixelFormatInvalid);
+    MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_TextureFilePath);
+    void CreateQuad(const char* p_FilePath);
     
-    void Render(MTK::View* p_MetalKitView);
+    void AddSprite(const SpriteAnimation &m_Sprite);
     
-    void Render(MTL::RenderPassDescriptor* p_RenderPassDescriptor);
+    void RemoveSprite(const SpriteAnimation &m_Sprite);
+    
+    void Render();
     
     void Commit();
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
     
     inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
+    
+    inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
     inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
     
@@ -61,23 +67,21 @@ public:
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
 
 private:
-    MTL::Device* m_MetalDevice;
-    MTL::CommandQueue* m_MetalCommandQueue;
-    MTL::CommandBuffer* m_MetalCommandBuffer;
-    MTL::RenderPassDescriptor* m_RenderPassDescriptor;
-    MTL::RenderCommandEncoder* m_RenderCommandEncoder;
-    MTL::RenderPipelineState* m_RenderToTexturePipelineState;
+    MTL::Device* m_MetalDevice = nullptr;
+    MTL::CommandQueue* m_MetalCommandQueue = nullptr;
+    MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
+    MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
+    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
+    MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     
-    MTK::View* m_MTKView;
-    
-    MetalVertexBuffer* m_VertexBuffer;
+    MetalVertexBuffer* m_VertexBuffer = nullptr;
     
     MetalShader m_Shader;
     
-    MetalTexture* m_Texture;
-
+    CA::MetalLayer* m_MetalLayer = nullptr;
+    CA::MetalDrawable* m_MetalDrawable = nullptr;
     
-    //Timer m_Timer;
-    
+    Mesh m_QuadMesh;
+    MeshBuilder m_MeshBuilder;
 };
 #endif //METALRENDERER_H

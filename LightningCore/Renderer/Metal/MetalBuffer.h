@@ -10,6 +10,7 @@
 
 #include <simd/simd.h>
 
+
 namespace MTL
 {
     class Device;
@@ -23,15 +24,30 @@ public:
     MetalVertexBuffer() = default;
     MetalVertexBuffer(MTL::Device* p_MetalDevice);
     ~MetalVertexBuffer();
-    void BindBuffer(const float* p_Vertices, uint32_t p_Size);
+        
+    void BindBuffer(const void* p_Vertices);
     
     inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }
     
 private:
-    MTL::Buffer* m_VertexBuffer;
-    MTL::Device* m_MetalDevice;
-    bool b_IsSet;
+    MTL::Buffer* m_VertexBuffer = nullptr;
+    MTL::Device* m_MetalDevice = nullptr;
+};
+
+class MetalIndexBuffer
+{
+public:
+    MetalIndexBuffer() = default;
+    MetalIndexBuffer(MTL::Device* p_MetalDevice);
+    ~MetalIndexBuffer();
+        
+    void BindBuffer(const void* p_Vertices);
     
+    inline MTL::Buffer* GetIndexBuffer() { return m_IndexBuffer; }
+    
+private:
+    MTL::Buffer* m_IndexBuffer = nullptr;
+    MTL::Device* m_MetalDevice = nullptr;
 };
 
 #endif /* MetalBuffer_hpp */

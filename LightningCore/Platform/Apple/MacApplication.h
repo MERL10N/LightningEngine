@@ -8,20 +8,22 @@
 #ifndef MacApplication_hpp
 #define MacApplication_hpp
 
-#include "MacApplicationDelegate.h"
-#include "../Window.h"
+#include "MacWindow.h"
+#include "Renderer/Metal/MetalRenderer.h"
+class MetalRenderer;
 
 
-class MacApplication : public Window
+class MacApplication
 {
 public:
-    MacApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Game");
+    MacApplication(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "Lightning Game");
     ~MacApplication();
-    void Update();
+    void Update(float p_DeltaTime);
 
 private:
-    NS::Application* m_SharedApplication;
-    MacApplicationDelegate macAppDelegate;
+    MacWindow m_MacWindow;
+    MetalRenderer m_MetalRenderer;
+    
 };
 
 #endif /* MacApplication_hpp */
