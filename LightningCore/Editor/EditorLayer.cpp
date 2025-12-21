@@ -46,7 +46,6 @@ void EditorLayer::DrawContentBrowser()
 {
     ImGui::Begin("File explorer");
     ImGui::Text("Coming when it's ready");
-    ImGui::PopFont();
     ImGui::End();
 }
 

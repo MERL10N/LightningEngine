@@ -46,6 +46,8 @@ private:
     MTL::CommandBuffer* m_ImGuiCommandBuffer = nullptr;
     MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
     simd::float2 m_ViewportSize;
+    
+    float m_AspectRatio;
 };
 
 #endif /* EditorApplication_hpp */

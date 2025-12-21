@@ -71,7 +71,6 @@ private:
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
     MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
-    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     
     MetalVertexBuffer* m_VertexBuffer = nullptr;

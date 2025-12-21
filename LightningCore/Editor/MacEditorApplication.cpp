@@ -12,12 +12,14 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
+#include "EditorLayer.h"
 
 MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
   m_MetalFrameBuffer(new MetalFrameBuffer(m_MacWindow.GetDevice())),
-  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
+  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_AspectRatio(p_Width / p_Height)
 {
     m_MetalRenderer->CreateQuad("../../../Assets/megaman.png");
     IMGUI_CHECKVERSION();
@@ -82,7 +84,7 @@ void MacEditorApplication::DrawGameViewport()
         ImGui::GetWindowDrawList()->AddImage(m_MetalFrameBuffer->GetAttachmentTexture(),
                                              ImVec2(pos.x, pos.y),
                                              ImVec2(pos.x + m_ViewportSize.x, pos.y + m_ViewportSize.y),
-                                             ImVec2(0, 1),ImVec2(1, 0));
+                                             ImVec2(0, 0),ImVec2(1, 1));
     }
     ImGui::End();
 }
@@ -93,6 +95,8 @@ void MacEditorApplication::Update()
         {
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
+                EditorLayer editorLayer;
+                
                 ImGuiIO& io = ImGui::GetIO();
                 
                 m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
@@ -108,9 +112,10 @@ void MacEditorApplication::Update()
                 
                 ImGui::DockSpaceOverViewport();
                 
+                editorLayer.DrawContentBrowser();
+                editorLayer.DrawMenuBar();
+                editorLayer.DrawStatsBar();
                 DrawGameViewport();
-                ImGui::Begin("Content Browser");
-                ImGui::End();
                 
                 // Submit FrameBuffer To Renderer
                 m_MetalRenderer->BeginFrame();

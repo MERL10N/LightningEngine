@@ -14,9 +14,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  //m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
-  m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
+  m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
    
@@ -49,11 +47,6 @@ MetalRenderer::~MetalRenderer()
         m_VertexBuffer = nullptr;
     }
     */
-    if (m_RenderPassDescriptor)
-    {
-        m_RenderPassDescriptor->release();
-        m_RenderPassDescriptor = nullptr;
-    }
     
     m_QuadMesh.indexBuffer->release();
     m_QuadMesh.vertexBuffer->release();
@@ -70,26 +63,18 @@ void MetalRenderer::BeginFrame()
 }
 
 void MetalRenderer::Render()
-{
-    m_MetalDrawable = m_MetalLayer->nextDrawable();
-    m_RenderPassColorAttachmentDescriptor = m_RenderPassDescriptor->colorAttachments()->object(0);
-    m_RenderPassColorAttachmentDescriptor->setTexture(m_MetalDrawable->texture());
-    m_RenderPassColorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
-    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 1.0));
-    m_RenderPassColorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
- 
+{ 
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
 
     m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
     m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(4), MTL::IndexType::IndexTypeUInt16, m_QuadMesh.indexBuffer, NS::UInteger(0));
+    m_RenderCommandEncoder->endEncoding();
 
 }
 
 void MetalRenderer::Commit()
 {
-    m_RenderCommandEncoder->endEncoding();
-    m_MetalCommandBuffer->presentDrawable(m_MetalDrawable);
     m_MetalCommandBuffer->commit();
 }

@@ -12,6 +12,16 @@
 #include "Renderer/Metal/MetalRenderer.h"
 class MetalRenderer;
 
+namespace MTL
+{
+    class RenderPassDescriptor;
+}
+
+namespace CA
+{
+  class MetalDrawable;
+}
+
 
 class MacApplication
 {
@@ -23,7 +33,9 @@ public:
 private:
     MacWindow m_MacWindow;
     MetalRenderer m_MetalRenderer;
-    
+    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
+    CA::MetalDrawable* m_WindowDrawable = nullptr;
+    float m_AspectRatio;
 };
 
 #endif /* MacApplication_hpp */
