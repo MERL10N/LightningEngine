@@ -41,7 +41,7 @@ public:
     MetalIndexBuffer(MTL::Device* p_MetalDevice);
     ~MetalIndexBuffer();
         
-    void BindBuffer(const float* p_Vertices);
+    void BindBuffer(const void* p_Vertices);
     
     inline MTL::Buffer* GetIndexBuffer() { return m_IndexBuffer; }
     

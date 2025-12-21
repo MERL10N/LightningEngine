@@ -44,3 +44,26 @@ MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice)
   m_IndexBuffer(nullptr)
 {
 }
+
+MetalIndexBuffer::~MetalIndexBuffer()
+{
+   if (m_IndexBuffer)
+   {
+       m_IndexBuffer->release();
+   }
+   if (m_MetalDevice)
+   {
+       m_MetalDevice->release();
+   }
+}
+
+void MetalIndexBuffer::BindBuffer(const void* p_Vertices)
+{
+    assert(m_MetalDevice);
+    
+    if (!m_IndexBuffer)
+    {
+        m_IndexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), MTL::ResourceStorageModeShared);
+    }
+    
+}

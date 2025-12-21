@@ -15,7 +15,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
+  //m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
   m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
@@ -42,12 +42,13 @@ MetalRenderer::~MetalRenderer()
         m_MetalCommandQueue = nullptr;
     }
     
+    /*
     if (m_VertexBuffer)
     {
         delete m_VertexBuffer;
         m_VertexBuffer = nullptr;
     }
-    
+    */
     if (m_RenderPassDescriptor)
     {
         m_RenderPassDescriptor->release();

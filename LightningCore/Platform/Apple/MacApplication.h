@@ -9,7 +9,7 @@
 #define MacApplication_hpp
 
 #include "MacWindow.h"
-
+#include "Renderer/Metal/MetalRenderer.h"
 class MetalRenderer;
 
 
@@ -22,7 +22,7 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MetalRenderer* m_MetalRenderer;
+    MetalRenderer m_MetalRenderer;
     
 };
 

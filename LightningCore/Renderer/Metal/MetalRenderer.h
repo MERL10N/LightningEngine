@@ -58,6 +58,8 @@ public:
     
     inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
     
+    inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
+    
     inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
     
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
@@ -71,7 +73,6 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
-    MTL::RenderPipelineState* m_RenderToTexturePipelineState = nullptr;
     
     MetalVertexBuffer* m_VertexBuffer = nullptr;
     
