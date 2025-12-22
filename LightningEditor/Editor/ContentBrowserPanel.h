@@ -8,14 +8,17 @@
 #ifndef ContentBrowserPanel_h
 #define ContentBrowserPanel_h
 
+#include <filesystem>
+
 class ContentBrowserPanel
 {
 public:
-    ContentBrowserPanel() = default;
+    ContentBrowserPanel();
     ~ContentBrowserPanel();
     
-    static void Render();
+    void Render();
+private:
+    std::filesystem::path m_CurrentDirectory;
+    
 };
-
-
 #endif /* ContentBrowserPanel_hpp */
