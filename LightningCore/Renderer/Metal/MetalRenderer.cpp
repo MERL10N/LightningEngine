@@ -40,14 +40,6 @@ MetalRenderer::~MetalRenderer()
         m_MetalCommandQueue = nullptr;
     }
     
-    /*
-    if (m_VertexBuffer)
-    {
-        delete m_VertexBuffer;
-        m_VertexBuffer = nullptr;
-    }
-    */
-    
     m_QuadMesh.indexBuffer->release();
     m_QuadMesh.vertexBuffer->release();
 }
