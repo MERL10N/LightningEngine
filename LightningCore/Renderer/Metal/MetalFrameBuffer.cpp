@@ -63,7 +63,7 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_TextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     m_TextureDescriptor->setWidth(p_Width);
     m_TextureDescriptor->setHeight(p_Height);
-    m_TextureDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     m_TextureDescriptor->setTextureType(MTL::TextureType2D);
     m_TextureDescriptor->setStorageMode(MTL::StorageModePrivate);
     m_TextureDescriptor->setUsage(MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead);

@@ -26,7 +26,7 @@ void ContentBrowserPanel::Render()
     
     if (m_CurrentDirectory != std::filesystem::path(s_AssetsPath))
     {
-        if (ImGui::Button("<-"))
+        if (ImGui::Button("Go back"))
         {
             m_CurrentDirectory = m_CurrentDirectory.parent_path();
         }
