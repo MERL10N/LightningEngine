@@ -14,7 +14,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat())
+  m_Shader("Assets/Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
    

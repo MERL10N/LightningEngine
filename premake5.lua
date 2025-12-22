@@ -143,8 +143,7 @@ project "LightningGame"
         linkoptions  { "-stdlib=libc++" }
          postbuildcommands
         {
-            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
-            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders"
+            "cp -R ../LightningGame/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
         }
     filter {}
 
@@ -170,8 +169,8 @@ project "LightningEditor"
     files 
     {
         "LightningEditor/Source/main.cpp", 
-        "LightningGame/Assets/**",
-        "LightningGame/Shaders/Shader.metal",
+        "LightningEditor/Assets/**",
+        "LightningEditor/Assets/Shaders/Shader.metal",
     }
 
     includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp" }
@@ -182,9 +181,10 @@ project "LightningEditor"
         
         files
         { 
-            "LightningEditor/Source/main.cpp", 
-            "LightningGame/Shaders/Shader.metal",
-            "LightningGame/Assets/**",
+            "LightningEditor/Source/**.cpp",
+            "LightningEditor/Source/**.h",  
+            "LightningEditor/Assets/Shaders/Shader.metal",
+            "LightningEditor/Assets/**",
         }
 
         filter { "system:macosx", "files:LightningGame/Assets/**" }
@@ -223,9 +223,8 @@ project "LightningEditor"
 
         postbuildcommands
         {
-            "cp -R ../LightningGame/Assets %{cfg.buildtarget.directory}/Assets",
-            "cp -R ../LightningGame/Shaders %{cfg.buildtarget.directory}/Shaders",
-            "cp -R ../LightningEditor/Fonts %{cfg.buildtarget.directory}/Fonts",
+            --"cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
         }
     filter {}
 

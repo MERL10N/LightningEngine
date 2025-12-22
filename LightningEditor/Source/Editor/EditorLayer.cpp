@@ -7,6 +7,9 @@
 
 #include "EditorLayer.h"
 #include "imgui.h"
+#include "ContentBrowserPanel.h"
+
+ContentBrowserPanel contentPanel;
 
 EditorLayer::EditorLayer()
 {
@@ -44,9 +47,7 @@ void EditorLayer::DrawMenuBar()
 
 void EditorLayer::DrawContentBrowser()
 {
-    ImGui::Begin("File explorer");
-    ImGui::Text("Coming when it's ready");
-    ImGui::End();
+    contentPanel.Render();
 }
 
 void EditorLayer::DrawStatsBar()

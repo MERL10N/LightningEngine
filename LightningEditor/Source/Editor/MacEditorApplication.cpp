@@ -21,7 +21,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_AspectRatio(p_Width / p_Height)
 {
-    m_MetalRenderer->CreateQuad("../../../Assets/megaman.png");
+    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -35,7 +35,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOther(m_MacWindow.GetWindow(), true);
     ImGui_ImplMetal_Init(m_MacWindow.GetDevice());
-    io.Fonts->AddFontDefault();
+    io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
     
     m_MetalFrameBuffer->Create(p_Width, p_Height);
 }
