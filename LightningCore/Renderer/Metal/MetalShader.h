@@ -6,6 +6,7 @@
 #define METALSHADER_H
 
 #include "Metal/MTLPixelFormat.hpp"
+#include "Metal/MTLRenderCommandEncoder.hpp"
 #include <string>
 
 namespace MTL
@@ -38,10 +39,17 @@ class MetalShader
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
     template <typename T>
-    void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
-    
+    void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    {
+        encoder->setFragmentBytes(value, sizeof(value), index);
+    }
+
     template <typename T>
-    void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index);
+    void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    {
+        encoder->setVertexBytes(value, sizeof(value), index);
+    }
+
     
     inline MTL::RenderPipelineState* GetRenderPipelineState()
     {
@@ -61,12 +69,8 @@ private:
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
-    bool b_Result;
-    
-    
     std::string LoadShaderFile(const std::string& path);
     
-    bool b_IsValid;
 };
 
 

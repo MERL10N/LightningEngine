@@ -16,21 +16,15 @@ namespace MTL
     class RenderPassColorAttachmentDescriptor;
 }
 
-namespace MTK
-{
-    class View;
-}
-
 namespace CA
 {
     class MetalLayer;
     class MetalDrawable;
 }
 
-class SpriteAnimation;
-
 #include "MetalShader.h"
 #include <simd/simd.h>
+#include "Primitives/MeshBuilder.h"
 
 class MetalVertexBuffer;
 class MetalTexture;
@@ -43,11 +37,8 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_FilePath, float p_Width, float p_Height);
-    
-    void AddSprite(const SpriteAnimation &m_Sprite);
-    
-    void RemoveSprite(const SpriteAnimation &m_Sprite);
+    void CreateQuad(const char* p_FilePath);
+
     
     void Render();
     
@@ -56,6 +47,8 @@ public:
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
     
     inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
+    
+    inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
     inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
     
@@ -68,17 +61,15 @@ private:
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
     MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
-    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
-    MTL::RenderPipelineState* m_RenderToTexturePipelineState = nullptr;
     
     MetalVertexBuffer* m_VertexBuffer = nullptr;
     
     MetalShader m_Shader;
     
-    MetalTexture* m_Texture = nullptr;
-    
     CA::MetalLayer* m_MetalLayer = nullptr;
-    CA::MetalDrawable* m_MetalDrawable = nullptr;
+    
+    Mesh m_QuadMesh;
+    MeshBuilder m_MeshBuilder;
 };
 #endif //METALRENDERER_H

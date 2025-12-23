@@ -19,16 +19,16 @@ MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 
 MetalFrameBuffer::~MetalFrameBuffer()
 {
-    if (m_AttachmentTexture)
-    {
-        m_AttachmentTexture->release();
-        m_AttachmentTexture = nullptr;
-    }
-    
     if (m_RenderPassDescriptor)
     {
         m_RenderPassDescriptor->release();
         m_RenderPassDescriptor = nullptr;
+    }
+    
+    if (m_AttachmentTexture)
+    {
+        m_AttachmentTexture->release();
+        m_AttachmentTexture = nullptr;
     }
 
     if (m_MetalDevice)
@@ -91,6 +91,7 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_DepthAttachmentDescriptor->setTexture(m_DepthTexture);
     m_DepthAttachmentDescriptor->setClearDepth(1.0);
     m_DepthAttachmentDescriptor->setStoreAction(MTL::StoreActionDontCare);
+    m_DepthAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
     
     
     if (m_DepthTextureDescriptor)

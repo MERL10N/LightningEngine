@@ -64,6 +64,11 @@ MacWindow::~MacWindow()
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
+    if (m_MetalLayer)
+    {
+        m_MetalLayer->release();
+        m_MetalLayer = nullptr;
+    }
 
     glfwTerminate();
 }

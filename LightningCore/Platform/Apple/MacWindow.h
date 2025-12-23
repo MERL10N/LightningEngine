@@ -10,15 +10,6 @@ namespace MTL
     class Device;
 }
 
-namespace NS
-{
-    class Window;
-    class Menu;
-    class MenuItem;
-    class Application;
-    class View;
-}
-
 namespace CA
 {
     class MetalLayer;
@@ -32,15 +23,17 @@ class MacWindow
 {
 
 public:
-    explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
+    explicit MacWindow(unsigned int p_Width = 1280, unsigned int p_Height = 720, const char* p_Title = "");
     bool Update();
     ~MacWindow();
 
 
     inline MTL::Device* GetDevice() { return m_MetalDevice; }
     inline CA::MetalLayer* GetMetalLayer() { return m_MetalLayer; }
+    inline CA::MetalDrawable* GetMetalDrawable() { return m_MetalDrawable; }
     inline unsigned int GetWidth() { return m_Width; }
     inline unsigned int GetHeight() { return m_Height; }
+    inline GLFWwindow* GetWindow() { return m_GlfwWindow; }
 
 private:
     

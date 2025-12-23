@@ -6,7 +6,6 @@
 #include "Metal/Metal.hpp"
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "MeshBuilder.h"
-#include "../../Primitives/SpriteAnimation.h"
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "../../Primitives/MeshBuilder.h"
@@ -15,12 +14,9 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
-  m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
+  m_Shader("Assets/Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
-    CreateQuad("Assets/Background.png", 2.0f, 2.0f);
    
 }
 
@@ -44,30 +40,13 @@ MetalRenderer::~MetalRenderer()
         m_MetalCommandQueue = nullptr;
     }
     
-    if (m_VertexBuffer)
-    {
-        delete m_VertexBuffer;
-        m_VertexBuffer = nullptr;
-    }
-    
-    if (m_Texture)
-    {
-        delete m_Texture;
-        m_Texture = nullptr;
-    }
-    
-    if (m_RenderPassDescriptor)
-    {
-        m_RenderPassDescriptor->release();
-        m_RenderPassDescriptor = nullptr;
-    }
+    m_QuadMesh.indexBuffer->release();
+    m_QuadMesh.vertexBuffer->release();
 }
 
-void MetalRenderer::CreateQuad(const char* p_FilePath, float p_Width, float p_Height)
+void MetalRenderer::CreateQuad(const char* p_FilePath)
 {
-    m_Texture = new MetalTexture(p_FilePath);
-    m_Texture->SetMetalDevice(m_MetalDevice);
-    MeshBuilder::GenerateQuad(m_VertexBuffer, p_Width, p_Height);
+    m_QuadMesh = m_MeshBuilder.GenerateQuad(m_MetalDevice, p_FilePath);
 }
 
 void MetalRenderer::BeginFrame()
@@ -76,29 +55,18 @@ void MetalRenderer::BeginFrame()
 }
 
 void MetalRenderer::Render()
-{
-    m_MetalDrawable = m_MetalLayer->nextDrawable();
-    m_RenderPassColorAttachmentDescriptor = m_RenderPassDescriptor->colorAttachments()->object(0);
-    m_RenderPassColorAttachmentDescriptor->setTexture(m_MetalDrawable->texture());
-    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(41.0f/255.0f, 42.0f/255.0f, 48.0f/255.0f, 1.0));
-    m_RenderPassColorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
- 
+{ 
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
-    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-    
-    if (m_Texture != nullptr)
-    {
-        m_RenderCommandEncoder->setFragmentTexture(m_Texture->GetTexture(), 0);
-        m_RenderCommandEncoder->setVertexBuffer(m_VertexBuffer->GetVertexBuffer(), 0, 0);
-        m_RenderCommandEncoder->drawPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(0), NS::UInteger(4));
-    }
+
+    m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
+    m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
+    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(4), MTL::IndexType::IndexTypeUInt16, m_QuadMesh.indexBuffer, NS::UInteger(0));
+    m_RenderCommandEncoder->endEncoding();
 
 }
 
 void MetalRenderer::Commit()
 {
-    m_RenderCommandEncoder->endEncoding();
-    m_MetalCommandBuffer->presentDrawable(m_MetalDrawable);
     m_MetalCommandBuffer->commit();
 }

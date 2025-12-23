@@ -22,6 +22,13 @@ project "LightningCore"
         "LightningCore/**.mm",
         "ThirdParty/imgui/backends/imgui_impl_glfw.cpp",
         "ThirdParty/imgui/backends/imgui_impl_metal.mm",
+        "ThirdParty/imgui/backends/imgui_impl_glfw.h",
+        "ThirdParty/imgui/backends/imgui_impl_metal.h",
+        "ThirdParty/imgui/imgui.cpp",
+        "ThirdParty/imgui/imgui_draw.cpp",
+        "ThirdParty/imgui/imgui_tables.cpp",
+        "ThirdParty/imgui/imgui_widgets.cpp",
+        "ThirdParty/imgui/imgui_demo.cpp"
     }
 
     includedirs 
@@ -56,7 +63,7 @@ project "LightningCore"
             "Foundation.framework"
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
+        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
 
@@ -134,6 +141,10 @@ project "LightningGame"
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
         linkoptions  { "-stdlib=libc++" }
+         postbuildcommands
+        {
+            "cp -R ../LightningGame/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
+        }
     filter {}
 
     filter "configurations:Debug"
@@ -158,8 +169,8 @@ project "LightningEditor"
     files 
     {
         "LightningEditor/Source/main.cpp", 
-        "LightningGame/Assets/**",
-        "LightningGame/Shaders/Shader.metal",
+        "LightningEditor/Assets/**",
+        "LightningEditor/Assets/Shaders/Shader.metal",
     }
 
     includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp" }
@@ -170,9 +181,10 @@ project "LightningEditor"
         
         files
         { 
-            "LightningEditor/Source/main.cpp", 
-            "LightningGame/Shaders/Shader.metal",
-            "LightningGame/Assets/**",
+            "LightningEditor/Source/**.cpp",
+            "LightningEditor/Source/**.h",  
+            "LightningEditor/Assets/Shaders/Shader.metal",
+            "LightningEditor/Assets/**",
         }
 
         filter { "system:macosx", "files:LightningGame/Assets/**" }
@@ -208,6 +220,12 @@ project "LightningEditor"
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
         linkoptions  { "-stdlib=libc++" }
+
+        postbuildcommands
+        {
+            --"cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/Assets",
+            "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
+        }
     filter {}
 
     filter "configurations:Debug"
