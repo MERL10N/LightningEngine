@@ -21,7 +21,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_AspectRatio(p_Width / p_Height)
 {
-    m_MetalRenderer->CreateQuad("Assets/Textures/spaceship.png");
+    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();

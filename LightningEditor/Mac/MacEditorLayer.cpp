@@ -15,18 +15,25 @@ static const char* s_AssetsPath = "Assets";
 MacEditorLayer::MacEditorLayer(MTL::Device* p_MetalDevice)
 : m_CurrentDirectory(s_AssetsPath),
   m_MetalDevice(p_MetalDevice),
-  m_Icon(new MetalTexture("Assets/Textures/foldericon.png"))
+  m_FolderIcon(new MetalTexture("Assets/Textures/foldericon.png")),
+  m_FileIcon(new MetalTexture("Assets/Textures/file_icon.png"))
 {
-    m_Icon->SetMetalDevice(m_MetalDevice);
+    m_FolderIcon->SetMetalDevice(m_MetalDevice);
+    m_FileIcon->SetMetalDevice(m_MetalDevice);
 }
 
 MacEditorLayer::~MacEditorLayer()
 {
     std::println("MacEditorLayer destructor called");
-    if (m_Icon)
+    if (m_FolderIcon)
     {
-        delete m_Icon;
-        m_Icon = nullptr;
+        delete m_FolderIcon;
+        m_FolderIcon = nullptr;
+    }
+    if (m_FileIcon)
+    {
+        delete m_FileIcon;
+        m_FileIcon = nullptr;
     }
     if (m_MetalDevice)
     {
@@ -89,9 +96,24 @@ void MacEditorLayer::DrawContentBrowser()
         const auto &path = directoryEntry.path();
         auto relativePath = std::filesystem::relative(path, s_AssetsPath);
         std::string fileNameString = relativePath.filename().string();
+        
+        if (fileNameString == ".DS_Store")
+        {
+            continue; // For macOS, ignore any .DS_Store files in the content browser
+        }
+        
         ImGui::PushID(fileNameString.c_str());
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
-        ImGui::ImageButton("##IconButton", (ImTextureID)m_Icon->GetTexture(), ImVec2(32, 32),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+        
+    
+        if (directoryEntry.is_directory())
+        {
+            ImGui::ImageButton("##IconButton", (ImTextureID)m_FolderIcon->GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+        }
+        else
+        {
+            ImGui::ImageButton("##FileIconButton", (ImTextureID)m_FileIcon->GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+        }
         ImGui::PopStyleColor();
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {

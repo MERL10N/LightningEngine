@@ -30,7 +30,7 @@ public:
 private:
     bool b_showAnotherWindow;
     std::filesystem::path m_CurrentDirectory;
-    MetalTexture* m_Icon;
+    MetalTexture* m_FolderIcon, *m_FileIcon;
     MTL::Device* m_MetalDevice;
 };
 
