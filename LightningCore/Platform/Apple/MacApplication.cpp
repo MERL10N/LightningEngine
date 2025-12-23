@@ -14,7 +14,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
   m_MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
-    m_MetalRenderer.CreateQuad("../../../Assets/megaman.png");
+    m_MetalRenderer.CreateQuad("Assets/Textures/megaman.png");
 }
 
 
