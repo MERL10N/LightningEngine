@@ -27,7 +27,7 @@ void MetalTexture::SetMetalDevice(MTL::Device *p_MetalDevice)
     
     if (image)
     {
-        std::cout << "Image found at " << m_Filepath << std::endl;
+        std::println("Image found at {} ", m_Filepath);
     }
     
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);

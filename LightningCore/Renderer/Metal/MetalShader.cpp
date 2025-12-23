@@ -12,8 +12,8 @@
 std::string MetalShader::LoadShaderFile(const std::string &path)
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
-    if (!file.is_open()) {
-        //Log::GetCoreLogger()->error("Cannot Open shader file");
+    if (!file.is_open())
+    {
         return "";
     }
 
@@ -76,8 +76,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     {
         std::println("Fragment function successfully found and loaded");
     }
-    
-    b_Result = true;
 
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
@@ -99,9 +97,9 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
     NS::UInteger offset = 0;
-
-    // Initialise vertex descriptor
+    
     m_VertexDescriptor = MTL::VertexDescriptor::alloc()->init();
+    
     // Set attribute 0: position (vec3)
     m_VertexDescriptor->attributes()->object(0)->setFormat(MTL::VertexFormatFloat3);
     m_VertexDescriptor->attributes()->object(0)->setOffset(offset);

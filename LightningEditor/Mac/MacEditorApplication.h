@@ -30,7 +30,7 @@ namespace CA
 class MacEditorApplication
 {
 public:
-    explicit MacEditorApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Editor");
+    explicit MacEditorApplication(float p_Width = 1280.f, float p_Height = 720.f, const char* p_Title = "Lightning Editor");
     void DrawGameViewport();
     ~MacEditorApplication();
     void Update();
