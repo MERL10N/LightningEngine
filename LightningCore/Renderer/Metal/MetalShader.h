@@ -69,12 +69,8 @@ private:
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
-    bool b_Result;
-    
-    
     std::string LoadShaderFile(const std::string& path);
     
-    bool b_IsValid;
 };
 
 

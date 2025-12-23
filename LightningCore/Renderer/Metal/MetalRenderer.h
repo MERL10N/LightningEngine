@@ -16,18 +16,11 @@ namespace MTL
     class RenderPassColorAttachmentDescriptor;
 }
 
-namespace MTK
-{
-    class View;
-}
-
 namespace CA
 {
     class MetalLayer;
     class MetalDrawable;
 }
-
-class SpriteAnimation;
 
 #include "MetalShader.h"
 #include <simd/simd.h>
@@ -45,10 +38,7 @@ public:
     void BeginFrame();
 
     void CreateQuad(const char* p_FilePath);
-    
-    void AddSprite(const SpriteAnimation &m_Sprite);
-    
-    void RemoveSprite(const SpriteAnimation &m_Sprite);
+
     
     void Render();
     
@@ -78,7 +68,6 @@ private:
     MetalShader m_Shader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
-    CA::MetalDrawable* m_MetalDrawable = nullptr;
     
     Mesh m_QuadMesh;
     MeshBuilder m_MeshBuilder;
