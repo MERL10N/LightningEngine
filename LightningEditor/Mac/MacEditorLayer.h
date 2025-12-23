@@ -9,6 +9,7 @@
 #define MacEditorLayer_h
 
 #include <filesystem>
+#include "Renderer/Metal/MetalTexture.h"
 
 namespace MTL
 {
@@ -30,7 +31,7 @@ public:
 private:
     bool b_showAnotherWindow;
     std::filesystem::path m_CurrentDirectory;
-    MetalTexture* m_FolderIcon, *m_FileIcon;
+    MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon;
     MTL::Device* m_MetalDevice;
 };
 

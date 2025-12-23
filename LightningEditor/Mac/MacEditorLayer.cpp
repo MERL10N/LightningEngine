@@ -7,7 +7,6 @@
 
 #include "MacEditorLayer.h"
 #include "imgui.h"
-#include "Renderer/Metal/MetalTexture.h"
 #include "Metal/Metal.hpp"
 #include <print>
 static const char* s_AssetsPath = "Assets";
@@ -15,26 +14,19 @@ static const char* s_AssetsPath = "Assets";
 MacEditorLayer::MacEditorLayer(MTL::Device* p_MetalDevice)
 : m_CurrentDirectory(s_AssetsPath),
   m_MetalDevice(p_MetalDevice),
-  m_FolderIcon(new MetalTexture("Assets/Textures/foldericon.png")),
-  m_FileIcon(new MetalTexture("Assets/Textures/file_icon.png"))
+  m_FolderIcon("Assets/Textures/foldericon.png"),
+  m_FileIcon("Assets/Textures/file_icon.png"),
+  m_ShaderIcon("Assets/Textures/Metal_4.png")
 {
-    m_FolderIcon->SetMetalDevice(m_MetalDevice);
-    m_FileIcon->SetMetalDevice(m_MetalDevice);
+    m_FolderIcon.SetMetalDevice(m_MetalDevice);
+    m_FileIcon.SetMetalDevice(m_MetalDevice);
+    m_ShaderIcon.SetMetalDevice(m_MetalDevice);
 }
 
 MacEditorLayer::~MacEditorLayer()
 {
     std::println("MacEditorLayer destructor called");
-    if (m_FolderIcon)
-    {
-        delete m_FolderIcon;
-        m_FolderIcon = nullptr;
-    }
-    if (m_FileIcon)
-    {
-        delete m_FileIcon;
-        m_FileIcon = nullptr;
-    }
+    
     if (m_MetalDevice)
     {
         m_MetalDevice->release();
@@ -108,12 +100,21 @@ void MacEditorLayer::DrawContentBrowser()
     
         if (directoryEntry.is_directory())
         {
-            ImGui::ImageButton("##IconButton", (ImTextureID)m_FolderIcon->GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+            ImGui::ImageButton("##IconButton", (ImTextureID)m_FolderIcon.GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
         }
         else
         {
-            ImGui::ImageButton("##FileIconButton", (ImTextureID)m_FileIcon->GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+            if (fileNameString.contains(".metal"))
+            {
+                ImGui::ImageButton("##FileIconButton", (ImTextureID)m_ShaderIcon.GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+            }
+            else
+            {
+                ImGui::ImageButton("##FileIconButton", (ImTextureID)m_FileIcon.GetTexture(), ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+            }
         }
+        
+        
         ImGui::PopStyleColor();
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
