@@ -21,15 +21,19 @@ namespace MTL
 
 struct Vertex
 {
-    simd::float3 pos;   //(x,y,z)
-    simd::float3 color; //(r,g,b)
-    simd::float2 texCoord; //(u,v)
+    simd::float3 pos;
+    simd::float3 color;
+    simd::float2 texCoord; 
+};
+
+struct Uniforms
+{
+    simd::float4x4 model, view, projection;
 };
 
 struct Mesh
 {
-    MTL::Buffer* vertexBuffer, *indexBuffer;
-    MTL::VertexDescriptor* vertexDescriptor;
+    MTL::Buffer* vertexBuffer, *indexBuffer, *transformationBuffer;
     MetalTexture* texture;
 };
 
@@ -39,6 +43,7 @@ public:
     MeshBuilder() = default;
     ~MeshBuilder();
     Mesh GenerateQuad(MTL::Device* device, const char* texture);
+    Mesh GenerateCube(MTL::Device* device, const char* texture);
 private:
     Mesh m_Mesh;
 };

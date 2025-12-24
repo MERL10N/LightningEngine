@@ -21,6 +21,7 @@ class MetalTexture;
 class MacEditorLayer
 {
 public:
+    MacEditorLayer() = default;
     MacEditorLayer(MTL::Device* p_MetalDevice);
     ~MacEditorLayer();
     

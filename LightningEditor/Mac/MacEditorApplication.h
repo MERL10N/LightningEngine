@@ -8,11 +8,11 @@
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
 #include "Platform/Apple/MacWindow.h"
-#include "MacEditorLayer.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
 class MetalFrameBuffer;
+class MacEditorLayer;
 
 namespace MTL
 {
@@ -37,7 +37,7 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MacEditorLayer* macEditorLayer = nullptr;
+    MacEditorLayer* m_MacEditorLayer = nullptr;
     MetalRenderer* m_MetalRenderer = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     MetalFrameBuffer* m_MetalFrameBuffer = nullptr;

@@ -10,19 +10,14 @@
 
 namespace MTL
 {
-class Device;
-class Texture;
-class TextureDescriptor;
-class RenderPassDescriptor;
-class RenderPassColorAttachmentDescriptor;
-class RenderPassDepthAttachmentDescriptor;
-class RenderCommandEncoder;
-class Library;
-}
-
-namespace MTK
-{
-class View;
+    class Device;
+    class Texture;
+    class TextureDescriptor;
+    class RenderPassDescriptor;
+    class RenderPassColorAttachmentDescriptor;
+    class RenderPassDepthAttachmentDescriptor;
+    class RenderCommandEncoder;
+    class Library;
 }
 
 #include <stdint.h>
@@ -43,7 +38,6 @@ public:
 
 private:
     MTL::Device* m_MetalDevice = nullptr;
-
     MTL::Texture* m_AttachmentTexture = nullptr;
     MTL::Texture* m_DepthTexture = nullptr;
     

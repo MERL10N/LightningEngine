@@ -8,7 +8,8 @@
 #include "MeshBuilder.h"
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
-#include "../../Primitives/MeshBuilder.h"
+#include "Primitives/MeshBuilder.h"
+#include "Math/AAPLMathUtilities.h"
 
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
@@ -17,7 +18,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_Shader("Assets/Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
-   
 }
 
 MetalRenderer::~MetalRenderer()
@@ -49,16 +49,25 @@ void MetalRenderer::CreateQuad(const char* p_FilePath)
     m_QuadMesh = m_MeshBuilder.GenerateQuad(m_MetalDevice, p_FilePath);
 }
 
+void MetalRenderer::CreateCube(const char* p_FilePath)
+{
+    m_CubeMesh = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
+}
+
 void MetalRenderer::BeginFrame()
 {
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
 void MetalRenderer::Render()
-{ 
+{
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-
+    
+    matrix_float4x4 projection = matrix_perspective_left_hand(45.0f, 4.0f/3.0f, 0.2f, 10.f);
+    m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
+    matrix_float4x4 transform = matrix4x4_translation(0.0f, 0.0f, 4.0f);
+    m_RenderCommandEncoder->setVertexBytes(&transform, sizeof(matrix_float4x4), 1);
     m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
     m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(4), MTL::IndexType::IndexTypeUInt16, m_QuadMesh.indexBuffer, NS::UInteger(0));

@@ -6,8 +6,10 @@
 //
 
 #include "MacEditorApplication.h"
+#include "MacEditorLayer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
+#include "MacEditorLayer.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
@@ -15,11 +17,10 @@
 
 MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
-  macEditorLayer(new MacEditorLayer(m_MacWindow.GetDevice())),
+  m_MacEditorLayer(new MacEditorLayer(m_MacWindow.GetDevice())),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
   m_MetalFrameBuffer(new MetalFrameBuffer(m_MacWindow.GetDevice())),
-  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
-  m_AspectRatio(p_Width / p_Height)
+  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
     m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
     IMGUI_CHECKVERSION();
@@ -60,10 +61,16 @@ MacEditorApplication::~MacEditorApplication()
         m_WindowPassDescriptor = nullptr;
     }
     
-    if (macEditorLayer)
+    if (m_MacEditorLayer)
     {
-        delete macEditorLayer;
-        macEditorLayer = nullptr;
+        delete m_MacEditorLayer;
+        m_MacEditorLayer = nullptr;
+    }
+    
+    if (m_MetalFrameBuffer)
+    {
+        delete m_MetalFrameBuffer;
+        m_MetalFrameBuffer = nullptr;
     }
 }
 
@@ -119,9 +126,9 @@ void MacEditorApplication::Update()
                 
                 DrawGameViewport();
                 
-                macEditorLayer->DrawContentBrowser();
-                macEditorLayer->DrawMenuBar();
-                macEditorLayer->DrawStatsBar();
+                m_MacEditorLayer->DrawContentBrowser();
+                m_MacEditorLayer->DrawMenuBar();
+                m_MacEditorLayer->DrawStatsBar();
                 
                 // Submit FrameBuffer To Renderer
                 m_MetalRenderer->BeginFrame();

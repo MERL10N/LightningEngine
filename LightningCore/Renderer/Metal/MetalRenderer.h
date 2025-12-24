@@ -38,7 +38,7 @@ public:
     void BeginFrame();
 
     void CreateQuad(const char* p_FilePath);
-
+    void CreateCube(const char* p_FilePath);
     
     void Render();
     
@@ -63,13 +63,13 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     
-    MetalVertexBuffer* m_VertexBuffer = nullptr;
+    MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
     MetalShader m_Shader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     
-    Mesh m_QuadMesh;
+    Mesh m_QuadMesh, m_CubeMesh;
     MeshBuilder m_MeshBuilder;
 };
 #endif //METALRENDERER_H
