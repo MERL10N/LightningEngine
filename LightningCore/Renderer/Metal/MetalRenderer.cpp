@@ -64,9 +64,9 @@ void MetalRenderer::Render()
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     
-    matrix_float4x4 projection = matrix_perspective_left_hand(45.0f, 4.0f/3.0f, 0.2f, 10.f);
+    matrix_float4x4 projection = matrix_perspective_right_hand(45.0f, m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height, 0.2f, 10.f);
     m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
-    matrix_float4x4 transform = matrix4x4_translation(0.0f, 0.0f, 4.0f);
+    matrix_float4x4 transform = matrix4x4_translation(0.0f, 0.0f, -4.0f);
     m_RenderCommandEncoder->setVertexBytes(&transform, sizeof(matrix_float4x4), 1);
     m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
     m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
