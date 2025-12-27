@@ -9,7 +9,6 @@
 #include "MacEditorLayer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
-#include "MacEditorLayer.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
