@@ -135,7 +135,8 @@ void MacEditorLayer::DrawStatsBar()
 {
     ImGui::Begin("Welcome to Lightning Engine!");
     ImGui::Text("This is a metal game engine written in C++");
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Frame Rate: (%.1f FPS)", ImGui::GetIO().Framerate);
+    ImGui::Text("Frame Time: %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
     ImGui::Checkbox("Message from developer", &b_showAnotherWindow);
     if (b_showAnotherWindow)
     {

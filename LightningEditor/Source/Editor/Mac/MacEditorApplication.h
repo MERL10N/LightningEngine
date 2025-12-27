@@ -7,16 +7,16 @@
 
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
-
-#include "EditorLayer.h"
 #include "Platform/Apple/MacWindow.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
 class MetalFrameBuffer;
+class MacEditorLayer;
 
 namespace MTL
 {
+    class Device;
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class CommandBuffer;
@@ -30,15 +30,14 @@ namespace CA
 class MacEditorApplication
 {
 public:
-    explicit MacEditorApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Editor");
+    explicit MacEditorApplication(float p_Width = 1280.f, float p_Height = 720.f, const char* p_Title = "Lightning Editor");
     void DrawGameViewport();
     ~MacEditorApplication();
     void Update();
 
 private:
-
-   // EditorLayer m_EditorLayer;
     MacWindow m_MacWindow;
+    MacEditorLayer* m_MacEditorLayer = nullptr;
     MetalRenderer* m_MetalRenderer = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     MetalFrameBuffer* m_MetalFrameBuffer = nullptr;
