@@ -25,6 +25,7 @@ namespace CA
 #include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
+#include "Camera/Camera.h"
 
 class MetalVertexBuffer;
 class MetalTexture;
@@ -71,5 +72,6 @@ private:
     
     Mesh m_QuadMesh, m_CubeMesh;
     MeshBuilder m_MeshBuilder;
+    Camera m_Camera;
 };
 #endif //METALRENDERER_H
