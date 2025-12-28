@@ -6,20 +6,22 @@
 //
 
 #include "MacEditorApplication.h"
+#include "MacEditorLayer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
-#include "EditorLayer.h"
+#include "GLFW/glfw3.h"
 
 MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
+  m_MacEditorLayer(new MacEditorLayer(m_MacWindow.GetDevice())),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
   m_MetalFrameBuffer(new MetalFrameBuffer(m_MacWindow.GetDevice())),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
-  m_AspectRatio(p_Width / p_Height)
+  m_Camera(Camera())
 {
     m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
     IMGUI_CHECKVERSION();
@@ -59,6 +61,19 @@ MacEditorApplication::~MacEditorApplication()
         m_WindowPassDescriptor->release();
         m_WindowPassDescriptor = nullptr;
     }
+    
+    if (m_MacEditorLayer)
+    {
+        delete m_MacEditorLayer;
+        m_MacEditorLayer = nullptr;
+    }
+    
+    if (m_MetalFrameBuffer)
+    {
+        delete m_MetalFrameBuffer;
+        m_MetalFrameBuffer = nullptr;
+    }
+    
 }
 
 
@@ -93,9 +108,21 @@ void MacEditorApplication::Update()
 {
         while (m_MacWindow.Update())
         {
+            m_CurrentFrame = (float)glfwGetTime();
+            m_DeltaTime = m_CurrentFrame - m_LastFrame;
+            m_LastFrame = m_CurrentFrame;
+            
+            if (m_Controller.IsWKeyDown())
+                m_Camera.ProcessInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
+            if (m_Controller.IsSKeyDown())
+                m_Camera.ProcessInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
+            if (m_Controller.IsAKeyDown())
+                m_Camera.ProcessInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
+            if (m_Controller.IsDKeyDown())
+                m_Camera.ProcessInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+            
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
-                EditorLayer editorLayer;
                 
                 ImGuiIO& io = ImGui::GetIO();
                 
@@ -112,12 +139,14 @@ void MacEditorApplication::Update()
                 
                 ImGui::DockSpaceOverViewport();
                 
-                editorLayer.DrawContentBrowser();
-                editorLayer.DrawMenuBar();
-                editorLayer.DrawStatsBar();
                 DrawGameViewport();
                 
+                m_MacEditorLayer->DrawContentBrowser();
+                m_MacEditorLayer->DrawMenuBar();
+                m_MacEditorLayer->DrawStatsBar();
+                
                 // Submit FrameBuffer To Renderer
+                m_MetalRenderer->SetCamera(m_Camera);
                 m_MetalRenderer->BeginFrame();
                 m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer->GetRenderPassDescriptor());
                 m_MetalRenderer->Render();

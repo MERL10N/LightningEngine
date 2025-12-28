@@ -28,7 +28,8 @@ project "LightningCore"
         "ThirdParty/imgui/imgui_draw.cpp",
         "ThirdParty/imgui/imgui_tables.cpp",
         "ThirdParty/imgui/imgui_widgets.cpp",
-        "ThirdParty/imgui/imgui_demo.cpp"
+        "ThirdParty/imgui/imgui_demo.cpp",
+        "ThirdParty/entt/single_include"
     }
 
     includedirs 
@@ -91,7 +92,6 @@ project "LightningGame"
         "LightningGame/Source/**.h", 
         "LightningGame/Source/**.cpp",
         "LightningGame/Assets/**",
-        "LightningGame/Shaders/Shader.metal",
     }
 
     includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions" }
@@ -100,11 +100,11 @@ project "LightningGame"
         cppdialect "C++23"
         staticruntime "On"
         
-        files
+       files
         { 
             "LightningGame/Source/**.cpp",
-            "LightningGame/Source/**.h",
-            "LightningGame/Shaders/Shader.metal",
+            "LightningGame/Source/**.h",  
+            "LightningGame/Assets/Shaders/Shader.metal",
             "LightningGame/Assets/**",
         }
 
@@ -170,7 +170,6 @@ project "LightningEditor"
     {
         "LightningEditor/Source/main.cpp", 
         "LightningEditor/Assets/**",
-        "LightningEditor/Assets/Shaders/Shader.metal",
     }
 
     includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp" }

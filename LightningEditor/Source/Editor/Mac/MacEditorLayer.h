@@ -17,10 +17,12 @@ namespace MTL
 }
 
 class MetalTexture;
+class Scene;
 
 class MacEditorLayer
 {
 public:
+    MacEditorLayer() = default;
     MacEditorLayer(MTL::Device* p_MetalDevice);
     ~MacEditorLayer();
     
@@ -31,7 +33,7 @@ public:
 private:
     bool b_showAnotherWindow;
     std::filesystem::path m_CurrentDirectory;
-    MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon;
+    MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
     MTL::Device* m_MetalDevice;
 };
 

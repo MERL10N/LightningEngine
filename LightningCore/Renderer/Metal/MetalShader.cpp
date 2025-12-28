@@ -39,7 +39,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
-        //Log::GetCoreLogger()->error("Metal Shader is empty");
         std::cerr << "Error: metal shader is empty" << std::endl;
         return;
     }

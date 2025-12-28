@@ -25,6 +25,7 @@ namespace CA
 #include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
+#include "Camera/Camera.h"
 
 class MetalVertexBuffer;
 class MetalTexture;
@@ -38,7 +39,7 @@ public:
     void BeginFrame();
 
     void CreateQuad(const char* p_FilePath);
-
+    void CreateCube(const char* p_FilePath);
     
     void Render();
     
@@ -55,7 +56,9 @@ public:
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
-
+    
+    inline void SetCamera(Camera camera) { m_Camera = camera; }
+    
 private:
     MTL::Device* m_MetalDevice = nullptr;
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
@@ -63,13 +66,14 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     
-    MetalVertexBuffer* m_VertexBuffer = nullptr;
+    MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
     MetalShader m_Shader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     
-    Mesh m_QuadMesh;
+    Mesh m_QuadMesh, m_CubeMesh;
     MeshBuilder m_MeshBuilder;
+    Camera m_Camera;
 };
 #endif //METALRENDERER_H

@@ -7,16 +7,19 @@
 
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
-
-#include "EditorLayer.h"
 #include "Platform/Apple/MacWindow.h"
+#include "Input/AppleController.h"
+#include "Camera/Camera.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
 class MetalFrameBuffer;
+class MacEditorLayer;
+class Scene;
 
 namespace MTL
 {
+    class Device;
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class CommandBuffer;
@@ -30,15 +33,14 @@ namespace CA
 class MacEditorApplication
 {
 public:
-    explicit MacEditorApplication(float p_Width = 1920.f, float p_Height = 1080.f, const char* p_Title = "Lightning Editor");
+    explicit MacEditorApplication(float p_Width = 1280.f, float p_Height = 720.f, const char* p_Title = "Lightning Editor");
     void DrawGameViewport();
     ~MacEditorApplication();
     void Update();
 
 private:
-
-   // EditorLayer m_EditorLayer;
     MacWindow m_MacWindow;
+    MacEditorLayer* m_MacEditorLayer = nullptr;
     MetalRenderer* m_MetalRenderer = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     MetalFrameBuffer* m_MetalFrameBuffer = nullptr;
@@ -47,7 +49,16 @@ private:
     MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
     simd::float2 m_ViewportSize;
     
-    float m_AspectRatio;
+    Camera m_Camera;
+    
+    float m_AspectRatio = 0.0f;
+    
+    float m_CurrentFrame = 0.0f;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
+    
+    AppleController m_Controller;
+    
 };
 
 #endif /* EditorApplication_hpp */

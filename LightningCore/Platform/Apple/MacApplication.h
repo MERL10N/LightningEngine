@@ -9,7 +9,7 @@
 #define MacApplication_hpp
 
 #include "MacWindow.h"
-#include "Renderer/Metal/MetalRenderer.h"
+
 class MetalRenderer;
 
 namespace MTL
@@ -32,7 +32,7 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MetalRenderer m_MetalRenderer;
+    MetalRenderer* m_MetalRenderer = nullptr;
     MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     float m_AspectRatio;

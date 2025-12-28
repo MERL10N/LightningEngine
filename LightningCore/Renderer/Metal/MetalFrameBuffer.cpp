@@ -11,9 +11,9 @@
 #include <iostream>
 
 MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
-: m_Width(0.f),
-  m_Height(0.f),
-  m_MetalDevice(p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_Width(0.f),
+  m_Height(0.f)
 {
 }
 
@@ -36,19 +36,7 @@ MetalFrameBuffer::~MetalFrameBuffer()
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
-    
-    if (m_DepthAttachmentDescriptor)
-    {
-        m_DepthAttachmentDescriptor->release();
-        m_DepthAttachmentDescriptor = nullptr;
-    }
-    
-    if (m_ColorAttachmentDescriptor)
-    {
-        m_ColorAttachmentDescriptor->release();
-        m_ColorAttachmentDescriptor = nullptr;
-    }
-    
+
     if (m_DepthTexture)
     {
         m_DepthTexture->release();
