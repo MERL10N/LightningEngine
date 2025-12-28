@@ -5,7 +5,9 @@
 //  Created by Kian Marvi on 3/8/25.
 //
 
+#ifdef __APPLE__
 #include "Editor/Mac/MacEditorApplication.h"
+#endif
 #include <print>
 
 int main()
