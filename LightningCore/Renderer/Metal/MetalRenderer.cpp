@@ -16,7 +16,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_Shader("Assets/Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  m_Camera(Camera())
+  m_Camera()
 {
     assert(m_MetalDevice);
 }
@@ -65,6 +65,8 @@ void MetalRenderer::Render()
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     
+    matrix_float4x4 view = m_Camera.GetViewMatrix();
+    m_RenderCommandEncoder->setVertexBytes(&view, sizeof(matrix_float4x4), 3);
     matrix_float4x4 projection = matrix_perspective_right_hand(45.0f, m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height, 0.2f, 10.f);
     m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
     matrix_float4x4 transform = matrix4x4_translation(0.0f, 0.0f, -4.0f);

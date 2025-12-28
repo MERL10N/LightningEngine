@@ -56,7 +56,9 @@ public:
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
-
+    
+    inline void SetCamera(Camera camera) { m_Camera = camera; }
+    
 private:
     MTL::Device* m_MetalDevice = nullptr;
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
