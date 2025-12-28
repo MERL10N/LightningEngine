@@ -133,15 +133,14 @@ void MacEditorLayer::DrawContentBrowser()
 
 void MacEditorLayer::DrawStatsBar()
 {
-    ImGui::Begin("Welcome to Lightning Engine!");
-    ImGui::Text("This is a metal game engine written in C++");
+    ImGui::Begin("Stats");
     ImGui::Text("Frame Rate: (%.1f FPS)", ImGui::GetIO().Framerate);
     ImGui::Text("Frame Time: %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
     ImGui::Checkbox("Message from developer", &b_showAnotherWindow);
     if (b_showAnotherWindow)
     {
         ImGui::Begin("Message from developer", &b_showAnotherWindow);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("I can't wait to show you more of what is to come!");
+        ImGui::Text("I can't wait to show you more!");
         if (ImGui::Button("Close"))
             b_showAnotherWindow = false;
         ImGui::End();
