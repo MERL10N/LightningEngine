@@ -24,7 +24,7 @@ Camera::~Camera()
 }
 
 
-void Camera::ProcessInput(CAMERA_MOVEMENT direction, float deltaTime)
+void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaTime)
 {
     m_Velocity = m_MovementSpeed * deltaTime;
     
@@ -43,6 +43,14 @@ void Camera::ProcessInput(CAMERA_MOVEMENT direction, float deltaTime)
             m_Position += m_Right * m_Velocity;
             break;
     }
+}
+
+void Camera::ProcessControllerInput(float deltaTime, float axisValueX, float axisValueY)
+{
+    m_Velocity = m_MovementSpeed * deltaTime;
+    
+    m_Position += m_Right * m_Velocity * axisValueX;
+    m_Position += m_Front * m_Velocity * axisValueY;
 }
 
 void Camera::UpdateCameraVectors()

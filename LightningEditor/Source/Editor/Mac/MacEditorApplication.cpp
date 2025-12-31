@@ -113,13 +113,17 @@ void MacEditorApplication::Update()
             m_LastFrame = m_CurrentFrame;
             
             if (m_Controller.IsWKeyDown())
-                m_Camera.ProcessInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
             if (m_Controller.IsSKeyDown())
-                m_Camera.ProcessInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
             if (m_Controller.IsAKeyDown())
-                m_Camera.ProcessInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
             if (m_Controller.IsDKeyDown())
-                m_Camera.ProcessInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+         
+            m_Camera.ProcessControllerInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+
+      
             
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {

@@ -20,9 +20,13 @@ public:
     bool IsSKeyDown() const;
     bool IsDKeyDown() const;
     
+    // Mouse Cursor Position
+    void GetCursorPosition();
+    
     // Gamepad Input
     float LeftThumbstickX() const;
-    float rightThumbstickX() const;
+    float LeftThumbstickY() const;
+    float RightThumbstick() const;
 };
 
 #endif /* AppleController_h */

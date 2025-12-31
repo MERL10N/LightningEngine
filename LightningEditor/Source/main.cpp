@@ -13,8 +13,8 @@
 int main()
 {
 #ifdef __APPLE__
-    auto pEditorApp = MacEditorApplication();
-    pEditorApp.Update();
+    auto editor = MacEditorApplication();
+    editor.Update();
 #else
     std::println("Lightning Engine not supported on other platforms");
 #endif
