@@ -14,16 +14,20 @@
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
 #include "GLFW/glfw3.h"
+#include <simd/simd.h>
 
 MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
-  m_MacEditorLayer(new MacEditorLayer(m_MacWindow.GetDevice())),
-  m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
-  m_MetalFrameBuffer(new MetalFrameBuffer(m_MacWindow.GetDevice())),
+  m_MetalDevice(m_MacWindow.GetDevice()),
+  m_MacEditorLayer(new MacEditorLayer(m_MetalDevice)),
+  m_MetalRenderer(new MetalRenderer(m_MetalDevice, m_MacWindow.GetMetalLayer())),
+  m_MetalFrameBuffer(new MetalFrameBuffer(m_MetalDevice)),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera())
 {
-    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/11.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,2.f, -1.01f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(1.f, 1.f, 1.f), simd::make_float3(0.0f,0.0f, -1.0f));
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();

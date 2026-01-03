@@ -38,5 +38,11 @@ fragment half4 fragmentShader(VertexOut out [[stage_in]],
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     // Sample the texture to obtain a color
     half4 colorSample = colorTexture.sample(textureSampler, out.texCoord);
+    
+    if (colorSample.a < 0.1)
+    {
+        discard_fragment();
+    }
+    
     return colorSample * half4(out.color, 1.0f);
 }

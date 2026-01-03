@@ -14,6 +14,8 @@ namespace MTL
     class RenderCommandEncoder;
     class Buffer;
     class RenderPassColorAttachmentDescriptor;
+    class DepthStencilState;
+    class DepthStencilDescriptor;
 }
 
 namespace CA
@@ -22,13 +24,17 @@ namespace CA
     class MetalDrawable;
 }
 
+class MetalVertexBuffer;
+class MetalTexture;
+class SubTexture;
+class MetalTexture;
+
 #include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
 #include "Camera/Camera.h"
-
-class MetalVertexBuffer;
-class MetalTexture;
+#include "Math/AAPLMathUtilities.h"
+#include <vector>
 
 class MetalRenderer
 {
@@ -38,7 +44,11 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_FilePath);
+    // Create quads with texture
+    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
+    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
+    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    // Create Cube
     void CreateCube(const char* p_FilePath);
     
     void Render();
@@ -65,6 +75,8 @@ private:
     MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
+    MTL::DepthStencilState* m_DepthStencilState = nullptr;
+    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
     
     MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
@@ -72,7 +84,10 @@ private:
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     
-    Mesh m_QuadMesh, m_CubeMesh;
+    Mesh m_Mesh;
+    
+    std::vector<Mesh> m_Meshes;
+    
     MeshBuilder m_MeshBuilder;
     Camera m_Camera;
 };

@@ -7,23 +7,11 @@
 
 #include "MeshBuilder.h"
 
-#ifdef __APPLE__
-    #include "Metal/Metal.hpp"
+#include "Metal/Metal.hpp"
 #include "Renderer/Metal/MetalBuffer.h"
 #include "Renderer/Metal/MetalTexture.h"
-#endif
 
-
-MeshBuilder::~MeshBuilder()
-{
-    if (m_Mesh.texture)
-    {
-        delete m_Mesh.texture;
-        m_Mesh.texture = nullptr;
-    }
-}
-
-Mesh MeshBuilder::GenerateQuad(MTL::Device *device, const char* textureFile)
+Mesh MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)
 {
     Vertex vertices[] =
     {
@@ -39,19 +27,45 @@ Mesh MeshBuilder::GenerateQuad(MTL::Device *device, const char* textureFile)
     NS::UInteger indexBufferSize = 4 * sizeof(ushort);
         
     //vertex buffer
-    m_Mesh.vertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh.vertexBuffer->contents(), vertices, vertexBufferSize);
+    m_Mesh.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_VertexBuffer->contents(), vertices, vertexBufferSize);
         
     //index buffer
-    m_Mesh.indexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh.indexBuffer->contents(), indices, indexBufferSize);
+    m_Mesh.m_IndexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_IndexBuffer->contents(), indices, indexBufferSize);
     
-    m_Mesh.texture = new MetalTexture(textureFile);
-    m_Mesh.texture->SetMetalDevice(device);
+    m_Mesh.m_Texture = new MetalTexture(textureFile, device);
+
+    return m_Mesh;
+}
+
+Mesh MeshBuilder::GenerateQuad(MTL::Device *device)
+{
+    Vertex vertices[] =
+    {
+        {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
+        {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
+        {{ 0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 1.0}},
+        {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
+    };
+    
+    NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
+        
+    ushort indices[4] = {0, 1, 3, 2};
+    NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+        
+    //vertex buffer
+    m_Mesh.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_VertexBuffer->contents(), vertices, vertexBufferSize);
+        
+    //index buffer
+    m_Mesh.m_IndexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_IndexBuffer->contents(), indices, indexBufferSize);
     
     return m_Mesh;
 }
 
+// TODO: This function needs testing after finishing up on sprite animation
 Mesh MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
 {
    
@@ -106,21 +120,15 @@ Mesh MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
     };
     
     // vertex buffer
-    m_Mesh.vertexBuffer = device->newBuffer(4 * sizeof(Vertex), MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh.vertexBuffer->contents(), vertices, sizeof(Vertex));
+    m_Mesh.m_VertexBuffer = device->newBuffer(4 * sizeof(Vertex), MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_VertexBuffer->contents(), vertices, sizeof(Vertex));
     
     // Index buffer
-    m_Mesh.indexBuffer = device->newBuffer(4 * sizeof(uint16_t), MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh.indexBuffer->contents(), indices, sizeof(uint16_t));
+    m_Mesh.m_IndexBuffer = device->newBuffer(4 * sizeof(uint16_t), MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh.m_IndexBuffer->contents(), indices, sizeof(uint16_t));
     
-    m_Mesh.texture = new MetalTexture(texture);
-    m_Mesh.texture->SetMetalDevice(device);
-    
-    // Transformation buffer
-    //m_Mesh.transformationBuffer = device->newBuffer(sizeof(Transform), MTL::ResourceStorageModeShared);
+    m_Mesh.m_Texture = new MetalTexture(texture, device);
+
     return m_Mesh;
      
 }
-
-
-

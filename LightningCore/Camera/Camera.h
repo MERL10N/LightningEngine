@@ -27,7 +27,7 @@ constexpr float ZOOM        = 45.0f;
 class Camera
 {
 public:
-    Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 0.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 5.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
     ~Camera();
     
     void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaTime);
@@ -35,6 +35,8 @@ public:
     void ProcessMouseMovement(float xOffset, float yOffset, bool contrainPitch = true);
     
     inline simd::float4x4 GetViewMatrix() { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    
+    inline float GetZoom() { return m_Zoom; }
     
 private:
     

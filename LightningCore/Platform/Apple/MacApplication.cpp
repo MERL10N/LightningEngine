@@ -14,7 +14,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
 {
-    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png");
+    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(0.0f, 0.0f, 0.0f));
 }
 
 
@@ -22,7 +22,7 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
-       // NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         {
             m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
             m_WindowPassDescriptor->colorAttachments()->object(0)->setTexture(m_WindowDrawable->texture());
@@ -36,7 +36,7 @@ void MacApplication::Update(float p_DeltaTime)
             m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
             m_MetalRenderer->Commit();
         }
-        //m_Pool->release();
+        m_Pool->release();
     }
 }
 

@@ -30,7 +30,6 @@ class MetalShader
 {
     public:
     MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat);
-    MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, const char* p_VertexFunction, const char* p_FragmentFunction);
     
     ~MetalShader();
     

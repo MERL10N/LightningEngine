@@ -30,10 +30,12 @@ MetalVertexBuffer::~MetalVertexBuffer()
    if (m_VertexBuffer)
    {
        m_VertexBuffer->release();
+       m_VertexBuffer = nullptr;
    }
    if (m_MetalDevice)
    {
        m_MetalDevice->release();
+       m_MetalDevice = nullptr;
    }
 }
 

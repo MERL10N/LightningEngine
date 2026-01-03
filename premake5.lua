@@ -64,7 +64,7 @@ project "LightningCore"
             "Foundation.framework"
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++"}
+        buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
 

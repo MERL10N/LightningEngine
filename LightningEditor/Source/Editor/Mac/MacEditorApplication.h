@@ -10,6 +10,7 @@
 #include "Platform/Apple/MacWindow.h"
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
+#include "Renderer/Metal/MetalTexture.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
@@ -40,24 +41,26 @@ public:
 
 private:
     MacWindow m_MacWindow;
+    MTL::Device* m_MetalDevice = nullptr;
+    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
+    MTL::CommandBuffer* m_ImGuiCommandBuffer = nullptr;
+    MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
     MacEditorLayer* m_MacEditorLayer = nullptr;
     MetalRenderer* m_MetalRenderer = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     MetalFrameBuffer* m_MetalFrameBuffer = nullptr;
-    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
-    MTL::CommandBuffer* m_ImGuiCommandBuffer = nullptr;
-    MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
     simd::float2 m_ViewportSize;
     
     Camera m_Camera;
     
     float m_AspectRatio = 0.0f;
-    
     float m_CurrentFrame = 0.0f;
     float m_DeltaTime = 0.0f;
     float m_LastFrame = 0.0f;
     
     AppleController m_Controller;
+    
+    MetalTexture m_PlayerSprite;
     
 };
 

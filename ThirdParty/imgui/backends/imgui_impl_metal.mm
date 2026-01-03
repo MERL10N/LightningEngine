@@ -174,7 +174,8 @@ void ImGui_ImplMetal_NewFrame(MTLRenderPassDescriptor* renderPassDescriptor)
     ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
     IM_ASSERT(bd != nil && "Context or backend not initialized! Did you call ImGui_ImplMetal_Init()?");
 #ifdef IMGUI_IMPL_METAL_CPP
-    bd->SharedMetalContext.framebufferDescriptor = [[[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor]autorelease];
+    //bd->SharedMetalContext.framebufferDescriptor = [[[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor]autorelease];
+    bd->SharedMetalContext.framebufferDescriptor = [[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor];
 #else
     bd->SharedMetalContext.framebufferDescriptor = [[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor];
 #endif
@@ -420,7 +421,7 @@ bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device)
     bd->SharedMetalContext.depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
     ImGui_ImplMetal_CreateDeviceObjectsForPlatformWindows();
 #ifdef IMGUI_IMPL_METAL_CPP
-    [depthStencilDescriptor release];
+    //[depthStencilDescriptor release];
 #endif
 
     return true;

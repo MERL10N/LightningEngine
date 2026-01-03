@@ -31,11 +31,8 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
   m_FilePath(p_FilePath),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
 {
-    if (!p_MetalDevice)
-    {
-        return;
-    }
-
+    
+    assert(m_MetalDevice);
     std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
@@ -45,7 +42,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     
     NS::Error* error = nullptr;
     
-    m_Library = p_MetalDevice->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
+    m_Library = m_MetalDevice->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
     if (!m_Library)
     {
         __builtin_printf( "%s", error->localizedDescription()->utf8String() );
