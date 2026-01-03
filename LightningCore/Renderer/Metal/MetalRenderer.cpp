@@ -8,18 +8,22 @@
 #include "MeshBuilder.h"
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
-#include "../../Primitives/MeshBuilder.h"
+#include "Primitives/MeshBuilder.h"
+#include "SubTexture.h"
+#include <print>
 
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("../../../Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  //m_VertexBuffer(new MetalVertexBuffer(m_MetalDevice)),
-  m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
+  m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
+  m_Shader("Assets/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat()),
+  m_Camera()
 {
     assert(m_MetalDevice);
-   
+    m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunction::CompareFunctionLess);
+    m_DepthStencilDescriptor->setDepthWriteEnabled(true);
+    m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
 }
 
 MetalRenderer::~MetalRenderer()
@@ -42,26 +46,56 @@ MetalRenderer::~MetalRenderer()
         m_MetalCommandQueue = nullptr;
     }
     
-    /*
-    if (m_VertexBuffer)
+    if (m_DepthStencilDescriptor)
     {
-        delete m_VertexBuffer;
-        m_VertexBuffer = nullptr;
-    }
-    */
-    if (m_RenderPassDescriptor)
-    {
-        m_RenderPassDescriptor->release();
-        m_RenderPassDescriptor = nullptr;
+        m_DepthStencilDescriptor->release();
+        m_DepthStencilDescriptor = nullptr;
     }
     
-    m_QuadMesh.indexBuffer->release();
-    m_QuadMesh.vertexBuffer->release();
+    // TODO: Refactor this for better clarity
+    for (auto &mesh: m_Meshes)
+    {
+        mesh.m_IndexBuffer->release();
+        mesh.m_IndexBuffer = nullptr;
+        
+        mesh.m_VertexBuffer->release();
+        mesh.m_VertexBuffer = nullptr;
+        
+        delete mesh.m_Texture;
+        mesh.m_Texture = nullptr;
+    }
+  
+    m_Meshes.clear();
 }
 
-void MetalRenderer::CreateQuad(const char* p_FilePath)
+
+void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &position)
 {
-    m_QuadMesh = m_MeshBuilder.GenerateQuad(m_MetalDevice, p_FilePath);
+    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
+    m_Mesh.m_Transform = matrix4x4_translation(position);
+    m_Meshes.push_back(m_Mesh);
+}
+
+void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position)
+{
+    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
+
+    m_Mesh.m_Transform = matrix4x4_scale_translation(scale, position);
+    m_Meshes.push_back(m_Mesh);
+}
+
+// TODO: This function is still work in progress
+void MetalRenderer::CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath)
+{
+    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
+    m_Mesh.m_Transform = matrix4x4_translation(simd_make_float3(0.f, 0.f, -2.f));
+    SubTexture::CreateFromCoords(m_Mesh.m_Texture->GetTexture(), position, size);
+    m_Meshes.push_back(m_Mesh);
+}
+
+void MetalRenderer::CreateCube(const char* p_FilePath)
+{
+    m_Mesh = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
 }
 
 void MetalRenderer::BeginFrame()
@@ -71,25 +105,40 @@ void MetalRenderer::BeginFrame()
 
 void MetalRenderer::Render()
 {
-    m_MetalDrawable = m_MetalLayer->nextDrawable();
-    m_RenderPassColorAttachmentDescriptor = m_RenderPassDescriptor->colorAttachments()->object(0);
-    m_RenderPassColorAttachmentDescriptor->setTexture(m_MetalDrawable->texture());
-    m_RenderPassColorAttachmentDescriptor->setLoadAction(MTL::LoadActionClear);
-    m_RenderPassColorAttachmentDescriptor->setClearColor(MTL::ClearColor(0.15f, 0.15f, 0.15f, 1.0));
-    m_RenderPassColorAttachmentDescriptor->setStoreAction(MTL::StoreActionStore);
- 
+    
+    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
+    depthAttachment->setClearDepth(1.0f);
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
-
-    m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
-    m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
-    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(4), MTL::IndexType::IndexTypeUInt16, m_QuadMesh.indexBuffer, NS::UInteger(0));
+    m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
+    matrix_float4x4 view = m_Camera.GetViewMatrix();
+    m_RenderCommandEncoder->setVertexBytes(&view, sizeof(matrix_float4x4), 3);
+    
+    // TODO: Switch to orthographic camera for 2D Game
+    matrix_float4x4 projection = matrix_perspective_right_hand(90.0f * (M_PI / 180.f),
+                                                               m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height,
+                                                               1.f,
+                                                               1000.f);
+    m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
+    
+    for (auto &mesh : m_Meshes)
+    {
+        m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);
+        m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
+        m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
+        m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip,
+                                                      NS::UInteger(4), MTL::IndexType::IndexTypeUInt16,
+                                                      mesh.m_IndexBuffer,
+                                                      NS::UInteger(0));
+    }
+    
+    m_RenderCommandEncoder->endEncoding();
 
 }
 
 void MetalRenderer::Commit()
 {
-    m_RenderCommandEncoder->endEncoding();
-    m_MetalCommandBuffer->presentDrawable(m_MetalDrawable);
     m_MetalCommandBuffer->commit();
 }
+
+

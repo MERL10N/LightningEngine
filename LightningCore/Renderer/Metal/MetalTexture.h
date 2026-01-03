@@ -19,22 +19,20 @@ class MetalTexture
 {
 public:
     MetalTexture() = default;
-    explicit MetalTexture(const char* p_Filepath);
+    explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     ~MetalTexture();
-    
-    void SetMetalDevice(MTL::Device* p_MetalDevice);
-    
-    inline MTL::Texture* GetTexture()
+
+    inline MTL::Texture* GetTexture() const
     {
         return m_Texture;
     }
     
-    inline int GetWidth()
+    inline int GetWidth() const
     {
         return m_Width;
     }
     
-    inline int GetHeight()
+    inline int GetHeight() const
     {
         return m_Height;
     }

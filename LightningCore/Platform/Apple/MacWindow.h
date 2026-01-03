@@ -10,15 +10,6 @@ namespace MTL
     class Device;
 }
 
-namespace NS
-{
-    class Window;
-    class Menu;
-    class MenuItem;
-    class Application;
-    class View;
-}
-
 namespace CA
 {
     class MetalLayer;
@@ -32,7 +23,7 @@ class MacWindow
 {
 
 public:
-    explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
+    explicit MacWindow(unsigned int p_Width = 1280, unsigned int p_Height = 720, const char* p_Title = "");
     bool Update();
     ~MacWindow();
 

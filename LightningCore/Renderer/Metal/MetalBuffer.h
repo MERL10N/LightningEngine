@@ -30,8 +30,8 @@ public:
     inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }
     
 private:
-    MTL::Buffer* m_VertexBuffer = nullptr;
     MTL::Device* m_MetalDevice = nullptr;
+    MTL::Buffer* m_VertexBuffer = nullptr;
 };
 
 class MetalIndexBuffer
@@ -46,8 +46,8 @@ public:
     inline MTL::Buffer* GetIndexBuffer() { return m_IndexBuffer; }
     
 private:
-    MTL::Buffer* m_IndexBuffer = nullptr;
     MTL::Device* m_MetalDevice = nullptr;
+    MTL::Buffer* m_IndexBuffer = nullptr;
 };
 
 #endif /* MetalBuffer_hpp */

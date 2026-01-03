@@ -14,11 +14,8 @@ namespace MTL
     class RenderCommandEncoder;
     class Buffer;
     class RenderPassColorAttachmentDescriptor;
-}
-
-namespace MTK
-{
-    class View;
+    class DepthStencilState;
+    class DepthStencilDescriptor;
 }
 
 namespace CA
@@ -27,14 +24,17 @@ namespace CA
     class MetalDrawable;
 }
 
-class SpriteAnimation;
+class MetalVertexBuffer;
+class MetalTexture;
+class SubTexture;
+class MetalTexture;
 
 #include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
-
-class MetalVertexBuffer;
-class MetalTexture;
+#include "Camera/Camera.h"
+#include "Math/AAPLMathUtilities.h"
+#include <vector>
 
 class MetalRenderer
 {
@@ -44,11 +44,12 @@ public:
     
     void BeginFrame();
 
-    void CreateQuad(const char* p_FilePath);
-    
-    void AddSprite(const SpriteAnimation &m_Sprite);
-    
-    void RemoveSprite(const SpriteAnimation &m_Sprite);
+    // Create quads with texture
+    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
+    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
+    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    // Create Cube
+    void CreateCube(const char* p_FilePath);
     
     void Render();
     
@@ -65,23 +66,29 @@ public:
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
-
+    
+    inline void SetCamera(Camera camera) { m_Camera = camera; }
+    
 private:
     MTL::Device* m_MetalDevice = nullptr;
     MTL::CommandQueue* m_MetalCommandQueue = nullptr;
     MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
-    MTL::RenderPassColorAttachmentDescriptor* m_RenderPassColorAttachmentDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
+    MTL::DepthStencilState* m_DepthStencilState = nullptr;
+    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
     
-    MetalVertexBuffer* m_VertexBuffer = nullptr;
+    MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
     MetalShader m_Shader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
-    CA::MetalDrawable* m_MetalDrawable = nullptr;
     
-    Mesh m_QuadMesh;
+    Mesh m_Mesh;
+    
+    std::vector<Mesh> m_Meshes;
+    
     MeshBuilder m_MeshBuilder;
+    Camera m_Camera;
 };
 #endif //METALRENDERER_H

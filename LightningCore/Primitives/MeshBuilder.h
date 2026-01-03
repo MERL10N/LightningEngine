@@ -9,7 +9,6 @@
 #define MESHBUILDER_H
 
 #include <simd/simd.h>
-class MetalVertexBuffer;
 class MetalTexture;
 namespace MTL
 {
@@ -21,24 +20,26 @@ namespace MTL
 
 struct Vertex
 {
-    simd::float3 pos;   //(x,y,z)
-    simd::float3 color; //(r,g,b)
-    simd::float2 texCoord; //(u,v)
+    simd::float3 pos;
+    simd::float3 color;
+    simd::float2 texCoord; 
 };
 
 struct Mesh
 {
-    MTL::Buffer* vertexBuffer, *indexBuffer;
-    MTL::VertexDescriptor* vertexDescriptor;
-    MetalTexture* texture;
+    MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
+    MetalTexture* m_Texture;
+    matrix_float4x4 m_Transform;
 };
 
 class MeshBuilder
 {
 public:
     MeshBuilder() = default;
-    ~MeshBuilder();
-    Mesh GenerateQuad(MTL::Device* device, const char* texture);
+    ~MeshBuilder(){};
+    Mesh GenerateQuadWithTexture(MTL::Device* device, const char* texture);
+    Mesh GenerateQuad(MTL::Device* device);
+    Mesh GenerateCube(MTL::Device* device, const char* texture);
 private:
     Mesh m_Mesh;
 };
