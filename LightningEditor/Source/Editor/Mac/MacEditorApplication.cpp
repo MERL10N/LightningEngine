@@ -25,8 +25,13 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera())
 {
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/11.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,2.f, -1.01f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(1.f, 1.f, 1.f), simd::make_float3(0.0f,0.0f, -1.0f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/1.png", simd::make_float3(50.f, 50.f, 1.f), simd::make_float3(0.0f,5.f, -4.f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/2.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,6.f, -3.9f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/3.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,5.5f, -3.8f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/4.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.7f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/5.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.6f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/city/8.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.f));
+    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(1.f, 1.f, 1.f), simd::make_float3(0.0f,-5.0f, -1.0f));
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

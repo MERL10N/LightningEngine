@@ -17,8 +17,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
-  m_Shader("Assets/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat()),
-  m_Camera()
+  m_Shader("Assets/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunction::CompareFunctionLess);
@@ -79,7 +78,6 @@ void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &posit
 void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position)
 {
     m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
-
     m_Mesh.m_Transform = matrix4x4_scale_translation(scale, position);
     m_Meshes.push_back(m_Mesh);
 }
