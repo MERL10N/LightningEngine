@@ -17,7 +17,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
-  m_Shader("Assets/Shaders/Shader.metal", m_MetalDevice, m_MetalLayer->pixelFormat())
+  m_Shader("Assets/Shaders/Shader2D.metal", m_MetalDevice, m_MetalLayer->pixelFormat())
 {
     assert(m_MetalDevice);
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunction::CompareFunctionLess);
