@@ -25,7 +25,7 @@ vertex VertexOut vertexShader(VertexIn in [[stage_in]], constant float4x4 &trans
 {
     VertexOut out;
     half3 pos = half3(in.position);
-    out.position = float4(half4x4(projection) * half4x4(transform) * half4x4(view) * half4(pos, 1.0f));
+    out.position = float4(half4x4(projection) * half4x4(view) * half4x4(transform) * half4(pos, 1.0f));
     out.color = half3(in.color);
     out.texCoord = in.texCoord;
     return out;
