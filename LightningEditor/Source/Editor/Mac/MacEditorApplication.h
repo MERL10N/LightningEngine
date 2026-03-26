@@ -11,6 +11,7 @@
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
 #include "Renderer/Metal/MetalTexture.h"
+#include "Primitives/Sprite.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
@@ -60,7 +61,7 @@ private:
     
     AppleController m_Controller;
     
-    MetalTexture m_PlayerSprite;
+    Sprite m_PlayerSprite;
     
 };
 

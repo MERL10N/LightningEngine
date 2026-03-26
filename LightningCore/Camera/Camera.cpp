@@ -42,6 +42,12 @@ void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaT
         case CAMERA_MOVEMENT::RIGHT:
             m_Position += m_Right * m_Velocity;
             break;
+        case CAMERA_MOVEMENT::UP:
+            m_Position += m_Up * m_Velocity;
+            break;
+        case CAMERA_MOVEMENT::DOWN:
+            m_Position -= m_Up * m_Velocity;
+            break;
     }
 }
 

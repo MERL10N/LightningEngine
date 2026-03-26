@@ -15,7 +15,9 @@ enum class CAMERA_MOVEMENT
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 
 constexpr float YAW         = -90.0f;
