@@ -142,7 +142,12 @@ MetalShader::~MetalShader()
     m_VertexDescriptor->release();
 }
 
-void MetalShader::SetDevice(MTL::Device *p_MetalDevice)
+void MetalShader::SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
 {
-    m_MetalDevice = p_MetalDevice;
+    encoder->setFragmentBytes(&value, sizeof(value), index);
+}
+
+void MetalShader::SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
+{
+    encoder->setVertexBytes(&value, sizeof(value), index);
 }

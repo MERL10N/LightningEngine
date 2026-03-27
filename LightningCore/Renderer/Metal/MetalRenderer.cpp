@@ -10,6 +10,7 @@
 #include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
 #include "SubTexture.h"
+#include "GLFW/glfw3.h"
 #include <print>
 
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
@@ -91,6 +92,10 @@ void MetalRenderer::CreateQuad(const simd::float2 &position, const simd::float2 
     m_Meshes.push_back(m_Mesh);
 }
 
+void MetalRenderer::CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite)
+{
+}
+
 void MetalRenderer::CreateCube(const char* p_FilePath)
 {
     m_Mesh = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
@@ -110,20 +115,23 @@ void MetalRenderer::Render()
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
     matrix_float4x4 view = m_Camera.GetViewMatrix();
-    m_RenderCommandEncoder->setVertexBytes(&view, sizeof(matrix_float4x4), 3);
+    m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, view, 3);
     
-    // TODO: Switch to orthographic camera for 2D Game
     matrix_float4x4 projection = matrix_perspective_right_hand(90.0f * (M_PI / 180.f),
                                                                m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height,
                                                                1.f,
                                                                1000.f);
-    m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
+    m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projection, 2);
     
     for (auto &mesh : m_Meshes)
     {
+        //SpriteUniform spriteUniform = mesh.m_Sprite.GetUniforms();
+        
         m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);
+        m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
         m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
         m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
+        //m_RenderCommandEncoder->setVertexBytes(&spriteUniform, sizeof(SpriteUniform), 4);
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip,
                                                       NS::UInteger(4), MTL::IndexType::IndexTypeUInt16,
                                                       mesh.m_IndexBuffer,

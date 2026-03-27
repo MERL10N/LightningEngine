@@ -32,6 +32,7 @@ class MetalTexture;
 #include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
+#include "Primitives/Sprite.h"
 #include "Camera/Camera.h"
 #include "Math/AAPLMathUtilities.h"
 #include <vector>
@@ -48,6 +49,7 @@ public:
     void CreateQuad(const char* p_FilePath, const simd::float3 &position);
     void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
     void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
     // Create Cube
     void CreateCube(const char* p_FilePath);
     

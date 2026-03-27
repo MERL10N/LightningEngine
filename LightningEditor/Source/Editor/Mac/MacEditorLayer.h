@@ -10,7 +10,6 @@
 
 #include <filesystem>
 #include "Renderer/Metal/MetalTexture.h"
-#include <array>
 
 namespace MTL
 {
@@ -36,7 +35,6 @@ private:
     std::filesystem::path m_CurrentDirectory;
     MTL::Device* m_MetalDevice;
     MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
-    
 };
 
 #endif /* MacEditorLayer_hpp */

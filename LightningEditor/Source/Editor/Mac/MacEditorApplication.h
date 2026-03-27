@@ -10,13 +10,14 @@
 #include "Platform/Apple/MacWindow.h"
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
-#include "Renderer/Metal/MetalTexture.h"
+#include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Primitives/Sprite.h"
+#include "Scene/Scene.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
-class MetalFrameBuffer;
 class MacEditorLayer;
+class MetalTexture;
 class Scene;
 
 namespace MTL
@@ -49,7 +50,7 @@ private:
     MacEditorLayer* m_MacEditorLayer = nullptr;
     MetalRenderer* m_MetalRenderer = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
-    MetalFrameBuffer* m_MetalFrameBuffer = nullptr;
+    MetalFrameBuffer m_MetalFrameBuffer;
     simd::float2 m_ViewportSize;
     
     Camera m_Camera;
@@ -62,6 +63,8 @@ private:
     AppleController m_Controller;
     
     Sprite m_PlayerSprite;
+    
+    Scene m_Scene;
     
 };
 

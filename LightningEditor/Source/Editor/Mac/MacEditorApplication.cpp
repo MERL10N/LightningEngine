@@ -13,6 +13,7 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
+#include "Scene/Component.h"
 #include "GLFW/glfw3.h"
 #include <simd/simd.h>
 
@@ -21,9 +22,10 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_MetalDevice(m_MacWindow.GetDevice()),
   m_MacEditorLayer(new MacEditorLayer(m_MetalDevice)),
   m_MetalRenderer(new MetalRenderer(m_MetalDevice, m_MacWindow.GetMetalLayer())),
-  m_MetalFrameBuffer(new MetalFrameBuffer(m_MetalDevice)),
+  m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
-  m_Camera(Camera())
+  m_Camera(Camera()),
+  m_Scene(Scene())
 {
     m_MetalRenderer->CreateQuad("Assets/Textures/city/1.png", simd::make_float3(50.f, 50.f, 1.f), simd::make_float3(0.0f,5.f, -4.f));
     m_MetalRenderer->CreateQuad("Assets/Textures/city/2.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,6.f, -3.9f));
@@ -33,6 +35,9 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     m_MetalRenderer->CreateQuad("Assets/Textures/city/8.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.f));
     m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(1.f, 1.f, 1.f), simd::make_float3(0.0f,-5.0f, -1.0f));
 
+    //auto square = m_Scene.CreateEntity();
+    //m_Scene.Reg().emplace<TransformComponent>(square);
+    //m_Scene.Reg().emplace<SpriteRendererComponent>(square, simd::make_float4(0.0f, 1.0f, 0.0f, 1.0f));
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -48,7 +53,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     ImGui_ImplMetal_Init(m_MacWindow.GetDevice());
     io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
     
-    m_MetalFrameBuffer->Create(p_Width, p_Height);
+    m_MetalFrameBuffer.Create(p_Width, p_Height);
 }
 
 
@@ -76,13 +81,6 @@ MacEditorApplication::~MacEditorApplication()
         delete m_MacEditorLayer;
         m_MacEditorLayer = nullptr;
     }
-    
-    if (m_MetalFrameBuffer)
-    {
-        delete m_MetalFrameBuffer;
-        m_MetalFrameBuffer = nullptr;
-    }
-    
 }
 
 
@@ -100,12 +98,12 @@ void MacEditorApplication::DrawGameViewport()
         {
             m_ViewportSize.x = viewportPanelSize.x;
             m_ViewportSize.y = viewportPanelSize.y;
-            m_MetalFrameBuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
+            m_MetalFrameBuffer.Resize(m_ViewportSize.x, m_ViewportSize.y);
         }
         
         ImVec2 pos = ImGui::GetCursorScreenPos();
         
-        ImGui::GetWindowDrawList()->AddImage(m_MetalFrameBuffer->GetAttachmentTexture(),
+        ImGui::GetWindowDrawList()->AddImage(m_MetalFrameBuffer.GetAttachmentTexture(),
                                              ImVec2(pos.x, pos.y),
                                              ImVec2(pos.x + m_ViewportSize.x, pos.y + m_ViewportSize.y),
                                              ImVec2(0, 0),ImVec2(1, 1));
@@ -132,7 +130,7 @@ void MacEditorApplication::Update()
          
             m_Camera.ProcessControllerInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
 
-      
+            m_Scene.Update(m_DeltaTime);
             
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
@@ -161,7 +159,7 @@ void MacEditorApplication::Update()
                 // Submit FrameBuffer To Renderer
                 m_MetalRenderer->SetCamera(m_Camera);
                 m_MetalRenderer->BeginFrame();
-                m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer->GetRenderPassDescriptor());
+                m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
                 m_MetalRenderer->Render();
                 m_MetalRenderer->Commit();
                 
@@ -172,7 +170,7 @@ void MacEditorApplication::Update()
                m_MetalRenderer->BeginFrame();
                m_ImGuiCommandBuffer = m_MetalRenderer->GetMetalCommandBuffer();
                m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
-               m_MetalFrameBuffer->UpdateViewport(m_ImGuiCommandEncoder);
+               m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
                ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);
                if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
                {

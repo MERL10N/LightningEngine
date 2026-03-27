@@ -6,13 +6,50 @@
 //
 
 #include "Scene.h"
-
+#include "Component.h"
+#include "Entity/Entity.h"
 #include <simd/simd.h>
 
-Scene::Scene()
+void Scene::DoMath(const simd::float4x4 &transform)
 {
 }
 
+void Scene::OnTransformConstruct(entt::registry &registry, entt::entity entity)
+{
+}
+
+Scene::Scene()
+: m_Entity(m_Registry.create())
+{
+    m_Registry.emplace<TransformComponent>(m_Entity, simd::float4x4(1.0f));
+    m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
+    
+    if (m_Registry.all_of<TransformComponent>(m_Entity))
+        TransformComponent &transform = m_Registry.get<TransformComponent>(m_Entity);
+    
+    auto view = m_Registry.view<TransformComponent>();
+    
+    for (auto &entity : view)
+    {
+        TransformComponent &transform = view.get<TransformComponent>(entity);
+    }
+    
+    auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+    for (auto &entity : group)
+    {
+        auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+    }
+}
+
 Scene::~Scene()
+{
+}
+
+Entity Scene::CreateEntity()
+{
+    return {m_Registry.create(), this};
+}
+
+void Scene::Update(float deltaTime)
 {
 }

@@ -15,13 +15,24 @@ class Scene;
 class Entity
 {
 public:
-    //Entity(entt::Entity entityHandle, Scene* scene);
-    //Entity(const Entity& other) = default;
+    Entity(entt::entity entityHandle, Scene *scene);
+    Entity(const Entity& other) = default;
+    ~Entity();
     
-    //~Entity();
+    template<typename T, typename... Args>
+    T& AddComponent(Args&&... args);
+    
+    template <typename T>
+    bool HasComponent();
+    
+    template <typename T>
+    bool GetComponent();
+    
+    template <typename T>
+    bool RemoveComponent();
 private:
-    //entt::Entity m_EntityHandle;
-   // Scene* m_Scene;
+    entt::entity m_EntityHandle;
+    Scene *m_Scene;
 };
 
 #endif /* Entity_h */
