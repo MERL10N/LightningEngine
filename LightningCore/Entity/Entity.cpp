@@ -15,6 +15,11 @@ Entity::Entity(entt::entity entityHandle, Scene *scene)
     
 }
 
+Entity::~Entity()
+{
+    
+}
+
 template<typename T, typename... Args>
 T& Entity::AddComponent(Args&&... args)
 {

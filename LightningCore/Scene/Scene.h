@@ -19,7 +19,7 @@ public:
     Scene();
     ~Scene();
     
-    Entity CreateEntity();
+    Entity CreateEntity(const char* tag);
     
     // Temporary
     entt::registry &Reg() { return m_Registry; }

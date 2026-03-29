@@ -8,6 +8,19 @@
 #ifndef Component_h
 #define Component_h
 #include <simd/simd.h>
+
+class MetalTexture;
+struct TagComponent
+{
+    const char* m_Tag;
+    
+    TagComponent() = default;
+    TagComponent(const TagComponent&) = default;
+    TagComponent(const char* tag)
+    : m_Tag(tag)
+    {}
+};
+
 struct TransformComponent
 {
     simd::float4x4 m_Transform;
@@ -26,6 +39,7 @@ struct SpriteRendererComponent
 {
     simd::float4 m_Color = simd::make_float4(1.0f, 1.0f, 1.0f, 1.0f);
     
+    MetalTexture* m_Texture;
     SpriteRendererComponent() = default;
     SpriteRendererComponent(const SpriteRendererComponent&) = default;
     SpriteRendererComponent(const simd::float4 &color)
