@@ -9,13 +9,13 @@
 #define MESHBUILDER_H
 
 #include <simd/simd.h>
+#include "Sprite.h"
+
 class MetalTexture;
 namespace MTL
 {
    class Device;
    class Buffer;
-   class Texture;
-   class VertexDescriptor;
 }
 
 struct Vertex
@@ -29,6 +29,7 @@ struct Mesh
 {
     MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
     MetalTexture* m_Texture;
+    Sprite m_Sprite;
     matrix_float4x4 m_Transform;
 };
 
