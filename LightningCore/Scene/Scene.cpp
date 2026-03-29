@@ -48,11 +48,10 @@ Scene::~Scene()
 Entity Scene::CreateEntity(const char* tag)
 {
     Entity entity = { m_Registry.create(), this};
-    
-    /// TODO: Fix the linker error
-   // entity.AddComponent<TransformComponent>();
-    //auto& entityTag = entity.AddComponent<TagComponent>();
-    //entityTag.m_Tag = (tag[0] == '\0') ? "Entity" : tag;
+
+    entity.AddComponent<TransformComponent>();
+    auto& entityTag = entity.AddComponent<TagComponent>();
+    entityTag.m_Tag = (tag[0] == '\0') ? "Entity" : tag;
     
     return entity;
 }
