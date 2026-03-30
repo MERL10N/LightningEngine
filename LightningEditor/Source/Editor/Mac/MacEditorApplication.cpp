@@ -27,6 +27,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_Camera(Camera()),
   m_Scene(Scene())
 {
+    /*
     m_MetalRenderer->CreateQuad("Assets/Textures/city/1.png", simd::make_float3(50.f, 50.f, 1.f), simd::make_float3(0.0f,5.f, -4.f));
     m_MetalRenderer->CreateQuad("Assets/Textures/city/2.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,6.f, -3.9f));
     m_MetalRenderer->CreateQuad("Assets/Textures/city/3.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,5.5f, -3.8f));
@@ -38,6 +39,9 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     //auto square = m_Scene.CreateEntity();
     //m_Scene.Reg().emplace<TransformComponent>(square);
     //m_Scene.Reg().emplace<SpriteRendererComponent>(square, simd::make_float4(0.0f, 1.0f, 0.0f, 1.0f));
+     */
+    
+    m_MetalRenderer->CreateCube("Assets/Textures/background.png");
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();

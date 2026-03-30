@@ -25,7 +25,7 @@ struct Vertex
     simd::float2 texCoord; 
 };
 
-struct Mesh
+struct Mesh_2D
 {
     MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
     MetalTexture* m_Texture;
@@ -33,15 +33,23 @@ struct Mesh
     matrix_float4x4 m_Transform;
 };
 
+struct Mesh_3D
+{
+    MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
+    MetalTexture* m_Texture;
+    matrix_float4x4 m_Transform, m_Rotation;
+};
+
 class MeshBuilder
 {
 public:
     MeshBuilder() = default;
     ~MeshBuilder(){};
-    Mesh GenerateQuadWithTexture(MTL::Device* device, const char* texture);
-    Mesh GenerateQuad(MTL::Device* device);
-    Mesh GenerateCube(MTL::Device* device, const char* texture);
+    Mesh_2D GenerateQuadWithTexture(MTL::Device* device, const char* texture);
+    Mesh_2D GenerateQuad(MTL::Device* device);
+    Mesh_3D GenerateCube(MTL::Device* device, const char* texture);
 private:
-    Mesh m_Mesh;
+    Mesh_2D m_Mesh2D;
+    Mesh_3D m_Mesh3D;
 };
 #endif /* MESHBUILDER_H */

@@ -78,7 +78,8 @@ private:
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     MTL::DepthStencilState* m_DepthStencilState = nullptr;
-    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
+    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
+    
     
     MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
@@ -86,9 +87,11 @@ private:
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     
-    Mesh m_Mesh;
+    Mesh_2D m_Mesh;
+    Mesh_3D m_Mesh3D;
     
-    std::vector<Mesh> m_Meshes;
+    std::vector<Mesh_2D> m_Meshes;
+    std::vector<Mesh_3D> m_3DMeshes;
     
     MeshBuilder m_MeshBuilder;
     Camera m_Camera;

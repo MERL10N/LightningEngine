@@ -66,6 +66,19 @@ MetalRenderer::~MetalRenderer()
     }
   
     m_Meshes.clear();
+    
+    for (auto &mesh: m_3DMeshes)
+    {
+        mesh.m_IndexBuffer->release();
+        mesh.m_IndexBuffer = nullptr;
+        
+        mesh.m_VertexBuffer->release();
+        mesh.m_VertexBuffer = nullptr;
+        
+        delete mesh.m_Texture;
+        mesh.m_Texture = nullptr;
+    }
+    m_3DMeshes.clear();
 }
 
 
@@ -83,7 +96,6 @@ void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &scale
     m_Meshes.push_back(m_Mesh);
 }
 
-// TODO: This function is still work in progress
 void MetalRenderer::CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath)
 {
     m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
@@ -98,7 +110,8 @@ void MetalRenderer::CreateSprite(const char* p_FilePath, const simd::float3 &sca
 
 void MetalRenderer::CreateCube(const char* p_FilePath)
 {
-    m_Mesh = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
+    m_Mesh3D = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
+    m_3DMeshes.push_back(m_Mesh3D);
 }
 
 void MetalRenderer::BeginFrame()
@@ -132,11 +145,35 @@ void MetalRenderer::Render()
         m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
         m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
         //m_RenderCommandEncoder->setVertexBytes(&spriteUniform, sizeof(SpriteUniform), 4);
-        m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip,
+        m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
                                                       NS::UInteger(4), MTL::IndexType::IndexTypeUInt16,
                                                       mesh.m_IndexBuffer,
                                                       NS::UInteger(0));
     }
+    
+    float angleInDegrees = glfwGetTime() * 0.5f * 90;
+    float angleInRadians = angleInDegrees * M_PI / 180.0f;
+    
+    matrix_float4x4 translationMatrix = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
+
+    matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, simd::make_float3(0.0, -1.0, 0.0));
+
+    
+    for (auto &mesh : m_3DMeshes)
+    {
+        mesh.m_Transform = simd_mul(translationMatrix, rotationMatrix);
+        m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+        m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
+        m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);
+        m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
+        m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
+        m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
+        m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
+                                                      36, MTL::IndexType::IndexTypeUInt16,
+                                                      mesh.m_IndexBuffer,
+                                                      NS::UInteger(0));
+    }
+    
     
     m_RenderCommandEncoder->endEncoding();
 
