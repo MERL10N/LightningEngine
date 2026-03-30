@@ -15,7 +15,7 @@ class Entity
 {
 public:
     Entity() = default;
-    Entity(entt::entity entityHandle, Scene *scene);
+    Entity(const entt::entity &entityHandle, Scene *scene);
     Entity(const Entity& other) = default;
     ~Entity();
     
