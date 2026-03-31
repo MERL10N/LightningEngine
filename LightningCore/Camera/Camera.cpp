@@ -64,12 +64,13 @@ void Camera::ProcessControllerRightThumbstickInput(const float axisValueX, const
     m_Yaw   += axisValueX;
     m_Pitch += axisValueY;
 
-  
-    if (m_Pitch > 89.0f)
-        m_Pitch = 89.0f;
-    if (m_Pitch < -89.0f)
-        m_Pitch = -89.0f;
-    
+  if (constrainPitch)
+  {
+      if (m_Pitch > 89.0f)
+          m_Pitch = 89.0f;
+      if (m_Pitch < -89.0f)
+          m_Pitch = -89.0f;
+  }
     UpdateCameraVectors();
 }
 
