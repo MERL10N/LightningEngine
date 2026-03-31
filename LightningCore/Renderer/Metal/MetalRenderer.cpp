@@ -127,12 +127,22 @@ void MetalRenderer::Render()
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
+    
+    
+    matrix_float4x4 translationMatrix = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
+    matrix_float4x4 rotationMatrix = matrix4x4_rotation(90 * (M_PI / 180.0f), simd::make_float3(0.0, -1.0, 0.0));
     matrix_float4x4 view = m_Camera.GetViewMatrix();
+    
+    matrix_float4x4 transformationMatrix = simd_mul(translationMatrix, rotationMatrix);
+    
+    
     m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, view, 3);
     
-    matrix_float4x4 projection = matrix_perspective_right_hand(90.0f * (M_PI / 180.f),
+    float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
+    
+    matrix_float4x4 projection = matrix_perspective_right_hand(fov,
                                                                m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height,
-                                                               1.f,
+                                                               0.1f,
                                                                1000.f);
     m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projection, 2);
     
@@ -151,17 +161,9 @@ void MetalRenderer::Render()
                                                       NS::UInteger(0));
     }
     
-    float angleInDegrees = glfwGetTime() * 0.5f * 90;
-    float angleInRadians = angleInDegrees * M_PI / 180.0f;
-    
-    matrix_float4x4 translationMatrix = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
-
-    matrix_float4x4 rotationMatrix = matrix4x4_rotation(angleInRadians, simd::make_float3(0.0, -1.0, 0.0));
-
-    
     for (auto &mesh : m_3DMeshes)
     {
-        mesh.m_Transform = simd_mul(translationMatrix, rotationMatrix);
+        mesh.m_Transform = transformationMatrix;
         m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
         m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
         m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);

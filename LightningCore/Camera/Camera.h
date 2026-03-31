@@ -32,9 +32,10 @@ public:
     Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 5.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
     ~Camera();
     
-    void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaTime);
-    void ProcessControllerInput(float deltaTime, float axisValueX, float axisValueY);
-    void ProcessMouseMovement(float xOffset, float yOffset, bool contrainPitch = true);
+    void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime);
+    void ProcessControllerLeftThumbstickInput(const float deltaTime, const float axisValueX, const float axisValueY);
+    void ProcessControllerRightThumbstickInput(const float axisValueX, const float axisValueY, const bool constrainPitch = true);
+    void ProcessMouseMovement(float xOffset, const float yOffset, const bool constrainPitch);
     
     inline simd::float4x4 GetViewMatrix() { return LookAt(m_Position, m_Position + m_Front, m_Up); }
     
@@ -54,7 +55,7 @@ private:
     float m_MovementSpeed, m_Velocity;
     
     float m_MouseSensitivity;
-    float m_Zoom;
+    float m_Zoom = 75.f;
 
     CAMERA_MOVEMENT m_CameraMovement;
     

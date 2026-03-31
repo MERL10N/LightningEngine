@@ -24,7 +24,7 @@ Camera::~Camera()
 }
 
 
-void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaTime)
+void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime)
 {
     m_Velocity = m_MovementSpeed * deltaTime;
     
@@ -51,7 +51,7 @@ void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, float deltaT
     }
 }
 
-void Camera::ProcessControllerInput(float deltaTime, float axisValueX, float axisValueY)
+void Camera::ProcessControllerLeftThumbstickInput(const float deltaTime, const float axisValueX, const float axisValueY)
 {
     m_Velocity = m_MovementSpeed * deltaTime;
     
@@ -59,12 +59,26 @@ void Camera::ProcessControllerInput(float deltaTime, float axisValueX, float axi
     m_Position += m_Front * m_Velocity * axisValueY;
 }
 
+void Camera::ProcessControllerRightThumbstickInput(const float axisValueX, const float axisValueY, const bool constrainPitch)
+{
+    m_Yaw   += axisValueX;
+    m_Pitch += axisValueY;
+
+  
+    if (m_Pitch > 89.0f)
+        m_Pitch = 89.0f;
+    if (m_Pitch < -89.0f)
+        m_Pitch = -89.0f;
+    
+    UpdateCameraVectors();
+}
+
 void Camera::UpdateCameraVectors()
 {
     simd::float3 front;
-    front.x = cos(Radians(m_Yaw) * cos(Radians(m_Pitch)));
+    front.x = cos(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     front.y = sin(Radians(m_Pitch));
-    front.z = sin(Radians(m_Yaw) * cos(Radians(m_Pitch)));
+    front.z = sin(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     
     m_Front = simd::normalize(front);
     
@@ -72,7 +86,7 @@ void Camera::UpdateCameraVectors()
     m_Up = simd::normalize(simd::cross(m_Right, m_Front));
 }
 
-void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch)
+void Camera::ProcessMouseMovement(float xOffset, float yOffset, const bool constrainPitch)
 {
     xOffset *= m_MouseSensitivity;
     yOffset *= m_MouseSensitivity;

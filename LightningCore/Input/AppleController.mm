@@ -48,9 +48,14 @@ float AppleController::LeftThumbstickY() const
     return (gamepad.leftThumbstick.yAxis.value);
 }
 
-float AppleController::RightThumbstick() const
+float AppleController::RightThumbstickX() const
 {
     GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
-    return (gamepad.rightThumbstick.xAxis.value) || (gamepad.rightThumbstick.yAxis.value);
+    return (gamepad.rightThumbstick.xAxis.value);
 }
 
+float AppleController::RightThumbstickY() const
+{
+    GCExtendedGamepad* gamepad = GCController.controllers.firstObject.extendedGamepad;
+    return (gamepad.rightThumbstick.yAxis.value);
+}
