@@ -124,9 +124,9 @@ void MacEditorApplication::Update()
             m_LastFrame = m_CurrentFrame;
             
             if (m_Controller.IsWKeyDown())
-                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::UP, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
             if (m_Controller.IsSKeyDown())
-                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::DOWN, m_DeltaTime);
+                m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
             if (m_Controller.IsAKeyDown())
                 m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
             if (m_Controller.IsDKeyDown())

@@ -16,6 +16,7 @@ namespace MTL
     class RenderPassColorAttachmentDescriptor;
     class DepthStencilState;
     class DepthStencilDescriptor;
+    class VertexDescriptor;
 }
 
 namespace CA
@@ -28,8 +29,8 @@ class MetalVertexBuffer;
 class MetalTexture;
 class SubTexture;
 class MetalTexture;
+class MetalShader;
 
-#include "MetalShader.h"
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
 #include "Primitives/Sprite.h"
@@ -79,11 +80,13 @@ private:
     MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
     MTL::DepthStencilState* m_DepthStencilState = nullptr;
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
+    MTL::VertexDescriptor* m_3DVertexDescriptor = nullptr;
     
     
     MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
-    MetalShader m_Shader;
+    MetalShader* m_Shader;
+    //m_LightShader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     

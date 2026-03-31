@@ -9,21 +9,37 @@
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
+#include "MetalVertexDescriptorBuilder.h"
+#include "MetalShader.h"
 #include "SubTexture.h"
 #include "GLFW/glfw3.h"
 #include <print>
+#include <cstddef>
 
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
-  m_Shader("Assets/Shaders/Shader2D.metal", m_MetalDevice, m_MetalLayer->pixelFormat())
+  m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init())
 {
     assert(m_MetalDevice);
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunction::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
+    
+    MetalVertexDescriptorBuilder vertexDescriptorBuilder;
+    
+    m_3DVertexDescriptor = vertexDescriptorBuilder
+        .AddAttribute(MTL::VertexFormatFloat3, 4 * sizeof(float))
+        .AddAttribute(MTL::VertexFormatFloat3, 4 * sizeof(float))
+        .AddAttribute(MTL::VertexFormatFloat2, 4 * sizeof(float))
+        .SetBufferLayout(4 * sizeof(float))
+        .BuildVertexDescriptor();
+    
+    m_Shader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    
+    m_3DVertexDescriptor->release();
+    
 }
 
 MetalRenderer::~MetalRenderer()
@@ -50,6 +66,12 @@ MetalRenderer::~MetalRenderer()
     {
         m_DepthStencilDescriptor->release();
         m_DepthStencilDescriptor = nullptr;
+    }
+    
+    if (m_Shader)
+    {
+        delete m_Shader;
+        m_Shader = nullptr;
     }
     
     // TODO: Refactor this for better clarity
@@ -125,7 +147,7 @@ void MetalRenderer::Render()
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
     depthAttachment->setClearDepth(1.0f);
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
-    m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
+    m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
     
     
@@ -135,23 +157,23 @@ void MetalRenderer::Render()
     
     matrix_float4x4 transformationMatrix = simd_mul(translationMatrix, rotationMatrix);
     
-    
-    m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, view, 3);
-    
     float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
     
     matrix_float4x4 projection = matrix_perspective_right_hand(fov,
                                                                m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height,
                                                                0.1f,
                                                                1000.f);
-    m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projection, 2);
+    
+    
+    m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, view, 3);
+    m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projection, 2);
     
     for (auto &mesh : m_Meshes)
     {
         //SpriteUniform spriteUniform = mesh.m_Sprite.GetUniforms();
         
         m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);
-        m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
+        m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
         m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
         m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
         //m_RenderCommandEncoder->setVertexBytes(&spriteUniform, sizeof(SpriteUniform), 4);
@@ -167,7 +189,7 @@ void MetalRenderer::Render()
         m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
         m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
         m_RenderCommandEncoder->setVertexBytes(&mesh.m_Transform, sizeof(matrix_float4x4), 1);
-        m_Shader.SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
+        m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
         m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
         m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,

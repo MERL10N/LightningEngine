@@ -104,7 +104,7 @@ project "LightningGame"
         { 
             "LightningGame/Source/**.cpp",
             "LightningGame/Source/**.h",  
-            "LightningGame/Assets/Shaders/Shader2D.metal",
+            "LightningGame/Assets/Shaders/**.metal",
             "LightningGame/Assets/**",
         }
 
@@ -181,7 +181,7 @@ project "LightningEditor"
         { 
             "LightningEditor/Source/**.cpp",
             "LightningEditor/Source/**.h",  
-            "LightningEditor/Assets/Shaders/Shader2D.metal",
+            "LightningEditor/Assets/Shaders/**.metal",
             "LightningEditor/Assets/**",
         }
 

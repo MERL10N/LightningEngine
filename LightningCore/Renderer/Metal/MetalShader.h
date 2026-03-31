@@ -27,12 +27,14 @@ namespace MTL
 
 class MetalShader
 {
-    public:
+public:
+    MetalShader() = default;
+    
     MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat);
+    MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat);
     
     ~MetalShader();
     
-    void SetDevice(MTL::Device* p_MetalDevice);
     
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
