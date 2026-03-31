@@ -104,14 +104,12 @@ project "LightningGame"
         { 
             "LightningGame/Source/**.cpp",
             "LightningGame/Source/**.h",  
-            "LightningGame/Assets/Shaders/Shader.metal",
+            "LightningGame/Assets/Shaders/Shader2D.metal",
             "LightningGame/Assets/**",
         }
 
-        filter { "system:macosx", "files:LightningGame/Assets/**" }
+        filter { "system:macosx", "files:LightningGame/Assets/**", "LightningGame/Assets/Shaders/**" }
         buildaction "Resource"
-        filter { "system:macosx", "files:LightningGame/Shaders/**" }
-         buildaction "Resource"
         filter {}
 
         libdirs { "ThirdParty/glfw/lib-universal" }
@@ -136,7 +134,8 @@ project "LightningGame"
         xcodebuildsettings
         {
             ["GENERATE_INFOPLIST_FILE"] = "YES",
-            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame"
+            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
+            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0"
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
@@ -182,14 +181,12 @@ project "LightningEditor"
         { 
             "LightningEditor/Source/**.cpp",
             "LightningEditor/Source/**.h",  
-            "LightningEditor/Assets/Shaders/Shader.metal",
+            "LightningEditor/Assets/Shaders/Shader2D.metal",
             "LightningEditor/Assets/**",
         }
 
-        filter { "system:macosx", "files:LightningGame/Assets/**" }
+        filter { "system:macosx", "files:LightningEditor/Assets/**", "LightningEditor/Assets/Shaders/**" }
         buildaction "Resource"
-        filter { "system:macosx", "files:LightningGame/Shaders/**" }
-         buildaction "Resource"
         filter {}
 
         libdirs { "ThirdParty/glfw/lib-universal" }
@@ -214,7 +211,8 @@ project "LightningEditor"
         xcodebuildsettings
         {
             ["GENERATE_INFOPLIST_FILE"] = "YES",
-            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame"
+            ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
+            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0"
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }

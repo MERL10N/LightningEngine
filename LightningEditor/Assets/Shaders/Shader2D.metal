@@ -1,4 +1,4 @@
-//  Shader.metal
+//  Shader2D.metal
 //  LightningGame
 //  Based on GLSL code from LearnOpenGL and GetIntoGameDev tutorials
 //  Created by Kian Marvi on 5/7/25.

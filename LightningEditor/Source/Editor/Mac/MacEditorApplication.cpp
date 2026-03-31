@@ -132,7 +132,9 @@ void MacEditorApplication::Update()
             if (m_Controller.IsDKeyDown())
                 m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
          
-            m_Camera.ProcessControllerInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+            m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+            
+            m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
 
             m_Scene.Update(m_DeltaTime);
             
