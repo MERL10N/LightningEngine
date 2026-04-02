@@ -74,10 +74,11 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     }
 
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+    m_RenderPipelineDescriptor->setRasterSampleCount(4);
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
-    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
     
     assert(m_RenderPipelineDescriptor);
     
@@ -92,39 +93,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_ColorAttachmentDescriptor->setDestinationRGBBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
     m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
-    
-    /*
-    NS::UInteger offset = 0;
-    
-    m_VertexDescriptor = MTL::VertexDescriptor::alloc()->init();
-    
-    // Set attribute 0: position (vec3)
-    m_VertexDescriptor->attributes()->object(0)->setFormat(MTL::VertexFormatFloat3);
-    m_VertexDescriptor->attributes()->object(0)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(0)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
-    
-    // Set attribute 1: color (vec3)
-    m_VertexDescriptor->attributes()->object(1)->setFormat(MTL::VertexFormatFloat3);
-    m_VertexDescriptor->attributes()->object(1)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(1)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
-    
-    // Set Attribute 2: Texture (vec2)
-    m_VertexDescriptor->attributes()->object(2)->setFormat(MTL::VertexFormatFloat2);
-    m_VertexDescriptor->attributes()->object(2)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(2)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
-
-    // Set layout for buffer 0
-    m_VertexDescriptor->layouts()->object(0)->setStride(offset);
-    m_VertexDescriptor->layouts()->object(0)->setStepFunction(MTL::VertexStepFunctionPerVertex);
-    
-    assert(m_VertexDescriptor);
-     */
 
     m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
     
@@ -142,7 +110,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
   m_FilePath(p_FilePath),
-  m_VertexDescriptor(p_VertexDescriptor),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
 {
     
@@ -188,6 +155,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     }
 
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+    m_RenderPipelineDescriptor->setRasterSampleCount(4);
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
@@ -206,38 +174,8 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     m_ColorAttachmentDescriptor->setDestinationRGBBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
     m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
-    NS::UInteger offset = 0;
-    
-    m_VertexDescriptor = MTL::VertexDescriptor::alloc()->init();
-    
-    // Set attribute 0: position (vec3)
-    m_VertexDescriptor->attributes()->object(0)->setFormat(MTL::VertexFormatFloat3);
-    m_VertexDescriptor->attributes()->object(0)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(0)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
-    
-    // Set attribute 1: color (vec3)
-    m_VertexDescriptor->attributes()->object(1)->setFormat(MTL::VertexFormatFloat3);
-    m_VertexDescriptor->attributes()->object(1)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(1)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
-    
-    // Set Attribute 2: Texture (vec2)
-    m_VertexDescriptor->attributes()->object(2)->setFormat(MTL::VertexFormatFloat2);
-    m_VertexDescriptor->attributes()->object(2)->setOffset(offset);
-    m_VertexDescriptor->attributes()->object(2)->setBufferIndex(0);
-    
-    offset += 4 * sizeof(float);
 
-    // Set layout for buffer 0
-    m_VertexDescriptor->layouts()->object(0)->setStride(offset);
-    m_VertexDescriptor->layouts()->object(0)->setStepFunction(MTL::VertexStepFunctionPerVertex);
-    
-    assert(m_VertexDescriptor);
-
-    m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
+    m_RenderPipelineDescriptor->setVertexDescriptor(p_VertexDescriptor);
     
     m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
     
@@ -252,8 +190,11 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
 MetalShader::~MetalShader()
 {
-    m_RenderPipelineState->release();
-    m_VertexDescriptor->release();
+    if (m_RenderPipelineState)
+    {
+        m_RenderPipelineState->release();
+        m_RenderPipelineState = nullptr;
+    }
 }
 
 void MetalShader::SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)

@@ -42,6 +42,8 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
      */
     
     m_MetalRenderer->CreateCube("Assets/Textures/background.png");
+    m_MetalRenderer->CreateSphere();
+    
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();

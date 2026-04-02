@@ -8,13 +8,15 @@
 #include "QuartzCore/QuartzCore.hpp"
 #include "Metal/Metal.hpp"
 #include "Renderer/Metal/MetalRenderer.h"
+#include "GLFW/glfw3.h"
 
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
-  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init())
+  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_Camera(Camera())
 {
-    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(0.0f, 0.0f, 0.0f));
+    m_MetalRenderer->CreateCube("Assets/Textures/background.png");
 }
 
 
@@ -22,6 +24,22 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
+        m_CurrentFrame = (float)glfwGetTime();
+        m_DeltaTime = m_CurrentFrame - m_LastFrame;
+        m_LastFrame = m_CurrentFrame;
+        
+        if (m_Controller.IsWKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
+        if (m_Controller.IsSKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
+        if (m_Controller.IsAKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
+        if (m_Controller.IsDKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+     
+        m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+        
+        m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
         NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         {
             m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
@@ -30,6 +48,7 @@ void MacApplication::Update(float p_DeltaTime)
             m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
             m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
             
+            m_MetalRenderer->SetCamera(m_Camera);
             m_MetalRenderer->BeginFrame();
             m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
             m_MetalRenderer->Render();

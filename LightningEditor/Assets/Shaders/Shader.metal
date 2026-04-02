@@ -10,14 +10,17 @@ struct VertexIn
 {
     float3 position [[attribute(0)]];
     float3 color [[attribute(1)]];
-    float2 texCoord[[attribute(2)]];
+    float3 normal [[attribute(2)]];
+    float2 texCoord[[attribute(3)]];
 };
 
 struct VertexOut
 {
     float4 position [[position]];
     half3 color;
+    float3 normal;
     float2 texCoord;
+    int textureIndex;
 };
 
 // Vertex shader
@@ -26,6 +29,7 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]], constant float4x4 &transf
     VertexOut out;
     half3 pos = half3(in.position);
     out.position = float4(half4x4(projection) * half4x4(view) * half4x4(transform) * half4(pos, 1.0f));
+    out.normal = in.normal;
     out.color = half3(in.color);
     out.texCoord = in.texCoord;
     return out;
@@ -46,3 +50,10 @@ fragment half4 fragment_main(VertexOut out [[stage_in]],
     
     return colorSample * half4(out.color, 1.0f);
 }
+
+// Fragment shader
+fragment half4 fragment_main_untextured(VertexOut out [[stage_in]])
+{
+    return half4(out.color, 1.0f);
+}
+

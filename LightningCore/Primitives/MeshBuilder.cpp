@@ -65,47 +65,46 @@ Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
     return m_Mesh2D;
 }
 
-// TODO: This function needs testing after finishing up on sprite animation
 Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
 {
    
-    Vertex vertices[] =
+    Vertex3D vertices[] =
     {
         // Front face
-        {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0}}, // 0
-        {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {1.0, 1.0}}, // 1
-        {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0}}, // 2
-        {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0}}, // 3
+        {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
+        {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
+        {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 0.0}}, // 2
+        {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0}}, // 3
         
         // Back face
-        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0}}, // 4
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 1.0}}, // 5
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0}}, // 6
-        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0}}, // 7
+        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {0.0, 1.0}}, // 4
+        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {1.0, 1.0}}, // 5
+        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {1.0, 0.0}}, // 6
+        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {0.0, 0.0}}, // 7
         
         // Left face
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0}}, // 8
-        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 1.0}}, // 9
-        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0}}, // 10
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0}}, // 11
+        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {0.0, 1.0}}, // 8
+        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {1.0, 1.0}}, // 9
+        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {1.0, 0.0}}, // 10
+        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {0.0, 0.0}}, // 11
         
         // Right face
-        {{0.5f,  -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0}}, // 12
-        {{0.5f,  -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 1.0}}, // 13
-        {{0.5f,   0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0}}, // 14
-        {{0.5f,   0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0}}, // 15
+        {{0.5f,  -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 1.0}}, // 12
+        {{0.5f,  -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {1.0, 1.0}}, // 13
+        {{0.5f,   0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {1.0, 0.0}}, // 14
+        {{0.5f,   0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.0}}, // 15
         
         // Top face
-        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0},  {0.0, 1.0}}, // 16
-        {{ 0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0},  {1.0, 1.0}}, // 17
-        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0},  {1.0, 0.0}}, // 18
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0},  {0.0, 0.0}}, // 19
+        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {0.0, 1.0}}, // 16
+        {{ 0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {1.0, 1.0}}, // 17
+        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {1.0, 0.0}}, // 18
+        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {0.0, 0.0}}, // 19
         
         // Bottom face
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0}}, // 20
-        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 1.0}}, // 21
-        {{ 0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0}}, // 22
-        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0}}, // 23
+        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{0.0, 1.0}}, // 20
+        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 1.0}}, // 21
+        {{ 0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 0.0}}, // 22
+        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0}, {0.0, 0.0}}, // 23
        
     };
     
@@ -119,16 +118,86 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
        20, 21, 22, 22, 23, 20
     };
     
+    m_Mesh3D.m_IndexCount = 36;
+    
     // vertex buffer
     m_Mesh3D.m_VertexBuffer = device->newBuffer(sizeof(vertices), MTL::ResourceStorageModeShared);
     memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices, sizeof(vertices));
     
+
     // Index buffer
     m_Mesh3D.m_IndexBuffer = device->newBuffer(sizeof(indices), MTL::ResourceStorageModeShared);
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
     
-    m_Mesh3D.m_Texture = new MetalTexture(texture, device);
+    if (texture[0] != '\0')
+        m_Mesh3D.m_Texture = new MetalTexture(texture, device);
 
     return m_Mesh3D;
      
+}
+
+Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments)
+{
+    std::vector<Vertex3D> vertices;
+    std::vector<u_int16_t> indices;
+    
+    const float PI = 3.1415926539f;
+    Vertex3D vertex;
+    
+    for (int x = 0; x <= xSegments; ++x)
+    {
+        for (int y = 0; y <= ySegments; ++y)
+        {
+            float xSegment = (float)x / (float)xSegments;
+            float ySegment = (float)y / (float)ySegments;
+            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float yPos = std::cos(ySegment * PI);
+            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+
+            
+            vertex.pos = simd::make_float3(xPos, yPos, zPos);
+            vertex.color = simd::make_float3(1.0f, 1.0f, 1.0f);
+            vertex.normals = simd::normalize(simd::make_float3(xPos, yPos, zPos));
+            vertex.texCoord = simd::make_float2(xSegment, ySegment);
+            
+            vertices.push_back(vertex);
+        }
+    }
+    
+    
+    for (int y = 0; y < ySegments; ++y)
+        {
+            for (int x = 0; x < xSegments; ++x)
+            {
+                uint16_t topLeft = y * (xSegments + 1) + x;
+                uint16_t topRight = topLeft + 1;
+                uint16_t bottomLeft = (y + 1) * (xSegments + 1) + x;
+                uint16_t bottomRight = bottomLeft + 1;
+
+                indices.push_back(topLeft);
+                indices.push_back(bottomLeft);
+                indices.push_back(topRight);
+                
+                indices.push_back(topRight);
+                indices.push_back(bottomLeft);
+                indices.push_back(bottomRight);
+            }
+        }
+    
+    m_Mesh3D.m_IndexCount = (u_int16_t)indices.size();
+    
+    size_t vertexSize = vertices.size() * sizeof(Vertex3D);
+    size_t indexSize  = indices.size() * sizeof(uint16_t);
+   
+    // vertex buffer
+    m_Mesh3D.m_VertexBuffer = device->newBuffer(vertexSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices.data(), vertexSize);
+    
+    // Index buffer
+    m_Mesh3D.m_IndexBuffer = device->newBuffer(indexSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
+    
+    
+    
+    return m_Mesh3D;
 }

@@ -9,6 +9,8 @@
 #define MacApplication_hpp
 
 #include "MacWindow.h"
+#include "Camera/Camera.h"
+#include "Input/AppleController.h"
 
 class MetalRenderer;
 
@@ -35,7 +37,11 @@ private:
     MetalRenderer* m_MetalRenderer = nullptr;
     MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
-    float m_AspectRatio;
+    Camera m_Camera;
+    AppleController m_Controller;
+    float m_CurrentFrame = 0.0f;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
 };
 
 #endif /* MacApplication_hpp */

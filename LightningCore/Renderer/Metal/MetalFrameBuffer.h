@@ -39,11 +39,13 @@ public:
 private:
     MTL::Device* m_MetalDevice = nullptr;
     MTL::Texture* m_AttachmentTexture = nullptr;
+    MTL::Texture* m_MSAATargetTexture = nullptr;
     MTL::Texture* m_DepthTexture = nullptr;
     
     MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
     MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
     MTL::TextureDescriptor* m_DepthTextureDescriptor = nullptr;
+    MTL::TextureDescriptor* m_MSAATextureDescriptor = nullptr;
     MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor = nullptr;
     

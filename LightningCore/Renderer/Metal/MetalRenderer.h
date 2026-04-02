@@ -17,6 +17,8 @@ namespace MTL
     class DepthStencilState;
     class DepthStencilDescriptor;
     class VertexDescriptor;
+    class TextureDescriptor;
+    class Texture;
 }
 
 namespace CA
@@ -44,18 +46,19 @@ public:
     MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
     
-    void BeginFrame();
 
     // Create quads with texture
     void CreateQuad(const char* p_FilePath, const simd::float3 &position);
     void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
     void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
     void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
+    
     // Create Cube
     void CreateCube(const char* p_FilePath);
+    void CreateSphere();
     
+    void BeginFrame();
     void Render();
-    
     void Commit();
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
@@ -86,14 +89,14 @@ private:
     MetalVertexBuffer* m_TransformationBuffer = nullptr;
     
     MetalShader* m_Shader;
-    //m_LightShader;
+    MetalShader* m_LightShader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
     
     Mesh_2D m_Mesh;
     Mesh_3D m_Mesh3D;
     
-    std::vector<Mesh_2D> m_Meshes;
+    std::vector<Mesh_2D> m_2DMeshes;
     std::vector<Mesh_3D> m_3DMeshes;
     
     MeshBuilder m_MeshBuilder;
