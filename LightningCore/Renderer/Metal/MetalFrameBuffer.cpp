@@ -7,8 +7,6 @@
 
 #include "MetalFrameBuffer.h"
 #include "Metal/Metal.hpp"
-#include "MetalShader.h"
-#include <iostream>
 
 MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 : m_MetalDevice(p_MetalDevice),
@@ -109,7 +107,10 @@ void MetalFrameBuffer::UpdateViewport(MTL::RenderCommandEncoder *p_Encoder)
 void MetalFrameBuffer::Resize(float p_Width, float p_Height)
 {
     if (m_AttachmentTexture)
+    {
         m_AttachmentTexture->release();
+        m_AttachmentTexture = nullptr;
+    }
     
     if (m_DepthTexture)
     {

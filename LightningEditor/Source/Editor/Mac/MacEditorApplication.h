@@ -11,8 +11,7 @@
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
-#include "Primitives/Sprite.h"
-#include "Scene/Scene.h"
+#include "Primitives/MeshBuilder.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
@@ -62,9 +61,9 @@ private:
     
     AppleController m_Controller;
     
-    Sprite m_PlayerSprite;
+    MeshBuilder m_MeshBuilder;
     
-    Scene m_Scene;
+    Scene* m_Scene;
     
 };
 

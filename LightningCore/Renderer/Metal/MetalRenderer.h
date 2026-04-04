@@ -40,6 +40,8 @@ class MetalShader;
 #include "Math/AAPLMathUtilities.h"
 #include <vector>
 
+class Scene;
+
 class MetalRenderer
 {
 public:
@@ -58,7 +60,7 @@ public:
     void CreateSphere();
     
     void BeginFrame();
-    void Render();
+    void Render(Scene* p_Scene);
     void Commit();
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
@@ -84,6 +86,7 @@ private:
     MTL::DepthStencilState* m_DepthStencilState = nullptr;
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
     MTL::VertexDescriptor* m_3DVertexDescriptor = nullptr;
+    MTL::VertexDescriptor* m_LightVertexDescriptor = nullptr;
     
     
     MetalVertexBuffer* m_TransformationBuffer = nullptr;

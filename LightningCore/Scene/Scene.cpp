@@ -19,8 +19,8 @@ void Scene::OnTransformConstruct(entt::registry &registry, entt::entity entity)
 }
 
 Scene::Scene()
-: m_Entity(m_Registry.create())
 {
+    /*
     m_Registry.emplace<TransformComponent>(m_Entity, simd::float4x4(1.0f));
     m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
     
@@ -39,6 +39,7 @@ Scene::Scene()
     {
         auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
     }
+     */
 }
 
 Scene::~Scene()

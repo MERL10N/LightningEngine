@@ -9,6 +9,8 @@
 #define Component_h
 #include <simd/simd.h>
 
+#include "Primitives/MeshBuilder.h"
+
 class MetalTexture;
 struct TagComponent
 {
@@ -23,16 +25,13 @@ struct TagComponent
 
 struct TransformComponent
 {
-    simd::float4x4 m_Transform;
+    matrix_float4x4 m_Transform = simd::float4x4(1.0f);
     
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
     TransformComponent(const simd::float4x4 &transform)
     : m_Transform(transform)
     {}
-    
-    operator simd::float4x4() { return m_Transform; }
-    operator const simd::float4x4&() const { return m_Transform; }
 };
 
 struct SpriteRendererComponent
@@ -44,6 +43,16 @@ struct SpriteRendererComponent
     SpriteRendererComponent(const SpriteRendererComponent&) = default;
     SpriteRendererComponent(const simd::float4 &color)
     : m_Color(color) {}
+};
+
+struct MeshComponent
+{
+    Mesh_3D m_Mesh;
+    MeshComponent() = default;
+    MeshComponent(const MeshComponent&) = default;
+    MeshComponent(const Mesh_3D &mesh)
+    : m_Mesh(mesh)
+    {}
 };
 
 #endif /* Component_h */

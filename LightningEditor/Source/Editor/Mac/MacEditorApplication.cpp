@@ -13,7 +13,9 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
+#include "Scene/Scene.h"
 #include "Scene/Component.h"
+#include "Entity/Entity.h"
 #include "GLFW/glfw3.h"
 #include <simd/simd.h>
 
@@ -25,7 +27,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera()),
-  m_Scene(Scene())
+  m_Scene(new Scene())
 {
     /*
     m_MetalRenderer->CreateQuad("Assets/Textures/city/1.png", simd::make_float3(50.f, 50.f, 1.f), simd::make_float3(0.0f,5.f, -4.f));
@@ -41,8 +43,13 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     //m_Scene.Reg().emplace<SpriteRendererComponent>(square, simd::make_float4(0.0f, 1.0f, 0.0f, 1.0f));
      */
     
-    m_MetalRenderer->CreateCube("Assets/Textures/background.png");
-    m_MetalRenderer->CreateSphere();
+    auto cube = m_Scene->CreateEntity("Cube");
+    cube.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice, "Assets/Textures/background.png"));
+    
+    auto sphere = m_Scene->CreateEntity("Sphere");
+    sphere.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(-5.0f, 0.0f, 0.0f));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64));;
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -86,6 +93,12 @@ MacEditorApplication::~MacEditorApplication()
     {
         delete m_MacEditorLayer;
         m_MacEditorLayer = nullptr;
+    }
+    
+    if (m_Scene)
+    {
+        delete m_Scene;
+        m_Scene = nullptr;
     }
 }
 
@@ -138,7 +151,7 @@ void MacEditorApplication::Update()
             
             m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
 
-            m_Scene.Update(m_DeltaTime);
+            m_Scene->Update(m_DeltaTime);
             
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
@@ -168,7 +181,7 @@ void MacEditorApplication::Update()
                 m_MetalRenderer->SetCamera(m_Camera);
                 m_MetalRenderer->BeginFrame();
                 m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-                m_MetalRenderer->Render();
+                m_MetalRenderer->Render(m_Scene);
                 m_MetalRenderer->Commit();
                 
                 // Rendering

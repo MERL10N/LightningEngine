@@ -197,6 +197,7 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     m_Mesh3D.m_IndexBuffer = device->newBuffer(indexSize, MTL::ResourceStorageModeShared);
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
     
+    m_Mesh3D.m_Texture = nullptr;
     
     
     return m_Mesh3D;

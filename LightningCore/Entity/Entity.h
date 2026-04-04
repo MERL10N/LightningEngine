@@ -33,7 +33,7 @@ public:
     }
     
     template <typename T>
-    bool GetComponent()
+    T& GetComponent()
     {
         assert(HasComponent<T>());
         return m_Scene->Reg().get<T>(m_EntityHandle);
