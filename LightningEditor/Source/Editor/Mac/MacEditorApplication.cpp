@@ -13,7 +13,6 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
-#include "Scene/Scene.h"
 #include "Scene/Component.h"
 #include "Entity/Entity.h"
 #include "GLFW/glfw3.h"
@@ -27,27 +26,14 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera()),
-  m_Scene(new Scene())
+  m_Scene(Scene())
 {
-    /*
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/1.png", simd::make_float3(50.f, 50.f, 1.f), simd::make_float3(0.0f,5.f, -4.f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/2.png", simd::make_float3(10.f, 10.f, 1.f), simd::make_float3(0.0f,6.f, -3.9f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/3.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,5.5f, -3.8f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/4.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.7f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/5.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.6f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/city/8.png", simd::make_float3(20.f, 20.f, 1.f), simd::make_float3(0.0f,0.f, -3.f));
-    m_MetalRenderer->CreateQuad("Assets/Textures/megaman.png", simd::make_float3(1.f, 1.f, 1.f), simd::make_float3(0.0f,-5.0f, -1.0f));
-
-    //auto square = m_Scene.CreateEntity();
-    //m_Scene.Reg().emplace<TransformComponent>(square);
-    //m_Scene.Reg().emplace<SpriteRendererComponent>(square, simd::make_float4(0.0f, 1.0f, 0.0f, 1.0f));
-     */
-    
-    auto cube = m_Scene->CreateEntity("Cube");
+ 
+    auto cube = m_Scene.CreateEntity("Cube");
     cube.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice, "Assets/Textures/background.png"));
     
-    auto sphere = m_Scene->CreateEntity("Sphere");
+    auto sphere = m_Scene.CreateEntity("Sphere");
     sphere.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64));;
     
@@ -59,6 +45,7 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable viewports
+    io.ConfigFlags |= ImGuiWindowFlags_NoResize;
     
     // Setup style
     ImGui::StyleColorsDark();
@@ -93,12 +80,6 @@ MacEditorApplication::~MacEditorApplication()
     {
         delete m_MacEditorLayer;
         m_MacEditorLayer = nullptr;
-    }
-    
-    if (m_Scene)
-    {
-        delete m_Scene;
-        m_Scene = nullptr;
     }
 }
 
@@ -151,7 +132,6 @@ void MacEditorApplication::Update()
             
             m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
 
-            m_Scene->Update(m_DeltaTime);
             
             NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
             {
@@ -178,17 +158,14 @@ void MacEditorApplication::Update()
                 m_MacEditorLayer->DrawStatsBar();
                 
                 // Submit FrameBuffer To Renderer
-                m_MetalRenderer->SetCamera(m_Camera);
-                m_MetalRenderer->BeginFrame();
                 m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-                m_MetalRenderer->Render(m_Scene);
-                m_MetalRenderer->Commit();
+                m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth()/ m_MetalFrameBuffer.GetHeight());
                 
                 // Rendering
                 ImGui::Render();
 
                // Render ImGui UI and Viewport
-               m_MetalRenderer->BeginFrame();
+               m_MetalRenderer->SubmitCommandBuffer();
                m_ImGuiCommandBuffer = m_MetalRenderer->GetMetalCommandBuffer();
                m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
                m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);

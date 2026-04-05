@@ -55,7 +55,7 @@ private:
     float m_MovementSpeed, m_Velocity;
     
     float m_MouseSensitivity;
-    float m_Zoom = 75.f;
+    float m_Zoom = 65.f;
 
     CAMERA_MOVEMENT m_CameraMovement;
     

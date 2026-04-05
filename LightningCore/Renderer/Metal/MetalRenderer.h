@@ -32,6 +32,7 @@ class MetalTexture;
 class SubTexture;
 class MetalTexture;
 class MetalShader;
+class Scene;
 
 #include <simd/simd.h>
 #include "Primitives/MeshBuilder.h"
@@ -40,7 +41,7 @@ class MetalShader;
 #include "Math/AAPLMathUtilities.h"
 #include <vector>
 
-class Scene;
+
 
 class MetalRenderer
 {
@@ -48,20 +49,6 @@ public:
     MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
     
-
-    // Create quads with texture
-    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
-    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
-    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
-    void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
-    
-    // Create Cube
-    void CreateCube(const char* p_FilePath);
-    void CreateSphere();
-    
-    void BeginFrame();
-    void Render(Scene* p_Scene);
-    void Commit();
     
     inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
     
@@ -75,7 +62,24 @@ public:
     
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
     
-    inline void SetCamera(Camera camera) { m_Camera = camera; }
+    void SubmitCommandBuffer();
+    
+
+    // Create quads with texture
+    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
+    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
+    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
+    
+    // Create Cube
+    void CreateCube(const char* p_FilePath);
+    void CreateSphere();
+    
+    // Scene rendering
+    void BeginScene(const Camera &p_Camera, const float p_AspectRatio);
+    void Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh);
+    void EndScene();
+
     
 private:
     MTL::Device* m_MetalDevice = nullptr;

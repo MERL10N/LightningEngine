@@ -10,6 +10,7 @@
 #include "Platform/Apple/MacWindow.h"
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
+#include "Scene/Scene.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Primitives/MeshBuilder.h"
 #include <simd/simd.h>
@@ -17,7 +18,6 @@
 class MetalRenderer;
 class MacEditorLayer;
 class MetalTexture;
-class Scene;
 
 namespace MTL
 {
@@ -63,7 +63,7 @@ private:
     
     MeshBuilder m_MeshBuilder;
     
-    Scene* m_Scene;
+    Scene m_Scene;
     
 };
 

@@ -48,12 +48,11 @@ void MacApplication::Update(float p_DeltaTime)
             m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
             m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
             
-            m_MetalRenderer->SetCamera(m_Camera);
-            m_MetalRenderer->BeginFrame();
+  
             m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
             //m_MetalRenderer->Render(sce);
             m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
-            m_MetalRenderer->Commit();
+            m_MetalRenderer->EndScene();
         }
         m_Pool->release();
     }

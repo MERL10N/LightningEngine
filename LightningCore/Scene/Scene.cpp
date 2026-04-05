@@ -8,38 +8,12 @@
 #include "Scene.h"
 #include "Component.h"
 #include "Entity/Entity.h"
+#include "Renderer/Metal/MetalRenderer.h"
+#include "Camera/Camera.h"
 #include <simd/simd.h>
-
-void Scene::DoMath(const simd::float4x4 &transform)
-{
-}
-
-void Scene::OnTransformConstruct(entt::registry &registry, entt::entity entity)
-{
-}
 
 Scene::Scene()
 {
-    /*
-    m_Registry.emplace<TransformComponent>(m_Entity, simd::float4x4(1.0f));
-    m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
-    
-    if (m_Registry.all_of<TransformComponent>(m_Entity))
-        TransformComponent &transform = m_Registry.get<TransformComponent>(m_Entity);
-    
-    auto view = m_Registry.view<TransformComponent>();
-    
-    for (auto &entity : view)
-    {
-        TransformComponent &transform = view.get<TransformComponent>(entity);
-    }
-    
-    auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-    for (auto &entity : group)
-    {
-        auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-    }
-     */
 }
 
 Scene::~Scene()
@@ -57,6 +31,17 @@ Entity Scene::CreateEntity(const char* tag)
     return entity;
 }
 
-void Scene::Update(float deltaTime)
+void Scene::RenderScene(MetalRenderer* p_MetalRenderer, const Camera &p_Camera, const float p_AspectRatio)
 {
+    auto meshes = m_Registry.view<TransformComponent, MeshComponent>();
+    
+    p_MetalRenderer->BeginScene(p_Camera, p_AspectRatio);
+    
+    for (auto &entity : meshes)
+    {
+        auto [transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
+        p_MetalRenderer->Render(transform.m_Transform, mesh.m_Mesh);
+    }
+    
+    p_MetalRenderer->EndScene();
 }

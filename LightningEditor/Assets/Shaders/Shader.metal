@@ -24,7 +24,10 @@ struct VertexOut
 };
 
 // Vertex shader
-vertex VertexOut vertex_main(VertexIn in [[stage_in]], constant float4x4 &transform[[buffer(1)]], constant float4x4 &projection[[buffer(2)]], constant float4x4 &view[[buffer(3)]])
+vertex VertexOut vertex_main(VertexIn in [[stage_in]],
+                             constant float4x4 &transform[[buffer(1)]],
+                             constant float4x4 &projection[[buffer(2)]],
+                             constant float4x4 &view[[buffer(3)]])
 {
     VertexOut out;
     half3 pos = half3(in.position);
@@ -37,7 +40,7 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]], constant float4x4 &transf
 
 // Fragment shader
 fragment half4 fragment_main(VertexOut out [[stage_in]],
-                               texture2d<half> colorTexture [[texture(0)]])
+                             texture2d<half> colorTexture [[texture(0)]])
 {
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     // Sample the texture to obtain a color

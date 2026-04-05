@@ -40,8 +40,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
-   // m_LightVertexDescriptor = vertexDescriptorBuilder.AddAttribute(MTL::VertexFormatFloat4, offsetof(simd::float4x4, pos));
-    
     m_Shader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
     
     m_LightShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
@@ -119,8 +117,6 @@ MetalRenderer::~MetalRenderer()
     }
     m_3DMeshes.clear();
 }
-
-
 void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &position)
 {
     m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
@@ -150,26 +146,26 @@ void MetalRenderer::CreateSprite(const char* p_FilePath, const simd::float3 &sca
 void MetalRenderer::CreateCube(const char* p_FilePath)
 {
     m_Mesh3D = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
-    m_Mesh3D.m_Transform = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
     m_3DMeshes.push_back(m_Mesh3D);
 }
 
 void MetalRenderer::CreateSphere()
 {
     m_Mesh3D = m_MeshBuilder.GenerateSphere(m_MetalDevice, 34, 34);
-    m_Mesh3D.m_Transform = matrix4x4_translation(simd_make_float3(-2.f, 0.f, 0.f));
     m_Mesh3D.m_Texture = nullptr;
     m_3DMeshes.push_back(m_Mesh3D);
 }
 
-
-void MetalRenderer::BeginFrame()
+void MetalRenderer::SubmitCommandBuffer()
 {
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
-void MetalRenderer::Render(Scene* p_Scene)
+
+void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio)
 {
+    m_Camera = p_Camera;
+    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
     
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
     depthAttachment->setClearDepth(1.0f);
@@ -182,55 +178,44 @@ void MetalRenderer::Render(Scene* p_Scene)
     float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
     
     matrix_float4x4 projectionMatrix = matrix_perspective_right_hand(fov,
-                                                               m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height,
+                                                               p_AspectRatio,
                                                                0.1f,
                                                                1000.f);
     
     
     m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, viewMatrix, 3);
     m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projectionMatrix, 2);
-    
-    auto view = p_Scene->Reg().view<TransformComponent, MeshComponent>();
-    
-    
-    for (auto &entity : view)
-    {
-        
-        auto& transformComponent = view.get<TransformComponent>(entity);
-        auto& meshComponent = view.get<MeshComponent>(entity);
-        
-        Mesh_3D& mesh = meshComponent.m_Mesh;
-        mesh.m_Transform = transformComponent.m_Transform;
+}
+
+void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh)
+{
         
         m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
         m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
        
-        m_RenderCommandEncoder->setVertexBuffer(mesh.m_VertexBuffer, 0, 0);
-        if (mesh.m_Texture)
+        m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+    
+        if (p_3DMesh.m_Texture)
         {
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
-            m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
-            m_RenderCommandEncoder->setFragmentTexture(mesh.m_Texture->GetTexture(), 0);
+            m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
+            m_RenderCommandEncoder->setFragmentTexture(p_3DMesh.m_Texture->GetTexture(), 0);
         }
         else
         {
             m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
-            m_LightShader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, mesh.m_Transform, 1);
+            m_LightShader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
         }
+    
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
-                                                      mesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
-                                                      mesh.m_IndexBuffer,
+                                                      p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
+                                                      p_3DMesh.m_IndexBuffer,
                                                       NS::UInteger(0));
-    }
-    
-    
-    m_RenderCommandEncoder->endEncoding();
 
 }
 
-void MetalRenderer::Commit()
+void MetalRenderer::EndScene()
 {
+    m_RenderCommandEncoder->endEncoding();
     m_MetalCommandBuffer->commit();
 }
-
-

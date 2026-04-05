@@ -40,9 +40,9 @@ public:
     }
     
     template <typename T>
-    bool RemoveComponent()
+    void RemoveComponent()
     {
-        return m_Scene->Reg().remove<T>(m_EntityHandle);
+        m_Scene->Reg().remove<T>(m_EntityHandle);
     }
 private:
     entt::entity m_EntityHandle;

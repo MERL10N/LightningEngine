@@ -10,8 +10,10 @@
 #include <simd/simd.h>
 
 #include "Primitives/MeshBuilder.h"
+#include "Camera/Camera.h"
 
 class MetalTexture;
+
 struct TagComponent
 {
     const char* m_Tag;
@@ -26,7 +28,7 @@ struct TagComponent
 struct TransformComponent
 {
     matrix_float4x4 m_Transform = simd::float4x4(1.0f);
-    
+    matrix_float4x4 m_Rotation;
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
     TransformComponent(const simd::float4x4 &transform)
@@ -34,14 +36,14 @@ struct TransformComponent
     {}
 };
 
-struct SpriteRendererComponent
+struct TextureComponent
 {
     simd::float4 m_Color = simd::make_float4(1.0f, 1.0f, 1.0f, 1.0f);
     
     MetalTexture* m_Texture;
-    SpriteRendererComponent() = default;
-    SpriteRendererComponent(const SpriteRendererComponent&) = default;
-    SpriteRendererComponent(const simd::float4 &color)
+    TextureComponent() = default;
+    TextureComponent(const TextureComponent&) = default;
+    TextureComponent(const simd::float4 &color)
     : m_Color(color) {}
 };
 
@@ -52,6 +54,26 @@ struct MeshComponent
     MeshComponent(const MeshComponent&) = default;
     MeshComponent(const Mesh_3D &mesh)
     : m_Mesh(mesh)
+    {}
+    
+    ~MeshComponent()
+    {
+        if (m_Mesh.m_Texture)
+        {
+            delete m_Mesh.m_Texture;
+            m_Mesh.m_Texture = nullptr;
+        }
+    }
+};
+
+struct CameraComponent
+{
+    Camera m_Camera;
+    bool   b_Primary = true;
+    CameraComponent() = default;
+    CameraComponent(const CameraComponent&) = default;
+    CameraComponent(const Camera &camera)
+    : m_Camera(camera)
     {}
 };
 

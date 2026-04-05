@@ -12,6 +12,9 @@
 #include <simd/simd.h>
 
 class Entity;
+class Camera;
+
+class MetalRenderer;
 
 class Scene
 {
@@ -23,12 +26,9 @@ public:
     
     // Temporary
     entt::registry &Reg() { return m_Registry; }
-    void Update(float deltaTime);
+    void RenderScene(MetalRenderer* p_MetalRenderer, const Camera &p_Camera, const float p_AspectRatio);
     
-private:
-    static void DoMath(const simd::float4x4 &transform);
-    static void OnTransformConstruct(entt::registry &registry, entt::entity entity);
-    
+private:    
     entt::registry m_Registry;
     entt::entity m_Entity;
 };
