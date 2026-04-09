@@ -29,7 +29,8 @@ std::string MetalShader::LoadShaderFile(const std::string &path)
 MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
   m_FilePath(p_FilePath),
-  m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
+  m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat),
+  m_RenderPipelineDescriptor(MTL::RenderPipelineDescriptor::alloc()->init())
 {
     
     assert(m_MetalDevice);
@@ -73,7 +74,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
         std::println("Fragment function successfully found and loaded");
     }
 
-    m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+
     m_RenderPipelineDescriptor->setRasterSampleCount(4);
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
