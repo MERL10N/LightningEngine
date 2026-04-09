@@ -43,14 +43,9 @@ public:
     void SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
 
     void SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
-    
-    MTL::Buffer* CreateArgumentBuffer(MTL::Texture* p_Texture);
 
     
-    inline MTL::RenderPipelineState* GetRenderPipelineState()
-    {
-        return m_RenderPipelineState;
-    }
+    inline MTL::RenderPipelineState* GetRenderPipelineState(){ return m_RenderPipelineState; }
     
 private:
     MTL::Device* m_MetalDevice = nullptr;
