@@ -64,6 +64,9 @@ void EditorLayer::DrawStatsBar()
             b_showAnotherWindow = false;
         ImGui::End();
     }
+    
+    
+    ImGui::Checkbox("Enable Wireframe Mode: ", &b_EnableWireFrameMode);
     ImGui::End();
 }
 

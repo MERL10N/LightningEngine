@@ -10,18 +10,20 @@
 #include <simd/simd.h>
 namespace MTL
 {
-   class Device;
-   class RenderPipelineState;
-   class RenderPipelineDescriptor;
-   class Texture;
-   class Function;
-   class Library;
-   class DepthStencilState;
-   class DepthStencilDescriptor;
-   class RenderCommandEncoder;
-   class RenderPassDescriptor;
-   class VertexDescriptor;
-   class RenderPipelineColorAttachmentDescriptor;
+    class Device;
+    class RenderPipelineState;
+    class RenderPipelineDescriptor;
+    class Texture;
+    class Function;
+    class Library;
+    class DepthStencilState;
+    class DepthStencilDescriptor;
+    class RenderCommandEncoder;
+    class RenderPassDescriptor;
+    class VertexDescriptor;
+    class RenderPipelineColorAttachmentDescriptor;
+    class Buffer;
+    class ArgumentEncoder;
    
 }
 
@@ -41,6 +43,8 @@ public:
     void SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
 
     void SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
+    
+    MTL::Buffer* CreateArgumentBuffer(MTL::Texture* p_Texture);
 
     
     inline MTL::RenderPipelineState* GetRenderPipelineState()
@@ -59,6 +63,8 @@ private:
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
     MTL::VertexDescriptor* m_VertexDescriptor = nullptr;
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
+    MTL::Buffer* m_ArgumentBuffer = nullptr;
+    MTL::ArgumentEncoder* m_ArgumentEncoder = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
     std::string LoadShaderFile(const std::string& path);

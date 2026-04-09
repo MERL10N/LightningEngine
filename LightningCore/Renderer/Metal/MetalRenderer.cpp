@@ -9,7 +9,7 @@
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
-#include "MetalVertexDescriptorBuilder.h"
+#include "MetalVertexDescriptor.h"
 #include "MetalShader.h"
 #include "SubTexture.h"
 #include "GLFW/glfw3.h"
@@ -21,16 +21,17 @@
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
-  m_MetalCommandQueue(m_MetalDevice->newCommandQueue())
+  m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
+  m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
+  b_EnableWireframe(false)
 {
     assert(m_MetalDevice);
-    m_DepthStencilDescriptor = MTL::DepthStencilDescriptor::alloc()->init();
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
     m_DepthStencilDescriptor->release();
     
-    MetalVertexDescriptorBuilder vertexDescriptorBuilder;
+    MetalVertexDescriptor vertexDescriptorBuilder;
     
     m_3DVertexDescriptor = vertexDescriptorBuilder
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, pos))
@@ -85,75 +86,6 @@ MetalRenderer::~MetalRenderer()
         delete m_Shader;
         m_Shader = nullptr;
     }
-    
-    // TODO: Refactor this for better clarity
-    for (auto &mesh: m_2DMeshes)
-    {
-        mesh.m_IndexBuffer->release();
-        mesh.m_IndexBuffer = nullptr;
-        
-        mesh.m_VertexBuffer->release();
-        mesh.m_VertexBuffer = nullptr;
-        
-        delete mesh.m_Texture;
-        mesh.m_Texture = nullptr;
-    }
-  
-    m_2DMeshes.clear();
-    
-    for (auto &mesh: m_3DMeshes)
-    {
-        mesh.m_IndexBuffer->release();
-        mesh.m_IndexBuffer = nullptr;
-        
-        mesh.m_VertexBuffer->release();
-        mesh.m_VertexBuffer = nullptr;
-        
-        if (mesh.m_Texture)
-        {
-            delete mesh.m_Texture;
-            mesh.m_Texture = nullptr;
-        }
-    }
-    m_3DMeshes.clear();
-}
-void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &position)
-{
-    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
-    m_Mesh.m_Transform = matrix4x4_translation(position);
-    m_2DMeshes.push_back(m_Mesh);
-}
-
-void MetalRenderer::CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position)
-{
-    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
-    m_Mesh.m_Transform = matrix4x4_scale_translation(scale, position);
-    m_2DMeshes.push_back(m_Mesh);
-}
-
-void MetalRenderer::CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath)
-{
-    m_Mesh = m_MeshBuilder.GenerateQuadWithTexture(m_MetalDevice, p_FilePath);
-    m_Mesh.m_Transform = matrix4x4_translation(simd_make_float3(0.f, 0.f, -2.f));
-    SubTexture::CreateFromCoords(m_Mesh.m_Texture->GetTexture(), position, size);
-    m_2DMeshes.push_back(m_Mesh);
-}
-
-void MetalRenderer::CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite)
-{
-}
-
-void MetalRenderer::CreateCube(const char* p_FilePath)
-{
-    m_Mesh3D = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
-    m_3DMeshes.push_back(m_Mesh3D);
-}
-
-void MetalRenderer::CreateSphere()
-{
-    m_Mesh3D = m_MeshBuilder.GenerateSphere(m_MetalDevice, 34, 34);
-    m_Mesh3D.m_Texture = nullptr;
-    m_3DMeshes.push_back(m_Mesh3D);
 }
 
 void MetalRenderer::SubmitCommandBuffer()
@@ -187,19 +119,28 @@ void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio
     m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projectionMatrix, 2);
 }
 
-void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh)
+void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
 {
         
         m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
         m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
-       
+    
+        if (b_EnableWireframe)
+        {
+            m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeLines);
+        }
+        else
+        {
+            m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
+        }
+    
         m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
     
-        if (p_3DMesh.m_Texture)
+        if (p_Texture)
         {
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
             m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
-            m_RenderCommandEncoder->setFragmentTexture(p_3DMesh.m_Texture->GetTexture(), 0);
+            m_RenderCommandEncoder->setFragmentTexture(p_Texture->GetTexture(), 0);
         }
         else
         {

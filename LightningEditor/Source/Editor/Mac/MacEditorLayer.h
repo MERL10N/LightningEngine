@@ -29,8 +29,11 @@ public:
     void DrawMenuBar();
     void DrawContentBrowser();
     
+    inline bool IsWireFrameEnabled() { return b_EnableWireframe; }
+    
 private:
     bool b_showAnotherWindow;
+    bool b_EnableWireframe = true;
     const char* s_AssetsPath = nullptr;
     std::filesystem::path m_CurrentDirectory;
     MTL::Device* m_MetalDevice;

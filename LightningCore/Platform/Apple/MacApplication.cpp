@@ -16,7 +16,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera())
 {
-    m_MetalRenderer->CreateCube("Assets/Textures/background.png");
+    ///m_MetalRenderer->CreateCube("Assets/Textures/background.png");
 }
 
 

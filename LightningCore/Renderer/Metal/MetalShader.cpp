@@ -182,8 +182,6 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     assert(m_RenderPipelineState);
     
     m_Library->release();
-    m_VertexFunction->release();
-    m_FragmentFunction->release();
     m_RenderPipelineDescriptor->release();
 
 }
@@ -195,6 +193,8 @@ MetalShader::~MetalShader()
         m_RenderPipelineState->release();
         m_RenderPipelineState = nullptr;
     }
+    m_VertexFunction->release();
+    m_FragmentFunction->release();
 }
 
 void MetalShader::SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
@@ -206,3 +206,15 @@ void MetalShader::SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* enc
 {
     encoder->setVertexBytes(&value, sizeof(value), index);
 }
+
+MTL::Buffer* MetalShader::CreateArgumentBuffer(MTL::Texture *p_Texture)
+{
+    m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
+    m_ArgumentBuffer = m_MetalDevice->newBuffer(m_ArgumentEncoder->encodedLength(), MTL::ResourceStorageModeShared);
+    
+    m_ArgumentEncoder->setArgumentBuffer(m_ArgumentBuffer, 0);
+    m_ArgumentEncoder->setTexture(p_Texture, 0);
+    m_ArgumentEncoder->release();
+    return m_ArgumentBuffer;
+}
+

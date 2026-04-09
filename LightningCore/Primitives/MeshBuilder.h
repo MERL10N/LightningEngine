@@ -44,7 +44,8 @@ struct Mesh_2D
 struct Mesh_3D
 {
     MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
-    MetalTexture* m_Texture;
+    MTL::Buffer* m_ArgumentBuffer;
+    //MetalTexture* m_Texture;
     uint16_t m_IndexCount;
 };
 
@@ -55,8 +56,9 @@ public:
     ~MeshBuilder(){};
     Mesh_2D GenerateQuadWithTexture(MTL::Device* device, const char* texture);
     Mesh_2D GenerateQuad(MTL::Device* device);
-    Mesh_3D GenerateCube(MTL::Device* device, const char* texture);
+    Mesh_3D GenerateCube(MTL::Device* device);
     Mesh_3D GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments);
+    Mesh_3D GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color);
 private:
     Mesh_2D m_Mesh2D;
     Mesh_3D m_Mesh3D;

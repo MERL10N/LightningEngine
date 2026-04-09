@@ -7,12 +7,12 @@
 
 #ifndef EditorApplication_hpp
 #define EditorApplication_hpp
+
 #include "Platform/Apple/MacWindow.h"
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
 #include "Scene/Scene.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
-#include "Primitives/MeshBuilder.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
@@ -35,7 +35,7 @@ namespace CA
 class MacEditorApplication
 {
 public:
-    explicit MacEditorApplication(float p_Width = 1280.f, float p_Height = 720.f, const char* p_Title = "Lightning Editor");
+    explicit MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title = "Lightning Editor");
     void DrawGameViewport();
     ~MacEditorApplication();
     void Update();
@@ -61,9 +61,9 @@ private:
     
     AppleController m_Controller;
     
-    MeshBuilder m_MeshBuilder;
-    
     Scene m_Scene;
+    
+    bool b_EnableWireframe = false;
     
 };
 

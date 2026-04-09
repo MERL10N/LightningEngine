@@ -26,7 +26,8 @@ public:
     
     // Temporary
     entt::registry &Reg() { return m_Registry; }
-    void RenderScene(MetalRenderer* p_MetalRenderer, const Camera &p_Camera, const float p_AspectRatio);
+    template <typename Renderer>
+    void RenderScene(Renderer* p_Renderer, const Camera &p_Camera, const float p_AspectRatio);
     
 private:    
     entt::registry m_Registry;

@@ -34,14 +34,14 @@ class MetalTexture;
 class MetalShader;
 class Scene;
 
+struct Mesh_3D;
+struct Mesh_2D;
+
 #include <simd/simd.h>
-#include "Primitives/MeshBuilder.h"
 #include "Primitives/Sprite.h"
 #include "Camera/Camera.h"
 #include "Math/AAPLMathUtilities.h"
 #include <vector>
-
-
 
 class MetalRenderer
 {
@@ -60,6 +60,8 @@ public:
     
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
+    inline void SetWireframeMode(bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
+    
     inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
     
     void SubmitCommandBuffer();
@@ -71,13 +73,9 @@ public:
     void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
     void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
     
-    // Create Cube
-    void CreateCube(const char* p_FilePath);
-    void CreateSphere();
-    
     // Scene rendering
     void BeginScene(const Camera &p_Camera, const float p_AspectRatio);
-    void Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh);
+    void Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture);
     void EndScene();
 
     
@@ -93,20 +91,18 @@ private:
     MTL::VertexDescriptor* m_LightVertexDescriptor = nullptr;
     
     
-    MetalVertexBuffer* m_TransformationBuffer = nullptr;
+    MTL::Buffer* m_ArgumentBuffer = nullptr;
     
     MetalShader* m_Shader;
     MetalShader* m_LightShader;
     
     CA::MetalLayer* m_MetalLayer = nullptr;
-    
-    Mesh_2D m_Mesh;
-    Mesh_3D m_Mesh3D;
-    
+
     std::vector<Mesh_2D> m_2DMeshes;
     std::vector<Mesh_3D> m_3DMeshes;
-    
-    MeshBuilder m_MeshBuilder;
+
     Camera m_Camera;
+    
+    bool b_EnableWireframe;
 };
 #endif //METALRENDERER_H

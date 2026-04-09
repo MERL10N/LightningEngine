@@ -14,11 +14,12 @@
 #include "imgui/backends/imgui_impl_metal.h"
 #include "QuartzCore/QuartzCore.hpp"
 #include "Scene/Component.h"
+#include "Primitives/MeshBuilder.h"
 #include "Entity/Entity.h"
 #include "GLFW/glfw3.h"
 #include <simd/simd.h>
 
-MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const char* p_Title)
+MacEditorApplication::MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalDevice(m_MacWindow.GetDevice()),
   m_MacEditorLayer(new MacEditorLayer(m_MetalDevice)),
@@ -28,14 +29,6 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
   m_Camera(Camera()),
   m_Scene(Scene())
 {
- 
-    auto cube = m_Scene.CreateEntity("Cube");
-    cube.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(0.0f, 0.0f, 0.0f));
-    cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice, "Assets/Textures/background.png"));
-    
-    auto sphere = m_Scene.CreateEntity("Sphere");
-    sphere.GetComponent<TransformComponent>().m_Transform = matrix4x4_translation(simd::make_float3(-5.0f, 0.0f, 0.0f));
-    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64));;
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -54,6 +47,20 @@ MacEditorApplication::MacEditorApplication(float p_Width, float p_Height, const 
     io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
     
     m_MetalFrameBuffer.Create(p_Width, p_Height);
+    
+    MeshBuilder m_MeshBuilder;
+    Entity cube = m_Scene.CreateEntity("Cube");
+    cube.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
+    cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MetalDevice);
+    
+    Entity sphere = m_Scene.CreateEntity("Sphere");
+    sphere.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, 0.0f));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64, simd::make_float3(0.5f, 1.f, 0.5f)));
+    
+    Entity sphere2 = m_Scene.CreateEntity("Sphere2");
+    sphere2.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, -5.0f));
+    sphere2.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(0.5f, 0.5f, 1.f)));
 }
 
 
@@ -157,9 +164,13 @@ void MacEditorApplication::Update()
                 m_MacEditorLayer->DrawMenuBar();
                 m_MacEditorLayer->DrawStatsBar();
                 
+                b_EnableWireframe = m_MacEditorLayer->IsWireFrameEnabled();
+            
+                m_MetalRenderer->SetWireframeMode(b_EnableWireframe);
+            
                 // Submit FrameBuffer To Renderer
                 m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-                m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth()/ m_MetalFrameBuffer.GetHeight());
+                m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
                 
                 // Rendering
                 ImGui::Render();

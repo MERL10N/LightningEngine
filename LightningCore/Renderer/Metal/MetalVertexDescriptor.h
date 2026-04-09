@@ -11,15 +11,15 @@
 #include <stdint.h>
 #include "Metal/MTLVertexDescriptor.hpp"
 
-class MetalVertexDescriptorBuilder
+class MetalVertexDescriptor
 {
 public:
-    MetalVertexDescriptorBuilder();
-    ~MetalVertexDescriptorBuilder();
+    MetalVertexDescriptor();
+    ~MetalVertexDescriptor();
     
-    MetalVertexDescriptorBuilder& AddAttribute(MTL::VertexFormat vertexFormat, uint16_t offset, uint16_t index = 0);
+    MetalVertexDescriptor& AddAttribute(const MTL::VertexFormat vertexFormat, const uint16_t offset, const uint16_t index = 0);
     
-    MetalVertexDescriptorBuilder& SetBufferLayout(uint16_t stride, MTL::VertexStepFunction stepFunction = MTL::VertexStepFunctionPerVertex, uint16_t index = 0);
+    MetalVertexDescriptor& SetBufferLayout(const uint16_t stride, const MTL::VertexStepFunction stepFunction = MTL::VertexStepFunctionPerVertex, const uint16_t index = 0);
     
     MTL::VertexDescriptor* BuildVertexDescriptor();
     

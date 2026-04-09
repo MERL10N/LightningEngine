@@ -65,7 +65,7 @@ Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
     return m_Mesh2D;
 }
 
-Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
+Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
 {
    
     Vertex3D vertices[] =
@@ -129,8 +129,8 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device, const char *texture)
     m_Mesh3D.m_IndexBuffer = device->newBuffer(sizeof(indices), MTL::ResourceStorageModeShared);
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
     
-    if (texture[0] != '\0')
-        m_Mesh3D.m_Texture = new MetalTexture(texture, device);
+    //if (texture[0] != '\0')
+    //    m_Mesh3D.m_Texture = new MetalTexture(texture, device);
 
     return m_Mesh3D;
      
@@ -197,7 +197,75 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     m_Mesh3D.m_IndexBuffer = device->newBuffer(indexSize, MTL::ResourceStorageModeShared);
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
     
-    m_Mesh3D.m_Texture = nullptr;
+    //m_Mesh3D.m_Texture = nullptr;
+    
+    
+    return m_Mesh3D;
+}
+
+Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color)
+{
+    std::vector<Vertex3D> vertices;
+    std::vector<u_int16_t> indices;
+    
+    const float PI = 3.1415926539f;
+    Vertex3D vertex;
+    
+    for (int x = 0; x <= xSegments; ++x)
+    {
+        for (int y = 0; y <= ySegments; ++y)
+        {
+            float xSegment = (float)x / (float)xSegments;
+            float ySegment = (float)y / (float)ySegments;
+            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float yPos = std::cos(ySegment * PI);
+            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+
+            
+            vertex.pos = simd::make_float3(xPos, yPos, zPos);
+            vertex.color = color;
+            vertex.normals = simd::normalize(simd::make_float3(xPos, yPos, zPos));
+            vertex.texCoord = simd::make_float2(xSegment, ySegment);
+            
+            vertices.push_back(vertex);
+        }
+    }
+    
+    
+    for (int y = 0; y < ySegments; ++y)
+        {
+            for (int x = 0; x < xSegments; ++x)
+            {
+                uint16_t topLeft = y * (xSegments + 1) + x;
+                uint16_t topRight = topLeft + 1;
+                uint16_t bottomLeft = (y + 1) * (xSegments + 1) + x;
+                uint16_t bottomRight = bottomLeft + 1;
+
+                indices.push_back(topLeft);
+                indices.push_back(bottomLeft);
+                indices.push_back(topRight);
+                
+                indices.push_back(topRight);
+                indices.push_back(bottomLeft);
+                indices.push_back(bottomRight);
+            }
+        }
+    
+    
+    m_Mesh3D.m_IndexCount = (u_int16_t)indices.size();
+    
+    size_t vertexSize = vertices.size() * sizeof(Vertex3D);
+    size_t indexSize  = indices.size() * sizeof(uint16_t);
+   
+    // vertex buffer
+    m_Mesh3D.m_VertexBuffer = device->newBuffer(vertexSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices.data(), vertexSize);
+    
+    // Index buffer
+    m_Mesh3D.m_IndexBuffer = device->newBuffer(indexSize, MTL::ResourceStorageModeShared);
+    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
+    
+    //m_Mesh3D.m_Texture = nullptr;
     
     
     return m_Mesh3D;

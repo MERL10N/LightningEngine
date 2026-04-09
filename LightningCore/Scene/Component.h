@@ -7,12 +7,11 @@
 
 #ifndef Component_h
 #define Component_h
-#include <simd/simd.h>
-
+#include "Math/AAPLMathUtilities.h"
 #include "Primitives/MeshBuilder.h"
+#include "Renderer/Metal/MetalTexture.h"
 #include "Camera/Camera.h"
 
-class MetalTexture;
 
 struct TagComponent
 {
@@ -31,20 +30,49 @@ struct TransformComponent
     matrix_float4x4 m_Rotation;
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
-    TransformComponent(const simd::float4x4 &transform)
-    : m_Transform(transform)
+    TransformComponent(const simd::float3 &transform)
+    : m_Transform(matrix4x4_translation(transform))
     {}
 };
 
 struct TextureComponent
 {
-    simd::float4 m_Color = simd::make_float4(1.0f, 1.0f, 1.0f, 1.0f);
-    
     MetalTexture* m_Texture;
     TextureComponent() = default;
-    TextureComponent(const TextureComponent&) = default;
-    TextureComponent(const simd::float4 &color)
-    : m_Color(color) {}
+    TextureComponent(const TextureComponent&) = delete;
+    TextureComponent& operator=(const TextureComponent&) = delete;
+    
+    TextureComponent(const char *pTexture, MTL::Device* pDevice)
+    : m_Texture(new MetalTexture(pTexture, pDevice))
+    {}
+
+    TextureComponent (TextureComponent&& pOther)
+    {
+        m_Texture = pOther.m_Texture;
+        pOther.m_Texture = nullptr;
+    }
+    
+    TextureComponent& operator=(TextureComponent&& pOther)
+    {
+        if (this != &pOther)
+        {
+            delete m_Texture;
+            m_Texture = pOther.m_Texture;
+            pOther.m_Texture = nullptr;
+        }
+        return (*this);
+    }
+    
+   
+    
+    ~TextureComponent()
+    {
+        if (m_Texture)
+        {
+            delete m_Texture;
+            m_Texture = nullptr;
+        }
+    }
 };
 
 struct MeshComponent
@@ -55,15 +83,6 @@ struct MeshComponent
     MeshComponent(const Mesh_3D &mesh)
     : m_Mesh(mesh)
     {}
-    
-    ~MeshComponent()
-    {
-        if (m_Mesh.m_Texture)
-        {
-            delete m_Mesh.m_Texture;
-            m_Mesh.m_Texture = nullptr;
-        }
-    }
 };
 
 struct CameraComponent
