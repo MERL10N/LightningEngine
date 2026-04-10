@@ -27,7 +27,9 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
   m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera()),
-  m_Scene(Scene())
+  m_Scene(Scene()),
+  m_Width(p_Width),
+  m_Height(p_Height)
 {
     
     IMGUI_CHECKVERSION();
@@ -46,7 +48,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     ImGui_ImplMetal_Init(m_MacWindow.GetDevice());
     io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
     
-    m_MetalFrameBuffer.Create(p_Width, p_Height);
+    m_MetalFrameBuffer.Create(m_Width, m_Height);
     
     MeshBuilder m_MeshBuilder;
     Entity cube = m_Scene.CreateEntity("Cube");
@@ -95,7 +97,7 @@ void MacEditorApplication::DrawGameViewport()
 {
     // Prevent crashes when compiling for the first time
     if (m_ViewportSize.x == 0.0f || m_ViewportSize.y == 0.0f)
-        ImGui::SetNextWindowSize(ImVec2(2560, 1600), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(m_Width, m_Height), ImGuiCond_FirstUseEver);
         
     ImGui::Begin("Game Scene");
     {

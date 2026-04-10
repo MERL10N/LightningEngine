@@ -58,6 +58,8 @@ private:
     float m_CurrentFrame = 0.0f;
     float m_DeltaTime = 0.0f;
     float m_LastFrame = 0.0f;
+    float m_Width = 0.0f;
+    float m_Height = 0.0f;
     
     AppleController m_Controller;
     
