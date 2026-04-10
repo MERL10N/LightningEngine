@@ -103,7 +103,17 @@ void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio
     depthAttachment->setClearDepth(1.0f);
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
+    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+    m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
     
+    if (b_EnableWireframe)
+    {
+        m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeLines);
+    }
+    else
+    {
+        m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
+    }
     
     matrix_float4x4 viewMatrix = m_Camera.GetViewMatrix();
     
@@ -117,30 +127,20 @@ void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio
     
     m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, viewMatrix, 3);
     m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projectionMatrix, 2);
+    
 }
 
 void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
 {
-        
-        m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
-        m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
-    
-        if (b_EnableWireframe)
-        {
-            m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeLines);
-        }
-        else
-        {
-            m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
-        }
-    
         m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
     
         if (p_Texture)
         {
+            m_ArgumentBuffer = m_Shader->InitialiseArgumentBuffers(p_Texture->GetTexture());
+            m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
+            m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead);
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
             m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
-            m_RenderCommandEncoder->setFragmentTexture(p_Texture->GetTexture(), 0);
         }
         else
         {

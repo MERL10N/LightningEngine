@@ -44,8 +44,10 @@ public:
 
     void SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
 
+    MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture);
     
-    inline MTL::RenderPipelineState* GetRenderPipelineState(){ return m_RenderPipelineState; }
+    
+    inline MTL::RenderPipelineState* GetRenderPipelineState() { return m_RenderPipelineState; }
     
 private:
     MTL::Device* m_MetalDevice = nullptr;
@@ -58,8 +60,6 @@ private:
     MTL::DepthStencilDescriptor* m_DepthStencilDescriptor = nullptr;
     MTL::VertexDescriptor* m_VertexDescriptor = nullptr;
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
-    MTL::Buffer* m_ArgumentBuffer = nullptr;
-    MTL::ArgumentEncoder* m_ArgumentEncoder = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
     std::string LoadShaderFile(const std::string& path);

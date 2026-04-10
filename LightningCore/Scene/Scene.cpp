@@ -34,10 +34,10 @@ Entity Scene::CreateEntity(const char* p_Tag)
 template <typename Renderer>
 void Scene::RenderScene(Renderer* p_Renderer, const Camera &p_Camera, const float p_AspectRatio)
 {
-    auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
-    auto meshes = m_Registry.view<TransformComponent, MeshComponent>();
     
     p_Renderer->BeginScene(p_Camera, p_AspectRatio);
+    auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
+    auto meshes = m_Registry.view<TransformComponent, MeshComponent>();
     
     /// TODO: Need to look into iterating all entities in one loop, regardless of whether or not they have a texture component
     for (auto &entity : textured_meshes)

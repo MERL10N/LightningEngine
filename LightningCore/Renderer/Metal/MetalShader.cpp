@@ -102,8 +102,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     assert(m_RenderPipelineState);
     
     m_Library->release();
-    m_VertexFunction->release();
-    m_FragmentFunction->release();
     m_RenderPipelineDescriptor->release();
 
 }
@@ -194,8 +192,17 @@ MetalShader::~MetalShader()
         m_RenderPipelineState->release();
         m_RenderPipelineState = nullptr;
     }
-    m_VertexFunction->release();
-    m_FragmentFunction->release();
+    if (m_VertexFunction)
+    {
+        m_VertexFunction->release();
+        m_VertexFunction = nullptr;
+    }
+    
+    if (m_FragmentFunction)
+    {
+        m_FragmentFunction->release();
+        m_FragmentFunction = nullptr;
+    }
 }
 
 void MetalShader::SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
@@ -207,3 +214,17 @@ void MetalShader::SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* enc
 {
     encoder->setVertexBytes(&value, sizeof(value), index);
 }
+
+MTL::Buffer *MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture)
+{
+    MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
+    MTL::Buffer* m_ArgumentBuffer = m_MetalDevice->newBuffer(m_ArgumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);
+    
+    m_ArgumentEncoder->setArgumentBuffer(m_ArgumentBuffer, 0);
+    m_ArgumentEncoder->setTexture(p_Texture, 0);
+    
+    m_ArgumentEncoder->release();
+    
+    return m_ArgumentBuffer;
+}
+
