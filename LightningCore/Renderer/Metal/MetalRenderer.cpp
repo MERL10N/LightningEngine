@@ -29,7 +29,12 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
-    m_DepthStencilDescriptor->release();
+
+    if (m_DepthStencilDescriptor)
+    {
+        m_DepthStencilDescriptor->release();
+        m_DepthStencilDescriptor = nullptr;
+    }
     
     MetalVertexDescriptor vertexDescriptorBuilder;
     
@@ -41,9 +46,16 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
+    
+    m_LightVertexDescriptor = vertexDescriptorBuilder
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, pos))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, normals))
+        .SetBufferLayout(sizeof(Vertex3D))
+        .BuildVertexDescriptor();
+    
     m_Shader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
     
-    m_LightShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_LightShader = new MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
     
     m_3DVertexDescriptor->release();
     
@@ -51,28 +63,13 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 
 MetalRenderer::~MetalRenderer()
 {
-    if (m_MetalDevice)
-    {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
-    }
+    std::println("MetalRenderer Destructor Called");
     
-    if (m_MetalLayer)
-    {
-        m_MetalLayer->release();
-        m_MetalLayer = nullptr;
-    }
-
-    if (m_MetalCommandQueue)
-    {
-        m_MetalCommandQueue->release();
-        m_MetalCommandQueue = nullptr;
-    }
     
-    if (m_DepthStencilDescriptor)
+    if (m_Shader)
     {
-        m_DepthStencilDescriptor->release();
-        m_DepthStencilDescriptor = nullptr;
+        delete m_Shader;
+        m_Shader = nullptr;
     }
     
     if (m_LightShader)
@@ -81,10 +78,22 @@ MetalRenderer::~MetalRenderer()
         m_LightShader = nullptr;
     }
     
-    if (m_Shader)
+    if (m_MetalCommandQueue)
     {
-        delete m_Shader;
-        m_Shader = nullptr;
+        m_MetalCommandQueue->release();
+        m_MetalCommandQueue = nullptr;
+    }
+    if (m_MetalDevice)
+    {
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
+    
+    
+    if (m_MetalLayer)
+    {
+        m_MetalLayer->release();
+        m_MetalLayer = nullptr;
     }
 }
 
@@ -138,7 +147,7 @@ void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_
         {
             m_ArgumentBuffer = m_Shader->InitialiseArgumentBuffers(p_Texture->GetTexture());
             m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
-            m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead);
+            m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
             m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
         }

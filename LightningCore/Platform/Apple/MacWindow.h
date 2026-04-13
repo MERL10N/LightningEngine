@@ -17,7 +17,6 @@ namespace CA
 }
 
 struct GLFWwindow;
-class MetalRenderer;
 
 class MacWindow
 {
@@ -47,7 +46,6 @@ private:
     CA::MetalLayer* m_MetalLayer;
     CA::MetalDrawable* m_MetalDrawable;
     GLFWwindow* m_GlfwWindow;
-    MetalRenderer* m_MetalRenderer;
 };
 
 #endif //MACAPPLICATION_H

@@ -46,7 +46,6 @@ public:
 
     MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture);
     
-    
     inline MTL::RenderPipelineState* GetRenderPipelineState() { return m_RenderPipelineState; }
     
 private:

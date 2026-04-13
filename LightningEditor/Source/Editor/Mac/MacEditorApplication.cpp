@@ -68,27 +68,27 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
 
 MacEditorApplication::~MacEditorApplication()
 {
+    std::println("Mac Window Destructor Called");
     // Cleanup
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
+    
     if (m_MetalRenderer)
     {
         delete m_MetalRenderer;
         m_MetalRenderer = nullptr;
     }
     
-    if (m_WindowPassDescriptor)
-    {
-        m_WindowPassDescriptor->release();
-        m_WindowPassDescriptor = nullptr;
-    }
-    
     if (m_MacEditorLayer)
     {
         delete m_MacEditorLayer;
         m_MacEditorLayer = nullptr;
+    }
+    if (m_WindowPassDescriptor)
+    {
+        m_WindowPassDescriptor->release();
+        m_WindowPassDescriptor = nullptr;
     }
 }
 

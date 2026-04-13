@@ -187,6 +187,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
 MetalShader::~MetalShader()
 {
+    std::println("MetalShader Destructor Called");
     if (m_RenderPipelineState)
     {
         m_RenderPipelineState->release();
@@ -215,7 +216,7 @@ void MetalShader::SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* enc
     encoder->setVertexBytes(&value, sizeof(value), index);
 }
 
-MTL::Buffer *MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture)
+MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture)
 {
     MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
     MTL::Buffer* m_ArgumentBuffer = m_MetalDevice->newBuffer(m_ArgumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);

@@ -6,8 +6,8 @@
 #include "Metal/Metal.hpp"
 #include "QuartzCore/QuartzCore.hpp"
 #include <QuartzCore/QuartzCore.h>
-#include "../../Renderer/Metal/MetalRenderer.h"
 #include <Appkit/Appkit.h>
+#include <print>
 
 #define GLFW_INCLUDE_NONE
 #import "GLFW/glfw3.h"
@@ -48,12 +48,8 @@ MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_
 
 bool MacWindow::Update()
 {
-    while (!glfwWindowShouldClose(m_GlfwWindow))
-    {
-        glfwPollEvents();
-        return true;
-    }
-    return false;
+    glfwPollEvents();
+    return !glfwWindowShouldClose(m_GlfwWindow);
 }
 
 MacWindow::~MacWindow()
@@ -69,6 +65,13 @@ MacWindow::~MacWindow()
         m_MetalLayer->release();
         m_MetalLayer = nullptr;
     }
-
+    
+    if (m_GlfwWindow)
+    {
+        glfwDestroyWindow(m_GlfwWindow);
+        m_GlfwWindow = nullptr;
+    }
     glfwTerminate();
+    
+    std::println("Mac Window Destructor Called");
 }
