@@ -89,7 +89,6 @@ MetalRenderer::~MetalRenderer()
         m_MetalDevice = nullptr;
     }
     
-    
     if (m_MetalLayer)
     {
         m_MetalLayer->release();
@@ -134,8 +133,8 @@ void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio
                                                                1000.f);
     
     
-    m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, viewMatrix, 3);
-    m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, projectionMatrix, 2);
+    m_Shader->SetVertexShaderUniform(m_RenderCommandEncoder, viewMatrix, 3);
+    m_Shader->SetVertexShaderUniform(m_RenderCommandEncoder, projectionMatrix, 2);
     
 }
 
@@ -149,12 +148,12 @@ void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_
             m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
             m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
-            m_Shader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
+            m_Shader->SetVertexShaderUniform(m_RenderCommandEncoder, p_Transform, 1);
         }
         else
         {
             m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
-            m_LightShader->SetVertexShaderUniformMatrix4x4(m_RenderCommandEncoder, p_Transform, 1);
+            m_LightShader->SetVertexShaderUniform(m_RenderCommandEncoder, p_Transform, 1);
         }
     
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,

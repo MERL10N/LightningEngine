@@ -8,10 +8,10 @@ using namespace metal;
 
 struct VertexIn
 {
-    float3 position [[attribute(0)]];
-    float3 color [[attribute(1)]];
-    float3 normal [[attribute(2)]];
-    float2 texCoord[[attribute(3)]];
+    float3 position  [[attribute(0)]];
+    float3 color     [[attribute(1)]];
+    float3 normal    [[attribute(2)]];
+    float2 texCoord  [[attribute(3)]];
 };
 
 struct VertexOut
@@ -21,6 +21,11 @@ struct VertexOut
     float3 normal;
     float2 texCoord;
     int textureIndex;
+};
+
+struct ArgumentBufferTexture
+{
+    texture2d<half> colorTexture[[id(0)]];
 };
 
 // Vertex shader
@@ -40,11 +45,11 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
 
 // Fragment shader
 fragment half4 fragment_main(VertexOut out [[stage_in]],
-                             texture2d<half> colorTexture [[texture(0)]])
+                             constant ArgumentBufferTexture &args[[buffer(0)]])
 {
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     // Sample the texture to obtain a color
-    half4 colorSample = colorTexture.sample(textureSampler, out.texCoord);
+    half4 colorSample = args.colorTexture.sample(textureSampler, out.texCoord);
     
     if (colorSample.a < 0.1)
     {

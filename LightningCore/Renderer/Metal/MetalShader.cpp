@@ -205,17 +205,6 @@ MetalShader::~MetalShader()
         m_FragmentFunction = nullptr;
     }
 }
-
-void MetalShader::SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
-{
-    encoder->setFragmentBytes(&value, sizeof(value), index);
-}
-
-void MetalShader::SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index)
-{
-    encoder->setVertexBytes(&value, sizeof(value), index);
-}
-
 MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture)
 {
     MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);

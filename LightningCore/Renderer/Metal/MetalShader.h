@@ -6,6 +6,7 @@
 #define METALSHADER_H
 
 #include "Metal/MTLPixelFormat.hpp"
+#include "Metal/MTLRenderCommandEncoder.hpp"
 #include <string>
 #include <simd/simd.h>
 namespace MTL
@@ -18,7 +19,6 @@ namespace MTL
     class Library;
     class DepthStencilState;
     class DepthStencilDescriptor;
-    class RenderCommandEncoder;
     class RenderPassDescriptor;
     class VertexDescriptor;
     class RenderPipelineColorAttachmentDescriptor;
@@ -40,9 +40,18 @@ public:
     
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
-    void SetFragmentShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
+    template<typename T>
+    void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    {
+        encoder->setFragmentBytes(&value, sizeof(value), index);
+    }
 
-    void SetVertexShaderUniformMatrix4x4(MTL::RenderCommandEncoder* encoder, const matrix_float4x4& value, const int index);
+    template<typename T>
+    void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    {
+        encoder->setVertexBytes(&value, sizeof(value), index);
+    }
+
 
     MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture);
     

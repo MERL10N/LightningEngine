@@ -34,8 +34,8 @@ Entity Scene::CreateEntity(const char* p_Tag)
 template <typename Renderer>
 void Scene::RenderScene(Renderer* p_Renderer, const Camera &p_Camera, const float p_AspectRatio)
 {
-    
     p_Renderer->BeginScene(p_Camera, p_AspectRatio);
+    
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto meshes = m_Registry.view<TransformComponent, MeshComponent>();
     
