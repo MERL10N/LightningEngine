@@ -58,11 +58,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, 0.0f));
-    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64, simd::make_float3(1.f, 1.f, 1.f)));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64, simd::make_float3(0.5f, 1.f, 0.5f)));
     
     Entity sphere2 = m_Scene.CreateEntity("Sphere2");
     sphere2.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, -5.0f));
-    sphere2.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.f, 1.f, 1.f)));
+    sphere2.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.f, 0.5f, 1.f)));
 }
 
 

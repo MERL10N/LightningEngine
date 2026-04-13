@@ -49,6 +49,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     
     m_LightVertexDescriptor = vertexDescriptorBuilder
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, pos))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, color))
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, normals))
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
