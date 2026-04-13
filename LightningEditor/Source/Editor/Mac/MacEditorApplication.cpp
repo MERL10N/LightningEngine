@@ -68,7 +68,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
 
 MacEditorApplication::~MacEditorApplication()
 {
-    std::println("Mac Window Destructor Called");
+    std::println("MacEditorApplication Destructor Called");
     // Cleanup
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplGlfw_Shutdown();
