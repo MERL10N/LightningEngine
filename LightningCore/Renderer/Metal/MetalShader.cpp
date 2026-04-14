@@ -78,13 +78,13 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     m_RenderPipelineDescriptor->setRasterSampleCount(4);
     m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
-    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
     m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
     
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
-    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
 
     m_ColorAttachmentDescriptor->setBlendingEnabled(true);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
@@ -163,7 +163,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
-    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
 
     m_ColorAttachmentDescriptor->setBlendingEnabled(true);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);

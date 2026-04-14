@@ -42,6 +42,10 @@ MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_
     m_MetalWindow.contentView.layer = (__bridge CAMetalLayer*)m_MetalLayer;
     m_MetalWindow.contentView.wantsLayer = YES;
     
+    int pixelWidth, pixelHeight;
+    glfwGetFramebufferSize(m_GlfwWindow, &pixelWidth, &pixelHeight);
+    m_MetalLayer->setDrawableSize(CGSizeMake(pixelWidth, pixelHeight));
+    
     glfwSetWindowUserPointer(m_GlfwWindow, this);
     glfwSetFramebufferSizeCallback(m_GlfwWindow, frameBufferSizeCallback);
 }
