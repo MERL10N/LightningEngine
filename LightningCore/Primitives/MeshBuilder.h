@@ -45,7 +45,6 @@ struct Mesh_3D
 {
     MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
     MTL::Buffer* m_ArgumentBuffer;
-    //MetalTexture* m_Texture;
     uint16_t m_IndexCount;
 };
 
