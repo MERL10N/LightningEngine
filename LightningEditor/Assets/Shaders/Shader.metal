@@ -20,7 +20,6 @@ struct VertexOut
     half3 color;
     float3 normal;
     float2 texCoord;
-    int textureIndex;
 };
 
 struct ArgumentBufferTexture
@@ -45,9 +44,31 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
 
 // Fragment shader
 fragment half4 fragment_main(VertexOut out [[stage_in]],
-                             constant ArgumentBufferTexture &args[[buffer(0)]])
+                             constant ArgumentBufferTexture &args[[buffer(0)]],
+                             constant float3& lightColor[[buffer(1)]],
+                             constant float3& lightPosition[[buffer(2)]],
+                             constant float3& cameraPosition[[buffer(3)]])
 {
+    // Ambient
+    float ambientStrength = 0.2f;
+    float3 ambient = ambientStrength * lightColor;
+        
+    // Diffuse
+    float3 norm = normalize(out.normal.xyz);
+    float3 lightDir = normalize(lightPosition - float3(out.position));
+    float diff = max(dot(norm, lightDir.xyz), 0.0);
+    float3 diffuse = diff * lightColor;
+        
+    // Specular
+    float specularStrength = 1.0f;
+    float3 viewDir = normalize(cameraPosition - float3(out.position));
+    float3 halfwayDir = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(norm, halfwayDir), 0.0), 32);
+        
+    float3 specular = specularStrength * spec * lightColor;
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
+    
+    half3 finalColor = half3(ambient + diffuse + specular) * out.color;
     // Sample the texture to obtain a color
     half4 colorSample = args.colorTexture.sample(textureSampler, out.texCoord);
     
@@ -56,7 +77,7 @@ fragment half4 fragment_main(VertexOut out [[stage_in]],
         discard_fragment();
     }
     
-    return colorSample * half4(out.color, 1.0f);
+    return colorSample * half4(finalColor, 1.0f);
 }
 
 // Fragment shader

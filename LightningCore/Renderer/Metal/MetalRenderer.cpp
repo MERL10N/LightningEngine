@@ -10,6 +10,7 @@
 #include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
 #include "MetalVertexDescriptor.h"
+#include "Primitives/Sprite.h"
 #include "MetalShader.h"
 #include "SubTexture.h"
 #include "GLFW/glfw3.h"
@@ -58,7 +59,16 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     
     m_LightShader = new MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
     
-    m_3DVertexDescriptor->release();
+    if (m_3DVertexDescriptor)
+    {
+        m_3DVertexDescriptor->release();
+        m_3DVertexDescriptor = nullptr;
+    }
+    if (m_LightVertexDescriptor)
+    {
+        m_LightVertexDescriptor->release();
+        m_LightVertexDescriptor = nullptr;
+    }
     
 }
 
@@ -150,11 +160,17 @@ void MetalRenderer::Render(const matrix_float4x4& p_Transform, const Mesh_3D& p_
             m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
             m_RenderCommandEncoder->setRenderPipelineState(m_Shader->GetRenderPipelineState());
             m_Shader->SetVertexShaderUniform(m_RenderCommandEncoder, p_Transform, 1);
+            m_Shader->SetFragmentShaderUniform(m_RenderCommandEncoder, simd_make_float3(0.0f, 1.0f, 1.0f), 1);
+            m_Shader->SetFragmentShaderUniform(m_RenderCommandEncoder, simd_make_float3(-2.0f, 0.0f, -2.0f), 2);
+            m_Shader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_Camera.GetPosition(), 3);
         }
         else
         {
             m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
             m_LightShader->SetVertexShaderUniform(m_RenderCommandEncoder, p_Transform, 1);
+            m_LightShader->SetFragmentShaderUniform(m_RenderCommandEncoder, simd_make_float3(0.0f, 1.0f, 1.0f), 1);
+            m_LightShader->SetFragmentShaderUniform(m_RenderCommandEncoder, simd_make_float3(-2.0f, 0.0f, -2.0f), 2);
+            m_LightShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_Camera.GetPosition(), 3);
         }
     
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
