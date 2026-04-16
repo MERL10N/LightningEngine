@@ -41,6 +41,8 @@ public:
     
     inline float GetZoom() { return m_Zoom; }
     
+    inline simd::float3 GetPosition() { return m_Position; }
+    
 private:
     
     simd::float3 m_Position;

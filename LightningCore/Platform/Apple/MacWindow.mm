@@ -59,23 +59,24 @@ bool MacWindow::Update()
 MacWindow::~MacWindow()
 {
     
-    if (m_MetalDevice)
-    {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
-    }
-    if (m_MetalLayer)
-    {
-        m_MetalLayer->release();
-        m_MetalLayer = nullptr;
-    }
-    
     if (m_GlfwWindow)
     {
         glfwDestroyWindow(m_GlfwWindow);
         m_GlfwWindow = nullptr;
     }
     glfwTerminate();
+    
+    if (m_MetalLayer)
+    {
+        m_MetalLayer->release();
+        m_MetalLayer = nullptr;
+    }
+    
+    if (m_MetalDevice)
+    {
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
     
     std::println("Mac Window Destructor Called");
 }

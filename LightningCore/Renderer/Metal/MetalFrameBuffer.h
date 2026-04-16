@@ -33,11 +33,11 @@ public:
     
     void UpdateViewport(MTL::RenderCommandEncoder* p_Encoder);
     
-    inline MTL::Texture* GetAttachmentTexture() { return m_AttachmentTexture; }
-    inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    inline MTL::Texture* GetAttachmentTexture() const { return m_AttachmentTexture; }
+    inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     
-    inline float GetWidth() { return m_Width; }
-    inline float GetHeight() { return m_Height; }
+    inline float GetWidth() const { return m_Width; }
+    inline float GetHeight() const { return m_Height; }
 
 private:
     MTL::Device* m_MetalDevice = nullptr;

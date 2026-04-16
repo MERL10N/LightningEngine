@@ -6,9 +6,6 @@
 //
 
 #include "MacEditorApplication.h"
-#include "MacEditorLayer.h"
-#include "Renderer/Metal/MetalRenderer.h"
-#include "Renderer/Metal/MetalFrameBuffer.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_metal.h"
@@ -22,12 +19,12 @@
 MacEditorApplication::MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalDevice(m_MacWindow.GetDevice()),
-  m_MacEditorLayer(new MacEditorLayer(m_MetalDevice)),
-  m_MetalRenderer(new MetalRenderer(m_MetalDevice, m_MacWindow.GetMetalLayer())),
+  m_MacEditorLayer(m_MetalDevice),
+  m_MetalRenderer(m_MetalDevice, m_MacWindow.GetMetalLayer()),
   m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
-  m_Camera(Camera()),
-  m_Scene(Scene()),
+  m_Camera(),
+  m_Scene(),
   m_Width(p_Width),
   m_Height(p_Height)
 {
@@ -74,17 +71,6 @@ MacEditorApplication::~MacEditorApplication()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     
-    if (m_MetalRenderer)
-    {
-        delete m_MetalRenderer;
-        m_MetalRenderer = nullptr;
-    }
-    
-    if (m_MacEditorLayer)
-    {
-        delete m_MacEditorLayer;
-        m_MacEditorLayer = nullptr;
-    }
     if (m_WindowPassDescriptor)
     {
         m_WindowPassDescriptor->release();
@@ -162,24 +148,24 @@ void MacEditorApplication::Update()
                 
                 DrawGameViewport();
                 
-                m_MacEditorLayer->DrawContentBrowser();
-                m_MacEditorLayer->DrawMenuBar();
-                m_MacEditorLayer->DrawStatsBar();
+                m_MacEditorLayer.DrawContentBrowser();
+                m_MacEditorLayer.DrawMenuBar();
+                m_MacEditorLayer.DrawStatsBar();
                 
-                b_EnableWireframe = m_MacEditorLayer->IsWireFrameEnabled();
+                b_EnableWireframe = m_MacEditorLayer.IsWireFrameEnabled();
             
-                m_MetalRenderer->SetWireframeMode(b_EnableWireframe);
+                m_MetalRenderer.SetWireframeMode(b_EnableWireframe);
             
                 // Submit FrameBuffer To Renderer
-                m_MetalRenderer->SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
+                m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
                 m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
                 
                 // Rendering
                 ImGui::Render();
 
                // Render ImGui UI and Viewport
-               m_MetalRenderer->SubmitCommandBuffer();
-               m_ImGuiCommandBuffer = m_MetalRenderer->GetMetalCommandBuffer();
+               m_MetalRenderer.SubmitCommandBuffer();
+               m_ImGuiCommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
                m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
                m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
                ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);

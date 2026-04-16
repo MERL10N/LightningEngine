@@ -27,12 +27,12 @@ public:
     ~MacWindow();
 
 
-    inline MTL::Device* GetDevice() { return m_MetalDevice; }
-    inline CA::MetalLayer* GetMetalLayer() { return m_MetalLayer; }
-    inline CA::MetalDrawable* GetMetalDrawable() { return m_MetalDrawable; }
-    inline unsigned int GetWidth() { return m_Width; }
-    inline unsigned int GetHeight() { return m_Height; }
-    inline GLFWwindow* GetWindow() { return m_GlfwWindow; }
+    inline MTL::Device* GetDevice() const { return m_MetalDevice; }
+    inline CA::MetalLayer* GetMetalLayer() const { return m_MetalLayer; }
+    inline CA::MetalDrawable* GetMetalDrawable() const { return m_MetalDrawable; }
+    inline unsigned int GetWidth() const { return m_Width; }
+    inline unsigned int GetHeight() const { return m_Height; }
+    inline GLFWwindow* GetWindow() const { return m_GlfwWindow; }
 
 private:
     

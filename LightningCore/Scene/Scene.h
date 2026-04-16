@@ -16,6 +16,7 @@ class Camera;
 
 class MetalRenderer;
 
+
 class Scene
 {
 public:
@@ -27,7 +28,7 @@ public:
     // Temporary
     entt::registry &Reg() { return m_Registry; }
     template <typename Renderer>
-    void RenderScene(Renderer* p_Renderer, const Camera &p_Camera, const float p_AspectRatio);
+    void RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio);
     
 private:    
     entt::registry m_Registry;

@@ -32,8 +32,8 @@ class MetalShader
 public:
     MetalShader() = default;
     
-    MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat);
-    MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat);
+    explicit MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat);
+    explicit MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat);
     
     ~MetalShader();
     
@@ -41,13 +41,13 @@ public:
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
     template<typename T>
-    void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    inline void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
     {
         encoder->setFragmentBytes(&value, sizeof(value), index);
     }
 
     template<typename T>
-    void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    inline void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
     {
         encoder->setVertexBytes(&value, sizeof(value), index);
     }
@@ -55,7 +55,7 @@ public:
 
     MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture);
     
-    inline MTL::RenderPipelineState* GetRenderPipelineState() { return m_RenderPipelineState; }
+    inline MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
 private:
     MTL::Device* m_MetalDevice = nullptr;
@@ -70,10 +70,8 @@ private:
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
-    std::string LoadShaderFile(const std::string& path);
+    std::string LoadShaderFile(const std::string& path) const;
     
 };
-
-
 
 #endif //METALSHADER_H

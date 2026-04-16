@@ -13,6 +13,8 @@
 #include "Camera/Camera.h"
 #include "Scene/Scene.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
+#include "Renderer/Metal/MetalRenderer.h"
+#include "MacEditorLayer.h"
 #include <simd/simd.h>
 
 class MetalRenderer;
@@ -46,8 +48,8 @@ private:
     MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
     MTL::CommandBuffer* m_ImGuiCommandBuffer = nullptr;
     MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
-    MacEditorLayer* m_MacEditorLayer = nullptr;
-    MetalRenderer* m_MetalRenderer = nullptr;
+    MacEditorLayer m_MacEditorLayer;
+    MetalRenderer m_MetalRenderer;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     MetalFrameBuffer m_MetalFrameBuffer;
     simd::float2 m_ViewportSize;

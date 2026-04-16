@@ -22,7 +22,7 @@ public:
     explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     ~MetalTexture();
 
-    inline MTL::Texture* GetTexture() const
+    inline const MTL::Texture* GetTexture() const
     {
         return m_Texture;
     }

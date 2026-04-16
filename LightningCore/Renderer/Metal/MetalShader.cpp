@@ -9,7 +9,7 @@
 #include <string>
 
 
-std::string MetalShader::LoadShaderFile(const std::string &path)
+std::string MetalShader::LoadShaderFile(const std::string &path) const
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     if (!file.is_open())

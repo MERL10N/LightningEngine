@@ -33,12 +33,12 @@ class SubTexture;
 class MetalTexture;
 class MetalShader;
 class Scene;
+class Sprite;
 
 struct Mesh_3D;
 struct Mesh_2D;
 
 #include <simd/simd.h>
-#include "Primitives/Sprite.h"
 #include "Camera/Camera.h"
 #include "Math/AAPLMathUtilities.h"
 #include <vector>
@@ -46,23 +46,24 @@ struct Mesh_2D;
 class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
+    MetalRenderer() = default;
+    explicit MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
     
     
-    inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
+    inline MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
     
-    inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
+    inline MTL::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
     
     inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
-    inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     
     inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
-    inline void SetWireframeMode(bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
+    inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
     
-    inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
+    inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
     
     void SubmitCommandBuffer();
     

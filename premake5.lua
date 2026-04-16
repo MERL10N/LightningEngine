@@ -135,7 +135,9 @@ project "LightningGame"
         {
             ["GENERATE_INFOPLIST_FILE"] = "YES",
             ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningGame",
-            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0"
+            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0",
+            ["MTL_HEADER_SEARCH_PATHS"] = "%{wks.location}/../../LightningCore",
+            ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
@@ -212,7 +214,9 @@ project "LightningEditor"
         {
             ["GENERATE_INFOPLIST_FILE"] = "YES",
             ["PRODUCT_BUNDLE_IDENTIFIER"] = "com.yourcompany.LightningEditor",
-            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0"
+            ["MACOSX_DEPLOYMENT_TARGET"] = "26.0",
+            ["MTL_HEADER_SEARCH_PATHS"] = "%{wks.location}/../../LightningCore",
+            ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++" }
@@ -220,7 +224,6 @@ project "LightningEditor"
 
         postbuildcommands
         {
-            --"cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/Assets",
             "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
         }
     filter {}
