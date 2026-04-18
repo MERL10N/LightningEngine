@@ -24,7 +24,7 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     
     if (image)
     {
-        std::println("Image found at {} ", m_Filepath);
+        std::println("Image found at: {} ", m_Filepath);
     }
     
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
@@ -48,7 +48,7 @@ MetalTexture::~MetalTexture()
 {
     if (m_Texture)
     {
-        std::println("Delete texture at {}", m_Filepath);
+        std::println("Delete texture at: {}", m_Filepath);
         m_Texture->release();
         m_Texture = nullptr;
     }

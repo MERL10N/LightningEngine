@@ -53,7 +53,7 @@ public:
     }
 
 
-    MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture);
+    MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const;
     
     inline MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
@@ -70,7 +70,7 @@ private:
     MTL::RenderPipelineColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     std::string m_FilePath;
-    std::string LoadShaderFile(const std::string& path) const;
+    const std::string LoadShaderFile(const std::string& path) const;
     
 };
 

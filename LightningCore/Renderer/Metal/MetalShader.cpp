@@ -9,7 +9,7 @@
 #include <string>
 
 
-std::string MetalShader::LoadShaderFile(const std::string &path) const
+const std::string MetalShader::LoadShaderFile(const std::string &path) const
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     if (!file.is_open())
@@ -97,7 +97,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
     m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
     
-    m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    m_RenderPipelineState = m_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
     
     assert(m_RenderPipelineState);
     
@@ -136,10 +136,6 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
         std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
         std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
     }
-    else
-    {
-        std::cout << "Vertex function successfully found and loaded" << std::endl;
-    }
     
     m_FragmentFunction = m_Library->newFunction(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding)); // Load the fragment function
     
@@ -148,9 +144,10 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
         std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
         std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
     }
-    else
+    
+    if (m_VertexFunction && m_FragmentFunction)
     {
-        std::println("Fragment function successfully found and loaded");
+        std::println("Loading shader at: {}", m_FilePath);
     }
 
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
@@ -176,7 +173,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
     m_RenderPipelineDescriptor->setVertexDescriptor(p_VertexDescriptor);
     
-    m_RenderPipelineState = p_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    m_RenderPipelineState = m_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
     
     assert(m_RenderPipelineState);
     
@@ -187,7 +184,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
 MetalShader::~MetalShader()
 {
-    std::println("MetalShader Destructor Called");
+    std::println("Delete shader at: {}", m_FilePath);
     if (m_RenderPipelineState)
     {
         m_RenderPipelineState->release();
@@ -205,7 +202,7 @@ MetalShader::~MetalShader()
         m_FragmentFunction = nullptr;
     }
 }
-MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture)
+MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const
 {
     MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
     MTL::Buffer* m_ArgumentBuffer = m_MetalDevice->newBuffer(m_ArgumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);
