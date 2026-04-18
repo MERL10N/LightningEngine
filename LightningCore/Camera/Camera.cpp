@@ -51,20 +51,20 @@ void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float 
     }
 }
 
-void Camera::ProcessControllerLeftThumbstickInput(const float deltaTime, const float axisValueX, const float axisValueY)
+void Camera::ProcessControllerLeftThumbstickInput(const float p_DeltaTime, const float p_AxisValueX, const float p_AxisValueY)
 {
-    m_Velocity = m_MovementSpeed * deltaTime;
+    m_Velocity = m_MovementSpeed * p_DeltaTime;
     
-    m_Position += m_Right * m_Velocity * axisValueX;
-    m_Position += m_Front * m_Velocity * axisValueY;
+    m_Position += m_Right * m_Velocity * p_AxisValueX;
+    m_Position += m_Front * m_Velocity * p_AxisValueY;
 }
 
-void Camera::ProcessControllerRightThumbstickInput(const float axisValueX, const float axisValueY, const bool constrainPitch)
+void Camera::ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch)
 {
-    m_Yaw   += axisValueX;
-    m_Pitch += axisValueY;
+    m_Yaw   += p_AxisValueX;
+    m_Pitch += p_AxisValueY;
 
-  if (constrainPitch)
+  if (p_ConstrainPitch)
   {
       if (m_Pitch > 89.0f)
           m_Pitch = 89.0f;
@@ -112,7 +112,7 @@ float Camera::Radians(float degrees)
     return degrees * M_PI / 180.0f;
 }
 
-simd::float4x4 Camera::LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up)
+simd::float4x4 Camera::LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const
 {
     simd::float3 z = simd::normalize(eye - center);
     simd::float3 x = simd::normalize(simd::cross(up, z));

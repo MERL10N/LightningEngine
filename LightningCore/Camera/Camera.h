@@ -33,15 +33,15 @@ public:
     ~Camera();
     
     void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime);
-    void ProcessControllerLeftThumbstickInput(const float deltaTime, const float axisValueX, const float axisValueY);
-    void ProcessControllerRightThumbstickInput(const float axisValueX, const float axisValueY, const bool constrainPitch = true);
+    void ProcessControllerLeftThumbstickInput(const float p_DeltaTime, const float p_AxisValueX, const float p_AxisValueY);
+    void ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch = true);
     void ProcessMouseMovement(float xOffset, const float yOffset, const bool constrainPitch);
     
-    inline simd::float4x4 GetViewMatrix() { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    inline simd::float4x4 GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
     
-    inline float GetZoom() { return m_Zoom; }
+    inline float GetZoom() const { return m_Zoom; }
     
-    inline simd::float3 GetPosition() { return m_Position; }
+    inline simd::float3 GetPosition() const  { return m_Position; }
     
 private:
     
@@ -65,7 +65,7 @@ private:
     
     float Radians(float degrees);
     
-    simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up);
+    simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const;
     
 };
 
