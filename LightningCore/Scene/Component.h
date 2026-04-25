@@ -28,6 +28,7 @@ struct TransformComponent
 {
     matrix_float4x4 m_Transform = simd::float4x4(1.0f);
     matrix_float4x4 m_Rotation;
+    matrix_float4x4 m_Scale =  matrix4x4_scale(1.0f, 1.0f, 1.0f);
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
     TransformComponent(const simd::float3 &transform)
@@ -83,6 +84,18 @@ struct MeshComponent
     MeshComponent(const Mesh_3D &mesh)
     : m_Mesh(mesh)
     {}
+};
+
+struct LightComponent
+{
+    simd::float3 m_Color = simd::make_float3(1.0f, 1.0f, 1.0f);
+    simd::float3 m_Position = simd::make_float3(0.0f, 0.0f, 0.0f);
+    LightComponent() = default;
+    LightComponent(const LightComponent&) = default;
+    LightComponent(const simd::float3& color)
+    : m_Color(color)
+    {
+    }
 };
 
 struct CameraComponent

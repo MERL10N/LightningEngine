@@ -24,7 +24,6 @@ Entity Scene::CreateEntity(const char* p_Tag)
 {
     Entity entity = { m_Registry.create(), this};
 
-    entity.AddComponent<TransformComponent>();
     auto& entityTag = entity.AddComponent<TagComponent>();
     entityTag.m_Tag = (p_Tag[0] == '\0') ? "Entity" : p_Tag;
     
@@ -37,19 +36,26 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     p_Renderer.BeginScene(p_Camera, p_AspectRatio);
     
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
-    auto meshes = m_Registry.view<TransformComponent, MeshComponent>();
+    auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
+    auto meshes = m_Registry.view<TransformComponent, MeshComponent>(entt::exclude<TextureComponent, LightComponent>);
+    for (auto &entity : light_sources)
+    {
+        auto [transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
+        p_Renderer.RenderLights(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, lights);
+    }
     
     for (auto &entity : textured_meshes)
     {
         auto [transform, mesh, textures] = textured_meshes.get<TransformComponent, MeshComponent, TextureComponent>(entity);
-        p_Renderer.Render(transform.m_Transform, mesh.m_Mesh, textures.m_Texture);
+        p_Renderer.RenderMesh(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, textures.m_Texture);
     }
     
     for (auto &entity : meshes)
     {
-        auto [transform, mesh] = textured_meshes.get<TransformComponent, MeshComponent>(entity);
-        p_Renderer.Render(transform.m_Transform, mesh.m_Mesh, nullptr);
+        auto [transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
+        p_Renderer.RenderMesh(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, nullptr);
     }
+    
     
     p_Renderer.EndScene();
 }

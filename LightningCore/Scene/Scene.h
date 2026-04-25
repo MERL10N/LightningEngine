@@ -31,8 +31,8 @@ public:
     void RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio);
     
 private:    
-    entt::registry m_Registry;
-    entt::entity m_Entity;
+    entt::registry  m_Registry;
+    entt::entity    m_Entity;
 };
 
 #endif /* Scene_h */

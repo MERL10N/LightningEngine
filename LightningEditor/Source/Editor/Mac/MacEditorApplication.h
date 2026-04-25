@@ -44,14 +44,18 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MTL::Device* m_MetalDevice = nullptr;
-    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
-    MTL::CommandBuffer* m_ImGuiCommandBuffer = nullptr;
-    MTL::RenderCommandEncoder* m_ImGuiCommandEncoder = nullptr;
-    MacEditorLayer m_MacEditorLayer;
-    MetalRenderer m_MetalRenderer;
-    CA::MetalDrawable* m_WindowDrawable = nullptr;
-    MetalFrameBuffer m_MetalFrameBuffer;
+    
+    MTL::Device*                m_MetalDevice           = nullptr;
+    MTL::RenderPassDescriptor*  m_WindowPassDescriptor  = nullptr;
+    MTL::CommandBuffer*         m_ImGuiCommandBuffer    = nullptr;
+    MTL::RenderCommandEncoder*  m_ImGuiCommandEncoder   = nullptr;
+    
+    MacEditorLayer      m_MacEditorLayer;
+    MetalRenderer       m_MetalRenderer;
+    
+    CA::MetalDrawable*  m_WindowDrawable = nullptr;
+    MetalFrameBuffer    m_MetalFrameBuffer;
+    
     simd::float2 m_ViewportSize;
     
     Camera m_Camera;

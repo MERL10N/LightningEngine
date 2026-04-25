@@ -48,24 +48,21 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     m_MetalFrameBuffer.Create(m_Width, m_Height);
     
     MeshBuilder m_MeshBuilder;
+    
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<TransformComponent>(simd::make_float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<LightComponent>(simd::make_float3(1.f, 1.f, 1.f));
+    cube.GetComponent<LightComponent>().m_Position = simd::make_float3(0.0f, 0.0f, 0.0f);
     cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
-    cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MetalDevice);
     
     Entity sphere = m_Scene.CreateEntity("Sphere");
-    sphere.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, 0.0f));
-    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 64, 64, simd::make_float3(0.5f, 1.f, 0.5f)));
-    
-    Entity sphere2 = m_Scene.CreateEntity("Sphere2");
-    sphere2.GetComponent<TransformComponent>() = TransformComponent(simd::make_float3(-5.0f, 0.0f, -5.0f));
-    sphere2.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.f, 0.5f, 1.f)));
+    sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(0.0f, 1.0f, 1.0f)));
 }
 
 
 MacEditorApplication::~MacEditorApplication()
 {
-    std::println("MacEditorApplication Destructor Called");
     // Cleanup
     ImGui_ImplMetal_Shutdown();
     ImGui_ImplGlfw_Shutdown();
