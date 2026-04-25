@@ -27,13 +27,13 @@ public:
     }
     
     template <typename T>
-    bool HasComponent()
+    bool HasComponent() const
     {
         return m_Scene->Reg().all_of<T>(m_EntityHandle);
     }
     
     template <typename T>
-    T& GetComponent()
+    T& GetComponent() const
     {
         assert(HasComponent<T>());
         return m_Scene->Reg().get<T>(m_EntityHandle);

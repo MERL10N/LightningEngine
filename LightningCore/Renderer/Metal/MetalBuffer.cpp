@@ -14,17 +14,6 @@ MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
 {
 }
 
-void MetalVertexBuffer::BindBuffer(const void* p_Vertices)
-{
-    assert(m_MetalDevice);
-    
-    if (!m_VertexBuffer)
-    {
-        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), MTL::ResourceStorageModeShared);
-    }
-    
-}
-
 MetalVertexBuffer::~MetalVertexBuffer()
 {
    if (m_VertexBuffer)
@@ -38,8 +27,6 @@ MetalVertexBuffer::~MetalVertexBuffer()
        m_MetalDevice = nullptr;
    }
 }
-
-
 
 MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice)
 : m_MetalDevice(p_MetalDevice),

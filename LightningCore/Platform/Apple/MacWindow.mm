@@ -77,6 +77,4 @@ MacWindow::~MacWindow()
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
-    
-    std::println("Mac Window Destructor Called");
 }

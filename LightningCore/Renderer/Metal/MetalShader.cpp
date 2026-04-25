@@ -28,13 +28,13 @@ const std::string MetalShader::LoadShaderFile(const std::string &path) const
 
 MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
-  m_FilePath(p_FilePath),
+  s_FilePath(p_FilePath),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat),
   m_RenderPipelineDescriptor(MTL::RenderPipelineDescriptor::alloc()->init())
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(m_FilePath);
+    std::string shaderSrc = LoadShaderFile(s_FilePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -108,12 +108,12 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
 MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
-  m_FilePath(p_FilePath),
+  s_FilePath(p_FilePath),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(m_FilePath);
+    std::string shaderSrc = LoadShaderFile(s_FilePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -147,7 +147,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     
     if (m_VertexFunction && m_FragmentFunction)
     {
-        std::println("Loading shader at: {}", m_FilePath);
+        std::println("Loading shader  at: {}", s_FilePath);
     }
 
     m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
@@ -184,7 +184,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
 MetalShader::~MetalShader()
 {
-    std::println("Delete shader at: {}", m_FilePath);
+    std::println("Delete shader  at: {}", s_FilePath);
     if (m_RenderPipelineState)
     {
         m_RenderPipelineState->release();
@@ -195,7 +195,6 @@ MetalShader::~MetalShader()
         m_VertexFunction->release();
         m_VertexFunction = nullptr;
     }
-    
     if (m_FragmentFunction)
     {
         m_FragmentFunction->release();

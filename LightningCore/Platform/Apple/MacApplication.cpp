@@ -50,7 +50,6 @@ void MacApplication::Update(float p_DeltaTime)
             
   
             m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
-            //m_MetalRenderer->Render(sce);
             m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
             m_MetalRenderer->EndScene();
         }

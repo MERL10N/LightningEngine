@@ -38,10 +38,10 @@ public:
     }
     
 private:
-    MTL::Texture* m_Texture = nullptr;
+    const char*             m_Filepath          = nullptr;
+    MTL::Device*            m_MetalDevice       = nullptr;
     MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
-    MTL::Device* m_MetalDevice = nullptr;
-    const char* m_Filepath = nullptr;
+    MTL::Texture*           m_Texture           = nullptr;
     int m_Width, m_Height, m_Channels;
 };
 
