@@ -68,14 +68,7 @@ project "LightningCore"
         linkoptions  { "-stdlib=libc++" }
     filter {}
 
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-    filter {}
-
-    filter "configurations:Release"
-        defines { "RELEASE" }
-        optimize "On"
+        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include", "ThirdParty/glfw/include"}
     filter {}
 
 -- Lightning Game (app)
@@ -94,7 +87,11 @@ project "LightningGame"
         "LightningGame/Assets/**",
     }
 
-    includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions" }
+    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/Shader.metal",  "LightningGame/Assets/*.png"}
+
+    includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
+    libdirs { "" }
+    links { "LightningCore" }
 
     filter "system:macosx"
         cppdialect "C++23"
@@ -140,18 +137,23 @@ project "LightningGame"
             ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++" }
-        linkoptions  { "-stdlib=libc++" }
-         postbuildcommands
-        {
-            "cp -R ../LightningGame/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
+        -- Link Apple frameworks
+        linkoptions { 
+            "-framework Foundation",
+            "-framework Metal",
+            "-framework MetalKit",
+            "-framework QuartzCore",
+            "-framework Cocoa",
+            "-framework AppKit",
+            "-framework GameController",
+            "-framework IOKit",
+            "-framework CoreVideo"
         }
     filter {}
 
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-    filter {}
+        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include"}
+        libdirs { "ThirdParty/glfw/lib-universal" }
+        links { "glfw3" }
 
     filter "configurations:Release"
         defines { "RELEASE" }
@@ -233,7 +235,6 @@ project "LightningEditor"
         symbols "On"
     filter {}
 
-    filter "configurations:Release"
-        defines { "RELEASE" }
-        optimize "On"
-    filter {}
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"   
