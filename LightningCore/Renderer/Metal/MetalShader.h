@@ -55,7 +55,7 @@ public:
 
     MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const;
     
-    inline MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
+    inline const MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
 private:
     MTL::Device*                                    m_MetalDevice               = nullptr;

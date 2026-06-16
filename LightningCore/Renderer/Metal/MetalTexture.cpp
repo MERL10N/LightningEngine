@@ -3,7 +3,6 @@
 //  LightningCore
 //
 //  Created by Kian Marvi on 6/15/25.
-//
 
 #include "MetalTexture.h"
 
@@ -46,16 +45,17 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
 
 MetalTexture::~MetalTexture()
 {
+    if (m_MetalDevice)
+    {
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
+    
     if (m_Texture)
     {
         std::println("Delete texture at: {}", m_Filepath);
         m_Texture->release();
         m_Texture = nullptr;
-    }
-    if (m_MetalDevice)
-    {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
     }
 }
 
