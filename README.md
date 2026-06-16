@@ -26,14 +26,16 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 
 
 ## Checklist (Revised)
-- [x] Render a window :tada:
-- [x] Render Basic Shapes (Triangle, Quad) :tada:
-- [x] Textures :tada:
-- [x] DearImGui support :tada:
+- [x] Render a window
+- [x] Render 3D Shapes (Cube, Spheres)
+- [x] Textures
+- [x] DearImGui Integration
 - [x] Camera
 - [x] Input System
 - [x] EnTT Integration
 - [x] Argument Buffers
+- [ ] Normal Mapping
 - [ ] Physics
 - [ ] Native Scripting System
+- [ ] PBR
 - [ ] Level Editor
