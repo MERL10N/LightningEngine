@@ -9,21 +9,15 @@
 #include "imgui.h"
 #include "Metal/Metal.hpp"
 
-
-static const char* s_AssetsPath = "Assets";
-
 MacEditorLayer::MacEditorLayer(MTL::Device* p_MetalDevice)
-: m_CurrentDirectory(s_AssetsPath),
+: s_AssetsPath("Assets"),
+  m_CurrentDirectory(s_AssetsPath),
   m_MetalDevice(p_MetalDevice),
-  m_FolderIcon("Assets/Textures/foldericon.png"),
-  m_FileIcon("Assets/Textures/file_icon.png"),
-  m_ShaderIcon("Assets/Textures/Metal_4.png"),
-  m_ReturnIcon("Assets/Textures/return_blue.png")
+  m_FolderIcon("Assets/Textures/foldericon.png", m_MetalDevice),
+  m_FileIcon("Assets/Textures/file_icon.png", m_MetalDevice),
+  m_ShaderIcon("Assets/Textures/Metal_4.png", m_MetalDevice),
+  m_ReturnIcon("Assets/Textures/return_blue.png", m_MetalDevice)
 {
-    m_FolderIcon.SetMetalDevice(m_MetalDevice);
-    m_FileIcon.SetMetalDevice(m_MetalDevice);
-    m_ShaderIcon.SetMetalDevice(m_MetalDevice);
-    m_ReturnIcon.SetMetalDevice(m_MetalDevice);
 }
 
 MacEditorLayer::~MacEditorLayer()
@@ -37,6 +31,7 @@ MacEditorLayer::~MacEditorLayer()
 
 void MacEditorLayer::DrawMenuBar()
 {
+    // TODO: Work on scene serialization
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -91,7 +86,7 @@ void MacEditorLayer::DrawContentBrowser()
         auto relativePath = std::filesystem::relative(path, s_AssetsPath);
         std::string fileNameString = relativePath.filename().string();
         
-        if (fileNameString == ".DS_Store")
+        if (fileNameString.contains(".DS_Store"))
         {
             continue; // For macOS, ignore any .DS_Store files in the content browser
         }
@@ -136,6 +131,9 @@ void MacEditorLayer::DrawStatsBar()
     ImGui::Begin("Stats");
     ImGui::Text("Frame Rate: (%.1f FPS)", ImGui::GetIO().Framerate);
     ImGui::Text("Frame Time: %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+    
+    ImGui::Checkbox("Wireframe Mode", &b_EnableWireframe);
+
     ImGui::Checkbox("Message from developer", &b_showAnotherWindow);
     if (b_showAnotherWindow)
     {
@@ -145,5 +143,7 @@ void MacEditorLayer::DrawStatsBar()
             b_showAnotherWindow = false;
         ImGui::End();
     }
+    
+    
     ImGui::End();
 }

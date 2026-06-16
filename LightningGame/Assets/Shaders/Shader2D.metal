@@ -1,4 +1,4 @@
-//  Shader.metal
+//  Shader2D.metal
 //  LightningGame
 //  Based on GLSL code from LearnOpenGL and GetIntoGameDev tutorials
 //  Created by Kian Marvi on 5/7/25.
@@ -21,10 +21,11 @@ struct VertexOut
 };
 
 // Vertex shader
-vertex VertexOut vertexShader(VertexIn in [[stage_in]])
+vertex VertexOut vertexShader(VertexIn in [[stage_in]], constant float4x4 &transform[[buffer(1)]], constant float4x4 &projection[[buffer(2)]], constant float4x4 &view[[buffer(3)]])
 {
     VertexOut out;
-    out.position = float4(in.position, 1.0f);
+    half3 pos = half3(in.position);
+    out.position = float4(half4x4(projection) * half4x4(view) * half4x4(transform) * half4(pos, 1.0f));
     out.color = half3(in.color);
     out.texCoord = in.texCoord;
     return out;
@@ -37,5 +38,11 @@ fragment half4 fragmentShader(VertexOut out [[stage_in]],
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     // Sample the texture to obtain a color
     half4 colorSample = colorTexture.sample(textureSampler, out.texCoord);
+    
+    if (colorSample.a < 0.1)
+    {
+        discard_fragment();
+    }
+    
     return colorSample * half4(out.color, 1.0f);
 }

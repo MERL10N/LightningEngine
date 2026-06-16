@@ -26,11 +26,6 @@ float AAPL_SIMD_OVERLOAD degrees_from_radians(float radians);
 /// Returns the number of radians in the specified number of degrees.
 float AAPL_SIMD_OVERLOAD radians_from_degrees(float degrees);
 
-// Generates a random float value inside the given range.
-inline static float AAPL_SIMD_OVERLOAD  random_float(float min, float max)
-{
-    return (((double)random()/RAND_MAX) * (max-min)) + min;
-}
 
 /// Generate a random three-component vector with values between min and max.
 vector_float3 AAPL_SIMD_OVERLOAD generate_random_vector(float min, float max);

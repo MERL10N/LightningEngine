@@ -9,7 +9,7 @@
 #define MetalBuffer_hpp
 
 #include <simd/simd.h>
-
+#include "Metal/MTLDevice.hpp"
 
 namespace MTL
 {
@@ -24,14 +24,21 @@ public:
     MetalVertexBuffer() = default;
     MetalVertexBuffer(MTL::Device* p_MetalDevice);
     ~MetalVertexBuffer();
-        
-    void BindBuffer(const void* p_Vertices);
+       
+    template<typename T>
+    void BindBuffer(T* p_Vertices, unsigned int p_ResourceStorageOption)
+    {
+        if (!m_VertexBuffer)
+        {
+            m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), p_ResourceStorageOption);
+        }
+    }
     
-    inline MTL::Buffer* GetVertexBuffer() { return m_VertexBuffer; }
+    inline const MTL::Buffer* GetVertexBuffer() const { return m_VertexBuffer; }
     
 private:
-    MTL::Buffer* m_VertexBuffer = nullptr;
     MTL::Device* m_MetalDevice = nullptr;
+    MTL::Buffer* m_VertexBuffer = nullptr;
 };
 
 class MetalIndexBuffer
@@ -43,11 +50,18 @@ public:
         
     void BindBuffer(const void* p_Vertices);
     
-    inline MTL::Buffer* GetIndexBuffer() { return m_IndexBuffer; }
+    inline const MTL::Buffer* GetIndexBuffer() const { return m_IndexBuffer; }
     
 private:
-    MTL::Buffer* m_IndexBuffer = nullptr;
     MTL::Device* m_MetalDevice = nullptr;
+    MTL::Buffer* m_IndexBuffer = nullptr;
+};
+
+class MetalArgumentBuffer
+{
+public:
+private:
+    
 };
 
 #endif /* MetalBuffer_hpp */

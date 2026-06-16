@@ -15,7 +15,9 @@ enum class CAMERA_MOVEMENT
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 
 constexpr float YAW         = -90.0f;
@@ -27,13 +29,19 @@ constexpr float ZOOM        = 45.0f;
 class Camera
 {
 public:
-    Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 0.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 5.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
     ~Camera();
     
-    void ProcessInput(CAMERA_MOVEMENT direction, float deltaTime);
-    void ProcessMouseMovement(float xOffset, float yOffset, bool contrainPitch = true);
+    void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime);
+    void ProcessControllerLeftThumbstickInput(const float p_DeltaTime, const float p_AxisValueX, const float p_AxisValueY);
+    void ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch = true);
+    void ProcessMouseMovement(float xOffset, const float yOffset, const bool constrainPitch);
     
-    inline simd::float4x4 GetViewMatrix() { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    inline simd::float4x4 GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    
+    inline float GetZoom() const { return m_Zoom; }
+    
+    inline simd::float3 GetPosition() const  { return m_Position; }
     
 private:
     
@@ -49,7 +57,7 @@ private:
     float m_MovementSpeed, m_Velocity;
     
     float m_MouseSensitivity;
-    float m_Zoom;
+    float m_Zoom = 65.f;
 
     CAMERA_MOVEMENT m_CameraMovement;
     
@@ -57,7 +65,7 @@ private:
     
     float Radians(float degrees);
     
-    simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up);
+    simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const;
     
 };
 

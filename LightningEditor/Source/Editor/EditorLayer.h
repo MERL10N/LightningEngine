@@ -20,6 +20,7 @@ public:
     
 private:
     bool b_showAnotherWindow;
+    bool b_EnableWireFrameMode;
 };
 
 #endif /* EditorLayer_hpp */

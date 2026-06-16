@@ -17,7 +17,6 @@ namespace MTL
 }
 
 class MetalTexture;
-class Scene;
 
 class MacEditorLayer
 {
@@ -30,11 +29,15 @@ public:
     void DrawMenuBar();
     void DrawContentBrowser();
     
+    inline bool IsWireFrameEnabled() const { return b_EnableWireframe; }
+    
 private:
     bool b_showAnotherWindow;
+    bool b_EnableWireframe = false;
+    const char* s_AssetsPath = nullptr;
     std::filesystem::path m_CurrentDirectory;
-    MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
     MTL::Device* m_MetalDevice;
+    MetalTexture m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
 };
 
 #endif /* MacEditorLayer_hpp */

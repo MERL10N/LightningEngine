@@ -9,24 +9,97 @@
 #include "MetalTexture.h"
 #include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
-#include "Math/AAPLMathUtilities.h"
+#include "MetalVertexDescriptor.h"
+#include "Primitives/Sprite.h"
+#include "MetalShader.h"
+#include "SubTexture.h"
+#include "GLFW/glfw3.h"
+#include "Scene/Scene.h"
+#include "Scene/Component.h"
+#include <print>
+#include <cstddef>
 
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
   m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
-  m_Shader("Assets/Shaders/Shader.metal", p_MetalDevice, p_MetalLayer->pixelFormat()),
-  m_Camera()
+  m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
+  b_EnableWireframe(false),
+  m_LightComponent(LightComponent())
 {
     assert(m_MetalDevice);
+    m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
+    m_DepthStencilDescriptor->setDepthWriteEnabled(true);
+    m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
+
+    if (m_DepthStencilDescriptor)
+    {
+        m_DepthStencilDescriptor->release();
+        m_DepthStencilDescriptor = nullptr;
+    }
+    
+    MetalVertexDescriptor vertexDescriptorBuilder;
+    
+    m_3DVertexDescriptor = vertexDescriptorBuilder
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, pos))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, color))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, normals))
+        .AddAttribute(MTL::VertexFormatFloat2, offsetof(Vertex3D, texCoord))
+        .SetBufferLayout(sizeof(Vertex3D))
+        .BuildVertexDescriptor();
+    
+    
+    m_LightVertexDescriptor = vertexDescriptorBuilder
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, pos))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, color))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, normals))
+        .SetBufferLayout(sizeof(Vertex3D))
+        .BuildVertexDescriptor();
+    
+    m_TextureShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    
+    m_UntexturedShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    
+    m_LightShader = new MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
+    
+    if (m_3DVertexDescriptor)
+    {
+        m_3DVertexDescriptor->release();
+        m_3DVertexDescriptor = nullptr;
+    }
+    if (m_LightVertexDescriptor)
+    {
+        m_LightVertexDescriptor->release();
+        m_LightVertexDescriptor = nullptr;
+    }
+    
 }
 
 MetalRenderer::~MetalRenderer()
 {
-    if (m_MetalDevice)
+    
+    if (m_LightShader)
     {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
+        delete m_LightShader;
+        m_LightShader = nullptr;
+    }
+    
+    if (m_TextureShader)
+    {
+        delete m_TextureShader;
+        m_TextureShader = nullptr;
+    }
+    
+    if (m_UntexturedShader)
+    {
+        delete m_UntexturedShader;
+        m_UntexturedShader = nullptr;
+    }
+    
+    if (m_MetalCommandQueue)
+    {
+        m_MetalCommandQueue->release();
+        m_MetalCommandQueue = nullptr;
     }
     
     if (m_MetalLayer)
@@ -34,51 +107,118 @@ MetalRenderer::~MetalRenderer()
         m_MetalLayer->release();
         m_MetalLayer = nullptr;
     }
-
-    if (m_MetalCommandQueue)
-    {
-        m_MetalCommandQueue->release();
-        m_MetalCommandQueue = nullptr;
-    }
     
-    m_QuadMesh.indexBuffer->release();
-    m_QuadMesh.vertexBuffer->release();
+    if (m_MetalDevice)
+    {
+        m_MetalDevice->release();
+        m_MetalDevice = nullptr;
+    }
 }
 
-void MetalRenderer::CreateQuad(const char* p_FilePath)
-{
-    m_QuadMesh = m_MeshBuilder.GenerateQuad(m_MetalDevice, p_FilePath);
-}
-
-void MetalRenderer::CreateCube(const char* p_FilePath)
-{
-    m_CubeMesh = m_MeshBuilder.GenerateCube(m_MetalDevice, p_FilePath);
-}
-
-void MetalRenderer::BeginFrame()
+void MetalRenderer::SubmitCommandBuffer()
 {
     m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
-void MetalRenderer::Render()
+
+void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio)
 {
-    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
-    m_RenderCommandEncoder->setRenderPipelineState(m_Shader.GetRenderPipelineState());
+    m_Camera = p_Camera;
+    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
     
-    matrix_float4x4 view = m_Camera.GetViewMatrix();
-    m_RenderCommandEncoder->setVertexBytes(&view, sizeof(matrix_float4x4), 3);
-    matrix_float4x4 projection = matrix_perspective_right_hand(45.0f, m_MetalLayer->drawableSize().width / m_MetalLayer->drawableSize().height, 0.2f, 10.f);
-    m_RenderCommandEncoder->setVertexBytes(&projection, sizeof(matrix_float4x4), 2);
-    matrix_float4x4 transform = matrix4x4_translation(0.0f, 0.0f, -4.0f);
-    m_RenderCommandEncoder->setVertexBytes(&transform, sizeof(matrix_float4x4), 1);
-    m_RenderCommandEncoder->setVertexBuffer(m_QuadMesh.vertexBuffer, 0, 0);
-    m_RenderCommandEncoder->setFragmentTexture(m_QuadMesh.texture->GetTexture(), 0);
-    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangleStrip, NS::UInteger(4), MTL::IndexType::IndexTypeUInt16, m_QuadMesh.indexBuffer, NS::UInteger(0));
-    m_RenderCommandEncoder->endEncoding();
+    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
+    depthAttachment->setClearDepth(1.0f);
+    
+    m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
+    m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
+    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+    m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
+    
+    if (b_EnableWireframe)
+    {
+        m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeLines);
+    }
+    else
+    {
+        m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
+    }
+    
+    m_ViewMatrix = m_Camera.GetViewMatrix();
+    
+    float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
+    
+    m_PerspectiveMatrix = matrix_perspective_right_hand(fov,
+                                                       p_AspectRatio,
+                                                       0.1f,
+                                                       1000.f);
+    
 
 }
 
-void MetalRenderer::Commit()
+void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D& p_3DMesh, const LightComponent &p_LightComponent)
 {
+    m_LightComponent = p_LightComponent;
+    
+    m_LightComponent.m_Position = simd::make_float3(p_ModelMatrix.columns[3].x,
+                                                    p_ModelMatrix.columns[3].y,
+                                                    p_ModelMatrix.columns[3].z);
+    
+    m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+    
+    if (m_LightShader)
+    {
+        m_ModelMatrix = p_ModelMatrix;
+        m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
+        m_LightShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_PerspectiveMatrix, 1);
+        m_LightShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_ViewMatrix, 2);
+        m_LightShader->SetVertexShaderUniform(m_RenderCommandEncoder, p_ModelMatrix, 3);
+        m_LightShader->SetFragmentShaderUniform(m_RenderCommandEncoder, p_LightComponent.m_Color, 0);
+    }
+    
+    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
+                                                  p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
+                                                  p_3DMesh.m_IndexBuffer,
+                                                  NS::UInteger(0));
+}
+
+void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
+{
+        m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+        if (p_Texture)
+        {
+            m_ModelMatrix = p_ModelMatrix;
+            m_ArgumentBuffer = m_TextureShader->InitialiseArgumentBuffers(p_Texture->GetTexture());
+            m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
+            m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
+            m_RenderCommandEncoder->setRenderPipelineState(m_TextureShader->GetRenderPipelineState());
+            m_TextureShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_PerspectiveMatrix, 1);
+            m_TextureShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_ViewMatrix, 2);
+            m_TextureShader->SetVertexShaderUniform(m_RenderCommandEncoder, p_ModelMatrix, 3);
+            m_TextureShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_LightComponent.m_Color, 1); // Light color
+            m_TextureShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_LightComponent.m_Position, 2); // Light position
+            m_TextureShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_Camera.GetPosition(), 3);
+        }
+        else
+        {
+            
+            m_RenderCommandEncoder->setRenderPipelineState(m_UntexturedShader->GetRenderPipelineState());
+            m_UntexturedShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_PerspectiveMatrix, 1);
+            m_UntexturedShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_ViewMatrix, 2);
+            m_UntexturedShader->SetVertexShaderUniform(m_RenderCommandEncoder, p_ModelMatrix, 3);
+            m_UntexturedShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_LightComponent.m_Color, 0); // Light color
+            m_UntexturedShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_LightComponent.m_Position, 1); // Light position
+            m_UntexturedShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_Camera.GetPosition(), 2);
+        }
+    
+        m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
+                                                      p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
+                                                      p_3DMesh.m_IndexBuffer,
+                                                      NS::UInteger(0));
+
+}
+
+void MetalRenderer::EndScene()
+{
+    m_RenderCommandEncoder->endEncoding();
     m_MetalCommandBuffer->commit();
 }

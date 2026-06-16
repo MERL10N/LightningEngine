@@ -24,7 +24,7 @@ Camera::~Camera()
 }
 
 
-void Camera::ProcessInput(CAMERA_MOVEMENT direction, float deltaTime)
+void Camera::ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime)
 {
     m_Velocity = m_MovementSpeed * deltaTime;
     
@@ -42,15 +42,44 @@ void Camera::ProcessInput(CAMERA_MOVEMENT direction, float deltaTime)
         case CAMERA_MOVEMENT::RIGHT:
             m_Position += m_Right * m_Velocity;
             break;
+        case CAMERA_MOVEMENT::UP:
+            m_Position += m_Up * m_Velocity;
+            break;
+        case CAMERA_MOVEMENT::DOWN:
+            m_Position -= m_Up * m_Velocity;
+            break;
     }
+}
+
+void Camera::ProcessControllerLeftThumbstickInput(const float p_DeltaTime, const float p_AxisValueX, const float p_AxisValueY)
+{
+    m_Velocity = m_MovementSpeed * p_DeltaTime;
+    
+    m_Position += m_Right * m_Velocity * p_AxisValueX;
+    m_Position += m_Front * m_Velocity * p_AxisValueY;
+}
+
+void Camera::ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch)
+{
+    m_Yaw   += p_AxisValueX;
+    m_Pitch += p_AxisValueY;
+
+  if (p_ConstrainPitch)
+  {
+      if (m_Pitch > 89.0f)
+          m_Pitch = 89.0f;
+      if (m_Pitch < -89.0f)
+          m_Pitch = -89.0f;
+  }
+    UpdateCameraVectors();
 }
 
 void Camera::UpdateCameraVectors()
 {
     simd::float3 front;
-    front.x = cos(Radians(m_Yaw) * cos(Radians(m_Pitch)));
+    front.x = cos(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     front.y = sin(Radians(m_Pitch));
-    front.z = sin(Radians(m_Yaw) * cos(Radians(m_Pitch)));
+    front.z = sin(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     
     m_Front = simd::normalize(front);
     
@@ -58,7 +87,7 @@ void Camera::UpdateCameraVectors()
     m_Up = simd::normalize(simd::cross(m_Right, m_Front));
 }
 
-void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch)
+void Camera::ProcessMouseMovement(float xOffset, float yOffset, const bool constrainPitch)
 {
     xOffset *= m_MouseSensitivity;
     yOffset *= m_MouseSensitivity;
@@ -83,7 +112,7 @@ float Camera::Radians(float degrees)
     return degrees * M_PI / 180.0f;
 }
 
-simd::float4x4 Camera::LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up)
+simd::float4x4 Camera::LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const
 {
     simd::float3 z = simd::normalize(eye - center);
     simd::float3 x = simd::normalize(simd::cross(up, z));
