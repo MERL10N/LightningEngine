@@ -201,6 +201,7 @@ MetalShader::~MetalShader()
         m_FragmentFunction = nullptr;
     }
 }
+
 MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const
 {
     MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
