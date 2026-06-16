@@ -53,7 +53,7 @@ IMGUI_IMPL_API void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex);
 // More info about using Metal from C++: https://developer.apple.com/metal/cpp/
 
 #ifdef IMGUI_IMPL_METAL_CPP
-#include <Metal/Metal.hpp>
+#include "Metal/Metal.hpp"
 #ifndef __OBJC__
 
 // Follow "Getting Started" link and check examples/ folder to learn about using backends!

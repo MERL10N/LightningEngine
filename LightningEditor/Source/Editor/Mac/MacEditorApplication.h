@@ -1,0 +1,78 @@
+//
+//  EditorApplication.hpp
+//  LightningEditor
+//
+//  Created by Kian Marvi on 7/11/25.
+//
+
+#ifndef EditorApplication_hpp
+#define EditorApplication_hpp
+
+#include "Platform/Apple/MacWindow.h"
+#include "Input/AppleController.h"
+#include "Camera/Camera.h"
+#include "Scene/Scene.h"
+#include "Renderer/Metal/MetalFrameBuffer.h"
+#include "Renderer/Metal/MetalRenderer.h"
+#include "MacEditorLayer.h"
+#include <simd/simd.h>
+
+class MetalRenderer;
+class MacEditorLayer;
+class MetalTexture;
+
+namespace MTL
+{
+    class Device;
+    class RenderPassDescriptor;
+    class RenderCommandEncoder;
+    class CommandBuffer;
+}
+
+namespace CA
+{
+  class MetalDrawable;
+}
+
+class MacEditorApplication
+{
+public:
+    explicit MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title = "Lightning Editor");
+    void DrawGameViewport();
+    ~MacEditorApplication();
+    void Update();
+
+private:
+    MacWindow m_MacWindow;
+    
+    MTL::Device*                m_MetalDevice           = nullptr;
+    MTL::RenderPassDescriptor*  m_WindowPassDescriptor  = nullptr;
+    MTL::CommandBuffer*         m_ImGuiCommandBuffer    = nullptr;
+    MTL::RenderCommandEncoder*  m_ImGuiCommandEncoder   = nullptr;
+    
+    MacEditorLayer      m_MacEditorLayer;
+    MetalRenderer       m_MetalRenderer;
+    
+    CA::MetalDrawable*  m_WindowDrawable = nullptr;
+    MetalFrameBuffer    m_MetalFrameBuffer;
+    
+    simd::float2 m_ViewportSize;
+    
+    Camera m_Camera;
+    
+    float m_AspectRatio = 0.0f;
+    float m_CurrentFrame = 0.0f;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
+    float m_Width = 0.0f;
+    float m_Height = 0.0f;
+    
+    AppleController m_Controller;
+    
+    Scene m_Scene;
+    
+    bool b_EnableWireframe = false;
+    
+};
+
+#endif /* EditorApplication_hpp */

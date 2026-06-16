@@ -5,79 +5,47 @@
 #ifndef MACAPPLICATION_H
 #define MACAPPLICATION_H
 
-#include <AppKit/NSApplication.hpp>
-
-namespace MTK
-{
-    class View;
-}
 namespace MTL
 {
     class Device;
 }
 
-namespace NS
+namespace CA
 {
-    class Window;
-    class Menu;
-    class MenuItem;
-    class Application;
-    class View;
+    class MetalLayer;
+    class MetalDrawable;
 }
 
-class MetalKitViewDelegate;
+struct GLFWwindow;
 
-class MacWindow : public NS::ApplicationDelegate
+class MacWindow
 {
 
 public:
-    explicit MacWindow(unsigned int p_Width = 1920, unsigned int p_Height = 1080, const char* p_Title = "");
-    void SetPreferredFramesPerSecond(float p_FPS);
+    explicit MacWindow(unsigned int p_Width = 1280, unsigned int p_Height = 720, const char* p_Title = "");
+    bool Update();
     ~MacWindow();
 
-    NS::Menu* createMenuBar();
 
-    virtual void applicationWillFinishLaunching( NS::Notification* pNotification ) override;
-    virtual void applicationDidFinishLaunching( NS::Notification* pNotification ) override;
-    virtual bool applicationShouldTerminateAfterLastWindowClosed( NS::Application* pSender ) override;
-    
-    inline MTK::View* GetMetalKitView() { return m_MetalKitView; }
-    inline MTL::Device* GetDevice() { return m_MetalDevice; }
-    
-    inline MetalKitViewDelegate* GetMTKViewDelegate() { return m_MetalKitViewDelegate; }
-    
-    inline unsigned int GetWidth() { return m_Width; }
-    inline unsigned int GetHeight() { return m_Height; }
+    inline MTL::Device* GetDevice() const { return m_MetalDevice; }
+    inline CA::MetalLayer* GetMetalLayer() const { return m_MetalLayer; }
+    inline CA::MetalDrawable* GetMetalDrawable() const { return m_MetalDrawable; }
+    inline unsigned int GetWidth() const { return m_Width; }
+    inline unsigned int GetHeight() const { return m_Height; }
+    inline GLFWwindow* GetWindow() const { return m_GlfwWindow; }
 
 private:
+    
+    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
+    void resizeFrameBuffer(int width, int height);
     
     unsigned int m_Width, m_Height;
     const char* m_Title;
     
-    MTK::View* m_MetalKitView;
     MTL::Device* m_MetalDevice;
-    MetalKitViewDelegate* m_MetalKitViewDelegate = nullptr;
-    
-    NS::Window* m_Window;
-    NS::Application* m_Application;
-    NS::ApplicationDelegate* m_AppDelegate;
-    
-    NS::Menu* m_Menu;
-    NS::Menu* m_MainMenu;
-    NS::Menu* m_AppMenu;
-    NS::Menu* m_WindowMenu;
-    
-    NS::String* m_AppName;
-    NS::String* m_QuitItemName;
-    
-    NS::MenuItem* m_AppMenuItem;
-    NS::MenuItem* pAppQuitItem;
-    NS::MenuItem* m_WindowMenuItem;
-    NS::MenuItem* m_CloseWindowItem;
-    
-    NS::View* m_View;
-    CGRect frame;
- 
+    CA::MetalLayer* m_MetalLayer;
+    CA::MetalDrawable* m_MetalDrawable;
+    GLFWwindow* m_GlfwWindow;
 };
 
 #endif //MACAPPLICATION_H

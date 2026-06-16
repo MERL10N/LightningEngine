@@ -10,19 +10,14 @@
 
 namespace MTL
 {
-class Device;
-class Texture;
-class TextureDescriptor;
-class RenderPassDescriptor;
-class RenderPassColorAttachmentDescriptor;
-class RenderPassDepthAttachmentDescriptor;
-class RenderCommandEncoder;
-class Library;
-}
-
-namespace MTK
-{
-class View;
+    class Device;
+    class Texture;
+    class TextureDescriptor;
+    class RenderPassDescriptor;
+    class RenderPassColorAttachmentDescriptor;
+    class RenderPassDepthAttachmentDescriptor;
+    class RenderCommandEncoder;
+    class Library;
 }
 
 #include <stdint.h>
@@ -30,7 +25,7 @@ class View;
 class MetalFrameBuffer
 {
 public:
-    MetalFrameBuffer(MTK::View* p_MetalKitView);;
+    MetalFrameBuffer(MTL::Device* p_MetalDevice);;
     ~MetalFrameBuffer();
     
     void Create(float p_Width, float p_Height);
@@ -38,19 +33,23 @@ public:
     
     void UpdateViewport(MTL::RenderCommandEncoder* p_Encoder);
     
-    inline MTL::Texture* GetAttachmentTexture() { return m_AttachmentTexture; }
-    inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    inline MTL::Texture* GetAttachmentTexture() const { return m_AttachmentTexture; }
+    inline MTL::RenderPassDescriptor* GetRenderPassDescriptor() const { return m_RenderPassDescriptor; }
+    
+    inline float GetWidth() const { return m_Width; }
+    inline float GetHeight() const { return m_Height; }
 
 private:
-    MTL::Device* m_MetalDevice = nullptr;
-    MTK::View* m_MetalKitView = nullptr;
+    MTL::Device*    m_MetalDevice       = nullptr;
+    MTL::Texture*   m_AttachmentTexture = nullptr;
+    MTL::Texture*   m_MSAATargetTexture = nullptr;
+    MTL::Texture*   m_DepthTexture      = nullptr;
     
-    MTL::Texture* m_AttachmentTexture = nullptr;
-    MTL::Texture* m_DepthTexture = nullptr;
+    MTL::RenderPassDescriptor*  m_RenderPassDescriptor      = nullptr;
+    MTL::TextureDescriptor*     m_TextureDescriptor         = nullptr;
+    MTL::TextureDescriptor*     m_DepthTextureDescriptor    = nullptr;
+    MTL::TextureDescriptor*     m_MSAATextureDescriptor     = nullptr;
     
-    MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
-    MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
-    MTL::TextureDescriptor* m_DepthTextureDescriptor = nullptr;
     MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor = nullptr;
     

@@ -1,31 +1,76 @@
 //
 //  MacApplication.cpp
 //  LightningCore
-//
 //  Created by Kian Marvi on 7/3/25.
 //
 
 #include "MacApplication.h"
-
+#include "QuartzCore/QuartzCore.hpp"
+#include "Metal/Metal.hpp"
+#include "Renderer/Metal/MetalRenderer.h"
+#include "GLFW/glfw3.h"
 
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
-: macAppDelegate(p_Width, p_Height, p_Title),
-  m_SharedApplication(NS::Application::sharedApplication())
+: m_MacWindow(p_Width, p_Height, p_Title),
+  m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
+  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_Camera(Camera())
 {
-   macAppDelegate.SetPreferredFramesPerSecond(120.f);
-   m_SharedApplication->setDelegate(&macAppDelegate);
+    ///m_MetalRenderer->CreateCube("Assets/Textures/background.png");
 }
 
 
 void MacApplication::Update(float p_DeltaTime)
 {
-    m_SharedApplication->run();
+    while (m_MacWindow.Update())
+    {
+        m_CurrentFrame = (float)glfwGetTime();
+        m_DeltaTime = m_CurrentFrame - m_LastFrame;
+        m_LastFrame = m_CurrentFrame;
+        
+        if (m_Controller.IsWKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
+        if (m_Controller.IsSKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
+        if (m_Controller.IsAKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
+        if (m_Controller.IsDKeyDown())
+            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+     
+        m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+        
+        m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
+        {
+            m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
+            m_WindowPassDescriptor->colorAttachments()->object(0)->setTexture(m_WindowDrawable->texture());
+            m_WindowPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionClear);
+            m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
+            m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
+            
+  
+            m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
+            m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
+            m_MetalRenderer->EndScene();
+        }
+        m_Pool->release();
+    }
 }
 
 
 MacApplication::~MacApplication()
 {
-    m_SharedApplication->release();
+    if (m_WindowPassDescriptor)
+    {
+        m_WindowPassDescriptor->release();
+        m_WindowPassDescriptor = nullptr;
+    }
+    
+    if (m_MetalRenderer)
+    {
+        delete m_MetalRenderer;
+        m_MetalRenderer = nullptr;
+    }
 }
 
 

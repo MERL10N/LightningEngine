@@ -6,28 +6,12 @@
 //
 
 #include "MetalBuffer.h"
-#include <Metal/Metal.hpp>
-#include "../../Logging/Log.h"
+#include "Metal/Metal.hpp"
 
 MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
-: m_MetalDevice(p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_VertexBuffer(nullptr)
 {
-#ifdef DEBUG
-    Log::Init();
-    Log::GetCoreLogger()->warn("Initialise Vertex Buffer");
-#endif
-}
-
-void MetalVertexBuffer::BindBuffer(const float* p_Vertices, uint32_t p_Size)
-{
-    assert(m_MetalDevice);
-    assert (p_Size != 0);
-    
-    if (!m_VertexBuffer)
-    {
-        m_VertexBuffer = m_MetalDevice->newBuffer(p_Vertices, p_Size, MTL::ResourceStorageModeShared);
-    }
-    
 }
 
 MetalVertexBuffer::~MetalVertexBuffer()
@@ -35,6 +19,26 @@ MetalVertexBuffer::~MetalVertexBuffer()
    if (m_VertexBuffer)
    {
        m_VertexBuffer->release();
+       m_VertexBuffer = nullptr;
+   }
+   if (m_MetalDevice)
+   {
+       m_MetalDevice->release();
+       m_MetalDevice = nullptr;
+   }
+}
+
+MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice)
+: m_MetalDevice(p_MetalDevice),
+  m_IndexBuffer(nullptr)
+{
+}
+
+MetalIndexBuffer::~MetalIndexBuffer()
+{
+   if (m_IndexBuffer)
+   {
+       m_IndexBuffer->release();
    }
    if (m_MetalDevice)
    {
@@ -42,3 +46,13 @@ MetalVertexBuffer::~MetalVertexBuffer()
    }
 }
 
+void MetalIndexBuffer::BindBuffer(const void* p_Vertices)
+{
+    assert(m_MetalDevice);
+    
+    if (!m_IndexBuffer)
+    {
+        m_IndexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), MTL::ResourceStorageModeShared);
+    }
+    
+}
