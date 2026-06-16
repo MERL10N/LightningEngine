@@ -205,6 +205,8 @@ public:
     void         setDepthStoreAction(MTL::StoreAction storeAction);
     void         setDepthStoreActionOptions(MTL::StoreActionOptions storeActionOptions);
 
+    void         setDepthTestBounds(float minBound, float maxBound);
+
     void         setFragmentAccelerationStructure(const MTL::AccelerationStructure* accelerationStructure, NS::UInteger bufferIndex);
 
     void         setFragmentBuffer(const MTL::Buffer* buffer, NS::UInteger offset, NS::UInteger index);
@@ -351,8 +353,11 @@ public:
     void         useHeaps(const MTL::Heap* const heaps[], NS::UInteger count);
     void         useHeaps(const MTL::Heap* const heaps[], NS::UInteger count, MTL::RenderStages stages);
 
+    [[deprecated("please use useResource(const MTL::Resource*, MTL::ResourceUsage, MTL::RenderStages)")]]
     void         useResource(const MTL::Resource* resource, MTL::ResourceUsage usage);
     void         useResource(const MTL::Resource* resource, MTL::ResourceUsage usage, MTL::RenderStages stages);
+
+    [[deprecated("please use useResources(const MTL::Resource* const [], MTL::ResourceUsage, MTL::RenderStages)")]]
     void         useResources(const MTL::Resource* const resources[], NS::UInteger count, MTL::ResourceUsage usage);
     void         useResources(const MTL::Resource* const resources[], NS::UInteger count, MTL::ResourceUsage usage, MTL::RenderStages stages);
 
@@ -514,6 +519,11 @@ _MTL_INLINE void MTL::RenderCommandEncoder::setDepthStoreAction(MTL::StoreAction
 _MTL_INLINE void MTL::RenderCommandEncoder::setDepthStoreActionOptions(MTL::StoreActionOptions storeActionOptions)
 {
     Object::sendMessage<void>(this, _MTL_PRIVATE_SEL(setDepthStoreActionOptions_), storeActionOptions);
+}
+
+_MTL_INLINE void MTL::RenderCommandEncoder::setDepthTestBounds(float minBound, float maxBound)
+{
+    Object::sendMessage<void>(this, _MTL_PRIVATE_SEL(setDepthTestMinBound_maxBound_), minBound, maxBound);
 }
 
 _MTL_INLINE void MTL::RenderCommandEncoder::setFragmentAccelerationStructure(const MTL::AccelerationStructure* accelerationStructure, NS::UInteger bufferIndex)
