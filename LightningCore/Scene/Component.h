@@ -64,7 +64,10 @@ struct TextureComponent
         return (*this);
     }
     
-   
+   const MetalTexture* GetTexture() const
+   {
+       return m_Texture;
+   }
     
     ~TextureComponent()
     {
