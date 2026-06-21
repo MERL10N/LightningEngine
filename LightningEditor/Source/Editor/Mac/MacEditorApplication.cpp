@@ -22,7 +22,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
   m_MacEditorLayer(m_MetalDevice),
   m_MetalRenderer(m_MetalDevice, m_MacWindow.GetMetalLayer()),
   m_MetalFrameBuffer(m_MetalDevice),
-  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_WindowPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
   m_Camera(),
   m_Scene(),
   m_Width(p_Width),
@@ -172,8 +172,8 @@ void MacEditorApplication::Update()
                    ImGui::RenderPlatformWindowsDefault();
                }
                 m_ImGuiCommandEncoder->endEncoding();
-                m_ImGuiCommandBuffer->presentDrawable(m_WindowDrawable);
-                m_ImGuiCommandBuffer->commit();
+                //m_ImGuiCommandBuffer->presentDrawable(m_WindowDrawable);
+                //m_ImGuiCommandBuffer->commit();
             }
             m_Pool->release();
         }

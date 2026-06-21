@@ -22,12 +22,36 @@
 MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer)
 : m_MetalDevice(p_MetalDevice),
   m_MetalLayer(p_MetalLayer),
-  m_MetalCommandQueue(m_MetalDevice->newCommandQueue()),
+  m_MetalCommandQueue(m_MetalDevice->newMTL4CommandQueue()),
+  m_MetalCommandBuffer(m_MetalDevice->newCommandBuffer()),
+  m_ArgumentTableDescriptor(MTL4::ArgumentTableDescriptor::alloc()->init()),
+  m_ResidencySetDescriptor(MTL::ResidencySetDescriptor::alloc()->init()),
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
   b_EnableWireframe(false),
   m_LightComponent(LightComponent())
 {
     assert(m_MetalDevice);
+    m_ArgumentTableDescriptor->setMaxBufferBindCount(1);
+    m_ArgumentTable = m_MetalDevice->newArgumentTable(m_ArgumentTableDescriptor, nullptr);
+    
+    if (m_ArgumentTableDescriptor)
+    {
+        m_ArgumentTableDescriptor->release();
+        m_ArgumentTableDescriptor = nullptr;
+    }
+    
+    m_ResidencySet = m_MetalDevice->newResidencySet(m_ResidencySetDescriptor, nullptr);
+    
+    if (m_ResidencySetDescriptor)
+    {
+        m_ResidencySetDescriptor->release();
+        m_ResidencySetDescriptor = nullptr;
+    }
+    
+    m_ResidencySet->commit();
+    m_MetalCommandQueue->addResidencySet(m_ResidencySet);
+    m_MetalCommandQueue->addResidencySet(m_MetalLayer->residencySet());
+    
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
@@ -72,7 +96,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         m_LightVertexDescriptor->release();
         m_LightVertexDescriptor = nullptr;
     }
-    
 }
 
 MetalRenderer::~MetalRenderer()
@@ -117,14 +140,14 @@ MetalRenderer::~MetalRenderer()
 
 void MetalRenderer::SubmitCommandBuffer()
 {
-    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    //m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
 }
 
 
 void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio)
 {
     m_Camera = p_Camera;
-    m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
+    //m_MetalCommandBuffer = m_MetalCommandQueue->commandBuffer();
     
     MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
     depthAttachment->setClearDepth(1.0f);
@@ -163,7 +186,9 @@ void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mes
                                                     p_ModelMatrix.columns[3].y,
                                                     p_ModelMatrix.columns[3].z);
     
-    m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+    //m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+    m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
+    m_ArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
     
     if (m_LightShader)
     {
@@ -175,21 +200,23 @@ void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mes
         m_LightShader->SetFragmentShaderUniform(m_RenderCommandEncoder, p_LightComponent.m_Color, 0);
     }
     
+    
+    m_RenderCommandEncoder->setArgumentTable(m_ArgumentTable, MTL::RenderStageVertex);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
-                                                  p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
-                                                  p_3DMesh.m_IndexBuffer,
-                                                  NS::UInteger(0));
+                                                 p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
+                                                 (uint64_t)p_3DMesh.m_IndexBuffer,
+                                                 NS::UInteger(0));
 }
 
 void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
 {
-        m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
+       //m_RenderCommandEncoder->setVertexBuffer(p_3DMesh.m_VertexBuffer, 0, 0);
         if (p_Texture)
         {
             m_ModelMatrix = p_ModelMatrix;
-            m_ArgumentBuffer = m_TextureShader->InitialiseArgumentBuffers(p_Texture->GetTexture());
-            m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
-            m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
+            //m_ArgumentBuffer = m_TextureShader->InitialiseArgumentBuffers(p_Texture->GetTexture());
+           // m_RenderCommandEncoder->setFragmentBuffer(m_ArgumentBuffer, 0, 0);
+           // m_RenderCommandEncoder->useResource(p_Texture->GetTexture(), MTL::ResourceUsageRead, MTL::RenderStageFragment);
             m_RenderCommandEncoder->setRenderPipelineState(m_TextureShader->GetRenderPipelineState());
             m_TextureShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_PerspectiveMatrix, 1);
             m_TextureShader->SetVertexShaderUniform(m_RenderCommandEncoder, m_ViewMatrix, 2);
@@ -210,15 +237,21 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
             m_UntexturedShader->SetFragmentShaderUniform(m_RenderCommandEncoder, m_Camera.GetPosition(), 2);
         }
     
+        m_RenderCommandEncoder->setArgumentTable(m_ArgumentTable, MTL::RenderStageVertex);
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
                                                       p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
-                                                      p_3DMesh.m_IndexBuffer,
+                                                      (uint64_t)p_3DMesh.m_IndexBuffer,
                                                       NS::UInteger(0));
+      
 
 }
 
-void MetalRenderer::EndScene()
+void MetalRenderer::EndScene(MTL::Drawable* p_MetalDrawable)
 {
     m_RenderCommandEncoder->endEncoding();
-    m_MetalCommandBuffer->commit();
+    //m_MetalCommandBuffer->commit();
+    m_MetalCommandQueue->wait(p_MetalDrawable);
+    m_MetalCommandQueue->commit(&m_MetalCommandBuffer, 1);
+    m_MetalCommandQueue->signalDrawable(p_MetalDrawable);
+    p_MetalDrawable->present();
 }

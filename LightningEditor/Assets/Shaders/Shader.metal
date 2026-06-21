@@ -39,7 +39,7 @@ struct VertexOut
     Light light;
 };
 
-struct ArgumentBufferTexture
+struct TextureArguments
 {
     texture2d<float> colorTexture[[id(0)]];
 };
@@ -62,7 +62,7 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
 
 // Fragment shader
 fragment float4 fragment_main(VertexOut out [[stage_in]],
-                             constant ArgumentBufferTexture &args[[buffer(0)]],
+                             constant TextureArguments &args[[buffer(0)]],
                              constant float3& lightColor[[buffer(1)]],
                              constant float3& lightPosition[[buffer(2)]],
                              constant float3& cameraPosition[[buffer(3)]])

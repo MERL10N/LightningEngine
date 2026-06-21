@@ -11,7 +11,6 @@ namespace MTL
     class CommandQueue;
     class CommandBuffer;
     class RenderPassDescriptor;
-    class RenderCommandEncoder;
     class Buffer;
     class RenderPassColorAttachmentDescriptor;
     class DepthStencilState;
@@ -19,6 +18,20 @@ namespace MTL
     class VertexDescriptor;
     class TextureDescriptor;
     class Texture;
+    class ResidencySet;
+    class ResidencySetDescriptor;
+    class Drawable;
+}
+
+namespace MTL4
+{
+    class ArgumentTable;
+    class ArgumentTableDescriptor;
+    class CommandBuffer;
+    class CommandQueue;
+    class CommandAllocator;
+    class RenderPassDescriptor;
+    class RenderCommandEncoder;
 }
 
 namespace CA
@@ -54,17 +67,19 @@ public:
     
     inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
     
-    inline MTL::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
+    inline MTL4::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
     
-    inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
+    inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
     
-    inline const MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
+    inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
-    inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
+    
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
     
     inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
     
-    inline const MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
+    inline const MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
     
     void SubmitCommandBuffer();
     
@@ -81,16 +96,22 @@ public:
     void BeginScene(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
     void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
-    void EndScene();
+    void EndScene(MTL::Drawable* p_WindowDrawable);
 
     
 private:
     MTL::Device*                    m_MetalDevice               = nullptr;
     CA::MetalLayer*                 m_MetalLayer                = nullptr;
-    MTL::CommandQueue*              m_MetalCommandQueue         = nullptr;
-    MTL::CommandBuffer*             m_MetalCommandBuffer        = nullptr;
-    MTL::RenderPassDescriptor*      m_RenderPassDescriptor      = nullptr;
-    MTL::RenderCommandEncoder*      m_RenderCommandEncoder      = nullptr;
+    
+    MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
+    MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
+    MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
+    MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
+    MTL4::ArgumentTable*            m_ArgumentTable             = nullptr;
+    MTL4::ArgumentTableDescriptor*  m_ArgumentTableDescriptor   = nullptr;
+    
+    MTL::ResidencySet*              m_ResidencySet              = nullptr;
+    MTL::ResidencySetDescriptor*    m_ResidencySetDescriptor    = nullptr;
     MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
     MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;

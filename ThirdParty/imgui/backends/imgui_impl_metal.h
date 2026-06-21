@@ -26,7 +26,8 @@
 #ifdef __OBJC__
 
 @class MTLRenderPassDescriptor;
-@protocol MTLDevice, MTLCommandBuffer, MTLRenderCommandEncoder;
+@class MTL4RenderPassDescriptor;
+@protocol MTLDevice, MTLCommandBuffer, MTLRenderCommandEncoder, MTL4CommandBuffer, MTL4RenderCommandEncoder;
 
 // Follow "Getting Started" link and check examples/ folder to learn about using backends!
 IMGUI_IMPL_API bool ImGui_ImplMetal_Init(id<MTLDevice> device);
@@ -35,6 +36,11 @@ IMGUI_IMPL_API void ImGui_ImplMetal_NewFrame(MTLRenderPassDescriptor* renderPass
 IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* drawData,
                                                    id<MTLCommandBuffer> commandBuffer,
                                                    id<MTLRenderCommandEncoder> commandEncoder);
+
+IMGUI_IMPL_API void ImGui_ImplMetal_NewFrame(MTL4RenderPassDescriptor* renderPassDescriptor);
+IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* drawData,
+                                                   id<MTL4CommandBuffer> commandBuffer,
+                                                   id<MTL4RenderCommandEncoder> commandEncoder);
 
 // Called by Init/NewFrame/Shutdown
 IMGUI_IMPL_API bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device);
@@ -63,6 +69,11 @@ IMGUI_IMPL_API void ImGui_ImplMetal_NewFrame(MTL::RenderPassDescriptor* renderPa
 IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data,
                                                    MTL::CommandBuffer* commandBuffer,
                                                    MTL::RenderCommandEncoder* commandEncoder);
+
+IMGUI_IMPL_API void ImGui_ImplMetal_NewFrame(MTL4::RenderPassDescriptor* renderPassDescriptor);
+IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data,
+                                                   MTL4::CommandBuffer* commandBuffer,
+                                                   MTL4::RenderCommandEncoder* commandEncoder);
 
 // Called by Init/NewFrame/Shutdown
 IMGUI_IMPL_API bool ImGui_ImplMetal_CreateDeviceObjects(MTL::Device* device);

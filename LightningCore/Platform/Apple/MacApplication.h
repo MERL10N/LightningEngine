@@ -14,9 +14,14 @@
 
 class MetalRenderer;
 
-namespace MTL
+namespace MTL4
 {
     class RenderPassDescriptor;
+}
+
+namespace MTL
+{
+    class Drawable;
 }
 
 namespace CA
@@ -35,7 +40,7 @@ public:
 private:
     MacWindow m_MacWindow;
     MetalRenderer* m_MetalRenderer = nullptr;
-    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
+    MTL4::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     Camera m_Camera;
     AppleController m_Controller;

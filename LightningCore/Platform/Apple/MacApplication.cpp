@@ -13,7 +13,7 @@
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
-  m_WindowPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_WindowPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
   m_Camera(Camera())
 {
     ///m_MetalRenderer->CreateCube("Assets/Textures/background.png");
@@ -50,8 +50,8 @@ void MacApplication::Update(float p_DeltaTime)
             
   
             m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
-            m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
-            m_MetalRenderer->EndScene();
+            //m_MetalRenderer->GetMetalCommandBuffer()->presentDrawable(m_WindowDrawable);
+            m_MetalRenderer->EndScene(m_WindowDrawable);
         }
         m_Pool->release();
     }

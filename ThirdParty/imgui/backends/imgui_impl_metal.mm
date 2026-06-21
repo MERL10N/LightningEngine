@@ -67,6 +67,7 @@ static void ImGui_ImplMetal_InvalidateDeviceObjectsForPlatformWindows();
 @property (nonatomic, assign) MTLPixelFormat depthPixelFormat;
 @property (nonatomic, assign) MTLPixelFormat stencilPixelFormat;
 - (instancetype)initWithRenderPassDescriptor:(MTLRenderPassDescriptor*)renderPassDescriptor;
+- (instancetype)initWithMTL4RenderPassDescriptor:(MTL4RenderPassDescriptor*)renderPassDescriptor;
 @end
 
 @interface MetalTexture : NSObject
@@ -121,6 +122,21 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data,
     ImGui_ImplMetal_RenderDrawData(draw_data,
                                    (__bridge id<MTLCommandBuffer>)(commandBuffer),
                                    (__bridge id<MTLRenderCommandEncoder>)(commandEncoder));
+
+}
+
+void ImGui_ImplMetal_NewFrame(MTL4::RenderPassDescriptor* renderPassDescriptor)
+{
+    ImGui_ImplMetal_NewFrame((__bridge MTL4RenderPassDescriptor*)(renderPassDescriptor));
+}
+
+void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data,
+                                    MTL4::CommandBuffer* commandBuffer,
+                                    MTL4::RenderCommandEncoder* commandEncoder)
+{
+    ImGui_ImplMetal_RenderDrawData(draw_data,
+                                   (__bridge id<MTL4CommandBuffer>)(commandBuffer),
+                                   (__bridge id<MTL4RenderCommandEncoder>)(commandEncoder));
 
 }
 
@@ -183,6 +199,20 @@ void ImGui_ImplMetal_NewFrame(MTLRenderPassDescriptor* renderPassDescriptor)
         ImGui_ImplMetal_CreateDeviceObjects(bd->SharedMetalContext.device);
 }
 
+void ImGui_ImplMetal_NewFrame(MTL4RenderPassDescriptor* renderPassDescriptor)
+{
+    ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
+    IM_ASSERT(bd != nil && "Context or backend not initialized! Did you call ImGui_ImplMetal_Init()?");
+#ifdef IMGUI_IMPL_METAL_CPP
+    //bd->SharedMetalContext.framebufferDescriptor = [[[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor]autorelease];
+    bd->SharedMetalContext.framebufferDescriptor = [[FramebufferDescriptor alloc] initWithMTL4RenderPassDescriptor:renderPassDescriptor];
+#else
+    bd->SharedMetalContext.framebufferDescriptor = [[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor];
+#endif
+    if (bd->SharedMetalContext.depthStencilState == nil)
+        ImGui_ImplMetal_CreateDeviceObjects(bd->SharedMetalContext.device);
+}
+
 static void ImGui_ImplMetal_SetupRenderState(ImDrawData* draw_data, id<MTLCommandBuffer> commandBuffer,
     id<MTLRenderCommandEncoder> commandEncoder, id<MTLRenderPipelineState> renderPipelineState,
     MetalBuffer* vertexBuffer, size_t vertexBufferOffset)
@@ -226,6 +256,51 @@ static void ImGui_ImplMetal_SetupRenderState(ImDrawData* draw_data, id<MTLComman
     [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
     [commandEncoder setVertexBufferOffset:vertexBufferOffset atIndex:0];
 }
+
+static void ImGui_ImplMetal_SetupRenderState(ImDrawData* draw_data, id<MTL4CommandBuffer> commandBuffer,
+    id<MTL4RenderCommandEncoder> commandEncoder, id<MTLRenderPipelineState> renderPipelineState,
+    MetalBuffer* vertexBuffer, size_t vertexBufferOffset)
+{
+    IM_UNUSED(commandBuffer);
+    ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
+    [commandEncoder setCullMode:MTLCullModeNone];
+    [commandEncoder setDepthStencilState:bd->SharedMetalContext.depthStencilState];
+
+    // Setup viewport, orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPos (top left) to
+    // draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
+    MTLViewport viewport =
+    {
+        .originX = 0.0,
+        .originY = 0.0,
+        .width = (double)(draw_data->DisplaySize.x * draw_data->FramebufferScale.x),
+        .height = (double)(draw_data->DisplaySize.y * draw_data->FramebufferScale.y),
+        .znear = 0.0,
+        .zfar = 1.0
+    };
+    [commandEncoder setViewport:viewport];
+
+    float L = draw_data->DisplayPos.x;
+    float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
+    float T = draw_data->DisplayPos.y;
+    float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
+    float N = (float)viewport.znear;
+    float F = (float)viewport.zfar;
+    const float ortho_projection[4][4] =
+    {
+        { 2.0f/(R-L),   0.0f,           0.0f,   0.0f },
+        { 0.0f,         2.0f/(T-B),     0.0f,   0.0f },
+        { 0.0f,         0.0f,        1/(F-N),   0.0f },
+        { (R+L)/(L-R),  (T+B)/(B-T), N/(F-N),   1.0f },
+    };
+    [commandEncoder setVertexBytes:&ortho_projection length:sizeof(ortho_projection) atIndex:1];
+
+    [commandEncoder setRenderPipelineState:renderPipelineState];
+
+    [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
+    [commandEncoder setVertexBufferOffset:vertexBufferOffset atIndex:0];
+}
+
 
 // Metal Render function.
 void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> commandBuffer, id<MTLRenderCommandEncoder> commandEncoder)
@@ -334,6 +409,124 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> 
 
     MetalContext* sharedMetalContext = bd->SharedMetalContext;
     [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer>)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @synchronized(sharedMetalContext.bufferCache)
+            {
+                [sharedMetalContext.bufferCache addObject:vertexBuffer];
+                [sharedMetalContext.bufferCache addObject:indexBuffer];
+            }
+        });
+    }];
+}
+
+// Metal Render function.
+void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTL4CommandBuffer> commandBuffer, id<MTL4RenderCommandEncoder> commandEncoder)
+{
+    ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
+    MetalContext* ctx = bd->SharedMetalContext;
+
+    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
+    int fb_width = (int)(draw_data->DisplaySize.x * draw_data->FramebufferScale.x);
+    int fb_height = (int)(draw_data->DisplaySize.y * draw_data->FramebufferScale.y);
+    if (fb_width <= 0 || fb_height <= 0 || draw_data->CmdLists.Size == 0)
+        return;
+
+    // Catch up with texture updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
+    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling texture updates).
+    if (draw_data->Textures != nullptr)
+        for (ImTextureData* tex : *draw_data->Textures)
+            if (tex->Status != ImTextureStatus_OK)
+                ImGui_ImplMetal_UpdateTexture(tex);
+
+    // Try to retrieve a render pipeline state that is compatible with the framebuffer config for this frame
+    // The hit rate for this cache should be very near 100%.
+    id<MTLRenderPipelineState> renderPipelineState = ctx.renderPipelineStateCache[ctx.framebufferDescriptor];
+    if (renderPipelineState == nil)
+    {
+        // No luck; make a new render pipeline state
+        renderPipelineState = [ctx renderPipelineStateForFramebufferDescriptor:ctx.framebufferDescriptor device:commandBuffer.device];
+
+        // Cache render pipeline state for later reuse
+        ctx.renderPipelineStateCache[ctx.framebufferDescriptor] = renderPipelineState;
+    }
+
+    size_t vertexBufferLength = (size_t)draw_data->TotalVtxCount * sizeof(ImDrawVert);
+    size_t indexBufferLength = (size_t)draw_data->TotalIdxCount * sizeof(ImDrawIdx);
+    MetalBuffer* vertexBuffer = [ctx dequeueReusableBufferOfLength:vertexBufferLength device:commandBuffer.device];
+    MetalBuffer* indexBuffer = [ctx dequeueReusableBufferOfLength:indexBufferLength device:commandBuffer.device];
+
+    ImGui_ImplMetal_SetupRenderState(draw_data, commandBuffer, commandEncoder, renderPipelineState, vertexBuffer, 0);
+
+    // Will project scissor/clipping rectangles into framebuffer space
+    ImVec2 clip_off = draw_data->DisplayPos;         // (0,0) unless using multi-viewports
+    ImVec2 clip_scale = draw_data->FramebufferScale; // (1,1) unless using retina display which are often (2,2)
+
+    // Render command lists
+    size_t vertexBufferOffset = 0;
+    size_t indexBufferOffset = 0;
+    for (const ImDrawList* draw_list : draw_data->CmdLists)
+    {
+        memcpy((char*)vertexBuffer.buffer.contents + vertexBufferOffset, draw_list->VtxBuffer.Data, (size_t)draw_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy((char*)indexBuffer.buffer.contents + indexBufferOffset, draw_list->IdxBuffer.Data, (size_t)draw_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+
+        for (int cmd_i = 0; cmd_i < draw_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &draw_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                // User callback, registered via ImDrawList::AddCallback()
+                // (ImDrawCallback_ResetRenderState is a special callback value used by the user to request the renderer to reset render state.)
+                if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
+                    ImGui_ImplMetal_SetupRenderState(draw_data, commandBuffer, commandEncoder, renderPipelineState, vertexBuffer, vertexBufferOffset);
+                else
+                    pcmd->UserCallback(draw_list, pcmd);
+            }
+            else
+            {
+                // Project scissor/clipping rectangles into framebuffer space
+                ImVec2 clip_min((pcmd->ClipRect.x - clip_off.x) * clip_scale.x, (pcmd->ClipRect.y - clip_off.y) * clip_scale.y);
+                ImVec2 clip_max((pcmd->ClipRect.z - clip_off.x) * clip_scale.x, (pcmd->ClipRect.w - clip_off.y) * clip_scale.y);
+
+                // Clamp to viewport as setScissorRect() won't accept values that are off bounds
+                if (clip_min.x < 0.0f) { clip_min.x = 0.0f; }
+                if (clip_min.y < 0.0f) { clip_min.y = 0.0f; }
+                if (clip_max.x > fb_width) { clip_max.x = (float)fb_width; }
+                if (clip_max.y > fb_height) { clip_max.y = (float)fb_height; }
+                if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y)
+                    continue;
+                if (pcmd->ElemCount == 0) // drawIndexedPrimitives() validation doesn't accept this
+                    continue;
+
+                // Apply scissor/clipping rectangle
+                MTLScissorRect scissorRect =
+                {
+                    .x = NSUInteger(clip_min.x),
+                    .y = NSUInteger(clip_min.y),
+                    .width = NSUInteger(clip_max.x - clip_min.x),
+                    .height = NSUInteger(clip_max.y - clip_min.y)
+                };
+                [commandEncoder setScissorRect:scissorRect];
+
+                // Bind texture, Draw
+                if (ImTextureID tex_id = pcmd->GetTexID())
+                    [commandEncoder setFragmentTexture:(__bridge id<MTLTexture>)(void*)(intptr_t)(tex_id) atIndex:0];
+
+                [commandEncoder setVertexBufferOffset:(vertexBufferOffset + pcmd->VtxOffset * sizeof(ImDrawVert)) atIndex:0];
+                [commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
+                                           indexCount:pcmd->ElemCount
+                                            indexType:sizeof(ImDrawIdx) == 2 ? MTLIndexTypeUInt16 : MTLIndexTypeUInt32
+                                          indexBuffer:indexBuffer.buffer
+                                    indexBufferOffset:indexBufferOffset + pcmd->IdxOffset * sizeof(ImDrawIdx)];
+            }
+        }
+
+        vertexBufferOffset += (size_t)draw_list->VtxBuffer.Size * sizeof(ImDrawVert);
+        indexBufferOffset += (size_t)draw_list->IdxBuffer.Size * sizeof(ImDrawIdx);
+    }
+
+    MetalContext* sharedMetalContext = bd->SharedMetalContext;
+    [commandBuffer addCompletedHandler:^(id<MTL4CommandBuffer>)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             @synchronized(sharedMetalContext.bufferCache)

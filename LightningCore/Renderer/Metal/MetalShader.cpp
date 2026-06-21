@@ -30,7 +30,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 : m_MetalDevice(p_MetalDevice),
   s_FilePath(p_FilePath),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat),
-  m_RenderPipelineDescriptor(MTL::RenderPipelineDescriptor::alloc()->init())
+  m_RenderPipelineDescriptor(MTL4::RenderPipelineDescriptor::alloc()->init())
 {
     
     assert(m_MetalDevice);
@@ -43,6 +43,9 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
     
     NS::Error* error = nullptr;
     
+    auto* compiler_desc = MTL4::CompilerDescriptor::alloc()->init();
+    m_Compiler = m_MetalDevice->newCompiler( compiler_desc, nullptr );
+    
     m_Library = m_MetalDevice->newLibrary(NS::String::string(shaderSrc.c_str(), NS::UTF8StringEncoding), nullptr, &error);
     if (!m_Library)
     {
@@ -50,7 +53,10 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
         assert( false );
     }
 
-    m_VertexFunction = m_Library->newFunction(NS::String::string("vertex_main", NS::UTF8StringEncoding)); // Load the vertex function
+    //m_VertexFunction = m_Library->newFunction(NS::String::string("vertex_main", NS::UTF8StringEncoding)); // Load the vertex function
+    m_VertexFunction = MTL4::LibraryFunctionDescriptor::alloc()->init();
+    m_VertexFunction->setLibrary(m_Library);
+    m_VertexFunction->setName(NS::String::string("vertex_main", NS::UTF8StringEncoding));
     
     if (!m_VertexFunction)
     {
@@ -62,7 +68,9 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
         std::cout << "Vertex function successfully found and loaded" << std::endl;
     }
     
-    m_FragmentFunction = m_Library->newFunction(NS::String::string("fragment_main", NS::UTF8StringEncoding)); // Load the fragment function
+    m_FragmentFunction = MTL4::LibraryFunctionDescriptor::alloc()->init(); // Load the fragment function
+    m_FragmentFunction->setLibrary(m_Library);
+    m_FragmentFunction->setName(NS::String::string("fragment_main", NS::UTF8StringEncoding));
     
     if (!m_FragmentFunction)
     {
@@ -76,17 +84,17 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
 
     m_RenderPipelineDescriptor->setRasterSampleCount(4);
-    m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
-    m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
+    m_RenderPipelineDescriptor->setVertexFunctionDescriptor(m_VertexFunction);
+    m_RenderPipelineDescriptor->setFragmentFunctionDescriptor(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
+    //m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
     
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
     m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
 
-    m_ColorAttachmentDescriptor->setBlendingEnabled(true);
+    m_ColorAttachmentDescriptor->setBlendingState(MTL4::BlendStateEnabled);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
     m_ColorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);
     m_ColorAttachmentDescriptor->setSourceRGBBlendFactor(MTL::BlendFactorSourceAlpha);
@@ -97,7 +105,7 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
     m_RenderPipelineDescriptor->setVertexDescriptor(m_VertexDescriptor);
     
-    m_RenderPipelineState = m_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, (NS::Error**)nullptr);
     
     assert(m_RenderPipelineState);
     
@@ -129,40 +137,42 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
         assert( false );
     }
 
-    m_VertexFunction = m_Library->newFunction(NS::String::string(p_VertexFunction, NS::UTF8StringEncoding)); // Load the vertex function
+    m_VertexFunction = MTL4::LibraryFunctionDescriptor::alloc()->init();
+    m_VertexFunction->setLibrary(m_Library);
+    m_VertexFunction->setName(NS::String::string(p_VertexFunction, NS::UTF8StringEncoding));
     
     if (!m_VertexFunction)
     {
         std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
         std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
     }
-    
-    m_FragmentFunction = m_Library->newFunction(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding)); // Load the fragment function
-    
-    if (!m_FragmentFunction)
+    else
     {
-        std::cerr << "Error: Wrong name used for fragmentShader function or is not found" << std::endl;
-        std::cerr << "Error: Make sure your fragment shader name is: fragmentShader" << std::endl;
+        std::cout << "Vertex function successfully found and loaded" << std::endl;
     }
+    
+    m_FragmentFunction = MTL4::LibraryFunctionDescriptor::alloc()->init(); // Load the fragment function
+    m_FragmentFunction->setLibrary(m_Library);
+    m_FragmentFunction->setName(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding));
     
     if (m_VertexFunction && m_FragmentFunction)
     {
         std::println("Loading shader  at: {}", s_FilePath);
     }
 
-    m_RenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
+    m_RenderPipelineDescriptor = MTL4::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setRasterSampleCount(4);
-    m_RenderPipelineDescriptor->setVertexFunction(m_VertexFunction);
-    m_RenderPipelineDescriptor->setFragmentFunction(m_FragmentFunction);
+    m_RenderPipelineDescriptor->setRasterSampleCount(4);
+    m_RenderPipelineDescriptor->setVertexFunctionDescriptor(m_VertexFunction);
+    m_RenderPipelineDescriptor->setFragmentFunctionDescriptor(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
-    m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(MTL::PixelFormatDepth32Float);
     
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
     m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
 
-    m_ColorAttachmentDescriptor->setBlendingEnabled(true);
+    m_ColorAttachmentDescriptor->setBlendingState(MTL4::BlendStateEnabled);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
     m_ColorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);
     m_ColorAttachmentDescriptor->setSourceRGBBlendFactor(MTL::BlendFactorSourceAlpha);
@@ -173,12 +183,13 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
     m_RenderPipelineDescriptor->setVertexDescriptor(p_VertexDescriptor);
     
-    m_RenderPipelineState = m_MetalDevice->newRenderPipelineState(m_RenderPipelineDescriptor, &error);
+    m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, (NS::Error**)nullptr);
     
     assert(m_RenderPipelineState);
     
     m_Library->release();
     m_RenderPipelineDescriptor->release();
+    m_Compiler->release();
 
 }
 
@@ -200,18 +211,5 @@ MetalShader::~MetalShader()
         m_FragmentFunction->release();
         m_FragmentFunction = nullptr;
     }
-}
-
-MTL::Buffer* MetalShader::InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const
-{
-    MTL::ArgumentEncoder* m_ArgumentEncoder = m_FragmentFunction->newArgumentEncoder(0);
-    MTL::Buffer* m_ArgumentBuffer = m_MetalDevice->newBuffer(m_ArgumentEncoder->encodedLength(), MTL::ResourceStorageModeManaged);
-    
-    m_ArgumentEncoder->setArgumentBuffer(m_ArgumentBuffer, 0);
-    m_ArgumentEncoder->setTexture(p_Texture, 0);
-    
-    m_ArgumentEncoder->release();
-    
-    return m_ArgumentBuffer;
 }
 

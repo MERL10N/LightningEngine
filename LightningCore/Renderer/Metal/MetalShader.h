@@ -9,11 +9,10 @@
 #include "Metal/MTLRenderCommandEncoder.hpp"
 #include <string>
 #include <simd/simd.h>
+
 namespace MTL
 {
     class Device;
-    class RenderPipelineState;
-    class RenderPipelineDescriptor;
     class Texture;
     class Function;
     class Library;
@@ -24,7 +23,16 @@ namespace MTL
     class RenderPipelineColorAttachmentDescriptor;
     class Buffer;
     class ArgumentEncoder;
-   
+}
+
+namespace MTL4
+{
+    class LibraryFunctionDescriptor;
+    class RenderPipelineDescriptor;
+    class RenderPipelineState;
+    class RenderPipelineColorAttachmentDescriptor;
+    class Compiler;
+    class RenderCommandEncoder;
 }
 
 class MetalShader
@@ -41,33 +49,34 @@ public:
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
     template<typename T>
-    inline void SetFragmentShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    inline void SetFragmentShaderUniform(MTL4::RenderCommandEncoder* encoder, const T& value, const int index)
     {
-        encoder->setFragmentBytes(&value, sizeof(value), index);
+        //encoder->setFragmentBytes(&value, sizeof(value), index);
     }
 
     template<typename T>
-    inline void SetVertexShaderUniform(MTL::RenderCommandEncoder* encoder, const T& value, const int index)
+    inline void SetVertexShaderUniform(MTL4::RenderCommandEncoder* encoder, const T& value, const int index)
     {
-        encoder->setVertexBytes(&value, sizeof(value), index);
+        //encoder->setVertexBytes(&value, sizeof(value), index);
     }
 
 
-    MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const;
+    //MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const;
     
     inline const MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
 private:
     MTL::Device*                                    m_MetalDevice               = nullptr;
     MTL::Library*                                   m_Library                   = nullptr;
-    MTL::Function*                                  m_VertexFunction            = nullptr;
-    MTL::Function*                                  m_FragmentFunction          = nullptr;
-    MTL::RenderPipelineDescriptor*                  m_RenderPipelineDescriptor  = nullptr;
+    MTL4::Compiler*                                 m_Compiler                  = nullptr;
+    MTL4::LibraryFunctionDescriptor*                m_VertexFunction            = nullptr;
+    MTL4::LibraryFunctionDescriptor*                m_FragmentFunction          = nullptr;
+    MTL4::RenderPipelineDescriptor*                 m_RenderPipelineDescriptor  = nullptr;
     MTL::RenderPipelineState*                       m_RenderPipelineState       = nullptr;
     MTL::DepthStencilState*                         m_DepthStencilState         = nullptr;
     MTL::DepthStencilDescriptor*                    m_DepthStencilDescriptor    = nullptr;
     MTL::VertexDescriptor*                          m_VertexDescriptor          = nullptr;
-    MTL::RenderPipelineColorAttachmentDescriptor*   m_ColorAttachmentDescriptor = nullptr;
+    MTL4::RenderPipelineColorAttachmentDescriptor*   m_ColorAttachmentDescriptor = nullptr;
     
     MTL::PixelFormat m_DepthAttachmentPixelFormat;
     

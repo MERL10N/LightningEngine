@@ -12,7 +12,7 @@ MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 : m_MetalDevice(p_MetalDevice),
   m_Width(0.f),
   m_Height(0.f),
-  m_RenderPassDescriptor(MTL::RenderPassDescriptor::alloc()->init()),
+  m_RenderPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
   m_TextureDescriptor(MTL::TextureDescriptor::alloc()->init()),
   m_MSAATextureDescriptor(MTL::TextureDescriptor::alloc()->init()),
   m_DepthTextureDescriptor(MTL::TextureDescriptor::alloc()->init())
@@ -99,7 +99,7 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
 
 }
 
-void MetalFrameBuffer::UpdateViewport(MTL::RenderCommandEncoder *p_Encoder)
+void MetalFrameBuffer::UpdateViewport(MTL4::RenderCommandEncoder *p_Encoder)
 {
     p_Encoder->setViewport(MTL::Viewport{0, 0, (double)m_Width, (double)m_Height});
 }
