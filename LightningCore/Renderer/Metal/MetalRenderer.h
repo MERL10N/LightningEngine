@@ -51,10 +51,12 @@ class Sprite;
 struct Mesh_3D;
 struct Mesh_2D;
 
+
 #include <simd/simd.h>
 #include "Camera/Camera.h"
 #include "Math/AAPLMathUtilities.h"
 #include "Scene/Component.h"
+#include "ShaderUniforms.h"
 #include <vector>
 
 class MetalRenderer
@@ -75,13 +77,13 @@ public:
     
     inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     
-    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder;}
     
     inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
     
-    inline const MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
+    inline MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
     
-    void SubmitCommandBuffer();
+    inline void SetMetalDrawable(MTL::Drawable* p_Drawable) { m_Drawable = p_Drawable; }
     
 
     // Create quads with texture
@@ -96,7 +98,7 @@ public:
     void BeginScene(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
     void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
-    void EndScene(MTL::Drawable* p_WindowDrawable);
+    void EndScene();
 
     
 private:
@@ -105,9 +107,11 @@ private:
     
     MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
     MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
+    MTL4::CommandAllocator*         m_MetalCommandAllocator     = nullptr;
     MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
     MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
-    MTL4::ArgumentTable*            m_ArgumentTable             = nullptr;
+    MTL4::ArgumentTable*            m_VertexArgumentTable       = nullptr;
+    MTL4::ArgumentTable*            m_FragmentArgumentTable     = nullptr;
     MTL4::ArgumentTableDescriptor*  m_ArgumentTableDescriptor   = nullptr;
     
     MTL::ResidencySet*              m_ResidencySet              = nullptr;
@@ -116,9 +120,12 @@ private:
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
     MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
     MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
+    MTL::Drawable*                  m_Drawable                  = nullptr;
     
     
     MTL::Buffer* m_ArgumentBuffer       = nullptr;
+    MTL::Buffer* m_UniformBuffer        = nullptr;
+    MTL::Buffer* m_LightUniformBuffer   = nullptr;
     
     MetalShader* m_TextureShader        = nullptr;
     MetalShader* m_UntexturedShader     = nullptr;
@@ -135,5 +142,8 @@ private:
     
     LightComponent m_LightComponent;
     matrix_float4x4 m_LightPosition;
+    
+    LightUniforms m_LightUniforms;
+    Uniforms      m_Uniforms;
 };
 #endif //METALRENDERER_H

@@ -26,7 +26,6 @@ struct Uniforms
     float4x4 view;
     float4x4 model;
 };
-
 vertex VertexOut vertex_light(VertexIn in [[stage_in]],
                                    constant Uniforms &uniform [[buffer(0)]])
 {

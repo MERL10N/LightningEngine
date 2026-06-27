@@ -39,56 +39,62 @@ struct VertexOut
     Light light;
 };
 
-struct TextureArguments
+struct LightUniforms
 {
-    texture2d<float> colorTexture[[id(0)]];
+    float3 lightColor;
+    float3 lightPosition;
+    float3 cameraPosition;
+};
+
+struct Uniforms
+{
+    float4x4 perspective;
+    float4x4 view;
+    float4x4 model;
 };
 
 // Vertex shader
-vertex VertexOut vertex_main(VertexIn in [[stage_in]],
-                             constant float4x4 &perspective[[buffer(1)]],
-                             constant float4x4 &view[[buffer(2)]],
-                             constant float4x4 &model[[buffer(3)]])
+vertex VertexOut vertex_main(uint id [[vertex_id]],
+                             constant VertexIn *in [[buffer(0)]],
+                             constant Uniforms &uniforms[[buffer(1)]])
 {
     VertexOut out;
-    float4 worldPos = model * float4(in.position, 1.0f);
+    float4 worldPos = uniforms.model * float4(in[id].position, 1.0f);
     out.worldPosition = worldPos.xyz;
-    out.position = perspective * view * worldPos;
-    out.normal = in.normal;
-    out.color =  in.color;
-    out.texCoord = in.texCoord;
+    out.position = uniforms.perspective * uniforms.view * worldPos;
+    out.normal = in[id].normal;
+    out.color =  in[id].color;
+    out.texCoord = in[id].texCoord;
     return out;
 }
 
 // Fragment shader
 fragment float4 fragment_main(VertexOut out [[stage_in]],
-                             constant TextureArguments &args[[buffer(0)]],
-                             constant float3& lightColor[[buffer(1)]],
-                             constant float3& lightPosition[[buffer(2)]],
-                             constant float3& cameraPosition[[buffer(3)]])
+                             texture2d<float> colorTexture[[texture(0)]],
+                             constant LightUniforms &lightUniforms[[buffer(1)]])
 {
     // Ambient
     float ambientStrength = 0.1f;
-    float3 ambient = ambientStrength * lightColor;
+    float3 ambient = ambientStrength * lightUniforms.lightColor;
         
     // Diffuse
     float3 norm = normalize(out.normal.xyz);
-    float3 lightDir = normalize(lightPosition - float3(out.worldPosition));
+    float3 lightDir = normalize(lightUniforms.lightPosition - float3(out.worldPosition));
     float diff = max(dot(norm, lightDir.xyz), 0.0);
-    float3 diffuse = diff * lightColor;
+    float3 diffuse = diff * lightUniforms.lightColor;
         
     // Specular
     float specularStrength = 1.0f;
-    float3 viewDir = normalize(cameraPosition - float3(out.worldPosition));
+    float3 viewDir = normalize(lightUniforms.cameraPosition - float3(out.worldPosition));
     float3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(norm, halfwayDir), 0.0f), 32);
         
-    float3 specular = specularStrength * spec * lightColor;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor;
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     
     float3 result = (ambient + diffuse + specular) * out.color;
     // Sample the texture to obtain a color
-    float4 colorSample = args.colorTexture.sample(textureSampler, out.texCoord);
+    float4 colorSample = colorTexture.sample(textureSampler, out.texCoord);
     
     if (colorSample.a < 0.1)
     {
@@ -100,27 +106,25 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
 
 // Fragment shader
 fragment float4 fragment_main_untextured(VertexOut out [[stage_in]],
-                                        constant float3& lightColor[[buffer(0)]],
-                                        constant float3& lightPosition[[buffer(1)]],
-                                        constant float3& cameraPosition[[buffer(2)]])
+                                         constant LightUniforms &lightUniforms[[buffer(0)]])
 {
     // Ambient
     float ambientStrength = 0.1f;
-    float3 ambient = ambientStrength * lightColor;
+    float3 ambient = ambientStrength * lightUniforms.lightColor;
         
     // Diffuse
     float3 norm = normalize(out.normal.xyz);
-    float3 lightDir = normalize(lightPosition - float3(out.worldPosition));
+    float3 lightDir = normalize(lightUniforms.lightPosition - float3(out.worldPosition));
     float diff = max(dot(norm, lightDir.xyz), 0.0);
-    float3 diffuse = diff * lightColor;
+    float3 diffuse = diff * lightUniforms.lightColor;
         
     // Specular
     float specularStrength = 1.0f;
-    float3 viewDir = normalize(cameraPosition - float3(out.worldPosition));
+    float3 viewDir = normalize(lightUniforms.cameraPosition - float3(out.worldPosition));
     float3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(norm, halfwayDir), 0.0f), 32);
         
-    float3 specular = specularStrength * spec * lightColor;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor;
     float3 finalColor = (ambient + diffuse + specular) * out.color;
     
     return float4(finalColor, 1.0f);

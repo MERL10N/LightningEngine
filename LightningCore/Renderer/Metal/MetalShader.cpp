@@ -29,6 +29,8 @@ const std::string MetalShader::LoadShaderFile(const std::string &path) const
 MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
   s_FilePath(p_FilePath),
+  m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
+  m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat),
   m_RenderPipelineDescriptor(MTL4::RenderPipelineDescriptor::alloc()->init())
 {
@@ -116,6 +118,8 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
 MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat)
 : m_MetalDevice(p_MetalDevice),
+  m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
+  m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
   s_FilePath(p_FilePath),
   m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
 {
@@ -148,16 +152,26 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     }
     else
     {
-        std::cout << "Vertex function successfully found and loaded" << std::endl;
+        std::cout << "\nVertex function successfully found and loaded" << std::endl;
     }
     
     m_FragmentFunction = MTL4::LibraryFunctionDescriptor::alloc()->init(); // Load the fragment function
     m_FragmentFunction->setLibrary(m_Library);
     m_FragmentFunction->setName(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding));
     
+    if (!m_FragmentFunction)
+    {
+        std::cerr << "Error: Wrong name used for fragment shader function or is not found." << std::endl;
+    }
+    else
+    {
+        std::cout << "FragmentFunction function successfully found and loaded" << std::endl;
+    }
+    
+    
     if (m_VertexFunction && m_FragmentFunction)
     {
-        std::println("Loading shader  at: {}", s_FilePath);
+        std::println("Loading shader  at: {}\n", s_FilePath);
     }
 
     m_RenderPipelineDescriptor = MTL4::RenderPipelineDescriptor::alloc()->init();
@@ -183,12 +197,13 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
     m_RenderPipelineDescriptor->setVertexDescriptor(p_VertexDescriptor);
     
-    m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, (NS::Error**)nullptr);
+    m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, &error);
     
     assert(m_RenderPipelineState);
     
     m_Library->release();
     m_RenderPipelineDescriptor->release();
+    m_CompilerDescriptor->release();
     m_Compiler->release();
 
 }

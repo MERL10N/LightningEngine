@@ -50,11 +50,12 @@ public:
 private:
     MacWindow m_MacWindow;
     
-    MTL::Device*                m_MetalDevice           = nullptr;
-    MTL4::RenderPassDescriptor*  m_WindowPassDescriptor  = nullptr;
-    MTL4::CommandBuffer*         m_ImGuiCommandBuffer    = nullptr;
-    MTL4::RenderCommandEncoder*  m_ImGuiCommandEncoder   = nullptr;
-    MTL::Drawable*              m_Drawable              = nullptr;
+    MTL::Device*                    m_MetalDevice           = nullptr;
+    MTL4::RenderPassDescriptor*     m_WindowPassDescriptor  = nullptr;
+    MTL4::CommandAllocator*         m_ImGuiCommandAllocator = nullptr;
+    MTL4::CommandBuffer*            m_ImGuiCommandBuffer    = nullptr;
+    MTL4::RenderCommandEncoder*     m_ImGuiCommandEncoder   = nullptr;
+    MTL::Drawable*                  m_Drawable              = nullptr;
     
     MacEditorLayer      m_MacEditorLayer;
     MetalRenderer       m_MetalRenderer;

@@ -30,6 +30,7 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     
     m_TextureDescriptor->setWidth(m_Width);
     m_TextureDescriptor->setHeight(m_Height);
+    m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageShaderWrite);
 
     m_Texture = m_MetalDevice->newTexture(m_TextureDescriptor);
 

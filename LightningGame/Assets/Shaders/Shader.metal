@@ -55,7 +55,7 @@ struct Uniforms
 
 struct TextureArguments
 {
-    texture2d<float> colorTexture[[id(0)]];
+    texture2d<float> colorTexture[[texture(0)]];
 };
 
 // Vertex shader
