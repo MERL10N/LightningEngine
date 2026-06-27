@@ -78,7 +78,7 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_DepthTextureDescriptor->setWidth(p_Width);
     m_DepthTextureDescriptor->setHeight(p_Height);
     m_DepthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
-    m_DepthTextureDescriptor->setStorageMode(MTL::StorageModePrivate);
+    m_DepthTextureDescriptor->setStorageMode(MTL::StorageModeMemoryless);
     m_DepthTextureDescriptor->setSampleCount(4);
 
     m_DepthTexture = m_MetalDevice->newTexture(m_DepthTextureDescriptor);
@@ -122,7 +122,6 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
         m_MSAATargetTexture->release();
         m_MSAATargetTexture = nullptr;
     }
-    
     
     if (p_Width <= 1 || p_Height <= 1)
     {
