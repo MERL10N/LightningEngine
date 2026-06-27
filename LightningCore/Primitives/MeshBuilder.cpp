@@ -13,7 +13,7 @@
 
 Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)
 {
-    Vertex vertices[] =
+    constexpr Vertex vertices[] =
     {
         {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
         {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
@@ -21,10 +21,10 @@ Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* te
         {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
     };
     
-    NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
+    constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
         
-    ushort indices[4] = {0, 1, 3, 2};
-    NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+    constexpr ushort indices[4] = {0, 1, 3, 2};
+    constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
         
     //vertex buffer
     m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
@@ -41,7 +41,7 @@ Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* te
 
 Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
 {
-    Vertex vertices[] =
+    constexpr Vertex vertices[] =
     {
         {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
         {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
@@ -49,10 +49,10 @@ Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
         {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
     };
     
-    NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
+    constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
         
-    ushort indices[4] = {0, 1, 3, 2};
-    NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+    constexpr ushort indices[4] = {0, 1, 3, 2};
+    constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
         
     //vertex buffer
     m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
@@ -68,7 +68,7 @@ Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
 Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
 {
    
-    Vertex3D vertices[] =
+    constexpr Vertex3D vertices[] =
     {
         // Front face
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
@@ -108,7 +108,7 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
        
     };
     
-    uint16_t indices[] =
+    constexpr uint16_t indices[] =
     {
        0, 1, 2, 2, 3, 0,
        4, 5, 6, 6, 7, 4,
@@ -139,7 +139,7 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     std::vector<Vertex3D> vertices;
     std::vector<u_int16_t> indices;
     
-    const float PI = 3.1415926539f;
+    constexpr float PI = 3.1415926539f;
     Vertex3D vertex;
     
     for (int x = 0; x <= xSegments; ++x)
