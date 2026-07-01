@@ -95,10 +95,10 @@ public:
     void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
     
     // Scene rendering
-    void BeginScene(const Camera &p_Camera, const float p_AspectRatio);
+    void Submit(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
     void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
-    void EndScene();
+    void Commit();
 
     
 private:
@@ -122,8 +122,6 @@ private:
     MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
     MTL::Drawable*                  m_Drawable                  = nullptr;
     
-    
-    MTL::Buffer* m_ArgumentBuffer       = nullptr;
     MTL::Buffer* m_UniformBuffer        = nullptr;
     MTL::Buffer* m_LightUniformBuffer   = nullptr;
     

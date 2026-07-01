@@ -29,14 +29,14 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_ArgumentTableDescriptor(MTL4::ArgumentTableDescriptor::alloc()->init()),
   m_ResidencySetDescriptor(MTL::ResidencySetDescriptor::alloc()->init()),
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
-  m_UniformBuffer(m_MetalDevice->newBuffer(sizeof(Uniforms), MTL::ResourceStorageModeShared)),
-  m_LightUniformBuffer(m_MetalDevice->newBuffer(sizeof(LightUniforms), MTL::ResourceStorageModeShared)),
+  m_UniformBuffer(m_MetalDevice->newBuffer(sizeof(Uniforms) * 100, MTL::ResourceStorageModeShared)),
+  m_LightUniformBuffer(m_MetalDevice->newBuffer(sizeof(LightUniforms) * 100, MTL::ResourceStorageModeShared)),
   b_EnableWireframe(false),
   m_LightComponent(LightComponent())
 {
     assert(m_MetalDevice);
-    m_ArgumentTableDescriptor->setMaxBufferBindCount(5);
-    m_ArgumentTableDescriptor->setMaxTextureBindCount(5);
+    m_ArgumentTableDescriptor->setMaxBufferBindCount(10);
+    m_ArgumentTableDescriptor->setMaxTextureBindCount(10);
     m_VertexArgumentTable = m_MetalDevice->newArgumentTable(m_ArgumentTableDescriptor, nullptr);
     m_FragmentArgumentTable = m_MetalDevice->newArgumentTable(m_ArgumentTableDescriptor, nullptr);
     
@@ -190,15 +190,15 @@ MetalRenderer::~MetalRenderer()
     
 }
 
-void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio)
+void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
 {
     m_Camera = p_Camera;
     
+   // m_MetalCommandAllocator->reset();
     m_MetalCommandBuffer->beginCommandBuffer(m_MetalCommandAllocator);
     m_MetalCommandBuffer->useResidencySet(m_ResidencySet);
     
-    MTL::RenderPassDepthAttachmentDescriptor* depthAttachment = m_RenderPassDescriptor->depthAttachment();
-    depthAttachment->setClearDepth(1.0f);
+    m_RenderPassDescriptor->depthAttachment()->setClearDepth(1.0f);
     
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
@@ -228,28 +228,30 @@ void MetalRenderer::BeginScene(const Camera &p_Camera, const float p_AspectRatio
 
 void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D& p_3DMesh, const LightComponent &p_LightComponent)
 {
+    m_ModelMatrix = p_ModelMatrix;
     m_LightComponent = p_LightComponent;
+    m_Uniforms  = {m_PerspectiveMatrix, m_ViewMatrix, m_ModelMatrix};
+    memcpy(m_UniformBuffer->contents(), &m_Uniforms, sizeof(m_Uniforms));
+    
+    simd::float3 color = m_LightComponent.m_Color;
+    memcpy(m_LightUniformBuffer->contents(), &color, sizeof(color));
+    
     
     m_LightComponent.m_Position = simd::make_float3(p_ModelMatrix.columns[3].x,
                                                     p_ModelMatrix.columns[3].y,
                                                     p_ModelMatrix.columns[3].z);
-    
-    simd::float3 color = m_LightComponent.m_Color;
-    memcpy(m_LightUniformBuffer->contents(), &color, sizeof(color));
 
     m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
+    m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
     m_ResidencySet->addAllocation(m_UniformBuffer);
     m_ResidencySet->addAllocation(m_LightUniformBuffer);
-    m_VertexArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
-    m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
+    m_ResidencySet->commit();
     
     if (m_LightShader)
     {
-        m_ModelMatrix = p_ModelMatrix;
-        m_Uniforms  = {m_PerspectiveMatrix, m_ViewMatrix, m_ModelMatrix};
-        memcpy(m_UniformBuffer->contents(), &m_Uniforms, sizeof(m_Uniforms));
         m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
-        m_VertexArgumentTable->setAddress(m_UniformBuffer->gpuAddress(), 0);
+        m_VertexArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
+        m_VertexArgumentTable->setAddress(m_UniformBuffer->gpuAddress(), 1);
         m_FragmentArgumentTable->setAddress(m_LightUniformBuffer->gpuAddress(), 0);
     }
     
@@ -257,9 +259,10 @@ void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mes
     m_RenderCommandEncoder->setArgumentTable(m_VertexArgumentTable, MTL::RenderStageVertex);
     m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
-                                                 p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
-                                                 p_3DMesh.m_IndexBuffer->gpuAddress(),
-                                                 sizeof(p_3DMesh.m_IndexBuffer));
+                                                  p_3DMesh.m_IndexCount,
+                                                  MTL::IndexType::IndexTypeUInt16,
+                                                  p_3DMesh.m_IndexBuffer->gpuAddress(),
+                                                  p_3DMesh.m_IndexBuffer->length());
 }
 
 void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
@@ -278,34 +281,36 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
     
         if (p_Texture)
         {
+            m_ResidencySet->addAllocation(p_Texture->GetArgumentBuffer());
             m_ResidencySet->addAllocation(p_Texture->GetTexture());
-            m_FragmentArgumentTable->setTexture(p_Texture->GetTexture()->gpuResourceID(), 0);
-            m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
+            m_ResidencySet->commit();
+            
             m_RenderCommandEncoder->setRenderPipelineState(m_TextureShader->GetRenderPipelineState());
 
             m_VertexArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
             m_VertexArgumentTable->setAddress(m_UniformBuffer->gpuAddress(), 1);
+            m_FragmentArgumentTable->setAddress(p_Texture->GetArgumentBuffer()->gpuAddress(), 0);
             m_FragmentArgumentTable->setAddress(m_LightUniformBuffer->gpuAddress(), 1);
         }
         else
         {
             
             m_RenderCommandEncoder->setRenderPipelineState(m_UntexturedShader->GetRenderPipelineState());
+            m_VertexArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
             m_VertexArgumentTable->setAddress(m_UniformBuffer->gpuAddress(), 1);
-            m_FragmentArgumentTable->setAddress(m_LightUniformBuffer->gpuAddress(), 1);
+            m_FragmentArgumentTable->setAddress(m_LightUniformBuffer->gpuAddress(), 0);
         }
     
         m_RenderCommandEncoder->setArgumentTable(m_VertexArgumentTable, MTL::RenderStageVertex);
         m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
         m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
-                                                      p_3DMesh.m_IndexCount, MTL::IndexType::IndexTypeUInt16,
+                                                      p_3DMesh.m_IndexCount,
+                                                      MTL::IndexType::IndexTypeUInt16,
                                                       p_3DMesh.m_IndexBuffer->gpuAddress(),
-                                                      NS::UInteger(0));
-      
-
+                                                      p_3DMesh.m_IndexBuffer->length());
 }
 
-void MetalRenderer::EndScene()
+void MetalRenderer::Commit()
 {
     m_RenderCommandEncoder->endEncoding();
     
@@ -318,6 +323,4 @@ void MetalRenderer::EndScene()
     m_MetalCommandQueue->wait(m_Drawable);
     m_MetalCommandQueue->commit(&m_MetalCommandBuffer, 1);
     m_MetalCommandQueue->signalDrawable(m_Drawable);
-    m_Drawable->present();
-    
 }

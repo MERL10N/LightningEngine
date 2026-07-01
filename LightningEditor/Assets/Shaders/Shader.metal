@@ -53,24 +53,28 @@ struct Uniforms
     float4x4 model;
 };
 
+struct TextureArguments
+{
+    texture2d<float> colorTexture[[id(0)]];
+};
+
 // Vertex shader
-vertex VertexOut vertex_main(uint id [[vertex_id]],
-                             constant VertexIn *in [[buffer(0)]],
+vertex VertexOut vertex_main(VertexIn in [[stage_in]],
                              constant Uniforms &uniforms[[buffer(1)]])
 {
     VertexOut out;
-    float4 worldPos = uniforms.model * float4(in[id].position, 1.0f);
+    float4 worldPos = uniforms.model * float4(in.position, 1.0f);
     out.worldPosition = worldPos.xyz;
     out.position = uniforms.perspective * uniforms.view * worldPos;
-    out.normal = in[id].normal;
-    out.color =  in[id].color;
-    out.texCoord = in[id].texCoord;
+    out.normal = in.normal;
+    out.color =  in.color;
+    out.texCoord = in.texCoord;
     return out;
 }
 
 // Fragment shader
 fragment float4 fragment_main(VertexOut out [[stage_in]],
-                             texture2d<float> colorTexture[[texture(0)]],
+                             constant TextureArguments& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
     // Ambient
@@ -94,7 +98,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float3 result = (ambient + diffuse + specular) * out.color;
     // Sample the texture to obtain a color
-    float4 colorSample = colorTexture.sample(textureSampler, out.texCoord);
+    float4 colorSample = textureArgs.colorTexture.sample(textureSampler, out.texCoord);
     
     if (colorSample.a < 0.1)
     {

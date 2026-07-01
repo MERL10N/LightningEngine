@@ -104,7 +104,7 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
         {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{0.0, 1.0}}, // 20
         {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 1.0}}, // 21
         {{ 0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 0.0}}, // 22
-        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0}, {0.0, 0.0}}, // 23
+        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{0.0, 0.0}}, // 23
        
     };
     
@@ -142,9 +142,9 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     constexpr float PI = 3.1415926539f;
     Vertex3D vertex;
     
-    for (int x = 0; x <= xSegments; ++x)
+    for (int x = 0; x < xSegments; ++x)
     {
-        for (int y = 0; y <= ySegments; ++y)
+        for (int y = 0; y < ySegments; ++y)
         {
             float xSegment = (float)x / (float)xSegments;
             float ySegment = (float)y / (float)ySegments;
@@ -164,7 +164,7 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     
     
     for (int y = 0; y < ySegments; ++y)
-        {
+    {
             for (int x = 0; x < xSegments; ++x)
             {
                 uint16_t topLeft = y * (xSegments + 1) + x;
@@ -180,7 +180,7 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
                 indices.push_back(bottomLeft);
                 indices.push_back(bottomRight);
             }
-        }
+    }
     
     
     m_Mesh3D.m_IndexCount = (u_int16_t)indices.size();

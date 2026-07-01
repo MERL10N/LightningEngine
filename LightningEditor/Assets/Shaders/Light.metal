@@ -28,11 +28,11 @@ struct Uniforms
 };
 
 vertex VertexOut vertex_light(VertexIn in [[stage_in]],
-                                   constant Uniforms &uniform [[buffer(0)]])
+                              constant Uniforms &uniforms[[buffer(1)]])
 {
     VertexOut out;
     float3 pos = in.position;
-    out.position = float4(uniform.perspective * uniform.view * uniform.model * float4(pos, 1.0f));
+    out.position = float4(uniforms.perspective * uniforms.view * uniforms.model * float4(pos, 1.0f));
     return out;
 }
 

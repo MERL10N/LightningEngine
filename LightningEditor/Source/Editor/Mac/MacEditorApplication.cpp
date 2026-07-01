@@ -55,10 +55,14 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
     cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MetalDevice);
     
+    // TODO: Need to fix lighting 
+    /*
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
-    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(0.0f, 1.0f, 1.0f)));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.0f, 1.0f, 1.0f)));
+     */
+     
 }
 
 
@@ -172,6 +176,7 @@ void MacEditorApplication::Update()
 
             // Render ImGui UI and Viewport
             m_ImGuiCommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
+            m_ImGuiCommandAllocator->reset();
             m_ImGuiCommandBuffer->beginCommandBuffer(m_ImGuiCommandAllocator);
             m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
             m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
@@ -183,10 +188,10 @@ void MacEditorApplication::Update()
                 ImGui::RenderPlatformWindowsDefault();
             }
             m_ImGuiCommandEncoder->endEncoding();
-            
             m_ImGuiCommandBuffer->endCommandBuffer();
-            //m_MetalRenderer.GetMetalCommandQueue()->wait(m_WindowDrawable);
             m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
+            m_ImGuiCommandAllocator->reset();
+            m_WindowDrawable->present();
          
         }
                  

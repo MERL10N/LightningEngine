@@ -55,7 +55,6 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
         assert( false );
     }
 
-    //m_VertexFunction = m_Library->newFunction(NS::String::string("vertex_main", NS::UTF8StringEncoding)); // Load the vertex function
     m_VertexFunction = MTL4::LibraryFunctionDescriptor::alloc()->init();
     m_VertexFunction->setLibrary(m_Library);
     m_VertexFunction->setName(NS::String::string("vertex_main", NS::UTF8StringEncoding));

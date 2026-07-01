@@ -33,7 +33,7 @@ Entity Scene::CreateEntity(const char* p_Tag)
 template <typename Renderer>
 void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio)
 {
-    p_Renderer.BeginScene(p_Camera, p_AspectRatio);
+    p_Renderer.Submit(p_Camera, p_AspectRatio);
     
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
@@ -56,8 +56,7 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
         p_Renderer.RenderMesh(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, nullptr);
     }
     
-    
-    p_Renderer.EndScene();
+    p_Renderer.Commit();
 }
 
 template void Scene::RenderScene<MetalRenderer>(MetalRenderer&, const Camera &, const float);
