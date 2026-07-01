@@ -142,9 +142,9 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     constexpr float PI = 3.1415926539f;
     Vertex3D vertex;
     
-    for (int x = 0; x < xSegments; ++x)
+    for (int x = 0; x <= xSegments; ++x)
     {
-        for (int y = 0; y < ySegments; ++y)
+        for (int y = 0; y <= ySegments; ++y)
         {
             float xSegment = (float)x / (float)xSegments;
             float ySegment = (float)y / (float)ySegments;
