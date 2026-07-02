@@ -7,16 +7,29 @@
 #include "MacApplication.h"
 #include "QuartzCore/QuartzCore.hpp"
 #include "Metal/Metal.hpp"
-#include "Renderer/Metal/MetalRenderer.h"
 #include "GLFW/glfw3.h"
+#include "Scene/Component.h"
+#include "Primitives/MeshBuilder.h"
+#include "Entity/Entity.h"
 
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
-  m_MetalRenderer(new MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer())),
+  m_MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()),
   m_WindowPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
-  m_Camera(Camera())
+  m_Camera(Camera()),
+  m_Scene()
 {
-    ///m_MetalRenderer->CreateCube("Assets/Textures/background.png");
+    MeshBuilder m_MeshBuilder;
+    
+    Entity cube = m_Scene.CreateEntity("Cube");
+    cube.AddComponent<TransformComponent>(simd::make_float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MacWindow.GetDevice()));
+    cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MacWindow.GetDevice());
+    
+    Entity sphere = m_Scene.CreateEntity("Sphere");
+    sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
+    sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
+    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MacWindow.GetDevice(), 32, 32, simd::make_float3(1.0f, 1.0f, 1.0f)));
 }
 
 
@@ -48,10 +61,10 @@ void MacApplication::Update(float p_DeltaTime)
             m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
             m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
             
-            m_MetalRenderer->SetMetalDrawable(m_WindowDrawable);
-            m_MetalRenderer->SetRenderPassDescriptor(m_WindowPassDescriptor);
-            m_MetalRenderer->Submit(m_Camera, m_MacWindow.GetWidth() / m_MacWindow.GetHeight());
-            m_MetalRenderer->Commit();
+            m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
+            m_MetalRenderer.SetRenderPassDescriptor(m_WindowPassDescriptor);
+            m_Scene.RenderScene(m_MetalRenderer, m_Camera,  m_MacWindow.GetWidth() / m_MacWindow.GetHeight());
+            m_WindowDrawable->present();
         }
         m_Pool->release();
     }
@@ -64,12 +77,6 @@ MacApplication::~MacApplication()
     {
         m_WindowPassDescriptor->release();
         m_WindowPassDescriptor = nullptr;
-    }
-    
-    if (m_MetalRenderer)
-    {
-        delete m_MetalRenderer;
-        m_MetalRenderer = nullptr;
     }
 }
 

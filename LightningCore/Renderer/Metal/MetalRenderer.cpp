@@ -313,7 +313,6 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
 void MetalRenderer::Commit()
 {
     m_RenderCommandEncoder->endEncoding();
-    
     m_ResidencySet->commit();
 
     m_MetalCommandQueue->addResidencySet(m_ResidencySet);

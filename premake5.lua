@@ -85,9 +85,8 @@ project "LightningGame"
         "LightningGame/Source/**.h", 
         "LightningGame/Source/**.cpp",
         "LightningGame/Assets/**",
+        "LightningGame/Assets/Shaders/**.metal"
     }
-
-    files { "LightningGame/Source/**.h", "LightningGame/Source/**.cpp", "LightningGame/Shaders/Shader.metal",  "LightningGame/Assets/*.png"}
 
     includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
     libdirs { "" }
@@ -96,14 +95,6 @@ project "LightningGame"
     filter "system:macosx"
         cppdialect "C++23"
         staticruntime "On"
-        
-       files
-        { 
-            "LightningGame/Source/**.cpp",
-            "LightningGame/Source/**.h",  
-            "LightningGame/Assets/Shaders/**.metal",
-            "LightningGame/Assets/**",
-        }
 
         filter { "system:macosx", "files:LightningGame/Assets/**", "LightningGame/Assets/Shaders/**" }
         buildaction "Resource"
@@ -137,23 +128,21 @@ project "LightningGame"
             ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
-        -- Link Apple frameworks
-        linkoptions { 
-            "-framework Foundation",
-            "-framework Metal",
-            "-framework MetalKit",
-            "-framework QuartzCore",
-            "-framework Cocoa",
-            "-framework AppKit",
-            "-framework GameController",
-            "-framework IOKit",
-            "-framework CoreVideo"
+        postbuildcommands
+        {
+            "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
         }
+
     filter {}
 
-        externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include"}
-        libdirs { "ThirdParty/glfw/lib-universal" }
-        links { "glfw3" }
+    externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include"}
+    libdirs { "ThirdParty/glfw/lib-universal" }
+    links { "glfw3" }
+
+    filter "configurations:Debug"
+        defines { "DEBUG" }
+        symbols "On"
+    filter {}
 
     filter "configurations:Release"
         defines { "RELEASE" }

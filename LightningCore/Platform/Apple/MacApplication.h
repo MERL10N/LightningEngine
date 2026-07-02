@@ -11,6 +11,8 @@
 #include "MacWindow.h"
 #include "Camera/Camera.h"
 #include "Input/AppleController.h"
+#include "Scene/Scene.h"
+#include "Renderer/Metal/MetalRenderer.h"
 
 class MetalRenderer;
 
@@ -39,10 +41,11 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MetalRenderer* m_MetalRenderer = nullptr;
+    MetalRenderer m_MetalRenderer;
     MTL4::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     Camera m_Camera;
+    Scene m_Scene;
     AppleController m_Controller;
     float m_CurrentFrame = 0.0f;
     float m_DeltaTime = 0.0f;
