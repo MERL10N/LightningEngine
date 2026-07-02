@@ -78,9 +78,4 @@ MetalTexture::~MetalTexture()
     }
 }
 
-void MetalTexture::InitialiseTextureArguments()
-{
-   
-}
-
 

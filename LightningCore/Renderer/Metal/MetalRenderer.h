@@ -21,6 +21,7 @@ namespace MTL
     class ResidencySet;
     class ResidencySetDescriptor;
     class Drawable;
+    class SharedEvent;
 }
 
 namespace MTL4
@@ -73,6 +74,8 @@ public:
     
     inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
     
+    inline MTL::ResidencySet* GetMetalResidencySet() const { return m_ResidencySet; }
+    
     inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
     inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
@@ -91,23 +94,19 @@ public:
     void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
     void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
     
-    //
-    void CreateSprite(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position, const Sprite &sprite);
-    
     // Scene rendering
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
     void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
     void Commit();
 
-    
 private:
     MTL::Device*                    m_MetalDevice               = nullptr;
     CA::MetalLayer*                 m_MetalLayer                = nullptr;
     
     MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
     MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
-    MTL4::CommandAllocator*         m_MetalCommandAllocator     = nullptr;
+    MTL4::CommandAllocator*         m_MetalCommandAllocators[3];
     MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
     MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
     MTL4::ArgumentTable*            m_VertexArgumentTable       = nullptr;
@@ -122,13 +121,14 @@ private:
     MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
     MTL::Drawable*                  m_Drawable                  = nullptr;
     
-    MTL::Buffer* m_UniformBuffer        = nullptr;
-    MTL::Buffer* m_LightUniformBuffer   = nullptr;
+    MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
     
-    MetalShader* m_TextureShader        = nullptr;
-    MetalShader* m_UntexturedShader     = nullptr;
-    MetalShader* m_LightShader          = nullptr;
-
+    MTL::Buffer*                    m_UniformBuffer             = nullptr;
+    MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
+    
+    MetalShader*                    m_TextureShader             = nullptr;
+    MetalShader*                    m_UntexturedShader          = nullptr;
+    MetalShader*                    m_LightShader               = nullptr;
 
     Camera m_Camera;
     
@@ -138,10 +138,13 @@ private:
     matrix_float4x4 m_PerspectiveMatrix;
     matrix_float4x4 m_ModelMatrix;
     
-    LightComponent m_LightComponent;
+    LightComponent  m_LightComponent;
     matrix_float4x4 m_LightPosition;
     
-    LightUniforms m_LightUniforms;
-    Uniforms      m_Uniforms;
+    LightUniforms   m_LightUniforms;
+    Uniforms        m_Uniforms;
+    
+    size_t          m_FrameNum;
+    size_t          m_FrameIndex;
 };
 #endif //METALRENDERER_H

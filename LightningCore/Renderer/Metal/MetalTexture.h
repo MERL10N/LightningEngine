@@ -28,9 +28,6 @@ public:
     MetalTexture() = default;
     explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     ~MetalTexture();
-    
-    void InitialiseTextureArguments();
-    
 
     inline MTL::Texture* GetTexture() const
     {
