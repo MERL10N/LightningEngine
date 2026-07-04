@@ -8,7 +8,6 @@
 #include "MeshBuilder.h"
 
 #include "Metal/Metal.hpp"
-#include "Renderer/Metal/MetalBuffer.h"
 #include "Renderer/Metal/MetalTexture.h"
 
 Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)

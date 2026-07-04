@@ -175,7 +175,6 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
     m_RenderPipelineDescriptor = MTL4::RenderPipelineDescriptor::alloc()->init();
     m_RenderPipelineDescriptor->setRasterSampleCount(4);
-    m_RenderPipelineDescriptor->setRasterSampleCount(4);
     m_RenderPipelineDescriptor->setVertexFunctionDescriptor(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunctionDescriptor(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(m_DepthAttachmentPixelFormat);
@@ -226,4 +225,3 @@ MetalShader::~MetalShader()
         m_FragmentFunction = nullptr;
     }
 }
-

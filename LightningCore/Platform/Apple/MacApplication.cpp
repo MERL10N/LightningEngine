@@ -25,11 +25,16 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     cube.AddComponent<TransformComponent>(simd::make_float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MacWindow.GetDevice()));
     cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MacWindow.GetDevice());
+    m_MetalRenderer.RegisterMesh(cube.GetComponent<MeshComponent>().m_Mesh);
+    m_MetalRenderer.RegisterTexture(cube.GetComponent<TextureComponent>().m_Texture);
     
+    // TODO: Need to fix lighting
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
     sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MacWindow.GetDevice(), 32, 32, simd::make_float3(1.0f, 1.0f, 1.0f)));
+    m_MetalRenderer.RegisterMesh(sphere.GetComponent<MeshComponent>().m_Mesh);
+    m_MetalRenderer.CommitResidencySet();
 }
 
 

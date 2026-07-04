@@ -77,5 +77,3 @@ MetalTexture::~MetalTexture()
         m_Texture = nullptr;
     }
 }
-
-

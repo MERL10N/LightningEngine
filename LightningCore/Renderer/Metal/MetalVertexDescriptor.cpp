@@ -61,5 +61,3 @@ MTL::VertexDescriptor* MetalVertexDescriptor::BuildVertexDescriptor()
     
     return builtDescriptor;
 }
-    
-    

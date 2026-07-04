@@ -6,9 +6,8 @@
 #include "ShaderUniforms.h"
 #include "Metal/Metal.hpp"
 #include "QuartzCore/CAMetalLayer.hpp"
-#include "MeshBuilder.h"
+#include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
-#include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
 #include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
@@ -27,7 +26,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_MetalCommandBuffer(m_MetalDevice->newCommandBuffer()),
   m_ArgumentTableDescriptor(MTL4::ArgumentTableDescriptor::alloc()->init()),
   m_ResidencySetDescriptor(MTL::ResidencySetDescriptor::alloc()->init()),
-  m_ResidencySet(m_MetalDevice->newResidencySet(m_ResidencySetDescriptor, nullptr)),
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
   m_UniformBuffer(m_MetalDevice->newBuffer(sizeof(Uniforms), MTL::ResourceStorageModeShared)),
   m_LightUniformBuffer(m_MetalDevice->newBuffer(sizeof(LightUniforms), MTL::ResourceStorageModeShared)),
@@ -38,6 +36,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_FrameIndex(0)
 {
     assert(m_MetalDevice);
+    m_ResidencySet = m_MetalDevice->newResidencySet(m_ResidencySetDescriptor, nullptr);
     m_FrameAvailableSharedEvent->setSignaledValue(0);
     m_ArgumentTableDescriptor->setMaxBufferBindCount(10);
     m_ArgumentTableDescriptor->setMaxTextureBindCount(10);
@@ -50,24 +49,22 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         m_ArgumentTableDescriptor = nullptr;
     }
     
-    for (auto& metalCommandAllocators : m_MetalCommandAllocators)
-    {
-        metalCommandAllocators = m_MetalDevice->newCommandAllocator();
-    }
-    
-    m_MetalCommandQueue->addResidencySet(m_ResidencySet);
-    m_MetalCommandQueue->addResidencySet(m_MetalLayer->residencySet());
-    m_ResidencySet->addAllocation(m_UniformBuffer);
-    m_ResidencySet->addAllocation(m_LightUniformBuffer);
-    
     if (m_ResidencySetDescriptor)
     {
         m_ResidencySetDescriptor->release();
         m_ResidencySetDescriptor = nullptr;
     }
     
+    for (auto& metalCommandAllocators : m_MetalCommandAllocators)
+    {
+        metalCommandAllocators = m_MetalDevice->newCommandAllocator();
+    }
+    m_ResidencySet->requestResidency();
     m_MetalCommandQueue->addResidencySet(m_ResidencySet);
-    m_MetalCommandQueue->addResidencySet(m_MetalLayer->residencySet());
+    //m_MetalCommandBuffer->useResidencySet(m_ResidencySet);
+    
+    m_ResidencySet->addAllocation(m_UniformBuffer);
+    m_ResidencySet->addAllocation(m_LightUniformBuffer);
     
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
@@ -202,6 +199,23 @@ MetalRenderer::~MetalRenderer()
     
 }
 
+void MetalRenderer::RegisterMesh(const Mesh_3D & p_3DMesh)
+{
+    m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
+    m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
+}
+
+void MetalRenderer::RegisterTexture(const MetalTexture* p_Texture)
+{
+    m_ResidencySet->addAllocation(p_Texture->GetArgumentBuffer());
+    m_ResidencySet->addAllocation(p_Texture->GetTexture());
+}
+
+void MetalRenderer::CommitResidencySet()
+{
+    m_ResidencySet->commit();
+}
+
 void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
 {
     m_Camera = p_Camera;
@@ -214,7 +228,6 @@ void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
     m_FrameIndex = m_FrameNum % 3;
     m_MetalCommandAllocators[m_FrameIndex]->reset();
     m_MetalCommandBuffer->beginCommandBuffer(m_MetalCommandAllocators[m_FrameIndex]);
-    m_MetalCommandBuffer->useResidencySet(m_ResidencySet);
     
     m_RenderPassDescriptor->depthAttachment()->setClearDepth(1.0f);
     
@@ -257,10 +270,6 @@ void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mes
     m_LightComponent.m_Position = simd::make_float3(p_ModelMatrix.columns[3].x,
                                                     p_ModelMatrix.columns[3].y,
                                                     p_ModelMatrix.columns[3].z);
-
-    m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
-    m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
-    m_ResidencySet->commit();
     
     if (m_LightShader)
     {
@@ -288,15 +297,8 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
     m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_Camera.GetPosition()};
     memcpy(m_LightUniformBuffer->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
 
-    m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
-    m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
-
     if (p_Texture)
     {
-        m_ResidencySet->addAllocation(p_Texture->GetArgumentBuffer());
-        m_ResidencySet->addAllocation(p_Texture->GetTexture());
-        m_ResidencySet->commit();
-
         m_RenderCommandEncoder->setRenderPipelineState(m_TextureShader->GetRenderPipelineState());
 
         m_VertexArgumentTable->setAddress(p_3DMesh.m_VertexBuffer->gpuAddress(), 0);
@@ -324,7 +326,6 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
 void MetalRenderer::Commit()
 {
     m_RenderCommandEncoder->endEncoding();
-    m_ResidencySet->commit();
     m_MetalCommandBuffer->endCommandBuffer();
     m_MetalCommandQueue->wait(m_Drawable);
     m_MetalCommandQueue->commit(&m_MetalCommandBuffer, 1);
@@ -332,3 +333,10 @@ void MetalRenderer::Commit()
     m_MetalCommandQueue->signalEvent(m_FrameAvailableSharedEvent, m_FrameNum);
     ++m_FrameNum;
 }
+
+void MetalRenderer::AddToResidencySet(const MTL::Allocation* p_Allocation)
+{
+    m_ResidencySet->addAllocation(p_Allocation);
+}
+
+

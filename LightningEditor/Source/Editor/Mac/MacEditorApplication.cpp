@@ -8,12 +8,13 @@
 #include "MacEditorApplication.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
-#include "imgui/backends/imgui_impl_metal.h"
+#include "imgui/backends/imgui_impl_metal4.h"
 #include "QuartzCore/QuartzCore.hpp"
 #include "Scene/Component.h"
 #include "Primitives/MeshBuilder.h"
 #include "Entity/Entity.h"
 #include "GLFW/glfw3.h"
+#include "Metal/Metal.hpp"
 #include <simd/simd.h>
 
 MacEditorApplication::MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title)
@@ -43,23 +44,29 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     // Setup style
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOther(m_MacWindow.GetWindow(), true);
-    ImGui_ImplMetal_Init(m_MacWindow.GetDevice());
+    ImGui_ImplMetal4_Init(m_MacWindow.GetDevice(), m_MetalRenderer.GetMetalCommandQueue(), 3);
     io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
     
     m_MetalFrameBuffer.Create(m_Width, m_Height);
     
     MeshBuilder m_MeshBuilder;
     
+    m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
+    
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(simd::make_float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
     cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MetalDevice);
+    m_MetalRenderer.RegisterMesh(cube.GetComponent<MeshComponent>().m_Mesh);
+    m_MetalRenderer.RegisterTexture(cube.GetComponent<TextureComponent>().m_Texture);
     
     // TODO: Need to fix lighting 
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
     sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.0f, 1.0f, 1.0f)));
+    m_MetalRenderer.RegisterMesh(sphere.GetComponent<MeshComponent>().m_Mesh);
+    m_MetalRenderer.CommitResidencySet();
      
 }
 
@@ -67,7 +74,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
 MacEditorApplication::~MacEditorApplication()
 {
     // Cleanup
-    ImGui_ImplMetal_Shutdown();
+    ImGui_ImplMetal4_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     
@@ -148,7 +155,7 @@ void MacEditorApplication::Update()
 
             m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
 
-            ImGui_ImplMetal_NewFrame(m_WindowPassDescriptor);
+            ImGui_ImplMetal4_NewFrame(m_WindowPassDescriptor, 0);
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
@@ -178,7 +185,7 @@ void MacEditorApplication::Update()
             m_ImGuiCommandBuffer->beginCommandBuffer(m_ImGuiCommandAllocator);
             m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
             m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
-            ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);
+            ImGui_ImplMetal4_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);
             
             if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
             {

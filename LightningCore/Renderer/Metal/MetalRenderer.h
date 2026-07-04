@@ -22,6 +22,7 @@ namespace MTL
     class ResidencySetDescriptor;
     class Drawable;
     class SharedEvent;
+    class Allocation;
 }
 
 namespace MTL4
@@ -66,10 +67,25 @@ public:
     MetalRenderer() = default;
     explicit MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
+
+    // Create quads with texture
+    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
+    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
+    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
     
+    // Scene rendering
+    void AddToResidencySet(const MTL::Allocation* p_Allocation);
+    void RegisterMesh(const Mesh_3D &p_3DMesh);
+    void RegisterTexture(const MetalTexture* p_Texture);
+    void CommitResidencySet();
+    
+    void Submit(const Camera &p_Camera, const float p_AspectRatio);
+    void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
+    void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
+    void Commit();
     
     inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
-    
+
     inline MTL4::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
     
     inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
@@ -87,18 +103,6 @@ public:
     inline MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
     
     inline void SetMetalDrawable(MTL::Drawable* p_Drawable) { m_Drawable = p_Drawable; }
-    
-
-    // Create quads with texture
-    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
-    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
-    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
-    
-    // Scene rendering
-    void Submit(const Camera &p_Camera, const float p_AspectRatio);
-    void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
-    void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
-    void Commit();
 
 private:
     MTL::Device*                    m_MetalDevice               = nullptr;
