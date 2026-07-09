@@ -9,6 +9,7 @@
 
 #include "Metal/Metal.hpp"
 #include "Renderer/Metal/MetalTexture.h"
+#include "Renderer/Metal/MetalBuffer.h"
 
 Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)
 {
@@ -22,7 +23,7 @@ Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* te
     
     constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
         
-    constexpr ushort indices[4] = {0, 1, 3, 2};
+    constexpr uint16_t indices[] = {0, 1, 3, 2};
     constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
         
     //vertex buffer
@@ -38,30 +39,29 @@ Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* te
     return m_Mesh2D;
 }
 
-Mesh_2D MeshBuilder::GenerateQuad(MTL::Device *device)
+Mesh_3D MeshBuilder::GeneratePlane(MTL::Device *device)
 {
-    constexpr Vertex vertices[] =
+    constexpr Vertex3D vertices[] =
     {
-        {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
-        {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
-        {{ 0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 1.0}},
-        {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
+        {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
+        {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
+        {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 0.0}}, // 2
+        {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0}}, // 3
     };
-    
-    constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
         
-    constexpr ushort indices[4] = {0, 1, 3, 2};
-    constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+    constexpr uint16_t indices[] = {0, 1, 2, 2, 3, 0};
+    
+    m_Mesh3D.m_IndexCount = 6;
         
     //vertex buffer
-    m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_VertexBuffer->contents(), vertices, vertexBufferSize);
+    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, sizeof(vertices));
+    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices, sizeof(vertices));
         
     //index buffer
-    m_Mesh2D.m_IndexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_IndexBuffer->contents(), indices, indexBufferSize);
+    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices, sizeof(indices));
+    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
     
-    return m_Mesh2D;
+    return m_Mesh3D;
 }
 
 Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
@@ -120,15 +120,14 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
     m_Mesh3D.m_IndexCount = 36;
     
     // vertex buffer
-    m_Mesh3D.m_VertexBuffer = device->newBuffer(sizeof(vertices), MTL::ResourceStorageModeShared);
+    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, sizeof(vertices));
     memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices, sizeof(vertices));
     
 
     // Index buffer
-    m_Mesh3D.m_IndexBuffer = device->newBuffer(sizeof(indices), MTL::ResourceStorageModeShared);
+    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices, sizeof(indices));
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
     
-
     return m_Mesh3D;
      
 }
@@ -188,11 +187,11 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
     size_t indexSize  = indices.size() * sizeof(uint16_t);
    
     // vertex buffer
-    m_Mesh3D.m_VertexBuffer = device->newBuffer(vertexSize, MTL::ResourceStorageModeShared);
+    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, static_cast<uint32_t>(vertexSize));
     memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices.data(), vertexSize);
     
     // Index buffer
-    m_Mesh3D.m_IndexBuffer = device->newBuffer(indexSize, MTL::ResourceStorageModeShared);
+    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices.data(), static_cast<uint32_t>(indexSize));
     memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
     
     return m_Mesh3D;
