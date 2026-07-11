@@ -40,7 +40,7 @@ IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* drawData,
 IMGUI_IMPL_API bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device);
 IMGUI_IMPL_API void ImGui_ImplMetal_DestroyDeviceObjects();
 
-// (Advanced) Use e.g. if you need to precisely control the timing of texture updates (e.g. for staged rendering), by setting ImDrawData::Textures = NULL to handle this manually.
+// (Advanced) Use e.g. if you need to precisely control the timing of texture updates (e.g. for staged rendering), by setting ImDrawData::Textures = nullptr to handle this manually.
 IMGUI_IMPL_API void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex);
 
 #endif
@@ -53,7 +53,7 @@ IMGUI_IMPL_API void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex);
 // More info about using Metal from C++: https://developer.apple.com/metal/cpp/
 
 #ifdef IMGUI_IMPL_METAL_CPP
-#include "Metal/Metal.hpp"
+#include <Metal/Metal.hpp>
 #ifndef __OBJC__
 
 // Follow "Getting Started" link and check examples/ folder to learn about using backends!
@@ -68,7 +68,7 @@ IMGUI_IMPL_API void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data,
 IMGUI_IMPL_API bool ImGui_ImplMetal_CreateDeviceObjects(MTL::Device* device);
 IMGUI_IMPL_API void ImGui_ImplMetal_DestroyDeviceObjects();
 
-// (Advanced) Use e.g. if you need to precisely control the timing of texture updates (e.g. for staged rendering), by setting ImDrawData::Textures = NULL to handle this manually.
+// (Advanced) Use e.g. if you need to precisely control the timing of texture updates (e.g. for staged rendering), by setting ImDrawData::Textures = nullptr to handle this manually.
 IMGUI_IMPL_API void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex);
 
 #endif

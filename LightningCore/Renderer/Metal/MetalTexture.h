@@ -13,6 +13,13 @@ namespace MTL
     class Device;
     class Texture;
     class TextureDescriptor;
+    class ResidencySet;
+    class Buffer;
+}
+
+namespace MTL4
+{
+    class ArgumentTable;
 }
 
 class MetalTexture
@@ -22,7 +29,7 @@ public:
     explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     ~MetalTexture();
 
-    inline const MTL::Texture* GetTexture() const
+    inline MTL::Texture* GetTexture() const
     {
         return m_Texture;
     }
@@ -37,11 +44,18 @@ public:
         return m_Height;
     }
     
+    inline MTL::Buffer* GetArgumentBuffer() const
+    {
+        return m_ArgumentBuffer;
+    }
+    
 private:
     const char*             m_Filepath          = nullptr;
     MTL::Device*            m_MetalDevice       = nullptr;
     MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
     MTL::Texture*           m_Texture           = nullptr;
+    MTL::Buffer*            m_ArgumentBuffer    = nullptr;
+    
     int m_Width, m_Height, m_Channels;
 };
 

@@ -14,9 +14,6 @@
 class Entity;
 class Camera;
 
-class MetalRenderer;
-
-
 class Scene
 {
 public:

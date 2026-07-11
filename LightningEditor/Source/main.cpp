@@ -7,6 +7,7 @@
 
 #ifdef __APPLE__
 #include "Editor/Mac/MacEditorApplication.h"
+#include "Foundation/NSAutoreleasePool.hpp"
 #endif
 #include <print>
 

@@ -15,7 +15,7 @@ class Entity
 {
 public:
     Entity() = default;
-    Entity(const entt::entity &entityHandle, Scene *scene);
+    Entity(const entt::entity &entityHandle, Scene* scene);
     Entity(const Entity& other) = default;
     ~Entity();
     
@@ -44,9 +44,11 @@ public:
     {
         m_Scene->Reg().remove<T>(m_EntityHandle);
     }
+    
+    operator bool() const { return m_EntityHandle != entt::null; }
 private:
-    entt::entity m_EntityHandle;
-    Scene *m_Scene;
+    entt::entity    m_EntityHandle{entt::null};
+    Scene*          m_Scene = nullptr;
 };
 
 #endif /* Entity_h */

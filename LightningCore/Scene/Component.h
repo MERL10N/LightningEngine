@@ -27,13 +27,27 @@ struct TagComponent
 struct TransformComponent
 {
     matrix_float4x4 m_Transform = simd::float4x4(1.0f);
-    matrix_float4x4 m_Rotation;
+    simd::float3    m_Rotation  = simd::make_float3(0.0f, 1.0f, 0.0f);
     matrix_float4x4 m_Scale =  matrix4x4_scale(1.0f, 1.0f, 1.0f);
+    
+    float m_RotationAngle = 0.0f;
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
     TransformComponent(const simd::float3 &transform)
     : m_Transform(matrix4x4_translation(transform))
     {}
+    
+    TransformComponent(const simd::float3 &transform, const simd::float3 &scale)
+    : m_Transform(matrix4x4_translation(transform)),
+      m_Scale(matrix4x4_scale(scale.x, scale.y, scale.z))
+    {}
+    
+    TransformComponent(const simd::float3 &transform, const float &angle, const simd::float3 &rotationAxis)
+    : m_Transform(matrix4x4_translation(transform)),
+      m_RotationAngle((angle * M_PI) / 180.f),
+      m_Rotation(rotationAxis)
+    {
+    }
 };
 
 struct TextureComponent
@@ -64,7 +78,10 @@ struct TextureComponent
         return (*this);
     }
     
-   
+   inline const MetalTexture* GetTexture() const
+   {
+       return m_Texture;
+   }
     
     ~TextureComponent()
     {

@@ -16,19 +16,23 @@ struct VertexIn
 struct VertexOut
 {
     float4 position [[position]];
-    
     float3 normal;
     float3 color;
 };
 
+struct Uniforms
+{
+    float4x4 perspective;
+    float4x4 view;
+    float4x4 model;
+};
+
 vertex VertexOut vertex_light(VertexIn in [[stage_in]],
-                                   constant float4x4 &perspective[[buffer(1)]],
-                                   constant float4x4 &view[[buffer(2)]],
-                                   constant float4x4 &model[[buffer(3)]])
+                              constant Uniforms &uniforms[[buffer(1)]])
 {
     VertexOut out;
     float3 pos = in.position;
-    out.position = float4(perspective * view * model * float4(pos, 1.0f));
+    out.position = float4(uniforms.perspective * uniforms.view * uniforms.model * float4(pos, 1.0f));
     return out;
 }
 

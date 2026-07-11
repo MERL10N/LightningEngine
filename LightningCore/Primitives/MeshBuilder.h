@@ -54,7 +54,7 @@ public:
     MeshBuilder() = default;
     ~MeshBuilder(){};
     Mesh_2D GenerateQuadWithTexture(MTL::Device* device, const char* texture);
-    Mesh_2D GenerateQuad(MTL::Device* device);
+    Mesh_3D GeneratePlane(MTL::Device* device);
     Mesh_3D GenerateCube(MTL::Device* device);
     Mesh_3D GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color = simd_make_float3(0.5f, 0.5f, 0.5f));
 private:

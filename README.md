@@ -2,7 +2,7 @@
 
 ## About this project
 
-Lightning Engine is a game engine written in C++ that is currently powered by Metal, Apple's Graphics API. The goal of this project is to explore and learn the feature sets Metal provides, while exploring gaming
+Lightning Engine is a game engine written in C++ that is currently powered by Metal 4, Apple's Graphics API. The goal of this project is to explore and learn the feature sets Metal provides, while exploring gaming
 potential of Apple Silicon. As of right now, this project is being rebuilt to use Premake, a cross platform built system with the long term goal of making this engine multi-platform. 
 
 > [!NOTE]
@@ -21,7 +21,8 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 >  This game engine is currently very primitive and is not intended for commercial use.
 
 ## Current Progress
-<img width="1512" height="982" alt="LightningEditor" src="https://github.com/user-attachments/assets/4a9a0083-6265-43c8-ae0d-fc36033e8ba1" />
+<img width="2560" height="1440" alt="Screenshot 2026-07-08 at 8 30 35 PM" src="https://github.com/user-attachments/assets/76aa21b4-1214-4919-9864-15ea1a9b107a" />
+
 
 ## Checklist (Revised)
 - [x] Render a window
@@ -32,7 +33,10 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 - [x] Input System
 - [x] EnTT Integration
 - [x] Argument Buffers
+- [x] Blinn-Phong Lighting
+- [x] Upgrade Renderer to Metal 4
 - [ ] Normal Mapping
-- [ ] Physics
-- [ ] Native Scripting System
 - [ ] ECS
+- [ ] Native Scripting System
+- [ ] Physics
+

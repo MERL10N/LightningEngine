@@ -107,7 +107,7 @@ void Camera::ProcessMouseMovement(float xOffset, float yOffset, const bool const
     UpdateCameraVectors();
 }
 
-float Camera::Radians(float degrees)
+float Camera::Radians(float degrees) const 
 {
     return degrees * M_PI / 180.0f;
 }
