@@ -60,7 +60,12 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     m_MetalRenderer.RegisterMesh(cube.GetComponent<MeshComponent>().m_Mesh);
     m_MetalRenderer.RegisterTexture(cube.GetComponent<TextureComponent>().m_Texture);
     
-    // TODO: Need to fix lighting 
+    
+    Entity plane = m_Scene.CreateEntity("Plane");
+    plane.AddComponent<TransformComponent>(simd::make_float3(0.0f, -2.0f, 0.0f), simd::make_float3(10.0f, 0.1f, 10.0f));
+    plane.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
+    m_MetalRenderer.RegisterMesh(plane.GetComponent<MeshComponent>().m_Mesh);
+     
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
