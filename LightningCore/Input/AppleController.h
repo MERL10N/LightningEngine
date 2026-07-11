@@ -26,7 +26,8 @@ public:
     // Gamepad Input
     float LeftThumbstickX() const;
     float LeftThumbstickY() const;
-    float RightThumbstick() const;
+    float RightThumbstickX() const;
+    float RightThumbstickY() const;
 };
 
 #endif /* AppleController_h */

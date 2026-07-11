@@ -9,12 +9,20 @@
 #define MacApplication_hpp
 
 #include "MacWindow.h"
+#include "Camera/Camera.h"
+#include "Input/AppleController.h"
+#include "Scene/Scene.h"
+#include "Renderer/Metal/MetalRenderer.h"
+#include "Renderer/Metal/MetalFrameBuffer.h"
 
-class MetalRenderer;
+namespace MTL4
+{
+    class RenderPassDescriptor;
+}
 
 namespace MTL
 {
-    class RenderPassDescriptor;
+    class Drawable;
 }
 
 namespace CA
@@ -32,10 +40,16 @@ public:
 
 private:
     MacWindow m_MacWindow;
-    MetalRenderer* m_MetalRenderer = nullptr;
-    MTL::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
+    MetalRenderer m_MetalRenderer;
+    MetalFrameBuffer m_MetalFrameBuffer;
+    MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
-    float m_AspectRatio;
+    Camera m_Camera;
+    Scene m_Scene;
+    AppleController m_Controller;
+    float m_CurrentFrame = 0.0f;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
 };
 
 #endif /* MacApplication_hpp */

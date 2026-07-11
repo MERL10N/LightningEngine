@@ -131,6 +131,9 @@ void MacEditorLayer::DrawStatsBar()
     ImGui::Begin("Stats");
     ImGui::Text("Frame Rate: (%.1f FPS)", ImGui::GetIO().Framerate);
     ImGui::Text("Frame Time: %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+    
+    ImGui::Checkbox("Wireframe Mode", &b_EnableWireframe);
+
     ImGui::Checkbox("Message from developer", &b_showAnotherWindow);
     if (b_showAnotherWindow)
     {
@@ -140,5 +143,7 @@ void MacEditorLayer::DrawStatsBar()
             b_showAnotherWindow = false;
         ImGui::End();
     }
+    
+    
     ImGui::End();
 }

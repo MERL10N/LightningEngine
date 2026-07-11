@@ -11,11 +11,29 @@ namespace MTL
     class CommandQueue;
     class CommandBuffer;
     class RenderPassDescriptor;
-    class RenderCommandEncoder;
     class Buffer;
     class RenderPassColorAttachmentDescriptor;
     class DepthStencilState;
     class DepthStencilDescriptor;
+    class VertexDescriptor;
+    class TextureDescriptor;
+    class Texture;
+    class ResidencySet;
+    class ResidencySetDescriptor;
+    class Drawable;
+    class SharedEvent;
+    class Allocation;
+}
+
+namespace MTL4
+{
+    class ArgumentTable;
+    class ArgumentTableDescriptor;
+    class CommandBuffer;
+    class CommandQueue;
+    class CommandAllocator;
+    class RenderPassDescriptor;
+    class RenderCommandEncoder;
 }
 
 namespace CA
@@ -28,67 +46,115 @@ class MetalVertexBuffer;
 class MetalTexture;
 class SubTexture;
 class MetalTexture;
+class MetalShader;
+class Scene;
+class Sprite;
 
-#include "MetalShader.h"
+struct Mesh_3D;
+struct Mesh_2D;
+
+
 #include <simd/simd.h>
-#include "Primitives/MeshBuilder.h"
 #include "Camera/Camera.h"
 #include "Math/AAPLMathUtilities.h"
+#include "Scene/Component.h"
+#include "ShaderUniforms.h"
 #include <vector>
 
 class MetalRenderer
 {
 public:
-    MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
+    MetalRenderer() = default;
+    explicit MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
-    
-    void BeginFrame();
 
     // Create quads with texture
     void CreateQuad(const char* p_FilePath, const simd::float3 &position);
     void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
     void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
-    // Create Cube
-    void CreateCube(const char* p_FilePath);
     
-    void Render();
+    // Scene rendering
+    void AddToResidencySet(const MTL::Allocation* p_Allocation);
+    void RegisterMesh(const Mesh_3D &p_3DMesh);
+    void RegisterTexture(const MetalTexture *p_Texture);
+    void CommitResidencySet();
     
+    void Submit(const Camera &p_Camera, const float p_AspectRatio);
+    void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
+    void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
     void Commit();
     
-    inline MTL::Device* GetMetalDevice() { return m_MetalDevice; }
+    inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
+
+    inline MTL4::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
     
-    inline MTL::CommandBuffer* GetMetalCommandBuffer() { return m_MetalCommandBuffer; }
+    inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
     
-    inline void SetRenderPassDescriptor(MTL::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
+    inline MTL::ResidencySet* GetMetalResidencySet() const { return m_ResidencySet; }
     
-    inline MTL::RenderPassDescriptor* GetMetalRenderPassDescriptor() { return m_RenderPassDescriptor; }
+    inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     
-    inline void SetRenderCommandEncoder(MTL::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     
-    inline MTL::RenderCommandEncoder* GetMetalRenderCommandEncoder() { return m_RenderCommandEncoder; }
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder;}
     
-    inline void SetCamera(Camera camera) { m_Camera = camera; }
+    inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
     
+    inline MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
+    
+    inline void SetMetalDrawable(MTL::Drawable* p_Drawable) { m_Drawable = p_Drawable; }
+
 private:
-    MTL::Device* m_MetalDevice = nullptr;
-    MTL::CommandQueue* m_MetalCommandQueue = nullptr;
-    MTL::CommandBuffer* m_MetalCommandBuffer = nullptr;
-    MTL::RenderPassDescriptor* m_RenderPassDescriptor = nullptr;
-    MTL::RenderCommandEncoder* m_RenderCommandEncoder = nullptr;
-    MTL::DepthStencilState* m_DepthStencilState = nullptr;
-    MTL::DepthStencilDescriptor* m_DepthStencilDescriptor;
+    MTL::Device*                    m_MetalDevice               = nullptr;
+    CA::MetalLayer*                 m_MetalLayer                = nullptr;
     
-    MetalVertexBuffer* m_TransformationBuffer = nullptr;
+    MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
+    MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
+    MTL4::CommandAllocator*         m_MetalCommandAllocators[3];
+    MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
+    MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
+    MTL4::ArgumentTable*            m_VertexArgumentTable       = nullptr;
+    MTL4::ArgumentTable*            m_FragmentArgumentTable     = nullptr;
+    MTL4::ArgumentTableDescriptor*  m_ArgumentTableDescriptor   = nullptr;
     
-    MetalShader m_Shader;
+    MTL::ResidencySet*              m_ResidencySet              = nullptr;
+    MTL::ResidencySetDescriptor*    m_ResidencySetDescriptor    = nullptr;
+    MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
+    MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
+    MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
+    MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
+    MTL::Drawable*                  m_Drawable                  = nullptr;
     
-    CA::MetalLayer* m_MetalLayer = nullptr;
+    MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
     
-    Mesh m_Mesh;
+    MTL::Buffer*                    m_UniformBuffer             = nullptr;
+    MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     
-    std::vector<Mesh> m_Meshes;
+    std::vector<MTL::Buffer*>       m_UniformBufferPool;
+    std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
+    size_t                          m_UniformBufferIndex;
     
-    MeshBuilder m_MeshBuilder;
+    MetalShader*                    m_TextureShader             = nullptr;
+    MetalShader*                    m_UntexturedShader          = nullptr;
+    MetalShader*                    m_LightShader               = nullptr;
+
     Camera m_Camera;
+    
+    bool b_EnableWireframe = false;
+    
+    matrix_float4x4 m_ViewMatrix;
+    matrix_float4x4 m_PerspectiveMatrix;
+    matrix_float4x4 m_ModelMatrix;
+    
+    LightComponent  m_LightComponent;
+    matrix_float4x4 m_LightPosition;
+    
+    LightUniforms   m_LightUniforms;
+    Uniforms        m_Uniforms;
+    
+    size_t          m_FrameNum;
+    size_t          m_FrameIndex;
+    
+    static constexpr uint16_t MAX_ENTITIES = 10000;
 };
 #endif //METALRENDERER_H

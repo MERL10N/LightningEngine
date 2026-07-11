@@ -7,3 +7,16 @@
 
 #include "Entity.h"
 
+Entity::Entity(const entt::entity &entityHandle, Scene *scene)
+: m_EntityHandle(entityHandle),
+  m_Scene(scene)
+{
+    
+}
+
+Entity::~Entity()
+{
+    
+}
+
+

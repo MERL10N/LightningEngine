@@ -3,7 +3,6 @@
 //  LightningCore
 //
 //  Created by Kian Marvi on 6/15/25.
-//
 
 #include "MetalTexture.h"
 
@@ -24,13 +23,15 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     
     if (image)
     {
-        std::println("Image found at {} ", m_Filepath);
+        std::println("Image found at: {} ", m_Filepath);
     }
+    
     
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     
     m_TextureDescriptor->setWidth(m_Width);
     m_TextureDescriptor->setHeight(m_Height);
+    m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageShaderWrite);
 
     m_Texture = m_MetalDevice->newTexture(m_TextureDescriptor);
 
@@ -38,6 +39,17 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     NS::UInteger bytesPerRow = 4 * m_Width;
 
     m_Texture->replaceRegion(region, 0, image, bytesPerRow);
+    
+    //InitialiseTextureArguments();
+    
+    
+    if (m_MetalDevice->argumentBuffersSupport() == MTL::ArgumentBuffersTier2)
+    {
+        m_ArgumentBuffer = m_MetalDevice->newBuffer(sizeof(MTL::ResourceID), MTL::ResourceStorageModeManaged);
+        MTL::ResourceID textureID = m_Texture->gpuResourceID();
+        memcpy(m_ArgumentBuffer->contents(), &textureID, sizeof(MTL::ResourceID));
+        m_ArgumentBuffer->didModifyRange(NS::Range(0, sizeof(MTL::ResourceID)));
+    }
 
     m_TextureDescriptor->release();
     stbi_image_free(image);
@@ -46,16 +58,22 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
 
 MetalTexture::~MetalTexture()
 {
-    if (m_Texture)
+    if (m_ArgumentBuffer)
     {
-        std::println("Delete texture at {}", m_Filepath);
-        m_Texture->release();
-        m_Texture = nullptr;
+        m_ArgumentBuffer->release();
+        m_ArgumentBuffer = nullptr;
     }
+    
     if (m_MetalDevice)
     {
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
+    
+    if (m_Texture)
+    {
+        std::println("Delete texture at: {}", m_Filepath);
+        m_Texture->release();
+        m_Texture = nullptr;
+    }
 }
-

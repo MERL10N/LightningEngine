@@ -9,14 +9,27 @@
 #define Scene_h
 
 #include "entt/single_include/entt/entt.hpp"
+#include <simd/simd.h>
+
+class Entity;
+class Camera;
 
 class Scene
 {
 public:
     Scene();
     ~Scene();
-private:
-    entt::registry m_Registry;
+    
+    Entity CreateEntity(const char* tag);
+    
+    // Temporary
+    entt::registry &Reg() { return m_Registry; }
+    template <typename Renderer>
+    void RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio);
+    
+private:    
+    entt::registry  m_Registry;
+    entt::entity    m_Entity;
 };
 
 #endif /* Scene_h */
