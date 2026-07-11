@@ -13,8 +13,7 @@
 #include "Input/AppleController.h"
 #include "Scene/Scene.h"
 #include "Renderer/Metal/MetalRenderer.h"
-
-class MetalRenderer;
+#include "Renderer/Metal/MetalFrameBuffer.h"
 
 namespace MTL4
 {
@@ -42,7 +41,8 @@ public:
 private:
     MacWindow m_MacWindow;
     MetalRenderer m_MetalRenderer;
-    MTL4::RenderPassDescriptor* m_WindowPassDescriptor = nullptr;
+    MetalFrameBuffer m_MetalFrameBuffer;
+    MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     Camera m_Camera;
     Scene m_Scene;

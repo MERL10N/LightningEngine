@@ -15,11 +15,14 @@
 MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()),
-  m_WindowPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
+  m_MetalFrameBuffer(m_MacWindow.GetDevice()),
   m_Camera(Camera()),
   m_Scene()
 {
     MeshBuilder m_MeshBuilder;
+    
+    m_MetalFrameBuffer.Create(p_Width, p_Height);
+    m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
     
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(simd::make_float3(0.0f, 0.0f, 0.0f));
@@ -28,7 +31,12 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     m_MetalRenderer.RegisterMesh(cube.GetComponent<MeshComponent>().m_Mesh);
     m_MetalRenderer.RegisterTexture(cube.GetComponent<TextureComponent>().m_Texture);
     
-    // TODO: Need to fix lighting
+    
+    Entity plane = m_Scene.CreateEntity("Plane");
+    plane.AddComponent<TransformComponent>(simd::make_float3(0.0f, -2.0f, 0.0f), simd::make_float3(10.0f, 0.1f, 10.0f));
+    plane.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MacWindow.GetDevice()));
+    m_MetalRenderer.RegisterMesh(plane.GetComponent<MeshComponent>().m_Mesh);
+     
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(simd::make_float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(simd::make_float3(1.0f, 1.0f, 1.0f));
@@ -54,21 +62,32 @@ void MacApplication::Update(float p_DeltaTime)
             m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
         if (m_Controller.IsDKeyDown())
             m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
-     
+        
         m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
         
         m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
+        
         NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         {
             m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setTexture(m_WindowDrawable->texture());
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionClear);
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
+            
+            float drawableWidth = m_WindowDrawable->texture()->width();
+            float drawableHeight = m_WindowDrawable->texture()->height();
+            
+            if (m_MetalFrameBuffer.GetWidth() != drawableWidth || m_MetalFrameBuffer.GetHeight() != drawableHeight)
+            {
+                m_MetalFrameBuffer.Resize(drawableWidth, drawableHeight);
+            }
+            
+            m_ColorAttachmentDescriptor = m_MetalFrameBuffer.GetRenderPassDescriptor()->colorAttachments()->object(0);
+            m_ColorAttachmentDescriptor->setResolveTexture(m_WindowDrawable->texture());
             
             m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
-            m_MetalRenderer.SetRenderPassDescriptor(m_WindowPassDescriptor);
-            m_Scene.RenderScene(m_MetalRenderer, m_Camera,  m_MacWindow.GetWidth() / m_MacWindow.GetHeight());
+            
+            m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
+            
+            m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
+            
             m_WindowDrawable->present();
         }
         m_Pool->release();
@@ -78,11 +97,9 @@ void MacApplication::Update(float p_DeltaTime)
 
 MacApplication::~MacApplication()
 {
-    if (m_WindowPassDescriptor)
+    if (m_ColorAttachmentDescriptor)
     {
-        m_WindowPassDescriptor->release();
-        m_WindowPassDescriptor = nullptr;
+        m_ColorAttachmentDescriptor->release();
+        m_ColorAttachmentDescriptor = nullptr;
     }
 }
-
-
