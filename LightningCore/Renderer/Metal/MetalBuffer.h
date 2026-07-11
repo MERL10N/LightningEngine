@@ -49,11 +49,4 @@ private:
     MTL::Buffer* m_IndexBuffer = nullptr;
 };
 
-class MetalArgumentBuffer
-{
-public:
-private:
-    
-};
-
 #endif /* MetalBuffer_hpp */
