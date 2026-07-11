@@ -5,7 +5,16 @@
 
 #include <metal_stdlib>
 using namespace metal;
-
+/*
+ 
+ TODO:
+ 
+ - [] Implement Lightmaps
+ - [] Implement Normal Mapping
+ - [] Implement Shadow Mapping
+ - [] Implement Deferred Rendering
+ 
+*/
 struct Light
 {
     float3 direction;
@@ -58,9 +67,17 @@ struct TextureArguments
     texture2d<float> colorTexture[[id(0)]];
 };
 
+struct Material
+{
+    texture2d<float>    diffuse[[id(0)]];
+    float3              specular[[id(1)]];
+    float               shininess[[id(2)]];
+};
+
 // Vertex shader
 vertex VertexOut vertex_main(VertexIn in [[stage_in]],
-                             constant Uniforms &uniforms[[buffer(1)]])
+                             constant Uniforms &uniforms[[buffer(1)]],
+                             uint instanceID [[instance_id]])
 {
     VertexOut out;
     float4 worldPos = uniforms.model * float4(in.position, 1.0f);
