@@ -37,11 +37,11 @@ public:
     void ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch = true);
     void ProcessMouseMovement(float xOffset, const float yOffset, const bool constrainPitch);
     
-    inline simd::float4x4 GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    inline const simd::float4x4& GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
     
     inline float GetZoom() const { return m_Zoom; }
     
-    inline simd::float3 GetPosition() const  { return m_Position; }
+    inline const simd::float3& GetPosition() const  { return m_Position; }
     
 private:
     
@@ -63,7 +63,7 @@ private:
     
     void UpdateCameraVectors();
     
-    float Radians(float degrees);
+    float Radians(float degrees) const;
     
     simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const;
     
