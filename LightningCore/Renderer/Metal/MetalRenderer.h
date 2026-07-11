@@ -129,6 +129,7 @@ private:
     
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
+    
     std::vector<MTL::Buffer*>       m_UniformBufferPool;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
     size_t                          m_UniformBufferIndex;
@@ -154,6 +155,6 @@ private:
     size_t          m_FrameNum;
     size_t          m_FrameIndex;
     
-    const uint16_t MAX_ENTITIES = 10000;
+    static constexpr uint16_t MAX_ENTITIES = 10000;
 };
 #endif //METALRENDERER_H

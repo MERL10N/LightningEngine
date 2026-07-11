@@ -11,6 +11,7 @@
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Camera/Camera.h"
 #include <simd/simd.h>
+#include "Math/AAPLMathUtilities.h"
 
 Scene::Scene()
 {
@@ -38,6 +39,7 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
     auto meshes = m_Registry.view<TransformComponent, MeshComponent>(entt::exclude<TextureComponent, LightComponent>);
+    
     for (const auto &entity : light_sources)
     {
         auto [transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
@@ -47,13 +49,23 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     for (const auto &entity : textured_meshes)
     {
         auto [transform, mesh, textures] = textured_meshes.get<TransformComponent, MeshComponent, TextureComponent>(entity);
-        p_Renderer.RenderMesh(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, textures.GetTexture());
+        
+        matrix_float4x4 rotationMatrix = matrix4x4_rotation(transform.m_RotationAngle, transform.m_Rotation.x, transform.m_Rotation.y, transform.m_Rotation.z);
+        
+        matrix_float4x4 rs = matrix_multiply(rotationMatrix, transform.m_Scale);
+        matrix_float4x4 modelMatrix = matrix_multiply(transform.m_Transform, rs);
+        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, textures.GetTexture());
     }
     
     for (const auto &entity : meshes)
     {
         auto [transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
-        p_Renderer.RenderMesh(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, nullptr);
+        
+        matrix_float4x4 rotationMatrix = matrix4x4_rotation(transform.m_RotationAngle, transform.m_Rotation.x, transform.m_Rotation.y, transform.m_Rotation.z);
+        
+        matrix_float4x4 rs = matrix_multiply(rotationMatrix, transform.m_Scale);
+        matrix_float4x4 modelMatrix = matrix_multiply(transform.m_Transform, rs);
+        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, nullptr);
     }
     
     p_Renderer.Commit();
