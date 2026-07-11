@@ -6,8 +6,6 @@
 #define METALSHADER_H
 
 #include "Metal/MTLPixelFormat.hpp"
-#include "Metal/MTLRenderCommandEncoder.hpp"
-#include "Metal/MTL4ArgumentTable.hpp"
 #include <string>
 #include <simd/simd.h>
 
@@ -50,9 +48,6 @@ public:
     
     
     void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
-    
-
-    MTL::Buffer* InitialiseArgumentBuffers(const MTL::Texture* p_Texture) const;
     
     inline const MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
