@@ -7,7 +7,8 @@
 
 #ifndef Component_h
 #define Component_h
-#include "Math/AAPLMathUtilities.h"
+#include <hlsl++.h>
+using namespace hlslpp;
 #include "Primitives/MeshBuilder.h"
 #include "Renderer/Metal/MetalTexture.h"
 #include "Camera/Camera.h"
@@ -26,14 +27,28 @@ struct TagComponent
 
 struct TransformComponent
 {
-    matrix_float4x4 m_Transform = simd::float4x4(1.0f);
-    matrix_float4x4 m_Rotation;
-    matrix_float4x4 m_Scale =  matrix4x4_scale(1.0f, 1.0f, 1.0f);
+    float4x4 m_Translation  = float4x4::identity();
+    float3   m_Rotation     = float3(0.0f, 1.0f, 0.0f);
+    float4x4 m_Scale        = float4x4::scale(1.0f, 1.0f, 1.0f);
+    
+    float m_RotationAngle = 0.0f;
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
-    TransformComponent(const simd::float3 &transform)
-    : m_Transform(matrix4x4_translation(transform))
+    TransformComponent(const float3 &transform)
+    : m_Translation(float4x4::translation(transform))
     {}
+    
+    TransformComponent(const float3 &transform, const float3 &scale)
+    : m_Translation(float4x4::translation(transform)),
+      m_Scale(float4x4::scale(scale.x, scale.y, scale.z))
+    {}
+    
+    TransformComponent(const float3 &transform, const float &angle, const float3 &rotationAxis)
+    : m_Translation(float4x4::translation(transform)),
+      m_RotationAngle((angle * M_PI) / 180.f),
+      m_Rotation(rotationAxis)
+    {
+    }
 };
 
 struct TextureComponent
@@ -64,11 +79,6 @@ struct TextureComponent
         return (*this);
     }
     
-   const MetalTexture* GetTexture() const
-   {
-       return m_Texture;
-   }
-    
     ~TextureComponent()
     {
         if (m_Texture)
@@ -91,11 +101,11 @@ struct MeshComponent
 
 struct LightComponent
 {
-    simd::float3 m_Color = simd::make_float3(1.0f, 1.0f, 1.0f);
-    simd::float3 m_Position = simd::make_float3(0.0f, 0.0f, 0.0f);
+    float3 m_Color = float3(1.0f, 1.0f, 1.0f);
+    float3 m_Position = float3(0.0f, 0.0f, 0.0f);
     LightComponent() = default;
     LightComponent(const LightComponent&) = default;
-    LightComponent(const simd::float3& color)
+    LightComponent(const float3& color)
     : m_Color(color)
     {
     }

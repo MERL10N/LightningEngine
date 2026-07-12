@@ -8,10 +8,13 @@
 #include "MetalBuffer.h"
 #include "Metal/Metal.hpp"
 
-MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice)
-: m_MetalDevice(p_MetalDevice),
-  m_VertexBuffer(nullptr)
+MetalVertexBuffer::MetalVertexBuffer(MTL::Device* p_MetalDevice, const uint32_t p_Size)
+: m_MetalDevice(p_MetalDevice)
 {
+    if (!m_VertexBuffer)
+    {
+        m_VertexBuffer = m_MetalDevice->newBuffer(nullptr, p_Size, MTL::ResourceStorageModeShared);
+    }
 }
 
 MetalVertexBuffer::~MetalVertexBuffer()
@@ -28,10 +31,19 @@ MetalVertexBuffer::~MetalVertexBuffer()
    }
 }
 
-MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice)
-: m_MetalDevice(p_MetalDevice),
-  m_IndexBuffer(nullptr)
+MTL::Buffer *MetalVertexBuffer::Create(MTL::Device *p_MetalDevice, const uint32_t size)
 {
+    return p_MetalDevice->newBuffer(size, MTL::ResourceStorageModeShared);
+}
+
+
+MetalIndexBuffer::MetalIndexBuffer(MTL::Device *p_MetalDevice, const uint32_t* indices, const uint32_t size)
+: m_MetalDevice(p_MetalDevice)
+{
+    if (!m_IndexBuffer)
+    {
+        m_IndexBuffer = m_MetalDevice->newBuffer(indices, size, MTL::ResourceStorageModeShared);
+    }
 }
 
 MetalIndexBuffer::~MetalIndexBuffer()
@@ -46,13 +58,7 @@ MetalIndexBuffer::~MetalIndexBuffer()
    }
 }
 
-void MetalIndexBuffer::BindBuffer(const void* p_Vertices)
+MTL::Buffer* MetalIndexBuffer::Create(MTL::Device* p_MetalDevice, const uint16_t* indices, const uint32_t size)
 {
-    assert(m_MetalDevice);
-    
-    if (!m_IndexBuffer)
-    {
-        m_IndexBuffer = m_MetalDevice->newBuffer(p_Vertices, sizeof(p_Vertices), MTL::ResourceStorageModeShared);
-    }
-    
+    return p_MetalDevice->newBuffer(indices, size, MTL::ResourceStorageModeShared);
 }

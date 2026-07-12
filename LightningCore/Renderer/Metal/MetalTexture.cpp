@@ -26,10 +26,12 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
         std::println("Image found at: {} ", m_Filepath);
     }
     
+    
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     
     m_TextureDescriptor->setWidth(m_Width);
     m_TextureDescriptor->setHeight(m_Height);
+    m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageShaderWrite);
 
     m_Texture = m_MetalDevice->newTexture(m_TextureDescriptor);
 
@@ -37,6 +39,14 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     NS::UInteger bytesPerRow = 4 * m_Width;
 
     m_Texture->replaceRegion(region, 0, image, bytesPerRow);
+    
+    
+    if (m_MetalDevice->argumentBuffersSupport() == MTL::ArgumentBuffersTier2)
+    {
+        m_ArgumentBuffer = m_MetalDevice->newBuffer(sizeof(MTL::ResourceID), MTL::ResourceStorageModeShared);
+        MTL::ResourceID textureID = m_Texture->gpuResourceID();
+        memcpy(m_ArgumentBuffer->contents(), &textureID, sizeof(MTL::ResourceID));
+    }
 
     m_TextureDescriptor->release();
     stbi_image_free(image);
@@ -45,6 +55,12 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
 
 MetalTexture::~MetalTexture()
 {
+    if (m_ArgumentBuffer)
+    {
+        m_ArgumentBuffer->release();
+        m_ArgumentBuffer = nullptr;
+    }
+    
     if (m_MetalDevice)
     {
         m_MetalDevice->release();
@@ -58,4 +74,3 @@ MetalTexture::~MetalTexture()
         m_Texture = nullptr;
     }
 }
-

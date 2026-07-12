@@ -6,8 +6,8 @@
 //
 
 #include "MacEditorLayer.h"
-#include "imgui.h"
-#include "Metal/Metal.hpp"
+#include <imgui/imgui.h>
+#include <Metal/Metal.hpp>
 
 MacEditorLayer::MacEditorLayer(MTL::Device* p_MetalDevice)
 : s_AssetsPath("Assets"),

@@ -12,6 +12,7 @@
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
 #include "Scene/Scene.h"
+#include "Entity/Entity.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "MacEditorLayer.h"
@@ -21,12 +22,17 @@ class MetalRenderer;
 class MacEditorLayer;
 class MetalTexture;
 
-namespace MTL
+namespace MTL4
 {
     class Device;
     class RenderPassDescriptor;
     class RenderCommandEncoder;
     class CommandBuffer;
+}
+
+namespace MTL
+{
+    class Drawable;
 }
 
 namespace CA
@@ -45,10 +51,12 @@ public:
 private:
     MacWindow m_MacWindow;
     
-    MTL::Device*                m_MetalDevice           = nullptr;
-    MTL::RenderPassDescriptor*  m_WindowPassDescriptor  = nullptr;
-    MTL::CommandBuffer*         m_ImGuiCommandBuffer    = nullptr;
-    MTL::RenderCommandEncoder*  m_ImGuiCommandEncoder   = nullptr;
+    MTL::Device*                    m_MetalDevice           = nullptr;
+    MTL4::RenderPassDescriptor*     m_WindowPassDescriptor  = nullptr;
+    MTL4::CommandAllocator*         m_ImGuiCommandAllocator = nullptr;
+    MTL4::CommandBuffer*            m_ImGuiCommandBuffer    = nullptr;
+    MTL4::RenderCommandEncoder*     m_ImGuiCommandEncoder   = nullptr;
+    MTL::Drawable*                  m_Drawable              = nullptr;
     
     MacEditorLayer      m_MacEditorLayer;
     MetalRenderer       m_MetalRenderer;
@@ -70,6 +78,8 @@ private:
     AppleController m_Controller;
     
     Scene m_Scene;
+    
+    Entity m_CameraEntity;
     
     bool b_EnableWireframe = false;
     
