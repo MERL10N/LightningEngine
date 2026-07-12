@@ -8,7 +8,10 @@
 #ifndef Camera_h
 #define Camera_h
 
-#include <simd/simd.h>
+#define HLSLPP_FEATURE_TRANSFORM
+#include <hlsl++.h>
+
+using namespace hlslpp;
 
 enum class CAMERA_MOVEMENT
 {
@@ -29,7 +32,7 @@ constexpr float ZOOM        = 60.0f;
 class Camera
 {
 public:
-    Camera(simd::float3 position = simd::make_float3(0.0f, 0.0f, 5.0), simd::float3 up = simd::make_float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    Camera(float3 position = float3(0.0f, 0.0f, -5.0f), float3 up = float3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
     ~Camera();
     
     void ProcessKeyboardInput(const CAMERA_MOVEMENT &direction, const float deltaTime);
@@ -37,19 +40,19 @@ public:
     void ProcessControllerRightThumbstickInput(const float p_AxisValueX, const float p_AxisValueY, const bool p_ConstrainPitch = true);
     void ProcessMouseMovement(float xOffset, const float yOffset, const bool constrainPitch);
     
-    inline const simd::float4x4& GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
+    inline const float4x4& GetViewMatrix() const { return LookAt(m_Position, m_Position + m_Front, m_Up); }
     
     inline float GetZoom() const { return m_Zoom; }
     
-    inline const simd::float3& GetPosition() const  { return m_Position; }
+    inline const float3& GetPosition() const  { return m_Position; }
     
 private:
     
-    simd::float3 m_Position;
-    simd::float3 m_Front;
-    simd::float3 m_Up;
-    simd::float3 m_Right;
-    simd::float3 m_WorldUp;
+    float3 m_Position;
+    float3 m_Front;
+    float3 m_Up;
+    float3 m_Right;
+    float3 m_WorldUp;
     
     float m_Yaw;
     float m_Pitch;
@@ -65,7 +68,7 @@ private:
     
     float Radians(float degrees) const;
     
-    simd::float4x4 LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const;
+    float4x4 LookAt(const float3 &eye, const float3 &center, const float3 &up) const;
     
 };
 

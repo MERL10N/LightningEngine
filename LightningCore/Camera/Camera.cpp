@@ -8,7 +8,7 @@
 #include "Camera.h"
 
 
-Camera::Camera(simd::float3 position, simd::float3 up, float yaw, float pitch)
+Camera::Camera(float3 position, float3 up, float yaw, float pitch)
 : m_Position(position),
   m_WorldUp(up),
   m_Yaw(yaw),
@@ -76,15 +76,15 @@ void Camera::ProcessControllerRightThumbstickInput(const float p_AxisValueX, con
 
 void Camera::UpdateCameraVectors()
 {
-    simd::float3 front;
+    float3 front;
     front.x = cos(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     front.y = sin(Radians(m_Pitch));
-    front.z = sin(Radians(m_Yaw)) * cos(Radians(m_Pitch));
+    front.z = -sin(Radians(m_Yaw)) * cos(Radians(m_Pitch));
     
-    m_Front = simd::normalize(front);
+    m_Front = normalize(front);
     
-    m_Right = simd::normalize(simd::cross(m_Front, m_WorldUp));
-    m_Up = simd::normalize(simd::cross(m_Right, m_Front));
+    m_Right = normalize(cross(m_WorldUp, m_Front));
+    m_Up = normalize(cross(m_Front, m_Right));
 }
 
 void Camera::ProcessMouseMovement(float xOffset, float yOffset, const bool constrainPitch)
@@ -112,19 +112,16 @@ float Camera::Radians(float degrees) const
     return degrees * M_PI / 180.0f;
 }
 
-simd::float4x4 Camera::LookAt(const simd::float3 &eye, const simd::float3 &center, const simd::float3 &up) const
+float4x4 Camera::LookAt(const float3 &eye, const float3 &center, const float3 &up) const
 {
-    simd::float3 z = simd::normalize(eye - center);
-    simd::float3 x = simd::normalize(simd::cross(up, z));
-    simd::float3 y = simd::cross(z, x);
+    float3 z = normalize(center - eye);
+    float3 x = normalize(cross(up, z));
+    float3 y = cross(z, x);
 
-    simd::float4x4 viewMatrix;
-    viewMatrix.columns[0] = simd::make_float4(x, 0);
-    viewMatrix.columns[1] = simd::make_float4(y, 0);
-    viewMatrix.columns[2] = simd::make_float4(z, 0);
-    viewMatrix.columns[3] = simd::make_float4(eye, 1);
-
-    return simd::inverse(viewMatrix);
+    return float4x4(float4(x.x, y.x, z.x, 0.0f),
+                    float4(x.y, y.y, z.y, 0.0f),
+                    float4(x.z, y.z, z.z, 0.0f),
+                    float4(-dot(x,eye), -dot(y,eye), -dot(z,eye), 1.0f));
 }
 
 

@@ -13,18 +13,18 @@
 
 Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)
 {
-    constexpr Vertex vertices[] =
+    Vertex vertices[] =
     {
-        {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
-        {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
-        {{ 0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 1.0}},
-        {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
+        {float3(-0.5f, -0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(0.0, 0.0)},
+        {float3( 0.5f, -0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(1.0, 0.0)},
+        {float3( 0.5f,  0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(1.0, 1.0)},
+        {float3(-0.5f,  0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(0.0, 1.0)},
     };
     
-    constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
+    constexpr unsigned int vertexBufferSize = 4 * sizeof(Vertex);
         
     constexpr uint16_t indices[] = {0, 1, 3, 2};
-    constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
+    constexpr unsigned int indexBufferSize = 4 * sizeof(ushort);
         
     //vertex buffer
     m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
@@ -41,7 +41,7 @@ Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* te
 
 Mesh_3D MeshBuilder::GeneratePlane(MTL::Device *device)
 {
-    constexpr Vertex3D vertices[] =
+    Vertex3D vertices[] =
     {
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
         {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
@@ -67,7 +67,7 @@ Mesh_3D MeshBuilder::GeneratePlane(MTL::Device *device)
 Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
 {
    
-    constexpr Vertex3D vertices[] =
+    Vertex3D vertices[] =
     {
         // Front face
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
@@ -132,7 +132,7 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
      
 }
 
-Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color)
+Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const float3 &color)
 {
     std::vector<Vertex3D> vertices;
     std::vector<u_int16_t> indices;
@@ -146,15 +146,15 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
         {
             float xSegment = (float)x / (float)xSegments;
             float ySegment = (float)y / (float)ySegments;
-            float xPos = simd::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = simd::cos(ySegment * PI);
-            float zPos = simd::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float yPos = std::cos(ySegment * PI);
+            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
             
-            vertex.pos = simd::make_float3(xPos, yPos, zPos);
+            vertex.pos = float3(xPos, yPos, zPos);
             vertex.color = color;
-            vertex.normals = simd::normalize(simd::make_float3(xPos, yPos, zPos));
-            vertex.texCoord = simd::make_float2(xSegment, ySegment);
+            vertex.normals = normalize(float3(xPos, yPos, zPos));
+            vertex.texCoord = float2(xSegment, ySegment);
             
             vertices.push_back(vertex);
         }

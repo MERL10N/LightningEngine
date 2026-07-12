@@ -53,10 +53,7 @@ class Sprite;
 struct Mesh_3D;
 struct Mesh_2D;
 
-
-#include <simd/simd.h>
 #include "Camera/Camera.h"
-#include "Math/AAPLMathUtilities.h"
 #include "Scene/Component.h"
 #include "ShaderUniforms.h"
 #include <vector>
@@ -69,9 +66,9 @@ public:
     ~MetalRenderer();
 
     // Create quads with texture
-    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
-    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
-    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    void CreateQuad(const char* p_FilePath, const float3 &position);
+    void CreateQuad(const char* p_FilePath, const float3 &scale, const float3 &position);
+    void CreateQuad(const float2 &position, const float2 &size, const char* p_FilePath);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
@@ -80,8 +77,8 @@ public:
     void CommitResidencySet();
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
-    void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
-    void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
+    void RenderLights(const float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
     void Commit();
     
     inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
@@ -142,12 +139,12 @@ private:
     
     bool b_EnableWireframe = false;
     
-    matrix_float4x4 m_ViewMatrix;
-    matrix_float4x4 m_PerspectiveMatrix;
-    matrix_float4x4 m_ModelMatrix;
+    float4x4 m_ViewMatrix;
+    float4x4 m_PerspectiveMatrix;
+    float4x4 m_ModelMatrix;
     
     LightComponent  m_LightComponent;
-    matrix_float4x4 m_LightPosition;
+    float4x4 m_LightPosition;
     
     LightUniforms   m_LightUniforms;
     Uniforms        m_Uniforms;

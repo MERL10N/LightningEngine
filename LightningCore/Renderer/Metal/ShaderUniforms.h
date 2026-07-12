@@ -8,19 +8,20 @@
 #ifndef ShaderUniforms_h
 #define ShaderUniforms_h
 
-#include <simd/simd.h>
+#define HLSLPP_FEATURE_TRANSFORM
+#include <hlsl++.h>
 
 struct Uniforms
 {
-    simd::float4x4 perspective;
-    simd::float4x4 view;
-    simd::float4x4 model;
+    float4x4 perspective;
+    float4x4 view;
+    float4x4 model;
 };
 struct LightUniforms
 {
-    simd::float3 m_LightColor;
-    simd::float3 m_LightPosition;
-    simd::float3 m_CameraPosition;
+    float3 m_LightColor;
+    float3 m_LightPosition;
+    float3 m_CameraPosition;
 };
 
 #endif /* ShaderUniforms_h */

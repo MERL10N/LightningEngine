@@ -9,7 +9,6 @@
 #define Scene_h
 
 #include <entt/entt.hpp>
-#include <simd/simd.h>
 
 class Entity;
 class Camera;

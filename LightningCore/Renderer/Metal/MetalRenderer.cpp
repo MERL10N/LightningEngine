@@ -246,7 +246,7 @@ void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
     
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
-    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingCounterClockwise);
+    m_RenderCommandEncoder->setFrontFacingWinding(MTL::WindingClockwise);
     m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
     
     if (b_EnableWireframe)
@@ -262,27 +262,22 @@ void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
     
     float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
     
-    m_PerspectiveMatrix = matrix_perspective_right_hand(fov,
-                                                       p_AspectRatio,
-                                                       0.1f,
-                                                       1000.f);
-    
-
+    m_PerspectiveMatrix = float4x4::perspective(projection(frustum::field_of_view_y(fov, p_AspectRatio, 0.1f, 1000.f), zclip::zero, zdirection::forward, zplane::finite));
 }
 
-void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D& p_3DMesh, const LightComponent &p_LightComponent)
+void MetalRenderer::RenderLights(const float4x4 &p_ModelMatrix, const Mesh_3D& p_3DMesh, const LightComponent &p_LightComponent)
 {
     m_ModelMatrix = p_ModelMatrix;
     m_LightComponent = p_LightComponent;
     m_Uniforms  = {m_PerspectiveMatrix, m_ViewMatrix, m_ModelMatrix};
     memcpy(m_UniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
     
-    simd::float3 color = m_LightComponent.m_Color;
+    float3 color = m_LightComponent.m_Color;
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &color, sizeof(color));
     
-    m_LightComponent.m_Position = simd::make_float3(p_ModelMatrix.columns[3].x,
-                                                    p_ModelMatrix.columns[3].y,
-                                                    p_ModelMatrix.columns[3].z);
+    m_LightComponent.m_Position = float3(p_ModelMatrix[3].x,
+                                                    p_ModelMatrix[3].y,
+                                                    p_ModelMatrix[3].z);
     
     if (m_LightShader)
     {
@@ -296,13 +291,13 @@ void MetalRenderer::RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mes
     m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
                                                   p_3DMesh.m_IndexCount,
-                                                  MTL::IndexType::IndexTypeUInt16,
+                                                  MTL::IndexTypeUInt16,
                                                   p_3DMesh.m_IndexBuffer->gpuAddress(),
                                                   p_3DMesh.m_IndexBuffer->length());
     ++m_UniformBufferIndex;
 }
 
-void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
+void MetalRenderer::RenderMesh(const float4x4& p_ModelMatrix, const Mesh_3D& p_3DMesh, const MetalTexture* p_Texture)
 {
     m_ModelMatrix = p_ModelMatrix;
     m_Uniforms  = {m_PerspectiveMatrix, m_ViewMatrix, m_ModelMatrix};
@@ -332,7 +327,7 @@ void MetalRenderer::RenderMesh(const matrix_float4x4& p_ModelMatrix, const Mesh_
     m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
     m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
                                                   p_3DMesh.m_IndexCount,
-                                                  MTL::IndexType::IndexTypeUInt16,
+                                                  MTL::IndexTypeUInt16,
                                                   p_3DMesh.m_IndexBuffer->gpuAddress(),
                                                   p_3DMesh.m_IndexBuffer->length());
     
