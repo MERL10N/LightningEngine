@@ -27,7 +27,7 @@ struct TagComponent
 
 struct TransformComponent
 {
-    float4x4 m_Translation    = float4x4::identity();
+    float4x4 m_Translation  = float4x4::identity();
     float3   m_Rotation     = float3(0.0f, 1.0f, 0.0f);
     float4x4 m_Scale        = float4x4::scale(1.0f, 1.0f, 1.0f);
     
@@ -78,11 +78,6 @@ struct TextureComponent
         }
         return (*this);
     }
-    
-   inline const MetalTexture* GetTexture() const
-   {
-       return m_Texture;
-   }
     
     ~TextureComponent()
     {

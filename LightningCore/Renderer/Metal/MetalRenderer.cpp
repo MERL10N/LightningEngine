@@ -7,6 +7,7 @@
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
+#include "MetalBuffer.h"
 #include "Primitives/MeshBuilder.h"
 #include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
@@ -210,7 +211,7 @@ MetalRenderer::~MetalRenderer()
     
 }
 
-void MetalRenderer::RegisterMesh(const Mesh_3D & p_3DMesh)
+void MetalRenderer::RegisterMesh(const Mesh_3D &p_3DMesh)
 {
     m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
     m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
@@ -226,6 +227,20 @@ void MetalRenderer::CommitResidencySet()
 {
     m_ResidencySet->commit();
 }
+
+// TODO: Work on this function so that MetalBuffer code can be abstracted away from MeshBuilder
+void MetalRenderer::CreateMesh(const Mesh_3D &p_3DMesh)
+{
+    /*
+     m_ResidencySet->addAllocation(p_3DMesh.m_VertexBuffer);
+     m_ResidencySet->addAllocation(p_3DMesh.m_IndexBuffer);
+    m_VertexBuffer = MetalVertexBuffer::Create(m_MetalDevice, static_cast<uint32_t>(p_3DMesh.m_VertexSize));
+    memcpy(p_3DMesh.m_VertexBuffer->contents(), p_3DMesh.m_Vertices.data(), p_3DMesh.m_Vertices.size());
+    m_IndexBuffer  = MetalIndexBuffer::Create(m_MetalDevice, p_3DMesh.m_Indices, static_cast<uint32_t>(p_3DMesh.m_IndexSize));
+    memcpy(p_3DMesh.m_IndexBuffer->contents(), p_3DMesh.m_Indices.data(), p_3DMesh.m_Indices.size());
+     */
+}
+
 
 void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
 {
@@ -276,8 +291,8 @@ void MetalRenderer::RenderLights(const float4x4 &p_ModelMatrix, const Mesh_3D& p
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &color, sizeof(color));
     
     m_LightComponent.m_Position = float3(p_ModelMatrix[3].x,
-                                                    p_ModelMatrix[3].y,
-                                                    p_ModelMatrix[3].z);
+                                         p_ModelMatrix[3].y,
+                                         p_ModelMatrix[3].z);
     
     if (m_LightShader)
     {

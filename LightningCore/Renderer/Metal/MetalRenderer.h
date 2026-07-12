@@ -70,6 +70,8 @@ public:
     void CreateQuad(const char* p_FilePath, const float3 &scale, const float3 &position);
     void CreateQuad(const float2 &position, const float2 &size, const char* p_FilePath);
     
+    void CreateMesh(const Mesh_3D &p_3DMesh);
+    
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
     void RegisterMesh(const Mesh_3D &p_3DMesh);
@@ -124,6 +126,8 @@ private:
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
     
+    MTL::Buffer*                    m_VertexBuffer              = nullptr;
+    MTL::Buffer*                    m_IndexBuffer               = nullptr;
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     

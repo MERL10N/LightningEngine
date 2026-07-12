@@ -11,7 +11,10 @@
 #define HLSLPP_FEATURE_TRANSFORM
 #include <hlsl++.h>
 using namespace hlslpp;
+
 #include "Sprite.h"
+#include <stddef.h>
+#include <vector>
 
 class MetalTexture;
 namespace MTL
@@ -46,7 +49,11 @@ struct Mesh_2D
 struct Mesh_3D
 {
     MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
-    MTL::Buffer* m_ArgumentBuffer;
+    
+    // Platform agnostic member variables
+    std::vector<Vertex3D> m_Vertices;
+    std::vector<uint16_t> m_Indices;
+    size_t m_VertexSize, m_IndexSize;
     uint16_t m_IndexCount;
 };
 
@@ -59,6 +66,13 @@ public:
     Mesh_3D GeneratePlane(MTL::Device* device);
     Mesh_3D GenerateCube(MTL::Device* device);
     Mesh_3D GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const float3 &color = float3(0.5f, 0.5f, 0.5f));
+    
+    // Platform agnotic implementation
+    Mesh_3D GenerateCube();
+    Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 &color = float3(0.5f, 0.5f, 0.5f));
+    
+    const std::vector<Vertex3D>& GetVertices() const { return m_Mesh3D.m_Vertices; }
+    const std::vector<uint16_t>& GetIndices()  const { return m_Mesh3D.m_Indices;  }
 private:
     Mesh_2D m_Mesh2D;
     Mesh_3D m_Mesh3D;

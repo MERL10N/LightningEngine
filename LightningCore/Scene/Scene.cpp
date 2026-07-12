@@ -65,7 +65,7 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, textures.GetTexture());
+        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, textures.m_Texture);
     }
     
     for (const auto &entity : meshes)
