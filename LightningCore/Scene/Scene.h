@@ -8,7 +8,7 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include "entt/single_include/entt/entt.hpp"
+#include <entt/entt.hpp>
 #include <simd/simd.h>
 
 class Entity;

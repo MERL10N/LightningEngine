@@ -6,15 +6,17 @@
 //
 
 #include "MacEditorApplication.h"
-#include "imgui/imgui.h"
-#include "imgui/backends/imgui_impl_glfw.h"
-#include "imgui/backends/imgui_impl_metal4.h"
-#include "QuartzCore/QuartzCore.hpp"
 #include "Scene/Component.h"
 #include "Primitives/MeshBuilder.h"
-#include "Entity/Entity.h"
-#include "GLFW/glfw3.h"
-#include "Metal/Metal.hpp"
+
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_metal4.h>
+
+#include <GLFW/glfw3.h>
+
+#include <QuartzCore/QuartzCore.hpp>
+#include <Metal/Metal.hpp>
 #include <simd/simd.h>
 
 MacEditorApplication::MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title)
@@ -72,7 +74,9 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, simd::make_float3(1.0f, 1.0f, 1.0f)));
     m_MetalRenderer.RegisterMesh(sphere.GetComponent<MeshComponent>().m_Mesh);
     m_MetalRenderer.CommitResidencySet();
-     
+    
+    m_CameraEntity = m_Scene.CreateEntity("Camera Entity");
+    m_CameraEntity.AddComponent<CameraComponent>();
 }
 
 

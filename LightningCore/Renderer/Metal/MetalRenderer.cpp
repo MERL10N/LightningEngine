@@ -4,7 +4,6 @@
 
 #include "MetalRenderer.h"
 #include "ShaderUniforms.h"
-#include "Metal/Metal.hpp"
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
@@ -12,10 +11,12 @@
 #include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
 #include "MetalShader.h"
-#include "SubTexture.h"
-#include "GLFW/glfw3.h"
 #include "Scene/Scene.h"
 #include "Scene/Component.h"
+
+#include <GLFW/glfw3.h>
+#include <Metal/Metal.hpp>
+
 #include <print>
 #include <cstddef>
 

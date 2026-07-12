@@ -23,25 +23,20 @@ project "LightningCore"
         "ThirdParty/imgui/backends/imgui_impl_glfw.cpp",
         "ThirdParty/imgui/backends/imgui_impl_metal.mm",
         "ThirdParty/imgui/backends/imgui_impl_glfw.h",
-        "ThirdParty/imgui/backends/imgui_impl_metal.h",
+        "ThirdParty/imgui/backends/imgui_impl_metal4.h",
+        "ThirdParty/imgui/backends/imgui_impl_metal4.mm",
         "ThirdParty/imgui/imgui.cpp",
         "ThirdParty/imgui/imgui_draw.cpp",
         "ThirdParty/imgui/imgui_tables.cpp",
         "ThirdParty/imgui/imgui_widgets.cpp",
         "ThirdParty/imgui/imgui_demo.cpp",
-        "ThirdParty/entt/single_include"
+        "ThirdParty/entt/single_include",
+        "ThirdParty/hlslpp/**.h"
     }
 
     includedirs 
     { 
-        "LightningCore",
-        "ThirdParty",
-        "ThirdParty/imgui",
-        "ThirdParty/glfw/include",
-        "ThirdParty/glm",
-        "ThirdParty/stb",
-        "ThirdParty/entt/single_include",
-        "ThirdParty/metal-cpp",
+        "LightningCore"
     }
 
     filter "system:macosx"
@@ -64,11 +59,21 @@ project "LightningCore"
             "Foundation.framework"
         }
 
+        externalincludedirs
+         {
+            "ThirdParty",
+            "ThirdParty/imgui",
+            "ThirdParty/glfw/include",
+            "ThirdParty/hlslpp/include",
+            "ThirdParty/glm",
+            "ThirdParty/stb",
+            "ThirdParty/entt/single_include",
+            "ThirdParty/metal-cpp",
+        }
+
         buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
-
-        externalincludedirs { "ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "ThirdParty/stb", "ThirdParty/imgui", "ThirdParty/spdlog/include", "ThirdParty/glfw/include"}
     filter {}
 
 -- Lightning Game (app)
@@ -88,7 +93,7 @@ project "LightningGame"
         "LightningGame/Assets/Shaders/**.metal"
     }
 
-    includedirs { "ThirdParty", "LightningGame/Source", "LightningCore" }
+    includedirs {"LightningGame/Source"}
     libdirs { "" }
     links { "LightningCore" }
 
@@ -100,6 +105,7 @@ project "LightningGame"
         buildaction "Resource"
         filter {}
 
+        externalincludedirs {"ThirdParty/metal-cpp", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include", "ThirdParty/entt/single_include", "ThirdParty/hlslpp/include"}
         libdirs { "ThirdParty/glfw/lib-universal" }
 
         links 
@@ -134,8 +140,6 @@ project "LightningGame"
         }
 
     filter {}
-
-    externalincludedirs {"ThirdParty/metal-cpp", "ThirdParty/metal-cpp-extensions", "LightningCore/", "ThirdParty/stb", "ThirdParty/glfw/include"}
     libdirs { "ThirdParty/glfw/lib-universal" }
     links { "glfw3" }
 
@@ -164,7 +168,16 @@ project "LightningEditor"
         "LightningEditor/Assets/**",
     }
 
-    includedirs { "LightningCore", "ThirdParty", "ThirdParty/imgui", "ThirdParty/glfw/include", "ThirdParty/metal-cpp" }
+    externalincludedirs 
+    {
+        "LightningCore",
+        "ThirdParty", 
+        "ThirdParty/imgui", 
+        "ThirdParty/glfw/include", 
+        "ThirdParty/metal-cpp",
+        "ThirdParty/hlslpp/include",
+        "ThirdParty/entt/single_include"
+    }
 
     filter "system:macosx"
         cppdialect "C++23"
