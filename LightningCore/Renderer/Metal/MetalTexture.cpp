@@ -40,15 +40,12 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
 
     m_Texture->replaceRegion(region, 0, image, bytesPerRow);
     
-    //InitialiseTextureArguments();
-    
     
     if (m_MetalDevice->argumentBuffersSupport() == MTL::ArgumentBuffersTier2)
     {
-        m_ArgumentBuffer = m_MetalDevice->newBuffer(sizeof(MTL::ResourceID), MTL::ResourceStorageModeManaged);
+        m_ArgumentBuffer = m_MetalDevice->newBuffer(sizeof(MTL::ResourceID), MTL::ResourceStorageModeShared);
         MTL::ResourceID textureID = m_Texture->gpuResourceID();
         memcpy(m_ArgumentBuffer->contents(), &textureID, sizeof(MTL::ResourceID));
-        m_ArgumentBuffer->didModifyRange(NS::Range(0, sizeof(MTL::ResourceID)));
     }
 
     m_TextureDescriptor->release();
