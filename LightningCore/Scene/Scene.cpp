@@ -33,15 +33,6 @@ Entity Scene::CreateEntity(const char* p_Tag)
 template <typename Renderer>
 void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio)
 {
-    /*
-    {
-        auto group = m_Registry.view<CameraComponent, TransformComponent>();
-        for (const auto &entity : group)
-        {
-            auto &[transform, camera] = m_Registry.get<TransformComponent>(entity).m_Transform;
-        }
-    }*/
-    
     p_Renderer.Submit(p_Camera, p_AspectRatio);
     
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
@@ -50,13 +41,13 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     
     for (const auto &entity : light_sources)
     {
-        auto [transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
+        const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
         p_Renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_Mesh, lights);
     }
     
     for (const auto &entity : textured_meshes)
     {
-        auto [transform, mesh, textures] = textured_meshes.get<TransformComponent, MeshComponent, TextureComponent>(entity);
+        const auto &[transform, mesh, textures] = textured_meshes.get<TransformComponent, MeshComponent, TextureComponent>(entity);
         
         float4x4 scaleMatrix = transform.m_Scale;
         float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
@@ -70,7 +61,7 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     
     for (const auto &entity : meshes)
     {
-        auto [transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
+        const auto &[transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
         
         float4x4 scaleMatrix = transform.m_Scale;
         float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
