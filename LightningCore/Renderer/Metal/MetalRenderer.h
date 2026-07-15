@@ -83,25 +83,18 @@ public:
     void RenderMesh(const float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
     void Commit();
     
-    inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
+    inline const MTL::Device* GetMetalDevice()                              const { return m_MetalDevice; }
+    inline const MTL::ResidencySet* GetMetalResidencySet()                  const { return m_ResidencySet; }
+    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
+    inline const MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
+    inline       MTL4::CommandBuffer* GetMetalCommandBuffer()               const { return m_MetalCommandBuffer; }
+    inline       MTL4::CommandQueue* GetMetalCommandQueue()                 const { return m_MetalCommandQueue; }
 
-    inline MTL4::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
-    
-    inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
-    
-    inline MTL::ResidencySet* GetMetalResidencySet() const { return m_ResidencySet; }
     
     inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
-    
-    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
-    
     inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder;}
-    
-    inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
-    
-    inline MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
-    
-    inline void SetMetalDrawable(MTL::Drawable* p_Drawable) { m_Drawable = p_Drawable; }
+    inline void SetWireframeMode(const bool p_EnableWireFrame)                              { b_EnableWireframe = p_EnableWireFrame; }
+    inline void SetMetalDrawable(MTL::Drawable* p_Drawable)                                 { m_Drawable = p_Drawable; }
 
 private:
     MTL::Device*                    m_MetalDevice               = nullptr;
