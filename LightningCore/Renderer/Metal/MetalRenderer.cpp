@@ -223,26 +223,25 @@ void MetalRenderer::CommitResidencySet()
     m_ResidencySet->commit();
 }
 
-// TODO: Work on this function so that MetalBuffer code can be abstracted away from MeshBuilder
-MeshHandle MetalRenderer::CreateMesh(const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture)
+MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture)
 {
     MTLMeshAttributes meshAttributes;
     
-    meshAttributes.m_IndexCount = p_3DMesh.m_IndexCount;
-    meshAttributes.m_VertexBuffer = MetalVertexBuffer::Create(m_MetalDevice, static_cast<uint32_t>(p_3DMesh.m_VertexSize));
-    memcpy(meshAttributes.m_VertexBuffer->contents(), p_3DMesh.m_Vertices.data(), p_3DMesh.m_VertexSize);
+    meshAttributes.m_IndexCount = mesh.m_IndexCount;
+    meshAttributes.m_VertexBuffer = m_MetalDevice->newBuffer(nullptr, static_cast<uint32_t>(mesh.m_VertexSize), MTL::ResourceStorageModeShared);
+    memcpy(meshAttributes.m_VertexBuffer->contents(), mesh.m_Vertices.data(), mesh.m_VertexSize);
     
-    meshAttributes.m_IndexBuffer  = MetalIndexBuffer::Create(m_MetalDevice, p_3DMesh.m_Indices.data(), static_cast<uint32_t>(p_3DMesh.m_IndexSize));
-    memcpy(meshAttributes.m_IndexBuffer->contents(), p_3DMesh.m_Indices.data(), p_3DMesh.m_IndexSize);
+    meshAttributes.m_IndexBuffer  = m_MetalDevice->newBuffer(mesh.m_Indices.data(), static_cast<uint32_t>(mesh.m_IndexSize), MTL::ResourceStorageModeShared);
+    memcpy(meshAttributes.m_IndexBuffer->contents(), mesh.m_Indices.data(), mesh.m_IndexSize);
     
     // Add the vertex and index buffer to residency set
     m_ResidencySet->addAllocation(meshAttributes.m_VertexBuffer);
     m_ResidencySet->addAllocation(meshAttributes.m_IndexBuffer);
     
-    if (p_Texture)
+    if (texture)
     {
-        m_ResidencySet->addAllocation(p_Texture->GetArgumentBuffer());
-        m_ResidencySet->addAllocation(p_Texture->GetTexture());
+        m_ResidencySet->addAllocation(texture->GetArgumentBuffer());
+        m_ResidencySet->addAllocation(texture->GetTexture());
     }
     
     m_RenderMeshes.push_back(meshAttributes);

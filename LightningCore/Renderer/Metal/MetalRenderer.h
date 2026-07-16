@@ -82,7 +82,7 @@ public:
     void CreateQuad(const char* p_FilePath, const float3 &scale, const float3 &position);
     void CreateQuad(const float2 &position, const float2 &size, const char* p_FilePath);
     
-    MeshHandle CreateMesh(const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
+    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);

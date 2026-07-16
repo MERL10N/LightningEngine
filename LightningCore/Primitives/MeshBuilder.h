@@ -13,7 +13,6 @@
 using namespace hlslpp;
 
 #include "Sprite.h"
-#include <stddef.h>
 #include <vector>
 
 using MeshHandle = size_t;
@@ -54,11 +53,10 @@ class MeshBuilder
 public:
     MeshBuilder() = default;
     ~MeshBuilder(){};
-    Mesh_2D GenerateQuadWithTexture();
     
     // Platform agnotic implementation
     static Mesh_3D GeneratePlane();
     static Mesh_3D GenerateCube();
-    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 &color = float3(0.5f, 0.5f, 0.5f));
+    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 color);
 };
 #endif /* MESHBUILDER_H */
