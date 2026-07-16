@@ -62,6 +62,14 @@ static constexpr uint16_t MAX_ENTITIES         = 10000;
 static constexpr uint8_t  MAX_FRAMES_IN_FLIGHT = 3;
 static constexpr unsigned int MAX_INSTANCES    = 1000;
 
+
+struct MTLMeshAttributes
+{
+    MTL::Buffer*   m_VertexBuffer  = nullptr;
+    MTL::Buffer*   m_IndexBuffer   = nullptr;
+    uint16_t       m_IndexCount    = 0;
+};
+
 class MetalRenderer
 {
 public:
@@ -74,7 +82,7 @@ public:
     void CreateQuad(const char* p_FilePath, const float3 &scale, const float3 &position);
     void CreateQuad(const float2 &position, const float2 &size, const char* p_FilePath);
     
-    void CreateMesh(const Mesh_3D &p_3DMesh);
+    MeshHandle CreateMesh(const Mesh_3D &p_3DMesh, const MetalTexture* p_Texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
@@ -83,8 +91,8 @@ public:
     void CommitResidencySet();
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
-    void RenderLights(const float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
-    void RenderMesh(const float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
+    void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const MetalTexture *p_Texture);
     void Commit();
     
     inline const MTL::Device*                GetMetalDevice()               const { return m_MetalDevice; }
@@ -134,6 +142,7 @@ private:
     
     std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
+    std::vector<MTLMeshAttributes>  m_RenderMeshes;
     
     MetalShader*                    m_TextureShader             = nullptr;
     MetalShader*                    m_UntexturedShader          = nullptr;

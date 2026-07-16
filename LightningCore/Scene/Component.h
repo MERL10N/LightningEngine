@@ -15,6 +15,12 @@
     using Texture = MetalTexture;
     using Device  = MTL::Device;
 #endif
+/*
+#elif __WIN32__
+    // using Device = VkPhysicalDevice;
+    // using Texture = VulkanTexture;
+#endif
+ */
 
 #include <hlsl++.h>
 using namespace hlslpp;
@@ -97,11 +103,11 @@ struct TextureComponent
 
 struct MeshComponent
 {
-    Mesh_3D m_Mesh;
+    MeshHandle m_MeshHandle;
     MeshComponent() = default;
     MeshComponent(const MeshComponent&) = default;
-    MeshComponent(const Mesh_3D &mesh)
-    : m_Mesh(mesh)
+    MeshComponent(const MeshHandle mesh)
+    : m_MeshHandle(mesh)
     {}
 };
 
