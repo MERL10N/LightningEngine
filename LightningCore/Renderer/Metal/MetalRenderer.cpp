@@ -286,7 +286,7 @@ void MetalRenderer::Submit(const Camera &p_Camera, const float p_AspectRatio)
     
     float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
     
-    m_ProjectionMatrix = float4x4::perspective(projection(frustum::field_of_view_y(fov, p_AspectRatio, 0.1f, 1000.f), zclip::zero, zdirection::forward, zplane::finite));
+    m_ProjectionMatrix = float4x4::perspective(projection(frustum::field_of_view_x(fov, p_AspectRatio, 0.1f, 1000.f), zclip::zero, zdirection::forward, zplane::finite));
 }
 
 void MetalRenderer::RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent)
