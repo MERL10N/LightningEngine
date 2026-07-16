@@ -8,13 +8,14 @@ using namespace metal;
 /*
  
  TODO:
- 
+ - [] Implement Instanced Rendering
  - [] Implement Lightmaps
  - [] Implement Normal Mapping
  - [] Implement Shadow Mapping
  - [] Implement Deferred Rendering
  
 */
+/*
 struct Light
 {
     float3 direction;
@@ -28,7 +29,7 @@ struct Light
     float quadratic;
     
 };
-
+*/
 struct VertexIn
 {
     float3 position  [[attribute(0)]];
@@ -45,7 +46,7 @@ struct VertexOut
     float3 color;
     float3 normal;
     float2 texCoord;
-    Light light;
+    //Light light;
 };
 
 struct LightUniforms
@@ -59,6 +60,12 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
+    float4x4 model; // <- Soon will be removed
+};
+
+// Prepare for instanced rendering
+struct InstancedUniforms
+{
     float4x4 model;
 };
 

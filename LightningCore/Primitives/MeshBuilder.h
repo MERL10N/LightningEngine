@@ -53,8 +53,10 @@ struct Mesh_3D
     // Platform agnostic member variables
     std::vector<Vertex3D> m_Vertices;
     std::vector<uint16_t> m_Indices;
-    size_t m_VertexSize, m_IndexSize;
-    uint16_t m_IndexCount;
+    size_t                m_VertexSize = 0;
+    size_t                m_IndexSize  = 0;
+    uint16_t              m_IndexCount = 0;
+    bool                  b_Instanced = false;
 };
 
 class MeshBuilder
