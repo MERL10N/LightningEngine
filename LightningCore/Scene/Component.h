@@ -7,11 +7,17 @@
 
 #ifndef Component_h
 #define Component_h
+#include "Primitives/MeshBuilder.h"
+#include "Camera/Camera.h"
+
+#ifdef __APPLE__
+    #include "Renderer/Metal/MetalTexture.h"
+    using Texture = MetalTexture;
+    using Device  = MTL::Device;
+#endif
+
 #include <hlsl++.h>
 using namespace hlslpp;
-#include "Primitives/MeshBuilder.h"
-#include "Renderer/Metal/MetalTexture.h"
-#include "Camera/Camera.h"
 
 
 struct TagComponent
@@ -53,13 +59,13 @@ struct TransformComponent
 
 struct TextureComponent
 {
-    MetalTexture* m_Texture;
+    Texture* m_Texture;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
     
-    TextureComponent(const char *pTexture, MTL::Device* pDevice)
-    : m_Texture(new MetalTexture(pTexture, pDevice))
+    TextureComponent(const char *pTexture, Device* pDevice)
+    : m_Texture(new Texture(pTexture, pDevice))
     {}
 
     TextureComponent (TextureComponent&& pOther)
