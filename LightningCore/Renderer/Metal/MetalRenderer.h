@@ -60,6 +60,7 @@ struct Mesh_2D;
 
 static constexpr uint16_t MAX_ENTITIES         = 10000;
 static constexpr uint8_t  MAX_FRAMES_IN_FLIGHT = 3;
+static constexpr unsigned int MAX_INSTANCES    = 1000;
 
 class MetalRenderer
 {
@@ -129,6 +130,7 @@ private:
     MTL::Buffer*                    m_IndexBuffer               = nullptr;
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
+    MTL::Buffer*                    m_InstanceBuffer            = nullptr;
     
     std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
