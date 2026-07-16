@@ -229,7 +229,7 @@ MeshHandle MetalRenderer::CreateMesh(const Mesh_3D &p_3DMesh, const MetalTexture
     MTLMeshAttributes meshAttributes;
     
     meshAttributes.m_IndexCount = p_3DMesh.m_IndexCount;
-    meshAttributes.m_VertexBuffer = m_VertexBuffer = MetalVertexBuffer::Create(m_MetalDevice, static_cast<uint32_t>(p_3DMesh.m_VertexSize));
+    meshAttributes.m_VertexBuffer = MetalVertexBuffer::Create(m_MetalDevice, static_cast<uint32_t>(p_3DMesh.m_VertexSize));
     memcpy(meshAttributes.m_VertexBuffer->contents(), p_3DMesh.m_Vertices.data(), p_3DMesh.m_VertexSize);
     
     meshAttributes.m_IndexBuffer  = MetalIndexBuffer::Create(m_MetalDevice, p_3DMesh.m_Indices.data(), static_cast<uint32_t>(p_3DMesh.m_IndexSize));
