@@ -134,8 +134,6 @@ private:
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
     
-    MTL::Buffer*                    m_VertexBuffer              = nullptr;
-    MTL::Buffer*                    m_IndexBuffer               = nullptr;
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     MTL::Buffer*                    m_InstanceBuffer            = nullptr;
