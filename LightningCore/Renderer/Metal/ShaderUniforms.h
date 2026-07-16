@@ -13,7 +13,7 @@
 
 struct Uniforms
 {
-    float4x4 perspective;
+    float4x4 projection;
     float4x4 view;
     float4x4 model;
 };
@@ -22,6 +22,11 @@ struct LightUniforms
     float3 m_LightColor;
     float3 m_LightPosition;
     float3 m_CameraPosition;
+};
+
+struct InstancedUniforms
+{
+    float4x4 model;
 };
 
 #endif /* ShaderUniforms_h */
