@@ -71,9 +71,17 @@ struct TextureComponent
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
     
+    // For a single texture map
     TextureComponent(const char *filePath, Device* device)
     : texture(new Texture(filePath, device))
-    {}
+    {
+    }
+    
+    // For multiple texture maps
+    TextureComponent(const std::vector<const char*> &filePaths, Device* device)
+    : texture(new Texture(filePaths, device))
+    {
+    }
 
     TextureComponent (TextureComponent&& pOther)
     {
