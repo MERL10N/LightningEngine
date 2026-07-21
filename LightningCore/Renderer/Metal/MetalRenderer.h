@@ -58,9 +58,10 @@ struct Mesh_2D;
 #include "ShaderUniforms.h"
 #include <vector>
 
-static constexpr uint16_t MAX_ENTITIES         = 10000;
-static constexpr uint8_t  MAX_FRAMES_IN_FLIGHT = 3;
-static constexpr unsigned int MAX_INSTANCES    = 1000;
+static constexpr uint8_t  s_MaxFramesInFlight   = 3;
+static constexpr uint8_t  s_MaxLights           = 10;
+static constexpr uint16_t s_MaxInstances        = 1000;
+static constexpr uint16_t s_MaxEntities         = 10000;
 
 
 struct MTLMeshAttributes
@@ -77,17 +78,11 @@ public:
     explicit MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
 
-    // Create quads with texture
-    void CreateQuad(const char* p_FilePath, const float3 &position);
-    void CreateQuad(const char* p_FilePath, const float3 &scale, const float3 &position);
-    void CreateQuad(const float2 &position, const float2 &size, const char* p_FilePath);
-    
+    // Create 3D Mesh with or without a texture
     MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
-    void RegisterMesh(const Mesh_3D &p_3DMesh);
-    void RegisterTexture(const MetalTexture *p_Texture);
     void CommitResidencySet();
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
@@ -105,8 +100,8 @@ public:
     
     inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
     inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) { m_RenderCommandEncoder = p_RenderCommandEncoder; }
-    inline void SetWireframeMode(const bool p_EnableWireFrame)                              { b_EnableWireframe = p_EnableWireFrame; }
-    inline void SetMetalDrawable(MTL::Drawable* p_Drawable)                                 { m_Drawable = p_Drawable; }
+    inline void SetWireframeMode(const bool enableWireFrame)                                { b_EnableWireframe = enableWireFrame; }
+    inline void SetMetalDrawable(MTL::Drawable* drawable)                                   { m_Drawable = drawable; }
 
 private:
 
@@ -116,7 +111,7 @@ private:
     MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
     MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
     
-    MTL4::CommandAllocator*         m_MetalCommandAllocators[MAX_FRAMES_IN_FLIGHT];
+    MTL4::CommandAllocator*         m_MetalCommandAllocators[s_MaxFramesInFlight];
     
     MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
     MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
@@ -137,10 +132,12 @@ private:
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     MTL::Buffer*                    m_InstanceBuffer            = nullptr;
+    MTL::Buffer*                    m_LightPositions[s_MaxFramesInFlight];
     
     std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
     std::vector<MTLMeshAttributes>  m_RenderMeshes;
+    std::vector<LightUniforms>      m_Lights;
     
     MetalShader*                    m_TextureShader             = nullptr;
     MetalShader*                    m_UntexturedShader          = nullptr;

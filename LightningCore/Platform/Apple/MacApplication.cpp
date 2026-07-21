@@ -16,7 +16,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
 : m_MacWindow(p_Width, p_Height, p_Title),
   m_MetalRenderer(m_MacWindow.GetDevice(), m_MacWindow.GetMetalLayer()),
   m_MetalFrameBuffer(m_MacWindow.GetDevice()),
-  m_Camera(Camera()),
+  m_Camera(),
   m_Scene()
 {
     MeshBuilder m_MeshBuilder;
@@ -27,16 +27,23 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MacWindow.GetDevice());
-    cube.AddComponent<MeshComponent>(m_MetalRenderer.CreateMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().m_Texture));
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
+    
     
     Entity plane = m_Scene.CreateEntity("Plane");
     plane.AddComponent<TransformComponent>(float3(-2.0f, -2.0f, 0.0f), float3(10.0f, 0.1f, 10.0f));
-    plane.AddComponent<MeshComponent>(m_MetalRenderer.CreateMesh(MeshBuilder::GenerateCube(), nullptr));
+    plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), nullptr));
      
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
-    sphere.AddComponent<MeshComponent>(m_MetalRenderer.CreateMesh(MeshBuilder::GenerateSphere( 32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
+    sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
+    m_MetalRenderer.CommitResidencySet();
+    
+    Entity sphere2 = m_Scene.CreateEntity("Sphere 2");
+    sphere2.AddComponent<TransformComponent>(float3(2.5f, 0.0f, 0.0f));
+    sphere2.AddComponent<LightComponent>(float3(0.0f, 1.0f, 1.0f));
+    sphere2.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
     m_MetalRenderer.CommitResidencySet();
 }
 

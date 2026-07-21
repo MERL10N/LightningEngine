@@ -14,6 +14,7 @@
     #include "Renderer/Metal/MetalTexture.h"
     using Texture = MetalTexture;
     using Device  = MTL::Device;
+    using Buffer  = MTL::Buffer;
 #endif
 /*
 #elif __WIN32__
@@ -65,38 +66,38 @@ struct TransformComponent
 
 struct TextureComponent
 {
-    Texture* m_Texture;
+    Texture* texture = nullptr;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
     
-    TextureComponent(const char *pTexture, Device* pDevice)
-    : m_Texture(new Texture(pTexture, pDevice))
+    TextureComponent(const char *filePath, Device* device)
+    : texture(new Texture(filePath, device))
     {}
 
     TextureComponent (TextureComponent&& pOther)
     {
-        m_Texture = pOther.m_Texture;
-        pOther.m_Texture = nullptr;
+        texture = pOther.texture;
+        pOther.texture = nullptr;
     }
     
     TextureComponent& operator=(TextureComponent&& pOther)
     {
         if (this != &pOther)
         {
-            delete m_Texture;
-            m_Texture = pOther.m_Texture;
-            pOther.m_Texture = nullptr;
+            delete texture;
+            texture = pOther.texture;
+            pOther.texture = nullptr;
         }
         return (*this);
     }
     
     ~TextureComponent()
     {
-        if (m_Texture)
+        if (texture)
         {
-            delete m_Texture;
-            m_Texture = nullptr;
+            delete texture;
+            texture = nullptr;
         }
     }
 };
