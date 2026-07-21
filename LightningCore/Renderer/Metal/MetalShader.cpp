@@ -26,17 +26,17 @@ const std::string MetalShader::LoadShaderFile(const std::string &path) const
     return std::string(buffer.begin(), buffer.end());
 }
 
-MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat)
-: m_MetalDevice(p_MetalDevice),
-  s_FilePath(p_FilePath),
+MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat)
+: m_MetalDevice(metalDevice),
+  m_FilePath(filePath),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
-  m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat),
+  m_DepthAttachmentPixelFormat(depthAttachmentPixelFormat),
   m_RenderPipelineDescriptor(MTL4::RenderPipelineDescriptor::alloc()->init())
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(s_FilePath);
+    std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -115,16 +115,16 @@ MetalShader::MetalShader(const std::string& p_FilePath, MTL::Device* p_MetalDevi
 
 }
 
-MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat)
-: m_MetalDevice(p_MetalDevice),
+MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat)
+: m_MetalDevice(metalDevice),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
-  s_FilePath(p_FilePath),
-  m_DepthAttachmentPixelFormat(p_DepthAttachmentPixelFormat)
+  m_FilePath(filePath),
+  m_DepthAttachmentPixelFormat(depthAttachmentPixelFormat)
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(s_FilePath);
+    std::string shaderSrc = LoadShaderFile(filePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -142,7 +142,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
     m_VertexFunction = MTL4::LibraryFunctionDescriptor::alloc()->init();
     m_VertexFunction->setLibrary(m_Library);
-    m_VertexFunction->setName(NS::String::string(p_VertexFunction, NS::UTF8StringEncoding));
+    m_VertexFunction->setName(NS::String::string(vertexFunction, NS::UTF8StringEncoding));
     
     if (!m_VertexFunction)
     {
@@ -156,7 +156,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     
     m_FragmentFunction = MTL4::LibraryFunctionDescriptor::alloc()->init(); // Load the fragment function
     m_FragmentFunction->setLibrary(m_Library);
-    m_FragmentFunction->setName(NS::String::string(p_FragmentFunction, NS::UTF8StringEncoding));
+    m_FragmentFunction->setName(NS::String::string(fragmentFunction, NS::UTF8StringEncoding));
     
     if (!m_FragmentFunction)
     {
@@ -170,7 +170,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     
     if (m_VertexFunction && m_FragmentFunction)
     {
-        std::println("Loading shader  at: {}\n", s_FilePath);
+        std::println("Loading shader  at: {}\n", m_FilePath);
     }
 
     m_RenderPipelineDescriptor = MTL4::RenderPipelineDescriptor::alloc()->init();
@@ -193,7 +193,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
     m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
 
-    m_RenderPipelineDescriptor->setVertexDescriptor(p_VertexDescriptor);
+    m_RenderPipelineDescriptor->setVertexDescriptor(vertexDescriptor);
     
     m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, &error);
     
@@ -208,7 +208,7 @@ MetalShader::MetalShader(const std::string &p_FilePath, const char* p_VertexFunc
 
 MetalShader::~MetalShader()
 {
-    std::println("Delete shader  at: {}", s_FilePath);
+    std::println("Delete shader  at: {}", m_FilePath);
     if (m_RenderPipelineState)
     {
         m_RenderPipelineState->release();

@@ -14,19 +14,19 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #import <GLFW/glfw3native.h>
 
-void MacWindow::frameBufferSizeCallback(GLFWwindow *window, int width, int height)
+void MacWindow::frameBufferSizeCallback(GLFWwindow *window, const int width, const int height)
 {
-    MacWindow* engine = (MacWindow*)glfwGetWindowUserPointer(window);
+    MacWindow* engine = static_cast<MacWindow*>(glfwGetWindowUserPointer(window));
     engine->resizeFrameBuffer(width, height);
 }
 
-void MacWindow::resizeFrameBuffer(int width, int height)
+void MacWindow::resizeFrameBuffer(const int width, const int height)
 {
     m_MetalLayer->setDrawableSize(CGSizeMake(width, height));
 }
 
 
-MacWindow::MacWindow(unsigned int p_Width, unsigned int p_Height, const char *p_Title)
+MacWindow::MacWindow(const unsigned int p_Width, const unsigned int p_Height, const char *p_Title)
 : m_Width(p_Width),
   m_Height(p_Height),
   m_Title(p_Title),

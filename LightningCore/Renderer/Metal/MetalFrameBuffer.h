@@ -38,13 +38,16 @@ public:
     
     void UpdateViewport(MTL4::RenderCommandEncoder* p_Encoder);
     
-    inline MTL::Texture* GetAttachmentTexture() const { return m_AttachmentTexture; }
+    inline MTL::Texture*               GetAttachmentTexture()    const { return m_AttachmentTexture; }
     inline MTL4::RenderPassDescriptor* GetRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     
     inline float GetWidth() const { return m_Width; }
     inline float GetHeight() const { return m_Height; }
 
 private:
+    
+    
+    
     MTL::Device*    m_MetalDevice       = nullptr;
     MTL::Texture*   m_AttachmentTexture = nullptr;
     MTL::Texture*   m_MSAATargetTexture = nullptr;

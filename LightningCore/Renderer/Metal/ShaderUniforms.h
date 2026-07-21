@@ -11,6 +11,8 @@
 #define HLSLPP_FEATURE_TRANSFORM
 #include <hlsl++.h>
 
+class MetalTexture;
+
 struct Uniforms
 {
     float4x4 projection;
@@ -19,9 +21,9 @@ struct Uniforms
 };
 struct LightUniforms
 {
-    float3 m_LightColor;
-    float3 m_LightPosition;
-    float3 m_CameraPosition;
+    float3 lightColor;
+    float3 lightPosition;
+    float3 cameraPosition;
 };
 
 struct InstancedUniforms
