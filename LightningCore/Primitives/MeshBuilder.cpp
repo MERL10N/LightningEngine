@@ -7,41 +7,6 @@
 
 #include "MeshBuilder.h"
 
-#include <Metal/Metal.hpp>
-#include "Renderer/Metal/MetalTexture.h"
-#include "Renderer/Metal/MetalBuffer.h"
-
-/*
-Mesh_2D MeshBuilder::GenerateQuadWithTexture()
-{
-    Vertex vertices[] =
-    {
-        {float3(-0.5f, -0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(0.0, 0.0)},
-        {float3( 0.5f, -0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(1.0, 0.0)},
-        {float3( 0.5f,  0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(1.0, 1.0)},
-        {float3(-0.5f,  0.5f, 0.0f), float3(1.0, 1.0, 1.0), float2(0.0, 1.0)},
-    };
-    
-    constexpr unsigned int vertexBufferSize = 4 * sizeof(Vertex);
-        
-    constexpr uint16_t indices[] = {0, 1, 3, 2};
-    constexpr unsigned int indexBufferSize = 4 * sizeof(ushort);
-        
-    //vertex buffer
-    m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_VertexBuffer->contents(), vertices, vertexBufferSize);
-        
-    //index buffer
-    m_Mesh2D.m_IndexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_IndexBuffer->contents(), indices, indexBufferSize);
-    
-    m_Mesh2D.m_Texture = new MetalTexture(textureFile, device);
-
-    return m_Mesh2D;
-}
-*/
-
-// Platform agnostic implementation
 Mesh_3D MeshBuilder::GeneratePlane()
 {
     Mesh_3D mesh;
@@ -56,7 +21,7 @@ Mesh_3D MeshBuilder::GeneratePlane()
         
     mesh.m_Indices = {0, 1, 2, 2, 3, 0};
     
-    mesh.m_IndexCount = 6;
+    mesh.m_IndexCount = sizeof(mesh.m_Indices);
 
     mesh.m_VertexSize = mesh.m_Vertices.size() * sizeof(Vertex3D);
     mesh.m_IndexSize  = mesh.m_Indices.size()  * sizeof(uint16_t);
@@ -126,8 +91,7 @@ Mesh_3D MeshBuilder::GenerateCube()
     return mesh;
      
 }
-
-Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, const float3 &color)
+Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, const float3 color)
 {
     Mesh_3D mesh;
     
@@ -140,17 +104,17 @@ Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, co
         {
             float xSegment = (float)x / (float)xSegments;
             float ySegment = (float)y / (float)ySegments;
-            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = std::cos(ySegment * PI);
-            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float xPos = cos(xSegment * 2.0f * PI) * sin(ySegment * PI);
+            float yPos = cos(ySegment * PI);
+            float zPos = sin(xSegment * 2.0f * PI) * sin(ySegment * PI);
 
             
-            vertex.pos = float3(xPos, yPos, zPos);
-            vertex.color = color;
-            vertex.normals = normalize(float3(xPos, yPos, zPos));
-            vertex.texCoord = float2(xSegment, ySegment);
+            vertex.m_Pos = float3(xPos, yPos, zPos);
+            vertex.m_Color = color;
+            vertex.m_Normals = normalize(float3(xPos, yPos, zPos));
+            vertex.m_TexCoord = float2(xSegment, ySegment);
             
-            mesh.m_Vertices.push_back(vertex);
+            mesh.m_Vertices.emplace_back(vertex);
         }
     }
     
@@ -164,13 +128,13 @@ Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, co
                 uint16_t bottomLeft = (y + 1) * (xSegments + 1) + x;
                 uint16_t bottomRight = bottomLeft + 1;
 
-                mesh.m_Indices.push_back(topLeft);
-                mesh.m_Indices.push_back(bottomLeft);
-                mesh.m_Indices.push_back(topRight);
+                mesh.m_Indices.emplace_back(topLeft);
+                mesh.m_Indices.emplace_back(bottomLeft);
+                mesh.m_Indices.emplace_back(topRight);
                 
-                mesh.m_Indices.push_back(topRight);
-                mesh.m_Indices.push_back(bottomLeft);
-                mesh.m_Indices.push_back(bottomRight);
+                mesh.m_Indices.emplace_back(topRight);
+                mesh.m_Indices.emplace_back(bottomLeft);
+                mesh.m_Indices.emplace_back(bottomRight);
             }
     }
     

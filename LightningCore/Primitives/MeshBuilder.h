@@ -19,22 +19,22 @@ using MeshHandle = size_t;
 
 struct Vertex
 {
-    float3 pos;
-    float3 color;
-    float2 texCoord;
+    float3 m_Pos;
+    float3 m_Color;
+    float2 m_TexCoord;
 };
 
 struct Vertex3D
 {
-    float3 pos;
-    float3 color;
-    float3 normals;
-    float2 texCoord;
+    float3 m_Pos;
+    float3 m_Color;
+    float3 m_Normals;
+    float2 m_TexCoord;
 };
 
 struct Mesh_2D
 {
-    Sprite m_Sprite;
+    Sprite   m_Sprite;
     float4x4 m_Transform;
 };
 
