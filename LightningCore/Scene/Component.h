@@ -7,11 +7,24 @@
 
 #ifndef Component_h
 #define Component_h
+#include "Primitives/MeshBuilder.h"
+#include "Camera/Camera.h"
+
+#ifdef __APPLE__
+    #include "Renderer/Metal/MetalTexture.h"
+    using Texture = MetalTexture;
+    using Device  = MTL::Device;
+    using Buffer  = MTL::Buffer;
+#endif
+/*
+#elif __WIN32__
+    // using Device = VkPhysicalDevice;
+    // using Texture = VulkanTexture;
+#endif
+ */
+
 #include <hlsl++.h>
 using namespace hlslpp;
-#include "Primitives/MeshBuilder.h"
-#include "Renderer/Metal/MetalTexture.h"
-#include "Camera/Camera.h"
 
 
 struct TagComponent
@@ -53,49 +66,57 @@ struct TransformComponent
 
 struct TextureComponent
 {
-    MetalTexture* m_Texture;
+    Texture* texture = nullptr;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
     
-    TextureComponent(const char *pTexture, MTL::Device* pDevice)
-    : m_Texture(new MetalTexture(pTexture, pDevice))
-    {}
+    // For a single texture map
+    TextureComponent(const char *filePath, Device* device)
+    : texture(new Texture(filePath, device))
+    {
+    }
+    
+    // For multiple texture maps
+    TextureComponent(const std::vector<const char*> &filePaths, Device* device)
+    : texture(new Texture(filePaths, device))
+    {
+    }
 
     TextureComponent (TextureComponent&& pOther)
     {
-        m_Texture = pOther.m_Texture;
-        pOther.m_Texture = nullptr;
+        texture = pOther.texture;
+        pOther.texture = nullptr;
     }
     
     TextureComponent& operator=(TextureComponent&& pOther)
     {
         if (this != &pOther)
         {
-            delete m_Texture;
-            m_Texture = pOther.m_Texture;
-            pOther.m_Texture = nullptr;
+            delete texture;
+            texture = pOther.texture;
+            pOther.texture = nullptr;
         }
         return (*this);
     }
     
     ~TextureComponent()
     {
-        if (m_Texture)
+        if (texture)
         {
-            delete m_Texture;
-            m_Texture = nullptr;
+            delete texture;
+            texture = nullptr;
         }
     }
 };
 
 struct MeshComponent
 {
-    Mesh_3D m_Mesh;
+    MeshHandle m_MeshHandle;
     MeshComponent() = default;
     MeshComponent(const MeshComponent&) = default;
-    MeshComponent(const Mesh_3D &mesh)
-    : m_Mesh(mesh)
+    MeshComponent(const MeshHandle mesh)
+    : m_MeshHandle(mesh)
     {}
 };
 

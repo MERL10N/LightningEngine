@@ -53,28 +53,27 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     
     MeshBuilder m_MeshBuilder;
     
+    m_MetalFrameBuffer.Create(p_Width, p_Height);
     m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
+    
+    std::vector<const char*> CubeTextures =
+    {
+        "Assets/Textures/container2.png",
+        "Assets/Textures/container2_specular.png"
+    };
+    
     
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
-    cube.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
-    cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MetalDevice);
-    m_MetalRenderer.RegisterMesh(cube.GetComponent<MeshComponent>().m_Mesh);
-    m_MetalRenderer.RegisterTexture(cube.GetComponent<TextureComponent>().m_Texture);
+    cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
     
-    
-    Entity plane = m_Scene.CreateEntity("Plane");
-    plane.AddComponent<TransformComponent>(float3(-2.0f, -2.0f, 0.0f), float3(10.0f, 0.1f, 10.0f));
-    plane.AddComponent<MeshComponent>(m_MeshBuilder.GenerateCube(m_MetalDevice));
-    m_MetalRenderer.RegisterMesh(plane.GetComponent<MeshComponent>().m_Mesh);
      
-    Entity sphere = m_Scene.CreateEntity("Sphere");
-    sphere.AddComponent<TransformComponent>(float3(-5.0f, 0.0f, 0.0f));
-    sphere.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
-    sphere.AddComponent<MeshComponent>(m_MeshBuilder.GenerateSphere(m_MetalDevice, 32, 32, float3(1.0f, 1.0f, 1.0f)));
-    m_MetalRenderer.RegisterMesh(sphere.GetComponent<MeshComponent>().m_Mesh);
+    Entity lightCube = m_Scene.CreateEntity("Light Sphere");
+    lightCube.AddComponent<TransformComponent>(float3(-1.2f, 1.0f, 2.0f), float3(0.2f,0.2f, 0.2f));
+    lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
+    lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), nullptr));
     m_MetalRenderer.CommitResidencySet();
-
 }
 
 
