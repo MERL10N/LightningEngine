@@ -12,6 +12,7 @@
 #include "Input/AppleController.h"
 #include "Camera/Camera.h"
 #include "Scene/Scene.h"
+#include "Entity/Entity.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "MacEditorLayer.h"
@@ -77,6 +78,8 @@ private:
     AppleController m_Controller;
     
     Scene m_Scene;
+    
+    Entity m_CameraEntity;
     
     bool b_EnableWireframe = false;
     

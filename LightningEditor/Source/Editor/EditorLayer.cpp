@@ -6,7 +6,7 @@
 //
 
 #include "EditorLayer.h"
-#include "imgui.h"
+#include <imgui.h>
 #include "ContentBrowserPanel.h"
 
 ContentBrowserPanel contentPanel;

@@ -7,41 +7,11 @@
 
 #include "MeshBuilder.h"
 
-#include "Metal/Metal.hpp"
-#include "Renderer/Metal/MetalTexture.h"
-#include "Renderer/Metal/MetalBuffer.h"
-
-Mesh_2D MeshBuilder::GenerateQuadWithTexture(MTL::Device *device, const char* textureFile)
+Mesh_3D MeshBuilder::GeneratePlane()
 {
-    constexpr Vertex vertices[] =
-    {
-        {{-0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 0.0}},
-        {{ 0.5f, -0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 0.0}},
-        {{ 0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {1.0, 1.0}},
-        {{-0.5f,  0.5f, 0.0f}, {1.0, 1.0, 1.0}, {0.0, 1.0}},
-    };
+    Mesh_3D mesh;
     
-    constexpr NS::UInteger vertexBufferSize = 4 * sizeof(Vertex);
-        
-    constexpr uint16_t indices[] = {0, 1, 3, 2};
-    constexpr NS::UInteger indexBufferSize = 4 * sizeof(ushort);
-        
-    //vertex buffer
-    m_Mesh2D.m_VertexBuffer = device->newBuffer(vertexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_VertexBuffer->contents(), vertices, vertexBufferSize);
-        
-    //index buffer
-    m_Mesh2D.m_IndexBuffer = device->newBuffer(indexBufferSize, MTL::ResourceStorageModeShared);
-    memcpy(m_Mesh2D.m_IndexBuffer->contents(), indices, indexBufferSize);
-    
-    m_Mesh2D.m_Texture = new MetalTexture(textureFile, device);
-
-    return m_Mesh2D;
-}
-
-Mesh_3D MeshBuilder::GeneratePlane(MTL::Device *device)
-{
-    constexpr Vertex3D vertices[] =
+    mesh.m_Vertices =
     {
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
         {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
@@ -49,25 +19,21 @@ Mesh_3D MeshBuilder::GeneratePlane(MTL::Device *device)
         {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0}}, // 3
     };
         
-    constexpr uint16_t indices[] = {0, 1, 2, 2, 3, 0};
+    mesh.m_Indices = {0, 1, 2, 2, 3, 0};
     
-    m_Mesh3D.m_IndexCount = 6;
-        
-    //vertex buffer
-    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, sizeof(vertices));
-    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices, sizeof(vertices));
-        
-    //index buffer
-    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices, sizeof(indices));
-    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
+    mesh.m_IndexCount = sizeof(mesh.m_Indices);
+
+    mesh.m_VertexSize = mesh.m_Vertices.size() * sizeof(Vertex3D);
+    mesh.m_IndexSize  = mesh.m_Indices.size()  * sizeof(uint16_t);
     
-    return m_Mesh3D;
+    return mesh;
 }
 
-Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
+Mesh_3D MeshBuilder::GenerateCube()
 {
-   
-    constexpr Vertex3D vertices[] =
+    Mesh_3D mesh;
+    
+    mesh.m_Vertices =
     {
         // Front face
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
@@ -107,7 +73,7 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
        
     };
     
-    constexpr uint16_t indices[] =
+    mesh.m_Indices =
     {
        0, 1, 2, 2, 3, 0,
        4, 5, 6, 6, 7, 4,
@@ -117,25 +83,17 @@ Mesh_3D MeshBuilder::GenerateCube(MTL::Device *device)
        20, 21, 22, 22, 23, 20
     };
     
-    m_Mesh3D.m_IndexCount = 36;
+    mesh.m_IndexCount = 36;
     
-    // vertex buffer
-    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, sizeof(vertices));
-    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices, sizeof(vertices));
+    mesh.m_VertexSize = mesh.m_Vertices.size() * sizeof(Vertex3D);
+    mesh.m_IndexSize  = mesh.m_Indices.size()  * sizeof(uint16_t);
     
-
-    // Index buffer
-    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices, sizeof(indices));
-    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices, sizeof(indices));
-    
-    return m_Mesh3D;
+    return mesh;
      
 }
-
-Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color)
+Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, const float3 color)
 {
-    std::vector<Vertex3D> vertices;
-    std::vector<u_int16_t> indices;
+    Mesh_3D mesh;
     
     constexpr float PI = 3.1415926539f;
     Vertex3D vertex;
@@ -146,17 +104,17 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
         {
             float xSegment = (float)x / (float)xSegments;
             float ySegment = (float)y / (float)ySegments;
-            float xPos = simd::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = simd::cos(ySegment * PI);
-            float zPos = simd::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float xPos = cos(xSegment * 2.0f * PI) * sin(ySegment * PI);
+            float yPos = cos(ySegment * PI);
+            float zPos = sin(xSegment * 2.0f * PI) * sin(ySegment * PI);
 
             
-            vertex.pos = simd::make_float3(xPos, yPos, zPos);
-            vertex.color = color;
-            vertex.normals = simd::normalize(simd::make_float3(xPos, yPos, zPos));
-            vertex.texCoord = simd::make_float2(xSegment, ySegment);
+            vertex.m_Pos = float3(xPos, yPos, zPos);
+            vertex.m_Color = color;
+            vertex.m_Normals = normalize(float3(xPos, yPos, zPos));
+            vertex.m_TexCoord = float2(xSegment, ySegment);
             
-            vertices.push_back(vertex);
+            mesh.m_Vertices.emplace_back(vertex);
         }
     }
     
@@ -170,29 +128,22 @@ Mesh_3D MeshBuilder::GenerateSphere(MTL::Device* device, const int xSegments, co
                 uint16_t bottomLeft = (y + 1) * (xSegments + 1) + x;
                 uint16_t bottomRight = bottomLeft + 1;
 
-                indices.push_back(topLeft);
-                indices.push_back(bottomLeft);
-                indices.push_back(topRight);
+                mesh.m_Indices.emplace_back(topLeft);
+                mesh.m_Indices.emplace_back(bottomLeft);
+                mesh.m_Indices.emplace_back(topRight);
                 
-                indices.push_back(topRight);
-                indices.push_back(bottomLeft);
-                indices.push_back(bottomRight);
+                mesh.m_Indices.emplace_back(topRight);
+                mesh.m_Indices.emplace_back(bottomLeft);
+                mesh.m_Indices.emplace_back(bottomRight);
             }
     }
     
     
-    m_Mesh3D.m_IndexCount = (u_int16_t)indices.size();
+    mesh.m_IndexCount = static_cast<u_int16_t>(mesh.m_Indices.size());
     
-    size_t vertexSize = vertices.size() * sizeof(Vertex3D);
-    size_t indexSize  = indices.size() * sizeof(uint16_t);
-   
-    // vertex buffer
-    m_Mesh3D.m_VertexBuffer = MetalVertexBuffer::Create(device, static_cast<uint32_t>(vertexSize));
-    memcpy(m_Mesh3D.m_VertexBuffer->contents(), vertices.data(), vertexSize);
+    mesh.m_VertexSize = mesh.m_Vertices.size() * sizeof(Vertex3D);
+    mesh.m_IndexSize  = mesh.m_Indices.size()  * sizeof(uint16_t);
     
-    // Index buffer
-    m_Mesh3D.m_IndexBuffer = MetalIndexBuffer::Create(device, indices.data(), static_cast<uint32_t>(indexSize));
-    memcpy(m_Mesh3D.m_IndexBuffer->contents(), indices.data(), indexSize);
-    
-    return m_Mesh3D;
+    return mesh;
 }
+

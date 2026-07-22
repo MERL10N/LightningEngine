@@ -10,8 +10,7 @@
 #include "Entity/Entity.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Camera/Camera.h"
-#include <simd/simd.h>
-#include "Math/AAPLMathUtilities.h"
+#include <hlsl++.h>
 
 Scene::Scene()
 {
@@ -32,9 +31,9 @@ Entity Scene::CreateEntity(const char* p_Tag)
 }
 
 template <typename Renderer>
-void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const float p_AspectRatio)
+void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float aspectRatio)
 {
-    p_Renderer.Submit(p_Camera, p_AspectRatio);
+    renderer.Submit(camera, aspectRatio);
     
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
@@ -42,33 +41,39 @@ void Scene::RenderScene(Renderer &p_Renderer, const Camera &p_Camera, const floa
     
     for (const auto &entity : light_sources)
     {
-        auto [transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-        p_Renderer.RenderLights(matrix_multiply(transform.m_Transform, transform.m_Scale), mesh.m_Mesh, lights);
+        const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
+        renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
     }
     
     for (const auto &entity : textured_meshes)
     {
-        auto [transform, mesh, textures] = textured_meshes.get<TransformComponent, MeshComponent, TextureComponent>(entity);
+        const auto &[transform, textures, mesh] = textured_meshes.get<TransformComponent, TextureComponent, MeshComponent>(entity);
         
-        matrix_float4x4 rotationMatrix = matrix4x4_rotation(transform.m_RotationAngle, transform.m_Rotation.x, transform.m_Rotation.y, transform.m_Rotation.z);
+        float4x4 scaleMatrix = transform.m_Scale;
+        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
+        float4x4 translationMatrix = transform.m_Translation;
         
-        matrix_float4x4 rs = matrix_multiply(rotationMatrix, transform.m_Scale);
-        matrix_float4x4 modelMatrix = matrix_multiply(transform.m_Transform, rs);
-        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, textures.GetTexture());
+        float4x4 sr = mul(scaleMatrix, rotationMatrix);
+        float4x4 modelMatrix = mul(sr, translationMatrix);
+        
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture);
     }
     
     for (const auto &entity : meshes)
     {
-        auto [transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
+        const auto &[transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
         
-        matrix_float4x4 rotationMatrix = matrix4x4_rotation(transform.m_RotationAngle, transform.m_Rotation.x, transform.m_Rotation.y, transform.m_Rotation.z);
+        float4x4 scaleMatrix = transform.m_Scale;
+        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
+        float4x4 translationMatrix = transform.m_Translation;
         
-        matrix_float4x4 rs = matrix_multiply(rotationMatrix, transform.m_Scale);
-        matrix_float4x4 modelMatrix = matrix_multiply(transform.m_Transform, rs);
-        p_Renderer.RenderMesh(modelMatrix, mesh.m_Mesh, nullptr);
+        float4x4 sr = mul(scaleMatrix, rotationMatrix);
+        float4x4 modelMatrix = mul(sr, translationMatrix);
+        
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, nullptr);
     }
     
-    p_Renderer.Commit();
+    renderer.Commit();
 }
 
 template void Scene::RenderScene<MetalRenderer>(MetalRenderer&, const Camera &, const float);

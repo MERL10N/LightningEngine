@@ -6,7 +6,7 @@
 //
 
 #include "ContentBrowserPanel.h"
-#include "imgui.h"
+#include <imgui.h>
 #include <string>
 
 static const char* s_AssetsPath = "Assets";

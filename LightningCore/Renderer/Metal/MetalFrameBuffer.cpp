@@ -6,7 +6,7 @@
 //
 
 #include "MetalFrameBuffer.h"
-#include "Metal/Metal.hpp"
+#include <Metal/Metal.hpp>
 
 MetalFrameBuffer::MetalFrameBuffer(MTL::Device* p_MetalDevice)
 : m_MetalDevice(p_MetalDevice),
@@ -26,18 +26,19 @@ MetalFrameBuffer::~MetalFrameBuffer()
         m_AttachmentTexture->release();
         m_AttachmentTexture = nullptr;
     }
+    
     if (m_DepthTexture)
     {
         m_DepthTexture->release();
         m_DepthTexture = nullptr;
     }
+    
     if (m_MSAATargetTexture)
     {
         m_MSAATargetTexture->release();
         m_MSAATargetTexture = nullptr;
     }
     
-   
     if (m_AttachmentTexture)
     {
         m_AttachmentTexture->release();
@@ -57,8 +58,8 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_Width = p_Width;
     m_Height = p_Height;
     
-    m_TextureDescriptor->setWidth(p_Width);
-    m_TextureDescriptor->setHeight(p_Height);
+    m_TextureDescriptor->setWidth(m_Width);
+    m_TextureDescriptor->setHeight(m_Height);
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     m_TextureDescriptor->setTextureType(MTL::TextureType2D);
     m_TextureDescriptor->setStorageMode(MTL::StorageModePrivate);
@@ -68,8 +69,8 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     
     m_MSAATextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
     m_MSAATextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    m_MSAATextureDescriptor->setWidth(p_Width);
-    m_MSAATextureDescriptor->setHeight(p_Height);
+    m_MSAATextureDescriptor->setWidth(m_Width);
+    m_MSAATextureDescriptor->setHeight(m_Height);
     m_MSAATextureDescriptor->setSampleCount(4);
     m_MSAATextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
     m_MSAATextureDescriptor->setStorageMode(MTL::StorageModeMemoryless);
@@ -78,8 +79,8 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     
     m_DepthTextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
     m_DepthTextureDescriptor->setPixelFormat(MTL::PixelFormatDepth32Float);
-    m_DepthTextureDescriptor->setWidth(p_Width);
-    m_DepthTextureDescriptor->setHeight(p_Height);
+    m_DepthTextureDescriptor->setWidth(m_Width);
+    m_DepthTextureDescriptor->setHeight(m_Height);
     m_DepthTextureDescriptor->setUsage(MTL::TextureUsageRenderTarget);
     m_DepthTextureDescriptor->setStorageMode(MTL::StorageModeMemoryless);
     m_DepthTextureDescriptor->setSampleCount(4);
@@ -131,12 +132,8 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
         p_Height = 1;
     }
     
-    
-    m_Width = p_Width;
-    m_Height = p_Height;
-    
-    assert(m_Width >= 1);
-    assert(m_Height >= 1);
+    assert(p_Width >= 1);
+    assert(p_Height >= 1);
 
-    Create(m_Width, m_Height);
+    Create(p_Width, p_Height);
 }

@@ -53,13 +53,23 @@ class Sprite;
 struct Mesh_3D;
 struct Mesh_2D;
 
-
-#include <simd/simd.h>
 #include "Camera/Camera.h"
-#include "Math/AAPLMathUtilities.h"
 #include "Scene/Component.h"
 #include "ShaderUniforms.h"
 #include <vector>
+
+static constexpr uint8_t  s_MaxFramesInFlight   = 3;
+static constexpr uint8_t  s_MaxLights           = 10;
+static constexpr uint16_t s_MaxInstances        = 1000;
+static constexpr uint16_t s_MaxEntities         = 10000;
+
+
+struct MTLMeshAttributes
+{
+    MTL::Buffer*   m_VertexBuffer  = nullptr;
+    MTL::Buffer*   m_IndexBuffer   = nullptr;
+    uint16_t       m_IndexCount    = 0;
+};
 
 class MetalRenderer
 {
@@ -68,49 +78,41 @@ public:
     explicit MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_MetalLayer);
     ~MetalRenderer();
 
-    // Create quads with texture
-    void CreateQuad(const char* p_FilePath, const simd::float3 &position);
-    void CreateQuad(const char* p_FilePath, const simd::float3 &scale, const simd::float3 &position);
-    void CreateQuad(const simd::float2 &position, const simd::float2 &size, const char* p_FilePath);
+    // Create 3D Mesh with or without a texture
+    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
-    void RegisterMesh(const Mesh_3D &p_3DMesh);
-    void RegisterTexture(const MetalTexture *p_Texture);
     void CommitResidencySet();
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
-    void RenderLights(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const LightComponent &p_LightComponent);
-    void RenderMesh(const matrix_float4x4 &p_ModelMatrix, const Mesh_3D &p_3DMesh, const MetalTexture *p_Texture);
+    void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const MetalTexture *p_Texture);
     void Commit();
     
-    inline const MTL::Device* GetMetalDevice() const { return m_MetalDevice; }
+    inline const MTL::Device*                GetMetalDevice()               const { return m_MetalDevice; }
+    inline const MTL::ResidencySet*          GetMetalResidencySet()         const { return m_ResidencySet; }
+    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
+    inline const MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
+    inline       MTL4::CommandBuffer*        GetMetalCommandBuffer()        const { return m_MetalCommandBuffer; }
+    inline       MTL4::CommandQueue*         GetMetalCommandQueue()         const { return m_MetalCommandQueue; }
 
-    inline MTL4::CommandBuffer* GetMetalCommandBuffer() const { return m_MetalCommandBuffer; }
-    
-    inline MTL4::CommandQueue* GetMetalCommandQueue() const { return m_MetalCommandQueue; }
-    
-    inline MTL::ResidencySet* GetMetalResidencySet() const { return m_ResidencySet; }
     
     inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
-    
-    inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
-    
-    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) {  m_RenderCommandEncoder = p_RenderCommandEncoder;}
-    
-    inline void SetWireframeMode(const bool p_EnableWireFrame) { b_EnableWireframe = p_EnableWireFrame; }
-    
-    inline MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }
-    
-    inline void SetMetalDrawable(MTL::Drawable* p_Drawable) { m_Drawable = p_Drawable; }
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) { m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline void SetWireframeMode(const bool enableWireFrame)                                { b_EnableWireframe = enableWireFrame; }
+    inline void SetMetalDrawable(MTL::Drawable* drawable)                                   { m_Drawable = drawable; }
 
 private:
+
     MTL::Device*                    m_MetalDevice               = nullptr;
     CA::MetalLayer*                 m_MetalLayer                = nullptr;
     
     MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
     MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
-    MTL4::CommandAllocator*         m_MetalCommandAllocators[3];
+    
+    MTL4::CommandAllocator*         m_MetalCommandAllocators[s_MaxFramesInFlight];
+    
     MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
     MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
     MTL4::ArgumentTable*            m_VertexArgumentTable       = nullptr;
@@ -129,32 +131,35 @@ private:
     
     MTL::Buffer*                    m_UniformBuffer             = nullptr;
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
+    MTL::Buffer*                    m_InstanceBuffer            = nullptr;
+    MTL::Buffer*                    m_LightPositions[s_MaxFramesInFlight];
     
-    std::vector<MTL::Buffer*>       m_UniformBufferPool;
+    std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
-    size_t                          m_UniformBufferIndex;
+    std::vector<MTLMeshAttributes>  m_RenderMeshes;
+    std::vector<LightUniforms>      m_Lights;
     
     MetalShader*                    m_TextureShader             = nullptr;
     MetalShader*                    m_UntexturedShader          = nullptr;
     MetalShader*                    m_LightShader               = nullptr;
-
+    
+    
+    size_t m_UniformBufferIndex;
+    size_t m_FrameNum;
+    size_t m_FrameIndex;
+    
     Camera m_Camera;
     
     bool b_EnableWireframe = false;
     
-    matrix_float4x4 m_ViewMatrix;
-    matrix_float4x4 m_PerspectiveMatrix;
-    matrix_float4x4 m_ModelMatrix;
+    float4x4 m_ViewMatrix;
+    float4x4 m_ProjectionMatrix;
+    float4x4 m_ModelMatrix;
+    float4x4 m_LightPosition;
     
     LightComponent  m_LightComponent;
-    matrix_float4x4 m_LightPosition;
     
     LightUniforms   m_LightUniforms;
     Uniforms        m_Uniforms;
-    
-    size_t          m_FrameNum;
-    size_t          m_FrameIndex;
-    
-    static constexpr uint16_t MAX_ENTITIES = 10000;
 };
 #endif //METALRENDERER_H

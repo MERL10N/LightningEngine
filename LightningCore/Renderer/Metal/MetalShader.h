@@ -7,7 +7,6 @@
 
 #include "Metal/MTLPixelFormat.hpp"
 #include <string>
-#include <simd/simd.h>
 
 namespace MTL
 {
@@ -41,13 +40,10 @@ class MetalShader
 public:
     MetalShader() = default;
     
-    explicit MetalShader(const std::string &p_FilePath, MTL::Device* p_MetalDevice, MTL::PixelFormat p_DepthAttachmentPixelFormat);
-    explicit MetalShader(const std::string &p_FilePath, const char* p_VertexFunction, const char* p_FragmentFunction, MTL::Device* p_MetalDevice, MTL::VertexDescriptor* p_VertexDescriptor, MTL::PixelFormat p_DepthAttachmentPixelFormat);
+    explicit MetalShader(const std::string &filePath, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat);
+    explicit MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat);
     
     ~MetalShader();
-    
-    
-    void SetDepthAttachmentPixelFormat(MTL::PixelFormat p_PixelFormat);
     
     inline const MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
     
@@ -67,7 +63,7 @@ private:
     
     MTL::PixelFormat                                m_DepthAttachmentPixelFormat;
     
-    std::string s_FilePath;
+    std::string m_FilePath;
     const std::string LoadShaderFile(const std::string& path) const;
 };
 

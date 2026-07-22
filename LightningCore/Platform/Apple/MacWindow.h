@@ -22,7 +22,7 @@ class MacWindow
 {
 
 public:
-    explicit MacWindow(unsigned int p_Width = 1280, unsigned int p_Height = 720, const char* p_Title = "");
+    explicit MacWindow(const unsigned int p_Width = 1280, const unsigned int p_Height = 720, const char* p_Title = "");
     bool Update();
     ~MacWindow();
 
@@ -36,8 +36,8 @@ public:
 
 private:
     
-    static void frameBufferSizeCallback(GLFWwindow *window, int width, int height);
-    void resizeFrameBuffer(int width, int height);
+    static void frameBufferSizeCallback(GLFWwindow *window, const int width, const int height);
+    void resizeFrameBuffer(const int width, const int height);
     
     unsigned int m_Width, m_Height;
     const char* m_Title;

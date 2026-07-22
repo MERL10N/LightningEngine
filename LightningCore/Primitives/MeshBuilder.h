@@ -8,44 +8,44 @@
 #ifndef MESHBUILDER_H
 #define MESHBUILDER_H
 
-#include <simd/simd.h>
-#include "Sprite.h"
+#define HLSLPP_FEATURE_TRANSFORM
+#include <hlsl++.h>
+using namespace hlslpp;
 
-class MetalTexture;
-namespace MTL
-{
-   class Device;
-   class Buffer;
-}
+#include "Sprite.h"
+#include <vector>
+
+using MeshHandle = size_t;
 
 struct Vertex
 {
-    simd::float3 pos;
-    simd::float3 color;
-    simd::float2 texCoord;
+    float3 m_Pos;
+    float3 m_Color;
+    float2 m_TexCoord;
 };
 
 struct Vertex3D
 {
-    simd::float3 pos;
-    simd::float3 color;
-    simd::float3 normals;
-    simd::float2 texCoord;
+    float3 m_Pos;
+    float3 m_Color;
+    float3 m_Normals;
+    float2 m_TexCoord;
 };
 
 struct Mesh_2D
 {
-    MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
-    MetalTexture* m_Texture;
-    Sprite m_Sprite;
-    matrix_float4x4 m_Transform;
+    Sprite   m_Sprite;
+    float4x4 m_Transform;
 };
 
 struct Mesh_3D
 {
-    MTL::Buffer* m_VertexBuffer, *m_IndexBuffer;
-    MTL::Buffer* m_ArgumentBuffer;
-    uint16_t m_IndexCount;
+    std::vector<Vertex3D> m_Vertices;
+    std::vector<uint16_t> m_Indices;
+    size_t                m_VertexSize;
+    size_t                m_IndexSize;
+    uint16_t              m_IndexCount;
+    bool                  b_Instanced = false;
 };
 
 class MeshBuilder
@@ -53,12 +53,10 @@ class MeshBuilder
 public:
     MeshBuilder() = default;
     ~MeshBuilder(){};
-    Mesh_2D GenerateQuadWithTexture(MTL::Device* device, const char* texture);
-    Mesh_3D GeneratePlane(MTL::Device* device);
-    Mesh_3D GenerateCube(MTL::Device* device);
-    Mesh_3D GenerateSphere(MTL::Device* device, const int xSegments, const int ySegments, const simd::float3 &color = simd_make_float3(0.5f, 0.5f, 0.5f));
-private:
-    Mesh_2D m_Mesh2D;
-    Mesh_3D m_Mesh3D;
+    
+    // Platform agnotic implementation
+    static Mesh_3D GeneratePlane();
+    static Mesh_3D GenerateCube();
+    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 color);
 };
 #endif /* MESHBUILDER_H */

@@ -7,7 +7,6 @@
 
 #ifdef __APPLE__
 #include "Editor/Mac/MacEditorApplication.h"
-#include "Foundation/NSAutoreleasePool.hpp"
 #endif
 #include <print>
 
@@ -19,5 +18,4 @@ int main()
 #else
     std::println("Lightning Engine not supported on other platforms");
 #endif
-    
 }
