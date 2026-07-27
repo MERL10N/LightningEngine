@@ -73,19 +73,17 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
         stbi_set_flip_vertically_on_load(true);
         unsigned char* image = stbi_load(filePath, &width, &height, &channels, STBI_rgb_alpha);
         
-        assert(image != nullptr);
         
         if (image)
         {
             std::println("Image found at: {} ", filePath);
+            maxImageWidth = std::max(maxImageWidth, width);
+            maxImageHeight = std::max(maxImageHeight, height);
+            
+            m_Widths.emplace_back(width);
+            m_Heights.emplace_back(height);
+            images.emplace_back(image);
         }
-        
-        maxImageWidth = std::max(maxImageWidth, width);
-        maxImageHeight = std::max(maxImageHeight, height);
-        
-        m_Widths.emplace_back(width);
-        m_Heights.emplace_back(height);
-        images.emplace_back(image);
     }
     
     m_TextureDescriptor->texture2DDescriptor(MTL::PixelFormatRGBA8Unorm, maxImageWidth, maxImageHeight, false);
@@ -130,18 +128,19 @@ MetalTexture::~MetalTexture()
         m_ArgumentBuffer = nullptr;
     }
     
+    if (m_Texture)
+    {
+        if (m_Filepath)
+        {
+            std::println("Delete texture at: {}", m_Filepath);
+        }
+        m_Texture->release();
+        m_Texture = nullptr;
+    }
+    
     if (m_MetalDevice)
     {
         m_MetalDevice->release();
         m_MetalDevice = nullptr;
     }
-    
-    /*
-    if (m_Texture)
-    {
-        std::println("Delete texture at: {}", m_Filepath);
-        m_Texture->release();
-        m_Texture = nullptr;
-    }
-     */
 }

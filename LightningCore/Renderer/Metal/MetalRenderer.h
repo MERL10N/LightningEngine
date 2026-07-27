@@ -53,7 +53,6 @@ class Sprite;
 struct Mesh_3D;
 struct Mesh_2D;
 
-#include "Camera/Camera.h"
 #include "Scene/Component.h"
 #include "ShaderUniforms.h"
 #include <vector>
@@ -79,7 +78,7 @@ public:
     ~MetalRenderer();
 
     // Create 3D Mesh with or without a texture
-    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture);
+    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture *texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
@@ -98,34 +97,31 @@ public:
     inline       MTL4::CommandQueue*         GetMetalCommandQueue()         const { return m_MetalCommandQueue; }
 
     
-    inline void SetRenderPassDescriptor(MTL4::RenderPassDescriptor* p_RenderPassDescriptor) { m_RenderPassDescriptor = p_RenderPassDescriptor; }
-    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder) { m_RenderCommandEncoder = p_RenderCommandEncoder; }
-    inline void SetWireframeMode(const bool enableWireFrame)                                { b_EnableWireframe = enableWireFrame; }
-    inline void SetMetalDrawable(MTL::Drawable* drawable)                                   { m_Drawable = drawable; }
+    inline void SetRenderPassDescriptor(const MTL4::RenderPassDescriptor* renderPassDescriptor) { m_RenderPassDescriptor = renderPassDescriptor; }
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder)     { m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline void SetWireframeMode(const bool enableWireFrame)                                    { b_EnableWireframe = enableWireFrame; }
+    inline void SetMetalDrawable(const MTL::Drawable* drawable)                                 { m_Drawable = drawable; }
 
 private:
 
-    MTL::Device*                    m_MetalDevice               = nullptr;
-    CA::MetalLayer*                 m_MetalLayer                = nullptr;
-    
-    MTL4::CommandQueue*             m_MetalCommandQueue         = nullptr;
-    MTL4::CommandBuffer*            m_MetalCommandBuffer        = nullptr;
-    
-    MTL4::CommandAllocator*         m_MetalCommandAllocators[s_MaxFramesInFlight];
-    
-    MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
-    MTL4::RenderCommandEncoder*     m_RenderCommandEncoder      = nullptr;
-    MTL4::ArgumentTable*            m_VertexArgumentTable       = nullptr;
-    MTL4::ArgumentTable*            m_FragmentArgumentTable     = nullptr;
-    MTL4::ArgumentTableDescriptor*  m_ArgumentTableDescriptor   = nullptr;
-    
+    MTL::Device*                          m_MetalDevice               = nullptr;
+    CA::MetalLayer*                       m_MetalLayer                = nullptr;
+    MTL4::CommandQueue*                   m_MetalCommandQueue         = nullptr;
+    MTL4::CommandBuffer*                  m_MetalCommandBuffer        = nullptr;
+    MTL4::CommandAllocator*               m_MetalCommandAllocators[s_MaxFramesInFlight];
+    const MTL4::RenderPassDescriptor*     m_RenderPassDescriptor      = nullptr;
+    MTL4::RenderCommandEncoder*           m_RenderCommandEncoder      = nullptr;
+    MTL4::ArgumentTable*                  m_VertexArgumentTable       = nullptr;
+    MTL4::ArgumentTable*                  m_FragmentArgumentTable     = nullptr;
+    MTL4::ArgumentTableDescriptor*        m_ArgumentTableDescriptor   = nullptr;
+
     MTL::ResidencySet*              m_ResidencySet              = nullptr;
     MTL::ResidencySetDescriptor*    m_ResidencySetDescriptor    = nullptr;
     MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
     MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
     MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
-    MTL::Drawable*                  m_Drawable                  = nullptr;
+    const MTL::Drawable*            m_Drawable                  = nullptr;
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
     
@@ -144,13 +140,12 @@ private:
     MetalShader*                    m_LightShader               = nullptr;
     
     
+    bool   b_EnableWireframe = false;
     size_t m_UniformBufferIndex;
     size_t m_FrameNum;
     size_t m_FrameIndex;
     
-    Camera m_Camera;
-    
-    bool b_EnableWireframe = false;
+    float3   m_CameraPosition;
     
     float4x4 m_ViewMatrix;
     float4x4 m_ProjectionMatrix;

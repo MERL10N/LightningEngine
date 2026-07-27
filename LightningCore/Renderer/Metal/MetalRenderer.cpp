@@ -12,7 +12,7 @@
 #include "Primitives/Sprite.h"
 #include "MetalShader.h"
 #include "Scene/Scene.h"
-#include "Scene/Component.h"
+#include "Camera/Camera.h"
 
 #include <GLFW/glfw3.h>
 #include <Metal/Metal.hpp>
@@ -96,6 +96,8 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Color))
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Normals))
         .AddAttribute(MTL::VertexFormatFloat2, offsetof(Vertex3D, m_TexCoord))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Tangent))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Bitangent))
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
@@ -233,7 +235,7 @@ void MetalRenderer::CommitResidencySet()
     m_ResidencySet->commit();
 }
 
-MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture)
+MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture *texture)
 {
     MTLMeshAttributes meshAttributes;
     
@@ -241,7 +243,7 @@ MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture* 
     meshAttributes.m_VertexBuffer = m_MetalDevice->newBuffer(mesh.m_Vertices.data(), static_cast<uint32_t>(mesh.m_VertexSize), MTL::ResourceStorageModeShared);
     memcpy(meshAttributes.m_VertexBuffer->contents(), mesh.m_Vertices.data(), mesh.m_VertexSize);
     
-    meshAttributes.m_IndexBuffer  = m_MetalDevice->newBuffer(mesh.m_Indices.data(), static_cast<uint32_t>(mesh.m_IndexSize), MTL::ResourceStorageModeShared);
+    meshAttributes.m_IndexBuffer = m_MetalDevice->newBuffer(mesh.m_Indices.data(), static_cast<uint32_t>(mesh.m_IndexSize), MTL::ResourceStorageModeShared);
     memcpy(meshAttributes.m_IndexBuffer->contents(), mesh.m_Indices.data(), mesh.m_IndexSize);
     
     // Add the vertex and index buffer to residency set
@@ -262,7 +264,6 @@ MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture* 
 
 void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
 {
-    m_Camera = camera;
     m_UniformBufferIndex = 0;
     
     if (m_FrameNum >= s_MaxFramesInFlight)
@@ -290,14 +291,16 @@ void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
         m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
     }
     
-    m_ViewMatrix = m_Camera.GetViewMatrix();
+    m_ViewMatrix = camera.GetViewMatrix();
     
-    float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
+    m_CameraPosition = camera.GetPosition();
+    
+    float fov = camera.GetZoom() * (M_PI / 180.0f);
     
     m_ProjectionMatrix = float4x4::perspective(projection(frustum::field_of_view_x(fov, aspectRatio, 0.1f, 1000.f), zclip::zero, zdirection::forward, zplane::finite));
 }
 
-void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &p_LightComponent)
+void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent)
 {
     if (!m_LightShader)
     {
@@ -310,7 +313,7 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
     
     
     m_ModelMatrix = modelMatrix;
-    m_LightComponent = p_LightComponent;
+    m_LightComponent = lightComponent;
     m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
     memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
     
@@ -345,7 +348,7 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
     m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
-    m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_Camera.GetPosition()};
+    m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
     
     m_RenderCommandEncoder->setRenderPipelineState(texture ? m_TextureShader->GetRenderPipelineState() : m_UntexturedShader->GetRenderPipelineState());
