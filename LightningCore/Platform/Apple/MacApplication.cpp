@@ -38,12 +38,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     sphere.AddComponent<TransformComponent>(float3(-5.0f, 0.0f, 0.0f));
     sphere.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
-    m_MetalRenderer.CommitResidencySet();
-    
-    Entity sphere2 = m_Scene.CreateEntity("Sphere 2");
-    sphere2.AddComponent<TransformComponent>(float3(2.5f, 0.0f, 0.0f));
-    sphere2.AddComponent<LightComponent>(float3(0.0f, 1.0f, 1.0f));
-    sphere2.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
+
     m_MetalRenderer.CommitResidencySet();
 }
 

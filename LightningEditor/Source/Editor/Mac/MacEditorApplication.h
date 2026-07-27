@@ -18,10 +18,6 @@
 #include "MacEditorLayer.h"
 #include <simd/simd.h>
 
-class MetalRenderer;
-class MacEditorLayer;
-class MetalTexture;
-
 namespace MTL4
 {
     class Device;

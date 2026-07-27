@@ -11,17 +11,73 @@ Mesh_3D MeshBuilder::GeneratePlane()
 {
     Mesh_3D mesh;
     
+    // positions
+    float3 pos1(-1.0f,  1.0f, 0.0f);
+    float3 pos2(-1.0f, -1.0f, 0.0f);
+    float3 pos3( 1.0f, -1.0f, 0.0f);
+    float3 pos4( 1.0f,  1.0f, 0.0f);
+
+    // color
+    float3 color(1.0f, 1.0f, 1.0f);
+    
+    // texture coordinates
+    float2 uv1(0.0f, 1.0f);
+    float2 uv2(0.0f, 0.0f);
+    float2 uv3(1.0f, 0.0f);
+    float2 uv4(1.0f, 1.0f);
+    // normal vector
+    float3 normal(0.0f, 0.0f, 1.0f);
+
+    // calculate tangent/bitangent vectors of both triangles
+    float3 tangent1, bitangent1;
+    float3 tangent2, bitangent2;
+    // triangle 1
+    // ----------
+    float3 edge1 = pos2 - pos1;
+    float3 edge2 = pos3 - pos1;
+    float2 deltaUV1 = uv2 - uv1;
+    float2 deltaUV2 = uv3 - uv1;
+
+    float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+    // triangle 2
+    // ----------
+    edge1 = pos3 - pos1;
+    edge2 = pos4 - pos1;
+    deltaUV1 = uv3 - uv1;
+    deltaUV2 = uv4 - uv1;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+
+    bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    
     mesh.m_Vertices =
     {
-        {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
-        {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
-        {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 0.0}}, // 2
-        {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0}}, // 3
+        {pos1, color, normal, uv1, tangent1, bitangent1}, // 0
+        {pos2, color, normal, uv2, tangent1, bitangent1}, // 1
+        {pos3, color, normal, uv3, tangent2, bitangent2}, // 2
+        {pos4, color, normal, uv4, tangent2, bitangent2}, // 3
     };
         
     mesh.m_Indices = {0, 1, 2, 2, 3, 0};
     
-    mesh.m_IndexCount = sizeof(mesh.m_Indices);
+    mesh.m_IndexCount = 6;
 
     mesh.m_VertexSize = mesh.m_Vertices.size() * sizeof(Vertex3D);
     mesh.m_IndexSize  = mesh.m_Indices.size()  * sizeof(uint16_t);
@@ -109,10 +165,12 @@ Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, co
             float zPos = sin(xSegment * 2.0f * PI) * sin(ySegment * PI);
 
             
-            vertex.m_Pos = float3(xPos, yPos, zPos);
-            vertex.m_Color = color;
-            vertex.m_Normals = normalize(float3(xPos, yPos, zPos));
-            vertex.m_TexCoord = float2(xSegment, ySegment);
+            vertex.m_Pos       = float3(xPos, yPos, zPos);
+            vertex.m_Color     = color;
+            vertex.m_Normals   = normalize(float3(xPos, yPos, zPos));
+            vertex.m_TexCoord  = float2(xSegment, ySegment);
+            vertex.m_Tangent   = float3(0.0f, 0.0f, 0.0f);
+            vertex.m_Bitangent = float3(0.0f, 0.0f, 0.0f);
             
             mesh.m_Vertices.emplace_back(vertex);
         }
