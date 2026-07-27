@@ -31,7 +31,8 @@ project "LightningCore"
         "ThirdParty/imgui/imgui_widgets.cpp",
         "ThirdParty/imgui/imgui_demo.cpp",
         "ThirdParty/entt/single_include",
-        "ThirdParty/hlslpp/**.h"
+        "ThirdParty/hlslpp/**.h",
+        "ThirdParty/assimp/assimp/**.h"
     }
 
     includedirs 
@@ -69,6 +70,12 @@ project "LightningCore"
             "ThirdParty/stb",
             "ThirdParty/entt/single_include",
             "ThirdParty/metal-cpp",
+            "ThirdParty/assimp"
+        }
+
+        libdirs
+        {
+            "ThirdParty/assimp/libassimp.6.0.5.dylib"
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
