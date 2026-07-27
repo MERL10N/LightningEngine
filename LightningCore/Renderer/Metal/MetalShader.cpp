@@ -9,7 +9,7 @@
 #include <string>
 
 
-const std::string MetalShader::LoadShaderFile(const std::string &path) const
+constexpr std::string MetalShader::LoadShaderFile(const std::string &path) const
 {
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     if (!file.is_open())
@@ -36,7 +36,7 @@ MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, 
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(m_FilePath);
+    const std::string shaderSrc = LoadShaderFile(m_FilePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;
@@ -88,7 +88,6 @@ MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, 
     m_RenderPipelineDescriptor->setVertexFunctionDescriptor(m_VertexFunction);
     m_RenderPipelineDescriptor->setFragmentFunctionDescriptor(m_FragmentFunction);
     m_RenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-    //m_RenderPipelineDescriptor->setDepthAttachmentPixelFormat(m_DepthAttachmentPixelFormat);
     
     assert(m_RenderPipelineDescriptor);
     
@@ -124,7 +123,7 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
 {
     
     assert(m_MetalDevice);
-    std::string shaderSrc = LoadShaderFile(filePath);
+    const std::string shaderSrc = LoadShaderFile(filePath);
     if (shaderSrc.empty())
     {
         std::cerr << "Error: metal shader is empty" << std::endl;

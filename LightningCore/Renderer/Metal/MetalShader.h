@@ -64,7 +64,7 @@ private:
     MTL::PixelFormat                                m_DepthAttachmentPixelFormat;
     
     std::string m_FilePath;
-    const std::string LoadShaderFile(const std::string& path) const;
+    constexpr std::string LoadShaderFile(const std::string& path) const;
 };
 
 #endif //METALSHADER_H
