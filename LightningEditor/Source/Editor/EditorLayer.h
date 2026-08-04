@@ -16,7 +16,12 @@ public:
     
     void DrawStatsBar();
     void DrawMenuBar();
-    void DrawContentBrowser();
+    
+    template<typename Self>
+    void DrawContentBrowser(this Self &&self) { self.DrawContentBrowserImpl(); }
+    
+    inline bool IsWireFrameEnabled() const { return b_EnableWireFrameMode; }
+    
     
 private:
     bool b_showAnotherWindow;

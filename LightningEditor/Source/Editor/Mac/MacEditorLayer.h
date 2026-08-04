@@ -10,6 +10,7 @@
 
 #include <filesystem>
 #include "Renderer/Metal/MetalTexture.h"
+#include "../EditorLayer.h"
 
 namespace MTL
 {
@@ -18,23 +19,17 @@ namespace MTL
 
 class MetalTexture;
 
-class MacEditorLayer
+class MacEditorLayer : public EditorLayer
 {
 public:
     MacEditorLayer() = default;
-    MacEditorLayer(MTL::Device* p_MetalDevice);
+    MacEditorLayer(MTL::Device* metalDevice);
     ~MacEditorLayer();
     
-    void DrawStatsBar();
-    void DrawMenuBar();
-    void DrawContentBrowser();
-    
-    inline bool IsWireFrameEnabled() const { return b_EnableWireframe; }
+    void DrawContentBrowserImpl();
     
 private:
-    bool            b_showAnotherWindow             = false;
-    bool            b_EnableWireframe               = false;
-    const char*     s_AssetsPath                    = nullptr;
+    const char*     m_AssetsPath                    = nullptr;
     
     std::filesystem::path      m_CurrentDirectory;
     MTL::Device*               m_MetalDevice        = nullptr;
