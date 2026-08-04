@@ -86,10 +86,10 @@ public:
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent);
-    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const MetalTexture *p_Texture);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, MetalTexture *p_Texture);
     void Commit();
     
-    inline const MTL::Device*                GetMetalDevice()               const { return m_MetalDevice; }
+    // Getters and Setters
     inline const MTL::ResidencySet*          GetMetalResidencySet()         const { return m_ResidencySet; }
     inline const MTL4::RenderPassDescriptor* GetMetalRenderPassDescriptor() const { return m_RenderPassDescriptor; }
     inline const MTL4::RenderCommandEncoder* GetMetalRenderCommandEncoder() const { return m_RenderCommandEncoder; }

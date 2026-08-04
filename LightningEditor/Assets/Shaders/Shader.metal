@@ -37,13 +37,13 @@ struct VertexIn
 struct VertexOut
 {
     float4 position [[position]];
-    float3 worldPosition;
+    float3 fragmentPosition;
     float3 color;
     float3 normal;
     float2 texCoord;
     float3 T;
-    float3 N;
     float3 B;
+    float3 N;
     float3 TangentLightPos;
     float3 TangentViewPos;
     float3 TangentFragPos;
@@ -82,12 +82,13 @@ vertex VertexOut vertex_main(VertexIn in [[stage_in]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    float4 worldPos     = uniforms.model * float4(in.aPosition, 1.0f);
-    out.worldPosition   = worldPos.xyz;
-    out.position        = uniforms.perspective * uniforms.view * worldPos;
+    out.position        = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
+    out.fragmentPosition = float3(uniforms.model * float4(in.aPosition, 1.0f));
     out.normal          = in.aNormal;
     out.color           = in.aColor;
     out.texCoord        = in.aTexCoord;
+    
+    
     out.T               = normalize(float3(uniforms.model * float4(in.aTangent, 0.0f)));
     out.N               = normalize(float3(uniforms.model * float4(in.aNormal, 0.0f)));
     out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
@@ -107,32 +108,50 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     float4 diffuseMap  = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 0);
     float4 specularMap = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 1);
     float4 normalMap   = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 2);
-    //float3 normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
-    
-    // Ambient
-    float ambientStrength = 0.1f;
-    float3 ambient = ambientStrength * lightUniforms.lightColor * diffuseMap.xyz;
-        
-    // Diffuse
-    float3 norm = normalize(out.normal.xyz);
-    float3 lightDir = normalize(lightUniforms.lightPosition - float3(out.worldPosition));
-    float diff = max(dot(norm, lightDir.xyz), 0.0);
-    float3 diffuse = diff * lightUniforms.lightColor * diffuseMap.xyz;
-        
-    // Specular
-    float specularStrength = 1.0f;
-    float3 viewDir = normalize(lightUniforms.cameraPosition - float3(out.worldPosition));
-    float3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(norm, halfwayDir), 0.0f), 32);
-        
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * specularMap.xyz;
-   
-    float3 result = (ambient + diffuse + specular) * out.color;
     
     if (diffuseMap.a < 0.1)
     {
         discard_fragment();
     }
+    
+    // Ambient
+    float ambientStrength = 0.1f;
+    float3 ambient = ambientStrength * lightUniforms.lightColor * diffuseMap.xyz;
+        
+    // Transform normal vector to range [-1, 1]
+    float3 normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
+    
+    float3x3 TBN = transpose(float3x3(out.T, out.B, out.N));
+    
+    out.TangentLightPos = TBN * lightUniforms.lightPosition;
+    out.TangentViewPos = TBN * lightUniforms.cameraPosition;
+    out.TangentFragPos = TBN * out.fragmentPosition;
+    
+
+
+    float3 lightDir = normalize(out.TangentLightPos - out.TangentFragPos);
+    float diff = max(dot(lightDir.xyz, normal), 0.0);
+    float3 diffuse = diff * lightUniforms.lightColor * diffuseMap.xyz;
+        
+    // Specular
+    float specularStrength = 0.5f;
+    
+    float3 viewDir = normalize(out.TangentViewPos - float3(out.TangentFragPos));
+    float3 halfwayDir = normalize(lightDir + viewDir);
+    
+    float specularTerm = max(dot(normal, halfwayDir), 0.0f);
+    
+    
+    float spec = pow(max(specularTerm, 0.0f), 16.0f);
+    
+    float geometricClamp = max(dot(normal, lightDir), 0.0f);
+        
+   // float3 specular = specularStrength * spec * lightUniforms.lightColor * specularMap.xyz;
+    
+    
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * geometricClamp;
+    
+    float3 result = (ambient + diffuse + specular) * out.color;
     
     return float4(result, 1.0f);
 }
@@ -147,13 +166,13 @@ fragment float4 fragment_main_untextured(VertexOut out [[stage_in]],
         
     // Diffuse
     float3 norm = normalize(out.normal.xyz);
-    float3 lightDir = normalize(lightUniforms.lightPosition - float3(out.worldPosition));
-    float diff = max(dot(norm, lightDir.xyz), 0.0);
+    float3 lightDir = normalize(lightUniforms.lightPosition - float3(out.fragmentPosition));
+    float diff = max(dot(lightDir.xyz, norm), 0.0);
     float3 diffuse = diff * lightUniforms.lightColor;
         
     // Specular
     float specularStrength = 1.0f;
-    float3 viewDir = normalize(lightUniforms.cameraPosition - float3(out.worldPosition));
+    float3 viewDir = normalize(lightUniforms.cameraPosition - float3(out.fragmentPosition));
     float3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(norm, halfwayDir), 0.0f), 32);
         

@@ -92,6 +92,7 @@ Mesh_3D MeshBuilder::GenerateCube()
     mesh.m_Vertices =
     {
         // Front face
+        // Vertex positon
         {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
         {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
         {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 0.0}}, // 2
@@ -169,8 +170,8 @@ Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, co
             vertex.m_Color     = color;
             vertex.m_Normals   = normalize(float3(xPos, yPos, zPos));
             vertex.m_TexCoord  = float2(xSegment, ySegment);
-            vertex.m_Tangent   = float3(0.0f, 0.0f, 0.0f);
-            vertex.m_Bitangent = float3(0.0f, 0.0f, 0.0f);
+            vertex.m_Tangent   = float3(-sin(xSegment * 2.0f * PI), 0, cos(xSegment * 2.0f * PI)); // partial derivative in x and z components
+            vertex.m_Bitangent = normalize(cross(vertex.m_Normals, vertex.m_Tangent));
             
             mesh.m_Vertices.emplace_back(vertex);
         }

@@ -339,7 +339,7 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
     ++m_UniformBufferIndex;
 }
 
-void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture* texture)
+void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle meshHandle, MetalTexture* texture)
 {
     if (meshHandle >= m_RenderMeshes.size())
         return;
@@ -358,6 +358,8 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
 
     if (texture)
     {
+        
+       // texture->GenerateMipmaps(m_MetalCommandBuffer, m_RenderCommandEncoder); // Need to end encoding on the RenderCommandEncoder before accessing computecommandEncoder
         m_FragmentArgumentTable->setAddress(texture->GetArgumentBuffer()->gpuAddress(), 0);
         m_FragmentArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 1);
     }
