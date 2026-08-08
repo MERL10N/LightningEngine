@@ -9,7 +9,7 @@ using namespace metal;
  
  TODO:
  - [X] Implement Lightmaps
- - [] Implement Normal Mapping
+ - [X] Implement Normal Mapping
  - [] Implement Instanced Rendering
  - [] Implement Shadow Mapping
  - [] Implement Deferred Rendering
@@ -144,12 +144,12 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float spec = pow(max(specularTerm, 0.0f), 16.0f);
     
-    float geometricClamp = max(dot(normal, lightDir), 0.0f);
+    float nDotL = max(dot(normal, lightDir), 0.0f);
         
    // float3 specular = specularStrength * spec * lightUniforms.lightColor * specularMap.xyz;
     
     
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * geometricClamp;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL;
     
     float3 result = (ambient + diffuse + specular) * out.color;
     
