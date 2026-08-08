@@ -170,8 +170,8 @@ Mesh_3D MeshBuilder::GenerateSphere(const int xSegments, const int ySegments, co
             vertex.m_Color     = color;
             vertex.m_Normals   = normalize(float3(xPos, yPos, zPos));
             vertex.m_TexCoord  = float2(xSegment, ySegment);
-            vertex.m_Tangent   = float3(-sin(xSegment * 2.0f * PI), 0, cos(xSegment * 2.0f * PI)); // partial derivative in x and z components
-            vertex.m_Bitangent = normalize(cross(vertex.m_Normals, vertex.m_Tangent));
+            vertex.m_Tangent   = float3(-sin(xSegment * 2.0f * PI), 0, cos(xSegment * 2.0f * PI)); // partial derivative with respect to theta
+            vertex.m_Binormal  = cross(vertex.m_Normals, vertex.m_Tangent);
             
             mesh.m_Vertices.emplace_back(vertex);
         }

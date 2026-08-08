@@ -33,7 +33,7 @@ struct Vertex3D
     float3 m_Normals;
     float2 m_TexCoord;
     float3 m_Tangent;
-    float3 m_Bitangent;
+    float3 m_Binormal;
 };
 
 /*

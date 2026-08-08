@@ -9,16 +9,14 @@
 #define Component_h
 #include "Primitives/MeshBuilder.h"
 #include "Camera/Camera.h"
+#include <vector>
 
 #ifdef __APPLE__
     #include "Renderer/Metal/MetalTexture.h"
     using Texture = MetalTexture;
-    using Device  = MTL::Device;
-    using Buffer  = MTL::Buffer;
 #endif
 /*
 #elif __WIN32__
-    // using Device = VkPhysicalDevice;
     // using Texture = VulkanTexture;
 #endif
  */
@@ -66,47 +64,27 @@ struct TransformComponent
 
 struct TextureComponent
 {
-    Texture* texture = nullptr;
+    Texture texture;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
     
     // For a single texture map
+    template<typename Device>
     TextureComponent(const char *filePath, Device* device)
-    : texture(new Texture(filePath, device))
+    : texture(filePath, device)
     {
     }
     
     // For multiple texture maps
+    template<typename Device>
     TextureComponent(const std::vector<const char*> &filePaths, Device* device)
-    : texture(new Texture(filePaths, device))
+    : texture(filePaths, device)
     {
-    }
-
-    TextureComponent (TextureComponent&& pOther)
-    {
-        texture = pOther.texture;
-        pOther.texture = nullptr;
-    }
-    
-    TextureComponent& operator=(TextureComponent&& pOther)
-    {
-        if (this != &pOther)
-        {
-            delete texture;
-            texture = pOther.texture;
-            pOther.texture = nullptr;
-        }
-        return (*this);
     }
     
     ~TextureComponent()
     {
-        if (texture)
-        {
-            delete texture;
-            texture = nullptr;
-        }
     }
 };
 
