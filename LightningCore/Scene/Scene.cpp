@@ -70,7 +70,7 @@ void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float as
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, nullptr);
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle);
     }
     
     renderer.Commit();

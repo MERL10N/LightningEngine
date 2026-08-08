@@ -45,8 +45,7 @@ namespace CA
 class MetalVertexBuffer;
 class MetalTexture;
 class SubTexture;
-class MetalTexture;
-class MetalShader;
+//class MetalShader;
 class Scene;
 class Sprite;
 
@@ -79,7 +78,8 @@ public:
     ~MetalRenderer();
 
     // Create 3D Mesh with or without a texture
-    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture *texture);
+    MeshHandle Create3DMesh(const Mesh_3D &mesh);
+    MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture &texture);
     
     // Scene rendering
     void AddToResidencySet(const MTL::Allocation* p_Allocation);
@@ -87,7 +87,8 @@ public:
     
     void Submit(const Camera &p_Camera, const float p_AspectRatio);
     void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent);
-    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, MetalTexture *p_Texture);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle);
+    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const MetalTexture &p_Texture);
     void Commit();
     
     // Getters and Setters

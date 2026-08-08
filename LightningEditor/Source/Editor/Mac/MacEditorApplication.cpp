@@ -79,12 +79,12 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
     
     
-    
+    /*
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
     cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
-    
+    */
     
     Entity plane = m_Scene.CreateEntity("Plane");
     plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));
@@ -96,7 +96,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     Entity lightCube = m_Scene.CreateEntity("Light Cube");
     lightCube.AddComponent<TransformComponent>(float3(-1.0f, 1.0f, 2.0f), float3(0.2f,0.2f, 0.2f));
     lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
-    lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), nullptr));
+    lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
     m_MetalRenderer.CommitResidencySet();
 }
 

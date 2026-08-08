@@ -45,6 +45,22 @@ MetalFrameBuffer::~MetalFrameBuffer()
         m_AttachmentTexture = nullptr;
     }
     
+    if (m_DepthTextureDescriptor)
+    {
+        m_DepthTextureDescriptor->release();
+        m_DepthAttachmentDescriptor = nullptr;
+    }
+    if (m_DepthAttachmentDescriptor)
+    {
+        m_DepthAttachmentDescriptor->release();
+        m_DepthAttachmentDescriptor = nullptr;
+    }
+    if (m_TextureDescriptor)
+    {
+        m_TextureDescriptor->release();
+        m_TextureDescriptor = nullptr;
+    }
+    
     if (m_MetalDevice)
     {
         m_MetalDevice->release();
