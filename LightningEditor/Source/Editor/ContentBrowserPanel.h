@@ -9,6 +9,8 @@
 #define ContentBrowserPanel_h
 
 #include <filesystem>
+#include <imgui.h>
+#include <array>
 
 class ContentBrowserPanel
 {
@@ -16,9 +18,8 @@ public:
     ContentBrowserPanel();
     ~ContentBrowserPanel();
     
-    void Render();
+    void Render(const std::array<ImTextureID, 4> &icons);
 private:
     std::filesystem::path m_CurrentDirectory;
-    
 };
 #endif /* ContentBrowserPanel_hpp */

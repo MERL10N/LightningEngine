@@ -97,7 +97,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Normals))
         .AddAttribute(MTL::VertexFormatFloat2, offsetof(Vertex3D, m_TexCoord))
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Tangent))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Bitangent))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Binormal))
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
@@ -109,11 +109,11 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
-    m_TextureShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_TextureShader = MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
     
-    m_UntexturedShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
     
-    m_LightShader = new MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_LightShader = MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
     
     if (m_3DVertexDescriptor)
     {
@@ -185,24 +185,6 @@ MetalRenderer::~MetalRenderer()
         m_ResidencySet = nullptr;
     }
     
-    if (m_LightShader)
-    {
-        delete m_LightShader;
-        m_LightShader = nullptr;
-    }
-    
-    if (m_TextureShader)
-    {
-        delete m_TextureShader;
-        m_TextureShader = nullptr;
-    }
-    
-    if (m_UntexturedShader)
-    {
-        delete m_UntexturedShader;
-        m_UntexturedShader = nullptr;
-    }
-    
     if (m_MetalCommandQueue)
     {
         m_MetalCommandQueue->release();
@@ -213,12 +195,6 @@ MetalRenderer::~MetalRenderer()
     {
         m_MetalLayer->release();
         m_MetalLayer = nullptr;
-    }
-    
-    if (m_MetalDevice)
-    {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
     }
     
 }

@@ -55,6 +55,7 @@ struct Mesh_2D;
 
 #include "Scene/Component.h"
 #include "ShaderUniforms.h"
+#include "MetalShader.h"
 #include <vector>
 
 static constexpr uint8_t  s_MaxFramesInFlight   = 3;
@@ -134,11 +135,11 @@ private:
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
     std::vector<MTLMeshAttributes>  m_RenderMeshes;
     std::vector<LightUniforms>      m_Lights;
+
     
-    MetalShader*                    m_TextureShader             = nullptr;
-    MetalShader*                    m_UntexturedShader          = nullptr;
-    MetalShader*                    m_LightShader               = nullptr;
-    
+    MetalShader                    m_TextureShader;
+    MetalShader                    m_UntexturedShader;
+    MetalShader                    m_LightShader;
     
     bool   b_EnableWireframe = false;
     size_t m_UniformBufferIndex;

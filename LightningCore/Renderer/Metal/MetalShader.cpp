@@ -111,6 +111,8 @@ MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, 
     
     m_Library->release();
     m_RenderPipelineDescriptor->release();
+    m_CompilerDescriptor->release();
+    m_Compiler->release();
 
 }
 
@@ -148,10 +150,6 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
         std::cerr << "Error: Wrong name used for vertex shader function or is not found." << std::endl;
         std::cerr << "Error: Make sure your vertex shader name is: vertexShader" << std::endl;
     }
-    else
-    {
-        std::cout << "\nVertex function successfully found and loaded" << std::endl;
-    }
     
     m_FragmentFunction = MTL4::LibraryFunctionDescriptor::alloc()->init(); // Load the fragment function
     m_FragmentFunction->setLibrary(m_Library);
@@ -161,15 +159,11 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
     {
         std::cerr << "Error: Wrong name used for fragment shader function or is not found." << std::endl;
     }
-    else
-    {
-        std::cout << "FragmentFunction function successfully found and loaded" << std::endl;
-    }
     
     
     if (m_VertexFunction && m_FragmentFunction)
     {
-        std::println("Loading shader  at: {}\n", m_FilePath);
+        std::println("Loading shader at: {}", m_FilePath);
     }
 
     m_RenderPipelineDescriptor = MTL4::RenderPipelineDescriptor::alloc()->init();
@@ -207,7 +201,6 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
 
 MetalShader::~MetalShader()
 {
-    std::println("Delete shader  at: {}", m_FilePath);
     if (m_RenderPipelineState)
     {
         m_RenderPipelineState->release();
@@ -224,3 +217,20 @@ MetalShader::~MetalShader()
         m_FragmentFunction = nullptr;
     }
 }
+
+MetalShader &MetalShader::operator=(MetalShader &&other)
+{
+    if (this != &other)
+    {
+        if (m_RenderPipelineState)
+        {
+            m_RenderPipelineState->release();
+            m_RenderPipelineState = nullptr;
+        }
+        m_FilePath = other.m_FilePath;
+        m_RenderPipelineState = other.m_RenderPipelineState;
+        other.m_RenderPipelineState = nullptr;
+    }
+    return *this;
+}
+

@@ -11,6 +11,8 @@
 #include <filesystem>
 #include "Renderer/Metal/MetalTexture.h"
 #include "../EditorLayer.h"
+#include "../ContentBrowserPanel.h"
+#include <imgui.h>
 
 namespace MTL
 {
@@ -29,11 +31,12 @@ public:
     void DrawContentBrowserImpl();
     
 private:
-    const char*     m_AssetsPath                    = nullptr;
-    
+    const char*                m_AssetsPath         = nullptr;
     std::filesystem::path      m_CurrentDirectory;
-    MTL::Device*               m_MetalDevice        = nullptr;
     MetalTexture               m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
+    std::array<ImTextureID, 4> m_Icons;
+    ContentBrowserPanel        m_ContentBrowserPanel;
+    
 };
 
 #endif /* MacEditorLayer_hpp */

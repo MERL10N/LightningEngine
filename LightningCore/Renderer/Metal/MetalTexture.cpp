@@ -58,10 +58,10 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
 {
 
     std::vector<unsigned char*> images;
-    images.reserve(2);
-    m_Widths.reserve(2);
-    m_Heights.reserve(2);
-    m_TextureInfos.reserve(2);
+    images.reserve(4);
+    m_Widths.reserve(4);
+    m_Heights.reserve(4);
+    m_TextureInfos.reserve(4);
     
     int maxImageWidth = 0;
     int maxImageHeight = 0;
@@ -72,7 +72,6 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
     {
         stbi_set_flip_vertically_on_load(true);
         unsigned char* image = stbi_load(filePath, &width, &height, &channels, STBI_rgb_alpha);
-        
         
         if (image)
         {
@@ -117,7 +116,24 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
     }
 }
 
-
+MetalTexture &MetalTexture::operator=(MetalTexture &&other)
+{
+    if (this != &other)
+    {
+        m_Texture->release();
+        m_ArgumentBuffer->release();
+        
+        m_Filepath = other.m_Filepath;
+        m_Texture = other.m_Texture;
+        m_ArgumentBuffer = other.m_ArgumentBuffer;
+          
+        other.m_Texture->release();
+        other.m_ArgumentBuffer->release();
+        other.m_Texture = nullptr;
+        other.m_ArgumentBuffer = nullptr;
+    }
+    return (*this);
+}
 
 
 MetalTexture::~MetalTexture()

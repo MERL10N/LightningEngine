@@ -43,6 +43,17 @@ public:
     explicit MetalShader(const std::string &filePath, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat);
     explicit MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat);
     
+    MetalShader(MetalShader&& other)
+    : m_RenderPipelineState(other.m_RenderPipelineState)
+    {
+        other.m_RenderPipelineState = nullptr;
+    }
+    
+    MetalShader& operator=(MetalShader&& other);
+    MetalShader(const MetalShader&) = delete;
+    MetalShader& operator=(const MetalShader&) = delete;
+    
+    
     ~MetalShader();
     
     inline const MTL::RenderPipelineState* GetRenderPipelineState() const { return m_RenderPipelineState; }
