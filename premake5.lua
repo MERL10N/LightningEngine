@@ -78,7 +78,7 @@ project "LightningCore"
             "ThirdParty/assimp/libassimp.6.0.5.dylib"
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++", "-fobjc-arc"}
+        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
     filter {}
@@ -230,7 +230,7 @@ project "LightningEditor"
             ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++" }
+        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
 
         postbuildcommands
