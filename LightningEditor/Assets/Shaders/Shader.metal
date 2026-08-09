@@ -41,6 +41,9 @@ struct VertexOut
     float3 color;
     float3 normal;
     float2 texCoord;
+    uint diffuseTextureIndex;
+    uint specularTextureIndex;
+    uint normalMapIndex;
     float3 T;
     float3 B;
     float3 N;
@@ -73,26 +76,32 @@ struct InstancedUniforms
 
 struct Material
 {
-    texture2d_array<float> textureMaps[[id(0)]];
+    texture2d<float> textureMaps[[id(0)]] [4];
 };
 
 // Vertex shader
 vertex VertexOut vertex_main(VertexIn in [[stage_in]],
                              constant Uniforms &uniforms[[buffer(1)]],
+                             constant LightUniforms &lightUniforms[[buffer(2)]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    out.position        = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
+    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
     out.fragmentPosition = float3(uniforms.model * float4(in.aPosition, 1.0f));
-    out.normal          = in.aNormal;
-    out.color           = in.aColor;
-    out.texCoord        = in.aTexCoord;
+    out.normal           = in.aNormal;
+    out.color            = in.aColor;
+    out.texCoord         = in.aTexCoord;
     
     
     out.T               = normalize(float3(uniforms.model * float4(in.aTangent, 0.0f)));
     out.N               = normalize(float3(uniforms.model * float4(in.aNormal, 0.0f)));
     out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
     out.B               = cross(out.N, out.T);
+    
+    float3x3 TBN = transpose(float3x3(out.T, out.B, out.N));
+    out.TangentLightPos = TBN * lightUniforms.lightPosition;
+    out.TangentViewPos  = TBN * lightUniforms.cameraPosition;
+    out.TangentFragPos  = TBN * out.fragmentPosition;
     
     return out;
 }
@@ -104,10 +113,27 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
 {
     constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
     
-    // Sample the texture to obtain a color
-    float4 diffuseMap  = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 0);
-    float4 specularMap = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 1);
-    float4 normalMap   = textureArgs.textureMaps.sample(textureSampler, out.texCoord, 2);
+    // Set the default values
+    float4 diffuseMap  = float4(1.0f);
+    float4 specularMap = float4(1.0f);
+    float4 normalMap   = float4(1.0f);
+    
+    
+    // Check if the texture maps are nullptr
+    if (!is_null_texture(textureArgs.textureMaps[0]))
+    {
+        diffuseMap  = textureArgs.textureMaps[0].sample(textureSampler, out.texCoord);
+    }
+    
+    if (!is_null_texture(textureArgs.textureMaps[1]))
+    {
+        specularMap = textureArgs.textureMaps[1].sample(textureSampler, out.texCoord);
+    }
+    
+    if (!is_null_texture(textureArgs.textureMaps[2]))
+    {
+        normalMap   = textureArgs.textureMaps[2].sample(textureSampler, out.texCoord);
+    }
     
     if (diffuseMap.a < 0.1)
     {
@@ -120,15 +146,6 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
         
     // Transform normal vector to range [-1, 1]
     float3 normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
-    
-    float3x3 TBN = transpose(float3x3(out.T, out.B, out.N));
-    
-    out.TangentLightPos = TBN * lightUniforms.lightPosition;
-    out.TangentViewPos = TBN * lightUniforms.cameraPosition;
-    out.TangentFragPos = TBN * out.fragmentPosition;
-    
-
-
     float3 lightDir = normalize(out.TangentLightPos - out.TangentFragPos);
     float diff = max(dot(lightDir.xyz, normal), 0.0);
     float3 diffuse = diff * lightUniforms.lightColor * diffuseMap.xyz;
@@ -141,16 +158,12 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float specularTerm = max(dot(normal, halfwayDir), 0.0f);
     
-    
-    float spec = pow(max(specularTerm, 0.0f), 16.0f);
+    float spec = pow(max(specularTerm, 0.0f), 64.0f);
     
     float nDotL = max(dot(normal, lightDir), 0.0f);
-        
-   // float3 specular = specularStrength * spec * lightUniforms.lightColor * specularMap.xyz;
     
-    
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL;
-    
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL * specularMap.xyz;
+
     float3 result = (ambient + diffuse + specular) * out.color;
     
     return float4(result, 1.0f);
