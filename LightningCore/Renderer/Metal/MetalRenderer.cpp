@@ -109,11 +109,25 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
-    m_TextureShader = MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_TextureShader = MetalShader("Assets/Shaders/Shader.metal",
+                                  "vertex_main", "fragment_main",
+                                  m_MetalDevice,
+                                  m_3DVertexDescriptor,
+                                  m_MetalLayer->pixelFormat());
     
-    m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal",
+                                     "vertex_main",
+                                     "fragment_main_untextured",
+                                     m_MetalDevice,
+                                     m_3DVertexDescriptor,
+                                     m_MetalLayer->pixelFormat());
     
-    m_LightShader = MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_LightShader = MetalShader("Assets/Shaders/Light.metal",
+                                "vertex_light",
+                                "fragment_light",
+                                m_MetalDevice,
+                                m_LightVertexDescriptor,
+                                m_MetalLayer->pixelFormat());
     
     if (m_3DVertexDescriptor)
     {
@@ -307,9 +321,7 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
         return;
     
     
-    m_ModelMatrix = modelMatrix;
-    m_LightComponent = lightComponent;
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
     memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
     
     float3 color = m_LightComponent.m_Color;
@@ -339,8 +351,7 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
     if (meshHandle >= m_RenderMeshes.size())
         return;
 
-    m_ModelMatrix = modelMatrix;
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
     m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_CameraPosition};
@@ -369,8 +380,7 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
     if (meshHandle >= m_RenderMeshes.size())
         return;
 
-    m_ModelMatrix = modelMatrix;
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
     m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_CameraPosition};
