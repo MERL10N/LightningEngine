@@ -25,8 +25,9 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     
     std::vector<const char*> CubeTextures =
     {
-        "Assets/Textures/container2.png",
-        "Assets/Textures/container2_specular.png"
+        "Assets/Textures/brickwall.jpg",
+        nullptr,
+        "Assets/Textures/brickwall_normal.jpg",
     };
     
     std::vector<const char*> PlaneTextures =
@@ -49,12 +50,12 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
     
     
-    /*
+    
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
+    cube.AddComponent<TransformComponent>(float3(1.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
-    cube.AddComponent<MeshComponent>(m_MetalRenderer->Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
-    */
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
+    
     
     Entity plane = m_Scene.CreateEntity("Plane");
     plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));

@@ -31,6 +31,7 @@ Mesh_3D MeshBuilder::GeneratePlane()
     // calculate tangent/bitangent vectors of both triangles
     float3 tangent1, bitangent1;
     float3 tangent2, bitangent2;
+    
     // triangle 1
     // ----------
     float3 edge1 = pos2 - pos1;
@@ -89,46 +90,298 @@ Mesh_3D MeshBuilder::GenerateCube()
 {
     Mesh_3D mesh;
     
+    // -- vertex positions
+    // Front
+    float3 pos1(-0.5f, -0.5f, 0.5f);
+    float3 pos2( 0.5f, -0.5f, 0.5f);
+    float3 pos3( 0.5f,  0.5f, 0.5f);
+    float3 pos4(-0.5f,  0.5f, 0.5f);
+    
+    // Back
+    float3 pos5( 0.5f, -0.5f, -0.5f);
+    float3 pos6(-0.5f, -0.5f, -0.5f);
+    float3 pos7(-0.5f,  0.5f, -0.5f);
+    float3 pos8( 0.5f,  0.5f, -0.5f);
+    
+    // Left
+    float3 pos9 (-0.5f, -0.5f, -0.5f);
+    float3 pos10(-0.5f, -0.5f,  0.5f);
+    float3 pos11(-0.5f,  0.5f,  0.5f);
+    float3 pos12(-0.5f,  0.5f, -0.5f);
+    
+    // Right
+    float3 pos13(0.5f,  -0.5f,  0.5f);
+    float3 pos14(0.5f,  -0.5f, -0.5f);
+    float3 pos15(0.5f,   0.5f, -0.5f);
+    float3 pos16(0.5f,   0.5f,  0.5f);
+    
+    // Top
+    float3 pos17(-0.5f,  0.5f,  0.5f);
+    float3 pos18( 0.5f,  0.5f,  0.5f);
+    float3 pos19( 0.5f,  0.5f, -0.5f);
+    float3 pos20(-0.5f,  0.5f, -0.5f);
+    
+    // Bottom
+    float3 pos21(-0.5f, -0.5f, -0.5f);
+    float3 pos22( 0.5f, -0.5f, -0.5f);
+    float3 pos23( 0.5f, -0.5f,  0.5f);
+    float3 pos24(-0.5f, -0.5f,  0.5f);
+
+    // -- color
+    float3 color(1.0f, 1.0f, 1.0f);
+    
+    // texture coordinates
+    float2 uv1(0.0f, 1.0f);
+    float2 uv2(1.0f, 1.0f);
+    float2 uv3(1.0f, 0.0f);
+    float2 uv4(0.0f, 0.0f);
+    
+    // -- normal vector
+    float3 normal1(0.0f, 0.0f, 1.0f);
+    float3 normal2(0.0f, 0.0f, -1.0f);
+    float3 normal3(-1.0f, 0.0f, 0.0f);
+    float3 normal4(1.0f, 0.0f, 0.0f);
+    float3 normal5(0.0f, 1.0f, 0.0f);
+    float3 normal6(0.0f, -1.0f, 0.0f);
+    
+    // calculate tangent/bitangent vectors of both triangles
+    float3 tangent1, bitangent1;
+    float3 tangent2, bitangent2;
+    float3 tangent3, bitangent3;
+    float3 tangent4, bitangent4;
+    float3 tangent5, bitangent5;
+    float3 tangent6, bitangent6;
+    float3 tangent7, bitangent7;
+    float3 tangent8, bitangent8;
+    float3 tangent9, bitangent9;
+    float3 tangent10, bitangent10;
+    float3 tangent11, bitangent11;
+    float3 tangent12, bitangent12;
+    
+    // triangle 1
+    // ----------
+    float3 edge1 = pos2 - pos1;
+    float3 edge2 = pos3 - pos1;
+    float2 deltaUV1 = uv2 - uv1;
+    float2 deltaUV2 = uv3 - uv1;
+
+    float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+    // triangle 2
+    // ----------
+    edge1 = pos3 - pos1;
+    edge2 = pos4 - pos1;
+    deltaUV1 = uv3 - uv1;
+    deltaUV2 = uv4 - uv1;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+
+    bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 3
+    // ----------
+    edge1 = pos6 - pos5;
+    edge2 = pos7 - pos5;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent3.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent3.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent3.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent3.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent3.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent3.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 4
+    // ----------
+    edge1 = pos7 - pos5;
+    edge2 = pos8 - pos5;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent4.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent4.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent4.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent4.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent4.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent4.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 5
+    // ----------
+    edge1 = pos10 - pos9;
+    edge2 = pos11 - pos9;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent5.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent5.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent5.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent5.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent5.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent5.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 6
+    // ----------
+    edge1 = pos11 - pos9;
+    edge2 = pos12 - pos9;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent6.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent6.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent6.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent6.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent6.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent6.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 7
+    // ----------
+    edge1 = pos14 - pos13;
+    edge2 = pos15 - pos13;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent7.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent7.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent7.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent7.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent7.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent7.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 8
+    // ----------
+    edge1 = pos15 - pos13;
+    edge2 = pos16 - pos13;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent8.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent8.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent8.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent8.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent8.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent8.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 9
+    // ----------
+    edge1 = pos18 - pos17;
+    edge2 = pos19 - pos17;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent9.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent9.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent9.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent9.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent9.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent9.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 10
+    // ----------
+    edge1 = pos19 - pos17;
+    edge2 = pos20 - pos17;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent10.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent10.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent10.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent10.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent10.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent10.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 11
+    // ----------
+    edge1 = pos22 - pos21;
+    edge2 = pos23 - pos21;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent11.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent11.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent11.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent11.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent11.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent11.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
+    // triangle 12
+    // ----------
+    edge1 = pos23 - pos21;
+    edge2 = pos24 - pos21;
+
+    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+    tangent12.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+    tangent12.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+    tangent12.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+    bitangent12.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+    bitangent12.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+    bitangent12.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    
     mesh.m_Vertices =
     {
         // Front face
-        // Vertex positon
-        {{-0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 1.0}}, // 0
-        {{ 0.5f, -0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 1.0}}, // 1
-        {{ 0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {1.0, 0.0}}, // 2
-        {{-0.5f,  0.5f, 0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, 1.0}, {0.0, 0.0}}, // 3
+        {pos1, color, normal1, uv1, tangent1, bitangent1},
+        {pos2, color, normal1, uv2, tangent1, bitangent1},
+        {pos3, color, normal1, uv3, tangent2, bitangent2},
+        {pos4, color, normal1, uv4, tangent2, bitangent2},
         
         // Back face
-        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {0.0, 1.0}}, // 4
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {1.0, 1.0}}, // 5
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {1.0, 0.0}}, // 6
-        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 0.0, -1.0}, {0.0, 0.0}}, // 7
+        {pos5, color, normal2, uv1, tangent3, bitangent3},
+        {pos6, color, normal2, uv2, tangent3, bitangent3},
+        {pos7, color, normal2, uv3, tangent4, bitangent4},
+        {pos8, color, normal2, uv4, tangent4, bitangent4},
         
         // Left face
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {0.0, 1.0}}, // 8
-        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {1.0, 1.0}}, // 9
-        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {1.0, 0.0}}, // 10
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {-1.0, 0.0, 0.0}, {0.0, 0.0}}, // 11
+        {pos9, color, normal3, uv1, tangent5, bitangent5},
+        {pos10, color, normal3, uv2, tangent5, bitangent5},
+        {pos11, color, normal3, uv3, tangent6, bitangent6},
+        {pos12, color, normal3, uv4, tangent6, bitangent6},
         
         // Right face
-        {{0.5f,  -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 1.0}}, // 12
-        {{0.5f,  -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {1.0, 1.0}}, // 13
-        {{0.5f,   0.5f, -0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {1.0, 0.0}}, // 14
-        {{0.5f,   0.5f,  0.5f}, {1.0, 1.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.0}}, // 15
+        {pos13, color, normal4, uv1, tangent7, bitangent7},
+        {pos14, color, normal4, uv2, tangent7, bitangent7},
+        {pos15, color, normal4, uv3, tangent8, bitangent8},
+        {pos16, color, normal4, uv4, tangent8, bitangent8},
         
-        // Top face
-        {{-0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {0.0, 1.0}}, // 16
-        {{ 0.5f,  0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {1.0, 1.0}}, // 17
-        {{ 0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {1.0, 0.0}}, // 18
-        {{-0.5f,  0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, 1.0, 0.0}, {0.0, 0.0}}, // 19
+        // Top Face
+        {pos17, color, normal5, uv1, tangent9, bitangent9},
+        {pos18, color, normal5, uv2, tangent9, bitangent9},
+        {pos19, color, normal5, uv3, tangent10, bitangent10},
+        {pos20, color, normal5, uv4, tangent10, bitangent10},
         
-        // Bottom face
-        {{-0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{0.0, 1.0}}, // 20
-        {{ 0.5f, -0.5f, -0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 1.0}}, // 21
-        {{ 0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{1.0, 0.0}}, // 22
-        {{-0.5f, -0.5f,  0.5f}, {1.0, 1.0, 1.0}, {0.0, -1.0, 0.0},{0.0, 0.0}}, // 23
-       
+        // Bottom Face
+        {pos21, color, normal6, uv1, tangent11, bitangent11},
+        {pos22, color, normal6, uv2, tangent11, bitangent11},
+        {pos23, color, normal6, uv3, tangent12, bitangent12},
+        {pos24, color, normal6, uv4, tangent12, bitangent12},
     };
+    
     
     mesh.m_Indices =
     {
