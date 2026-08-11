@@ -8,8 +8,7 @@
 #ifndef MESHBUILDER_H
 #define MESHBUILDER_H
 
-#define HLSLPP_FEATURE_TRANSFORM
-#include <hlsl++.h>
+#include <hlsl++/vector_float_type.h>
 
 using hlslpp::float2;
 using hlslpp::float3;
@@ -61,6 +60,6 @@ public:
     // Platform agnotic implementation
     static Mesh_3D GeneratePlane();
     static Mesh_3D GenerateCube();
-    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 color);
+    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 &color);
 };
 #endif /* MESHBUILDER_H */

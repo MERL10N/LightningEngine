@@ -55,6 +55,11 @@ public:
     
     MetalTexture(const MetalTexture&) = delete;
     MetalTexture& operator=(const MetalTexture&) = delete;
+    
+    inline const MTL::Texture* GetTexture() const
+    {
+        return m_Texture;
+    }
 
     inline const std::vector<MTL::Texture*>& GetTextures() const
     {
@@ -69,6 +74,7 @@ public:
     
 private:
     MTL::Device*                  m_MetalDevice               = nullptr;
+    MTL::Texture*                 m_Texture                   = nullptr;
     std::vector<MTL::Texture*>    m_Textures;
     MTL::Buffer*                  m_ArgumentBuffer            = nullptr;
     MTL4::ComputeCommandEncoder*  m_ComputeCommandEncoder     = nullptr;

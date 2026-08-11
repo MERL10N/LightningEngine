@@ -21,7 +21,8 @@
 #endif
  */
 
-#include <hlsl++.h>
+#include <hlsl++/vector_float_type.h>
+#include <hlsl++/matrix_float_type.h>
 using namespace hlslpp;
 
 

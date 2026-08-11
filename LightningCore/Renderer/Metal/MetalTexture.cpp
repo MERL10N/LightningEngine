@@ -15,7 +15,6 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
 : m_Filepath(p_FilePath),
   m_MetalDevice(p_MetalDevice)
 {
-    /*
     assert(m_MetalDevice);
     stbi_set_flip_vertically_on_load(true);
     int width, height, channels;
@@ -27,7 +26,7 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
         std::println("Image found at: {} ", m_Filepath);
     }
     
-    
+    MTL::TextureDescriptor* m_TextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
     
     m_TextureDescriptor->setWidth(width);
@@ -50,7 +49,7 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
         memcpy(m_ArgumentBuffer->contents(), &textureID, sizeof(MTL::ResourceID));
     }
     stbi_image_free(image);
-     */
+
 }
 
 MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Device *metalDevice)
