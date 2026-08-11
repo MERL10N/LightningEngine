@@ -6,7 +6,9 @@
 //
 
 #include "Camera.h"
-
+#include <hlsl++/vector_float.h>
+#include <hlsl++/matrix_float.h>
+#include <math.h>
 
 Camera::Camera(float3 position, float3 up, float yaw, float pitch)
 : m_Position(position),
@@ -112,7 +114,7 @@ float Camera::Radians(float degrees) const
     return degrees * M_PI / 180.0f;
 }
 
-float4x4 Camera::LookAt(const float3 eye, const float3 center, const float3 up) const
+float4x4 Camera::LookAt(const float3 &eye, const float3 &center, const float3 &up) const
 {
     float3 z = normalize(center - eye);
     float3 x = normalize(cross(up, z));

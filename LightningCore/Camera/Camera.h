@@ -9,7 +9,8 @@
 #define Camera_h
 
 #define HLSLPP_FEATURE_TRANSFORM
-#include <hlsl++.h>
+#include <hlsl++/vector_float_type.h>
+#include <hlsl++/matrix_float_type.h>
 
 using namespace hlslpp;
 
@@ -44,7 +45,7 @@ public:
     
     inline float GetZoom() const { return m_Zoom; }
     
-    inline float3 GetPosition() const  { return m_Position; }
+    inline const float3& GetPosition() const  { return m_Position; }
     
 private:
     
@@ -68,7 +69,7 @@ private:
     
     float Radians(float degrees) const;
     
-    float4x4 LookAt(const float3 eye, const float3 center, const float3 up) const;
+    float4x4 LookAt(const float3 &eye, const float3 &center, const float3 &up) const;
     
 };
 
