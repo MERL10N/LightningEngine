@@ -12,14 +12,6 @@
 #include "Renderer/Metal/MetalTexture.h"
 #include "../EditorLayer.h"
 #include "../ContentBrowserPanel.h"
-#include <imgui.h>
-
-namespace MTL
-{
-   class Device;
-}
-
-class MetalTexture;
 
 class MacEditorLayer : public EditorLayer
 {
