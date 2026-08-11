@@ -17,7 +17,7 @@
 
 #include <QuartzCore/QuartzCore.hpp>
 #include <Metal/Metal.hpp>
-#include <hlsl++.h>
+#include <hlsl++/vector_float.h>
 
 MacEditorApplication::MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title)
 : m_MacWindow(p_Width, p_Height, p_Title),
@@ -52,11 +52,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     m_MetalFrameBuffer.Create(m_Width, m_Height);
     m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
     
-    
     std::vector<const char*> CubeTextures =
     {
         "Assets/Textures/container2.png",
-        "Assets/Textures/container2_specular.png"
+        "Assets/Textures/container2_specular.png",
+        nullptr
     };
     
     std::vector<const char*> PlaneTextures =
@@ -81,7 +81,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     
     
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.AddComponent<TransformComponent>(float3(3.0f, 0.0f, 0.0f));
+    cube.AddComponent<TransformComponent>(float3(1.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
     cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
     
@@ -229,7 +229,6 @@ void MacEditorApplication::Update()
             m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
             m_ImGuiCommandAllocator->reset();
             m_WindowDrawable->present();
-         
         }
                  
         m_Pool->release();
