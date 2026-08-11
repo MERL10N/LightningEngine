@@ -117,7 +117,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     float4 diffuseMap  = float4(1.0f);
     float4 specularMap = float4(1.0f);
     float4 normalMap   = float4(1.0f);
-    
+    float3 normal      = float3(0.0f, 0.0f, 1.0f);
     
     // Check if the texture maps are nullptr
     if (!is_null_texture(textureArgs.textureMaps[0]))
@@ -133,6 +133,9 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     if (!is_null_texture(textureArgs.textureMaps[2]))
     {
         normalMap   = textureArgs.textureMaps[2].sample(textureSampler, out.texCoord);
+        
+        // Transform normal vector to range [-1, 1]
+        normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
     }
     
     if (diffuseMap.a < 0.1)
@@ -143,9 +146,8 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     // Ambient
     float ambientStrength = 0.1f;
     float3 ambient = ambientStrength * lightUniforms.lightColor * diffuseMap.xyz;
-        
-    // Transform normal vector to range [-1, 1]
-    float3 normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
+ 
+    
     float3 lightDir = normalize(out.TangentLightPos - out.TangentFragPos);
     float diff = max(dot(lightDir.xyz, normal), 0.0);
     float3 diffuse = diff * lightUniforms.lightColor * diffuseMap.xyz;
@@ -160,7 +162,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float spec = pow(max(specularTerm, 0.0f), 64.0f);
     
-    float nDotL = max(dot(normal, lightDir), 0.0f);
+    float nDotL = max(dot(normal, halfwayDir), 0.0f);
     
     float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL * specularMap.xyz;
 
