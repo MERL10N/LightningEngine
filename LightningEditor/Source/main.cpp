@@ -16,6 +16,6 @@ int main()
     auto editor = MacEditorApplication(1920.f, 1980.f);
     editor.Update();
 #else
-    std::println("Lightning Engine not supported on other platforms");
+    std::println("Lightning Engine not yet supported on other platforms");
 #endif
 }
