@@ -40,13 +40,11 @@ void Model::LoadModel(const char* path)
 
 void Model::ProcessNode(aiNode *node, const aiScene *scene)
 {
-    // Process each mesh located at the current node
     for(unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         m_Mesh.emplace_back(ProcessMesh(mesh, scene));
     }
-    // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
         ProcessNode(node->mChildren[i], scene);
@@ -80,11 +78,10 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
             vertex.m_Normal = vector;
         }
         // texture coordinates
-        if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        if(mesh->mTextureCoords[0])
         {
             float2 vec;
-            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't
-            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+            
             vec.x = mesh->mTextureCoords[0][i].x;
             vec.y = mesh->mTextureCoords[0][i].y;
             vertex.m_TexCoords = vec;
@@ -135,15 +132,15 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType 
 {
     std::vector<Texture> textures;
     
-    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+    for(unsigned int i = 0; i < mat->GetTextureCount(type); ++i)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
         // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
         bool skip = false;
-        for(unsigned int j = 0; j < textures_loaded.size(); j++)
+        for(unsigned int j = 0; j < textures_loaded.size(); ++j)
         {
-            if(std::strcmp(textures_loaded[j].m_Path.data(), str.C_Str()) == 0)
+            if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
             {
                 textures.emplace_back(textures_loaded[j]);
                 skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
@@ -153,8 +150,8 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType 
         if(!skip)
         {   // if texture hasn't been loaded already, load it
             Texture texture;
-            texture.m_Type = typeName;
-            texture.m_Path = str.C_Str();
+            texture.type = typeName;
+            texture.path = str.C_Str();
             textures.emplace_back(texture);
             textures_loaded.emplace_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
         }

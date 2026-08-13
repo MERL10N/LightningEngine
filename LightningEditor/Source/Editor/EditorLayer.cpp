@@ -53,7 +53,7 @@ void EditorLayer::DrawStatsBar()
     if (b_showAnotherWindow)
     {
         ImGui::Begin("Message from developer", &b_showAnotherWindow);
-        ImGui::Text("I can't wait to show you more of what is to come!");
+        ImGui::Text("There is more to come!");
         if (ImGui::Button("Close"))
             b_showAnotherWindow = false;
         ImGui::End();

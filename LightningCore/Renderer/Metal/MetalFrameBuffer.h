@@ -25,8 +25,6 @@ namespace MTL4
     class RenderCommandEncoder;
 }
 
-#include <stdint.h>
-
 class MetalFrameBuffer
 {
 public:

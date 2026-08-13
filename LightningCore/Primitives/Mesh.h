@@ -28,8 +28,8 @@ struct Vertex
 
 struct Texture
 {
-    std::string m_Path;
-    std::string m_Type;
+    std::string path;
+    std::string type;
 };
 
 class Mesh
