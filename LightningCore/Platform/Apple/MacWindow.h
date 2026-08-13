@@ -23,21 +23,20 @@ class MacWindow
 
 public:
     explicit MacWindow(const unsigned int p_Width = 1280, const unsigned int p_Height = 720, const char* p_Title = "");
-    bool Update();
-    ~MacWindow();
+    bool     Update();
+            ~MacWindow();
 
-
-    inline MTL::Device* GetDevice() const { return m_MetalDevice; }
-    inline CA::MetalLayer* GetMetalLayer() const { return m_MetalLayer; }
-    inline CA::MetalDrawable* GetMetalDrawable() const { return m_MetalDrawable; }
-    inline unsigned int GetWidth() const { return m_Width; }
-    inline unsigned int GetHeight() const { return m_Height; }
-    inline GLFWwindow* GetWindow() const { return m_GlfwWindow; }
+    inline MTL::Device* GetDevice()                 const { return m_MetalDevice; }
+    inline CA::MetalLayer* GetMetalLayer()          const { return m_MetalLayer; }
+    inline CA::MetalDrawable* GetMetalDrawable()    const { return m_MetalDrawable; }
+    inline unsigned int GetWidth()                  const { return m_Width; }
+    inline unsigned int GetHeight()                 const { return m_Height; }
+    inline GLFWwindow* GetWindow()                  const { return m_GlfwWindow; }
 
 private:
     
     static void frameBufferSizeCallback(GLFWwindow *window, const int width, const int height);
-    void resizeFrameBuffer(const int width, const int height);
+           void resizeFrameBuffer(const int width, const int height);
     
     unsigned int m_Width, m_Height;
     const char* m_Title;

@@ -76,6 +76,7 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         m_CurrentFrame = (float)glfwGetTime();
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
@@ -93,31 +94,29 @@ void MacApplication::Update(float p_DeltaTime)
         
         m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
         
-        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
+        m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
+        
+        float drawableWidth = m_WindowDrawable->texture()->width();
+        float drawableHeight = m_WindowDrawable->texture()->height();
+        
+        if (m_MetalFrameBuffer.GetWidth() != drawableWidth || m_MetalFrameBuffer.GetHeight() != drawableHeight)
         {
-            m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
-            
-            float drawableWidth = m_WindowDrawable->texture()->width();
-            float drawableHeight = m_WindowDrawable->texture()->height();
-            
-            if (m_MetalFrameBuffer.GetWidth() != drawableWidth || m_MetalFrameBuffer.GetHeight() != drawableHeight)
-            {
-                m_MetalFrameBuffer.Resize(drawableWidth, drawableHeight);
-            }
-            
-            m_ColorAttachmentDescriptor = m_MetalFrameBuffer.GetRenderPassDescriptor()->colorAttachments()->object(0);
-            m_ColorAttachmentDescriptor->setResolveTexture(m_WindowDrawable->texture());
-            
-            m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
-            
-            m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-            
-            m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
-            
-            m_WindowDrawable->present();
+            m_MetalFrameBuffer.Resize(drawableWidth, drawableHeight);
         }
+        
+        m_ColorAttachmentDescriptor = m_MetalFrameBuffer.GetRenderPassDescriptor()->colorAttachments()->object(0);
+        m_ColorAttachmentDescriptor->setResolveTexture(m_WindowDrawable->texture());
+        
+        m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
+        
+        m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
+        
+        m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
+        
+        m_WindowDrawable->present();
         m_Pool->release();
     }
+   
 }
 
 

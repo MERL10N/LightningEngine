@@ -47,7 +47,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOther(m_MacWindow.GetWindow(), true);
     ImGui_ImplMetal4_Init(m_MacWindow.GetDevice(), m_MetalRenderer.GetMetalCommandQueue(), 3);
-    io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf");
+    io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf", 15.0f);
     
     m_MetalFrameBuffer.Create(m_Width, m_Height);
     m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
@@ -90,7 +90,6 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));
     plane.AddComponent<TextureComponent>(PlaneTextures, m_MacWindow.GetDevice());
     plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GeneratePlane(), plane.GetComponent<TextureComponent>().texture));
-    
     
     
     Entity lightCube = m_Scene.CreateEntity("Light Cube");
@@ -153,6 +152,7 @@ void MacEditorApplication::Update()
 {
     while (m_MacWindow.Update())
     {
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         m_CurrentFrame = (float)glfwGetTime();
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
@@ -169,11 +169,6 @@ void MacEditorApplication::Update()
         m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
 
         m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
-
-
-        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
-        {
-
             ImGuiIO& io = ImGui::GetIO();
 
             m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
@@ -229,8 +224,6 @@ void MacEditorApplication::Update()
             m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
             m_ImGuiCommandAllocator->reset();
             m_WindowDrawable->present();
-        }
-                 
         m_Pool->release();
     }
 }
