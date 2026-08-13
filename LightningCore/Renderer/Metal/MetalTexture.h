@@ -9,6 +9,7 @@
 #define MetalTexture_hpp
 
 #include <vector>
+#include <array>
 
 struct TextureInfo
 {
@@ -50,6 +51,8 @@ public:
         other.m_ArgumentBuffer = nullptr;
     }
      */
+    
+    void LoadCubeMap(std::array<MTL::Texture*, 6> &faces);
     
     MetalTexture& operator=(MetalTexture&& other);
     
