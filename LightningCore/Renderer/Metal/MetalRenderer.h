@@ -45,7 +45,6 @@ namespace CA
 class MetalVertexBuffer;
 class MetalTexture;
 class SubTexture;
-//class MetalShader;
 class Scene;
 class Sprite;
 
@@ -59,8 +58,8 @@ struct Mesh_2D;
 
 static constexpr uint8_t  s_MaxFramesInFlight   = 3;
 static constexpr uint8_t  s_MaxLights           = 10;
-static constexpr uint16_t s_MaxInstances        = 1000;
-static constexpr uint16_t s_MaxEntities         = 10000;
+static constexpr uint16_t s_MaxInstances        = 100;
+static constexpr uint16_t s_MaxEntities         = 100;
 
 
 struct MTLMeshAttributes
@@ -82,13 +81,16 @@ public:
     MeshHandle Create3DMesh(const Mesh_3D &mesh, const MetalTexture &texture);
     
     // Scene rendering
-    void AddToResidencySet(const MTL::Allocation* p_Allocation);
+    void AddToResidencySet(const MTL::Allocation* allocation);
     void CommitResidencySet();
     
-    void Submit(const Camera &p_Camera, const float p_AspectRatio);
-    void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const LightComponent &p_LightComponent);
-    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle);
-    void RenderMesh(const float4x4 &p_ModelMatrix, const MeshHandle p_MeshHandle, const MetalTexture &p_Texture);
+    void Submit(const Camera &camera, const float aspectRatio);
+    void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
+    
+    void RenderSkybox(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture);
+    
     void Commit();
     
     // Getters and Setters
@@ -100,12 +102,14 @@ public:
 
     
     inline void SetRenderPassDescriptor(const MTL4::RenderPassDescriptor* renderPassDescriptor) { m_RenderPassDescriptor = renderPassDescriptor; }
-    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* p_RenderCommandEncoder)     { m_RenderCommandEncoder = p_RenderCommandEncoder; }
+    inline void SetRenderCommandEncoder(MTL4::RenderCommandEncoder* renderCommandEncoder)       { m_RenderCommandEncoder = renderCommandEncoder; }
     inline void SetWireframeMode(const bool enableWireFrame)                                    { b_EnableWireframe = enableWireFrame; }
     inline void SetMetalDrawable(const MTL::Drawable* drawable)                                 { m_Drawable = drawable; }
 
 private:
-
+    MTLMeshAttributes CreateMeshBuffers(const Mesh_3D &mesh);
+    
+    
     MTL::Device*                          m_MetalDevice               = nullptr;
     CA::MetalLayer*                       m_MetalLayer                = nullptr;
     MTL4::CommandQueue*                   m_MetalCommandQueue         = nullptr;
@@ -120,9 +124,11 @@ private:
     MTL::ResidencySet*              m_ResidencySet              = nullptr;
     MTL::ResidencySetDescriptor*    m_ResidencySetDescriptor    = nullptr;
     MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
+    MTL::DepthStencilState*         m_SkyboxDepthStencilState   = nullptr;
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
     MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
     MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
+    MTL::VertexDescriptor*          m_SkyboxVertexDescriptor    = nullptr;
     const MTL::Drawable*            m_Drawable                  = nullptr;
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
@@ -141,6 +147,7 @@ private:
     MetalShader                    m_TextureShader;
     MetalShader                    m_UntexturedShader;
     MetalShader                    m_LightShader;
+    MetalShader                    m_SkyboxShader;
     
     bool   b_EnableWireframe = false;
     size_t m_UniformBufferIndex;
@@ -153,8 +160,6 @@ private:
     float4x4 m_ProjectionMatrix;
     float4x4 m_ModelMatrix;
     float4x4 m_LightPosition;
-    
-    LightComponent  m_LightComponent;
     
     LightUniforms   m_LightUniforms;
     Uniforms        m_Uniforms;

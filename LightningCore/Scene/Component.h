@@ -84,6 +84,13 @@ struct TextureComponent
     {
     }
     
+    
+    template<typename Device>
+    TextureComponent(const std::array<const char*, 6> & faces, Device* device)
+    : texture(faces, device)
+    {
+    }
+    
     ~TextureComponent()
     {
     }
@@ -109,6 +116,17 @@ struct LightComponent
     : m_Color(color)
     {
     }
+    
+    LightComponent(const float3& color, const float3 &position)
+    : m_Color(color),
+      m_Position(position)
+    {
+    }
+};
+
+struct SkyboxComponent
+{
+    bool m_Active = true;
 };
 
 struct CameraComponent

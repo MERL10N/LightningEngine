@@ -40,6 +40,9 @@ public:
     explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     
     explicit MetalTexture(const std::vector<const char*> &filePaths, MTL::Device* metalDevice);
+    
+    explicit MetalTexture(const std::array<const char*, 6> &faces, MTL::Device* metalDevice);
+    
     ~MetalTexture();
     
     /*
@@ -51,8 +54,6 @@ public:
         other.m_ArgumentBuffer = nullptr;
     }
      */
-    
-    void LoadCubeMap(std::array<MTL::Texture*, 6> &faces);
     
     MetalTexture& operator=(MetalTexture&& other);
     
@@ -69,15 +70,24 @@ public:
         return m_Textures;
     }
     
+    inline const MTL::Texture* GetCubeMap() const
+    {
+        return m_CubeMap;
+    }
+    
     inline const MTL::Buffer* GetArgumentBuffer() const
     {
         return m_ArgumentBuffer;
     }
+    
+private:
+    void LoadCubeMap(const std::array<const char*, 6> &faces);
    
     
 private:
     MTL::Device*                  m_MetalDevice               = nullptr;
     MTL::Texture*                 m_Texture                   = nullptr;
+    MTL::Texture*                 m_CubeMap                   = nullptr;
     std::vector<MTL::Texture*>    m_Textures;
     MTL::Buffer*                  m_ArgumentBuffer            = nullptr;
     MTL4::ComputeCommandEncoder*  m_ComputeCommandEncoder     = nullptr;

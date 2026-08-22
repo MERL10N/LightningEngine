@@ -73,6 +73,16 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
         "Assets/Textures/brick-normal.png",
     };
     
+    std::array<const char*, 6> Skybox =
+    {
+        "Assets/Textures/skybox/px.png",
+        "Assets/Textures/skybox/nx.png",
+        "Assets/Textures/skybox/py.png",
+        "Assets/Textures/skybox/ny.png",
+        "Assets/Textures/skybox/pz.png",
+        "Assets/Textures/skybox/nz.png"
+    };
+    
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
     sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
@@ -96,6 +106,20 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     lightCube.AddComponent<TransformComponent>(float3(-1.0f, 1.0f, 2.0f), float3(0.2f,0.2f, 0.2f));
     lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
     lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
+    
+    
+    Entity skybox = m_Scene.CreateEntity("Skybox");
+    skybox.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f), float3(1000.0f, 1000.0f, 1000.0f));
+    skybox.AddComponent<TextureComponent>(Skybox, m_MacWindow.GetDevice());
+    skybox.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
+    skybox.AddComponent<SkyboxComponent>();
+    
+    
+    // This needs to be removed. Application classes should never have to worry about managing GPU residency.
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetArgumentBuffer());
+    
+     
     m_MetalRenderer.CommitResidencySet();
 }
 
@@ -222,8 +246,8 @@ void MacEditorApplication::Update()
             m_ImGuiCommandEncoder->endEncoding();
             m_ImGuiCommandBuffer->endCommandBuffer();
             m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
-            m_ImGuiCommandAllocator->reset();
             m_WindowDrawable->present();
+        
         m_Pool->release();
     }
 }
