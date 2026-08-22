@@ -28,11 +28,11 @@ constexpr std::string MetalShader::LoadShaderFile(const std::string &path) const
 
 MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat)
 : m_MetalDevice(metalDevice),
-  m_FilePath(filePath),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
   m_DepthAttachmentPixelFormat(depthAttachmentPixelFormat),
-  m_RenderPipelineDescriptor(MTL4::RenderPipelineDescriptor::alloc()->init())
+  m_RenderPipelineDescriptor(MTL4::RenderPipelineDescriptor::alloc()->init()),
+  m_FilePath(filePath)
 {
     
     assert(m_MetalDevice);
@@ -120,11 +120,10 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
 : m_MetalDevice(metalDevice),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
-  m_FilePath(filePath),
-  m_DepthAttachmentPixelFormat(depthAttachmentPixelFormat)
+  m_DepthAttachmentPixelFormat(depthAttachmentPixelFormat),
+  m_FilePath(filePath)
 {
     
-    assert(m_MetalDevice);
     const std::string shaderSrc = LoadShaderFile(filePath);
     if (shaderSrc.empty())
     {
