@@ -28,11 +28,10 @@ MetalTexture::MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice)
     
     MTL::TextureDescriptor* m_TextureDescriptor = MTL::TextureDescriptor::alloc()->init();
     m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
-    
     m_TextureDescriptor->setWidth(width);
     m_TextureDescriptor->setHeight(height);
     m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead);
-
+    
     m_Texture = m_MetalDevice->newTexture(m_TextureDescriptor);
     m_TextureDescriptor->release();
 
@@ -70,10 +69,13 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
             
             if (image)
             {
+                const uint32_t mipLevels = std::floor(std::log2(std::max(width, height))) + 1;
+                
                 std::println("Image found at {}", filePaths[i]);
                 MTL::TextureDescriptor* m_TextureDescriptor = MTL::TextureDescriptor::alloc()->init();
                 m_TextureDescriptor->setTextureType(MTL::TextureType2D);
-                m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageShaderWrite);
+                m_TextureDescriptor->setMipmapLevelCount(mipLevels);
+                m_TextureDescriptor->setUsage(MTL::TextureUsageShaderRead | MTL::TextureUsageRenderTarget);
                 m_TextureDescriptor->setWidth(width);
                 m_TextureDescriptor->setHeight(height);
                 m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
@@ -90,6 +92,8 @@ MetalTexture::MetalTexture(const std::vector<const char*> &filePaths, MTL::Devic
             }
         }
     }
+    
+    GenerateMipmaps();
     
     if (m_MetalDevice->argumentBuffersSupport() == MTL::ArgumentBuffersTier2)
     {
@@ -154,12 +158,18 @@ MetalTexture::~MetalTexture()
         m_CubeMap = nullptr;
     }
     
-    for (auto & texture : m_Textures)
+    if (m_Textures.size() > 0)
     {
-        texture->release();
-        texture = nullptr;
+        for (auto& texture : m_Textures)
+        {
+            if (texture)
+            {
+                texture->release();
+                texture = nullptr;
+            }
+        }
+        m_Textures.clear();
     }
-    m_Textures.clear();
     
     if (m_MetalDevice)
     {
@@ -175,8 +185,7 @@ void MetalTexture::LoadCubeMap(const std::array<const char*, 6> &faces)
     unsigned char* firstImage = stbi_load(faces[0], &width, &height, &channels, STBI_rgb_alpha);
     assert(firstImage);
     
-    
-    
+
     MTL::TextureDescriptor* cubeMapDescriptor = MTL::TextureDescriptor::textureCubeDescriptor(MTL::PixelFormatRGBA8Unorm, width, false);
     cubeMapDescriptor->setUsage(MTL::TextureUsageShaderRead);
     m_CubeMap = m_MetalDevice->newTexture(cubeMapDescriptor);
@@ -199,4 +208,51 @@ void MetalTexture::LoadCubeMap(const std::array<const char*, 6> &faces)
         memcpy(m_ArgumentBuffer->contents(), &id, sizeof(id));
     }
 }
+
+void MetalTexture::GenerateMipmaps()
+{
+    if (m_Textures.empty())
+        return;
+    
+    MTL::ResidencySetDescriptor* residencySetDescriptor = MTL::ResidencySetDescriptor::alloc()->init();
+    MTL::ResidencySet*           residencySet           = m_MetalDevice->newResidencySet(residencySetDescriptor, nullptr);
+    residencySetDescriptor->release();
+    
+    for (auto* texture: m_Textures)
+        residencySet->addAllocation(texture);
+    
+    residencySet->commit();
+    residencySet->requestResidency();
+    
+    MTL4::CommandAllocator* commandAllocator = m_MetalDevice->newCommandAllocator();
+    MTL4::CommandBuffer*    commandBuffer    = m_MetalDevice->newCommandBuffer();
+    MTL4::CommandQueue*     commandQueue     = m_MetalDevice->newMTL4CommandQueue();
+    MTL::SharedEvent*       signalEvent      = m_MetalDevice->newSharedEvent();
+    uint64_t signalValue = 0;
+    
+    commandBuffer->beginCommandBuffer(commandAllocator);
+    
+    MTL4::ComputeCommandEncoder* computeCommandEncoder =  commandBuffer->computeCommandEncoder();
+    
+    for (auto* texture: m_Textures)
+    {
+        if (texture->mipmapLevelCount() > 1)
+        {
+            computeCommandEncoder->generateMipmaps(texture);
+        }
+    }
+    computeCommandEncoder->endEncoding();
+    commandBuffer->endCommandBuffer();
+    
+    commandQueue->commit(&commandBuffer, 1);
+    commandQueue->signalEvent(signalEvent, ++signalValue);
+    signalEvent->waitUntilSignaledValue(signalValue, 5000);
+    
+    
+    signalEvent->release();
+    commandBuffer->release();
+    commandAllocator->release();
+    computeCommandEncoder->release();
+}
+
 

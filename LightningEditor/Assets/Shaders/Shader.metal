@@ -108,7 +108,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
                              constant Material& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::repeat);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, mip_filter::linear, address::repeat, max_anisotropy(16));
     
     // Set the default values
     float4 diffuseMap  = float4(1.0f);

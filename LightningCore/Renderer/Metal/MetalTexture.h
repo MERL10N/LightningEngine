@@ -83,7 +83,6 @@ public:
 private:
     void LoadCubeMap(const std::array<const char*, 6> &faces);
    
-    
 private:
     MTL::Device*                  m_MetalDevice               = nullptr;
     MTL::Texture*                 m_Texture                   = nullptr;
@@ -98,7 +97,7 @@ private:
     std::vector<int> m_Widths, m_Heights;
     std::vector<TextureInfo> m_TextureInfos;
     
-    void GenerateMipmaps(MTL::Texture* texture);
+    void GenerateMipmaps();
 };
 
 #endif /* MetalTexture_hpp */
