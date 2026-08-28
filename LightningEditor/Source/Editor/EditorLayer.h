@@ -20,8 +20,9 @@ public:
     void DrawStatsBar();
     void DrawMenuBar();
     
-    template<typename Derived>
-    void DrawContentBrowser(this Derived &&self) { self.DrawContentBrowserImpl(); }
+    //template<typename Derived>
+   // void DrawContentBrowser(this Derived &&self) { self.DrawContentBrowserImpl(); }
+    virtual void DrawContentBrowser() = 0;
     
     inline bool IsWireFrameEnabled() const { return b_EnableWireFrameMode; }
 

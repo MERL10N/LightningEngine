@@ -13,14 +13,14 @@
 #include "../EditorLayer.h"
 #include "../ContentBrowserPanel.h"
 
-class MacEditorLayer : public EditorLayer
+class MacEditorLayer final : public EditorLayer
 {
 public:
     MacEditorLayer() = default;
     MacEditorLayer(MTL::Device* metalDevice);
     ~MacEditorLayer();
     
-    void DrawContentBrowserImpl();
+    virtual void DrawContentBrowser() override;
     
 private:
     const char*                m_AssetsPath         = nullptr;

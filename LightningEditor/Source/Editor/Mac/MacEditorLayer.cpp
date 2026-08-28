@@ -29,7 +29,7 @@ MacEditorLayer::~MacEditorLayer()
 {
 }
 
-void MacEditorLayer::DrawContentBrowserImpl()
+void MacEditorLayer::DrawContentBrowser()
 {
     m_ContentBrowserPanel.Render(m_Icons);
 }
