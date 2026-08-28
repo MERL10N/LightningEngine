@@ -16,7 +16,7 @@
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "MacEditorLayer.h"
-#include <simd/simd.h>
+#include <imgui/imgui.h>
 
 namespace MTL4
 {
@@ -61,7 +61,7 @@ private:
     
     CA::MetalDrawable*   m_WindowDrawable = nullptr;
     
-    simd::float2 m_ViewportSize;
+    ImVec2 m_ViewportSize;
     
     Camera m_Camera;
     
@@ -82,3 +82,4 @@ private:
 };
 
 #endif /* EditorApplication_hpp */
+

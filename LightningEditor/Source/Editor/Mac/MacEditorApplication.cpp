@@ -9,7 +9,6 @@
 #include "Scene/Component.h"
 #include "Primitives/MeshBuilder.h"
 
-#include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_metal4.h>
 
@@ -157,8 +156,7 @@ void MacEditorApplication::DrawGameViewport()
       
         if (m_ViewportSize.x != viewportPanelSize.x || m_ViewportSize.y != viewportPanelSize.y)
         {
-            m_ViewportSize.x = viewportPanelSize.x;
-            m_ViewportSize.y = viewportPanelSize.y;
+            m_ViewportSize = viewportPanelSize;
             m_MetalFrameBuffer.Resize(m_ViewportSize.x, m_ViewportSize.y);
         }
         
