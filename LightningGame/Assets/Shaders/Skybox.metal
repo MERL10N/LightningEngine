@@ -50,7 +50,7 @@ fragment float4 fragment_skybox(VertexOut out [[stage_in]],
                                 constant CubeMapArguments& cubeMapArgs[[buffer(0)]],
                                 constant Uniforms &uniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::clamp_to_edge);
     
     float3 texCoords = float3(out.texCoords.x, out.texCoords.y, -out.texCoords.z);
     

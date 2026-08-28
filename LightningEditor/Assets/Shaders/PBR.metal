@@ -1,28 +1,12 @@
-//  Shader.metal
-//  LightningGame
-//  Based on GLSL code from LearnOpenGL and GetIntoGameDev tutorials
-//  Created by Kian Marvi on 5/7/25.
+//
+//  PBR.metal
+//  LightningEditor
+//
+//  Created by Kian Marvi on 8/25/26.
+//  Based on LearnOpenGL article on PBR: https://learnopengl.com/PBR/Lighting
 
 #include <metal_stdlib>
 using namespace metal;
-/*
- 
- TODO:
- - [X] Implement Lightmaps
- - [X] Implement Normal Mapping
- - [] Implement Instanced Rendering
- - [] Implement Shadow Mapping
- - [] Implement Deferred Rendering
-*/
-
-struct Light
-{
-    float3 direction;
-    float3 ambient;
-    float3 diffuse;
-    float3 specular;
-    
-};
 
 struct VertexIn
 {
@@ -60,21 +44,52 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
-    float4x4 model; // <- Soon will be removed
-};
-
-
-// Prepare for instanced rendering
-struct InstancedUniforms
-{
     float4x4 model;
 };
 
-
 struct Material
 {
-    texture2d<float> textureMaps[[id(0)]] [4];
+    array<texture2d<float>, 6> textureMaps[[id(0)]];
 };
+
+float DistributionGGX(float3 N, float3 H, float roughness)
+{
+    float a = roughness * roughness;
+    float a2 = a * a;
+    float NDotH = max(dot(N,H), 0.0f);
+    float NDotH2 = NDotH * NDotH;
+    
+    float num   = a2;
+    float denom = (NDotH2 * (a2 - 1.0) + 1.0);
+    denom = 3.14159265359f * denom * denom;
+    
+    return num / denom;
+}
+
+float GeometrySchlickGGX(float NDotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float num   = NDotV;
+    float denom = NDotV * (1.0 - k) + k;
+    
+    return num / denom;
+}
+float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+float3 fresnelSchlick(float cosTheta, float3 F0)
+{
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
 
 // Vertex shader
 vertex VertexOut vertex_main(VertexIn in [[stage_in]],
@@ -108,7 +123,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
                              constant Material& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::repeat);
     
     // Set the default values
     float4 diffuseMap  = float4(1.0f);
@@ -159,9 +174,9 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float spec = pow(max(specularTerm, 0.0f), 64.0f);
     
-    float nDotL = max(dot(normal, halfwayDir), 0.0f);
+    float nDotH = max(dot(normal, halfwayDir), 0.0f);
     
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL * specularMap.xyz;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotH * specularMap.xyz;
 
     float3 result = (ambient + diffuse + specular) * out.color;
     

@@ -41,9 +41,6 @@ struct VertexOut
     float3 color;
     float3 normal;
     float2 texCoord;
-    uint diffuseTextureIndex;
-    uint specularTextureIndex;
-    uint normalMapIndex;
     float3 T;
     float3 B;
     float3 N;
@@ -111,7 +108,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
                              constant Material& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::repeat);
     
     // Set the default values
     float4 diffuseMap  = float4(1.0f);
@@ -162,9 +159,9 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float spec = pow(max(specularTerm, 0.0f), 64.0f);
     
-    float nDotL = max(dot(normal, halfwayDir), 0.0f);
+    float nDotH = max(dot(normal, halfwayDir), 0.0f);
     
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL * specularMap.xyz;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotH * specularMap.xyz;
 
     float3 result = (ambient + diffuse + specular) * out.color;
     
