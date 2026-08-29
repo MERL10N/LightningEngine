@@ -6,14 +6,14 @@
 //
 
 #include "EditorLayer.h"
-#include <imgui.h>
 #include "ContentBrowserPanel.h"
 
 ContentBrowserPanel contentPanel;
 
 EditorLayer::EditorLayer()
+:  b_showAnotherWindow(true),
+   b_EnableWireFrameMode(false)
 {
-    b_showAnotherWindow = true;
 }
 
 EditorLayer::~EditorLayer()
@@ -45,28 +45,22 @@ void EditorLayer::DrawMenuBar()
     }
 }
 
-void EditorLayer::DrawContentBrowser()
-{
-    contentPanel.Render();
-}
-
 void EditorLayer::DrawStatsBar()
 {
-    ImGui::Begin("Welcome to Lightning Engine!");
-    ImGui::Text("This is a metal game engine written in C++");
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Begin("Statistics");
+    ImGui::Text("Performance: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::Checkbox("Message from developer", &b_showAnotherWindow);
     if (b_showAnotherWindow)
     {
-        ImGui::Begin("Message from developer", &b_showAnotherWindow);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Text("I can't wait to show you more of what is to come!");
+        ImGui::Begin("Message from developer", &b_showAnotherWindow);
+        ImGui::Text("There is more to come!");
         if (ImGui::Button("Close"))
             b_showAnotherWindow = false;
         ImGui::End();
     }
     
     
-    ImGui::Checkbox("Enable Wireframe Mode: ", &b_EnableWireFrameMode);
+    ImGui::Checkbox("Enable Wireframe Mode ", &b_EnableWireFrameMode);
     ImGui::End();
 }
 

@@ -8,11 +8,12 @@
 #ifndef MESHBUILDER_H
 #define MESHBUILDER_H
 
-#define HLSLPP_FEATURE_TRANSFORM
-#include <hlsl++.h>
-using namespace hlslpp;
+#include <hlsl++/vector_float_type.h>
 
-#include "Sprite.h"
+using hlslpp::float2;
+using hlslpp::float3;
+
+//#include "Sprite.h"
 #include <vector>
 
 using MeshHandle = size_t;
@@ -30,14 +31,17 @@ struct Vertex3D
     float3 m_Color;
     float3 m_Normals;
     float2 m_TexCoord;
+    float3 m_Tangent;
+    float3 m_Binormal;
 };
 
+/*
 struct Mesh_2D
 {
     Sprite   m_Sprite;
     float4x4 m_Transform;
 };
-
+*/
 struct Mesh_3D
 {
     std::vector<Vertex3D> m_Vertices;
@@ -45,7 +49,6 @@ struct Mesh_3D
     size_t                m_VertexSize;
     size_t                m_IndexSize;
     uint16_t              m_IndexCount;
-    bool                  b_Instanced = false;
 };
 
 class MeshBuilder
@@ -57,6 +60,6 @@ public:
     // Platform agnotic implementation
     static Mesh_3D GeneratePlane();
     static Mesh_3D GenerateCube();
-    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 color);
+    static Mesh_3D GenerateSphere(const int xSegments, const int ySegments, const float3 &color);
 };
 #endif /* MESHBUILDER_H */

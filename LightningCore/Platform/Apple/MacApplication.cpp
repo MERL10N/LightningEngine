@@ -22,28 +22,52 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     MeshBuilder m_MeshBuilder;
     
     m_MetalFrameBuffer.Create(p_Width, p_Height);
-    m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
+    
+    std::vector<const char*> CubeTextures =
+    {
+        "Assets/Textures/brickwall.jpg",
+        nullptr,
+        "Assets/Textures/brickwall_normal.jpg",
+    };
+    
+    std::vector<const char*> PlaneTextures =
+    {
+        "Assets/Textures/brickwall.jpg",
+        nullptr,
+        "Assets/Textures/brickwall_normal.jpg",
+    };
+    
+    std::vector<const char*> SphereTextures =
+    {
+        "Assets/Textures/brick-color.png",
+        nullptr,
+        "Assets/Textures/brick-normal.png",
+    };
+    
+    Entity sphere = m_Scene.CreateEntity("Sphere");
+    sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
+    sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
+    sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
+    
+    
     
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
-    cube.AddComponent<TextureComponent>("Assets/Textures/background.png", m_MacWindow.GetDevice());
+    cube.AddComponent<TransformComponent>(float3(1.0f, 0.0f, 0.0f));
+    cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
     cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
     
     
     Entity plane = m_Scene.CreateEntity("Plane");
-    plane.AddComponent<TransformComponent>(float3(-2.0f, -2.0f, 0.0f), float3(10.0f, 0.1f, 10.0f));
-    plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), nullptr));
-     
-    Entity sphere = m_Scene.CreateEntity("Sphere");
-    sphere.AddComponent<TransformComponent>(float3(-5.0f, 0.0f, 0.0f));
-    sphere.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
-    sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
-    m_MetalRenderer.CommitResidencySet();
+    plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));
+    plane.AddComponent<TextureComponent>(PlaneTextures, m_MacWindow.GetDevice());
+    plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GeneratePlane(), plane.GetComponent<TextureComponent>().texture));
     
-    Entity sphere2 = m_Scene.CreateEntity("Sphere 2");
-    sphere2.AddComponent<TransformComponent>(float3(2.5f, 0.0f, 0.0f));
-    sphere2.AddComponent<LightComponent>(float3(0.0f, 1.0f, 1.0f));
-    sphere2.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), nullptr));
+    
+    
+    Entity lightCube = m_Scene.CreateEntity("Light Cube");
+    lightCube.AddComponent<TransformComponent>(float3(-1.0f, 1.0f, 2.0f), float3(0.2f,0.2f, 0.2f));
+    lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
+    lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
     m_MetalRenderer.CommitResidencySet();
 }
 
@@ -52,6 +76,7 @@ void MacApplication::Update(float p_DeltaTime)
 {
     while (m_MacWindow.Update())
     {
+        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
         m_CurrentFrame = (float)glfwGetTime();
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
@@ -69,31 +94,29 @@ void MacApplication::Update(float p_DeltaTime)
         
         m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
         
-        NS::AutoreleasePool* m_Pool = NS::AutoreleasePool::alloc()->init();
+        m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
+        
+        float drawableWidth = m_WindowDrawable->texture()->width();
+        float drawableHeight = m_WindowDrawable->texture()->height();
+        
+        if (m_MetalFrameBuffer.GetWidth() != drawableWidth || m_MetalFrameBuffer.GetHeight() != drawableHeight)
         {
-            m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
-            
-            float drawableWidth = m_WindowDrawable->texture()->width();
-            float drawableHeight = m_WindowDrawable->texture()->height();
-            
-            if (m_MetalFrameBuffer.GetWidth() != drawableWidth || m_MetalFrameBuffer.GetHeight() != drawableHeight)
-            {
-                m_MetalFrameBuffer.Resize(drawableWidth, drawableHeight);
-            }
-            
-            m_ColorAttachmentDescriptor = m_MetalFrameBuffer.GetRenderPassDescriptor()->colorAttachments()->object(0);
-            m_ColorAttachmentDescriptor->setResolveTexture(m_WindowDrawable->texture());
-            
-            m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
-            
-            m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-            
-            m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
-            
-            m_WindowDrawable->present();
+            m_MetalFrameBuffer.Resize(drawableWidth, drawableHeight);
         }
+        
+        m_ColorAttachmentDescriptor = m_MetalFrameBuffer.GetRenderPassDescriptor()->colorAttachments()->object(0);
+        m_ColorAttachmentDescriptor->setResolveTexture(m_WindowDrawable->texture());
+        
+        m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
+        
+        m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
+        
+        m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
+        
+        m_WindowDrawable->present();
         m_Pool->release();
     }
+   
 }
 
 

@@ -7,14 +7,11 @@
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
-#include "Primitives/MeshBuilder.h"
 #include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
-#include "MetalShader.h"
 #include "Scene/Scene.h"
-#include "Scene/Component.h"
+#include "Camera/Camera.h"
 
-#include <GLFW/glfw3.h>
 #include <Metal/Metal.hpp>
 
 #include <print>
@@ -30,7 +27,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
   m_DepthStencilDescriptor(MTL::DepthStencilDescriptor::alloc()->init()),
   m_FrameAvailableSharedEvent(m_MetalDevice->newSharedEvent()),
   b_EnableWireframe(false),
-  m_LightComponent(LightComponent()),
   m_FrameNum(0),
   m_FrameIndex(0),
   m_UniformBufferIndex(0)
@@ -63,25 +59,29 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     {
         metalCommandAllocators = m_MetalDevice->newCommandAllocator();
     }
-    m_ResidencySet->requestResidency();
     m_MetalCommandQueue->addResidencySet(m_ResidencySet);
     
     for (int i = 0; i < s_MaxEntities; ++i)
     {
         m_UniformBuffers.emplace_back(m_MetalDevice->newBuffer(sizeof(Uniforms), MTL::ResourceStorageModeShared));
         m_LightUniformBufferPool.emplace_back(m_MetalDevice->newBuffer(sizeof(LightUniforms), MTL::ResourceStorageModeShared));
-        m_ResidencySet->addAllocation(m_UniformBuffers.at(i));
-        m_ResidencySet->addAllocation(m_LightUniformBufferPool.at(i));
+        m_ResidencySet->addAllocation(m_UniformBuffers[i]);
+        m_ResidencySet->addAllocation(m_LightUniformBufferPool[i]);
     }
     
     for (uint8_t i = 0; i < s_MaxFramesInFlight; ++i)
     {
         m_LightPositions[i] = m_MetalDevice->newBuffer(sizeof(float3) * s_MaxLights , MTL::ResourceStorageModeShared);
+        m_ResidencySet->addAllocation(m_LightPositions[i]);
     }
     
     m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLess);
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
+    
+    m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionAlways);
+    m_DepthStencilDescriptor->setDepthWriteEnabled(false);
+    m_SkyboxDepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
 
     if (m_DepthStencilDescriptor)
     {
@@ -96,6 +96,8 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Color))
         .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Normals))
         .AddAttribute(MTL::VertexFormatFloat2, offsetof(Vertex3D, m_TexCoord))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Tangent))
+        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Binormal))
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
@@ -107,11 +109,39 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         .SetBufferLayout(sizeof(Vertex3D))
         .BuildVertexDescriptor();
     
-    m_TextureShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_SkyboxVertexDescriptor = vertexDescriptorBuilder
+                                .AddAttribute(MTL::VertexFormatFloat3,  offsetof(Vertex3D, m_Pos))
+                                .AddAttribute(MTL::VertexFormatFloat3,  offsetof(Vertex3D, m_Normals))
+                                .SetBufferLayout(sizeof(Vertex3D))
+                                .BuildVertexDescriptor();
     
-    m_UntexturedShader = new MetalShader("Assets/Shaders/Shader.metal", "vertex_main", "fragment_main_untextured", m_MetalDevice, m_3DVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_TextureShader = MetalShader("Assets/Shaders/Shader.metal",
+                                  "vertex_main", "fragment_main",
+                                  m_MetalDevice,
+                                  m_3DVertexDescriptor,
+                                  m_MetalLayer->pixelFormat());
     
-    m_LightShader = new MetalShader("Assets/Shaders/Light.metal", "vertex_light", "fragment_light", m_MetalDevice, m_LightVertexDescriptor, m_MetalLayer->pixelFormat());
+    m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal",
+                                     "vertex_main",
+                                     "fragment_main_untextured",
+                                     m_MetalDevice,
+                                     m_3DVertexDescriptor,
+                                     m_MetalLayer->pixelFormat());
+    
+    m_LightShader = MetalShader("Assets/Shaders/Light.metal",
+                                "vertex_light",
+                                "fragment_light",
+                                m_MetalDevice,
+                                m_LightVertexDescriptor,
+                                m_MetalLayer->pixelFormat());
+    
+    m_SkyboxShader = MetalShader("Assets/Shaders/Skybox.metal",
+                                 "vertex_skybox",
+                                 "fragment_skybox",
+                                 m_MetalDevice,
+                                 m_SkyboxVertexDescriptor,
+                                 m_MetalLayer->pixelFormat());
+    
     
     if (m_3DVertexDescriptor)
     {
@@ -122,6 +152,11 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     {
         m_LightVertexDescriptor->release();
         m_LightVertexDescriptor = nullptr;
+    }
+    if (m_SkyboxVertexDescriptor)
+    {
+        m_SkyboxVertexDescriptor->release();
+        m_SkyboxVertexDescriptor = nullptr;
     }
 }
 
@@ -183,24 +218,6 @@ MetalRenderer::~MetalRenderer()
         m_ResidencySet = nullptr;
     }
     
-    if (m_LightShader)
-    {
-        delete m_LightShader;
-        m_LightShader = nullptr;
-    }
-    
-    if (m_TextureShader)
-    {
-        delete m_TextureShader;
-        m_TextureShader = nullptr;
-    }
-    
-    if (m_UntexturedShader)
-    {
-        delete m_UntexturedShader;
-        m_UntexturedShader = nullptr;
-    }
-    
     if (m_MetalCommandQueue)
     {
         m_MetalCommandQueue->release();
@@ -213,56 +230,68 @@ MetalRenderer::~MetalRenderer()
         m_MetalLayer = nullptr;
     }
     
-    if (m_MetalDevice)
-    {
-        m_MetalDevice->release();
-        m_MetalDevice = nullptr;
-    }
-    
 }
 
 
-void MetalRenderer::AddToResidencySet(const MTL::Allocation* p_Allocation)
+void MetalRenderer::AddToResidencySet(const MTL::Allocation* allocation)
 {
-    m_ResidencySet->addAllocation(p_Allocation);
+    m_ResidencySet->addAllocation(allocation);
 }
 
 
 void MetalRenderer::CommitResidencySet()
 {
     m_ResidencySet->commit();
+    m_ResidencySet->requestResidency();
 }
 
-MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture* texture)
+MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh)
 {
-    MTLMeshAttributes meshAttributes;
-    
-    meshAttributes.m_IndexCount = mesh.m_IndexCount;
-    meshAttributes.m_VertexBuffer = m_MetalDevice->newBuffer(mesh.m_Vertices.data(), static_cast<uint32_t>(mesh.m_VertexSize), MTL::ResourceStorageModeShared);
-    memcpy(meshAttributes.m_VertexBuffer->contents(), mesh.m_Vertices.data(), mesh.m_VertexSize);
-    
-    meshAttributes.m_IndexBuffer  = m_MetalDevice->newBuffer(mesh.m_Indices.data(), static_cast<uint32_t>(mesh.m_IndexSize), MTL::ResourceStorageModeShared);
-    memcpy(meshAttributes.m_IndexBuffer->contents(), mesh.m_Indices.data(), mesh.m_IndexSize);
-    
-    // Add the vertex and index buffer to residency set
-    m_ResidencySet->addAllocation(meshAttributes.m_VertexBuffer);
-    m_ResidencySet->addAllocation(meshAttributes.m_IndexBuffer);
-    
-    if (texture)
-    {
-        m_ResidencySet->addAllocation(texture->GetArgumentBuffer());
-        m_ResidencySet->addAllocation(texture->GetTexture());
-    }
+    MTLMeshAttributes meshAttributes = CreateMeshBuffers(mesh);
     
     m_RenderMeshes.emplace_back(meshAttributes);
     
     return m_RenderMeshes.size() - 1;
 }
 
+MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture &texture)
+{
+    MTLMeshAttributes meshAttributes = CreateMeshBuffers(mesh);
+    
+    if (texture.GetTextures().size() > 0)
+    {
+        m_ResidencySet->addAllocation(texture.GetArgumentBuffer());
+        
+        for (const auto& texture : texture.GetTextures())
+        {
+            m_ResidencySet->addAllocation(texture);
+        }
+    }
+    
+    
+    m_RenderMeshes.emplace_back(meshAttributes);
+    
+    return m_RenderMeshes.size() - 1;
+}
+
+MTLMeshAttributes MetalRenderer::CreateMeshBuffers(const Mesh_3D &mesh)
+{
+    MTLMeshAttributes meshAttributes;
+    meshAttributes.m_IndexCount = mesh.m_IndexCount;
+    meshAttributes.m_VertexBuffer = m_MetalDevice->newBuffer(mesh.m_Vertices.data(), static_cast<uint32_t>(mesh.m_VertexSize), MTL::ResourceStorageModeShared);
+    
+    meshAttributes.m_IndexBuffer = m_MetalDevice->newBuffer(mesh.m_Indices.data(), static_cast<uint32_t>(mesh.m_IndexSize), MTL::ResourceStorageModeShared);
+    
+    // Add the vertex and index buffer to residency set
+    m_ResidencySet->addAllocation(meshAttributes.m_VertexBuffer);
+    m_ResidencySet->addAllocation(meshAttributes.m_IndexBuffer);
+    
+    return meshAttributes;
+}
+
 
 void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
 {
-    m_Camera = camera;
     m_UniformBufferIndex = 0;
     
     if (m_FrameNum >= s_MaxFramesInFlight)
@@ -273,8 +302,6 @@ void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
     m_FrameIndex = m_FrameNum % s_MaxFramesInFlight;
     m_MetalCommandAllocators[m_FrameIndex]->reset();
     m_MetalCommandBuffer->beginCommandBuffer(m_MetalCommandAllocators[m_FrameIndex]);
-    
-    m_RenderPassDescriptor->depthAttachment()->setClearDepth(1.0f);
     
     m_RenderCommandEncoder = m_MetalCommandBuffer->renderCommandEncoder(m_RenderPassDescriptor);
     m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
@@ -290,39 +317,34 @@ void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
         m_RenderCommandEncoder->setTriangleFillMode(MTL::TriangleFillModeFill);
     }
     
-    m_ViewMatrix = m_Camera.GetViewMatrix();
+    m_ViewMatrix = camera.GetViewMatrix();
     
-    float fov = m_Camera.GetZoom() * (M_PI / 180.0f);
+    m_CameraPosition = camera.GetPosition();
+    
+    float fov = camera.GetZoom() * (M_PI / 180.0f);
     
     m_ProjectionMatrix = float4x4::perspective(projection(frustum::field_of_view_x(fov, aspectRatio, 0.1f, 1000.f), zclip::zero, zdirection::forward, zplane::finite));
 }
 
-void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &p_LightComponent)
+void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent)
 {
-    if (!m_LightShader)
-    {
-        std::println("Light shader is not initialised");
-        return;
-    }
     
     if (meshHandle >= m_RenderMeshes.size())
         return;
     
     
-    m_ModelMatrix = modelMatrix;
-    m_LightComponent = p_LightComponent;
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
     memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
     
-    float3 color = m_LightComponent.m_Color;
+    float3 color = lightComponent.m_Color;
     memcpy(m_LightPositions[m_UniformBufferIndex]->contents(), &color, sizeof(color));
     
-    m_LightComponent.m_Position = float3(modelMatrix[3].x,
-                                         modelMatrix[3].y,
-                                         modelMatrix[3].z);
+    float3 position = float3(modelMatrix[3].x,
+                             modelMatrix[3].y,
+                             modelMatrix[3].z);
     
 
-    m_RenderCommandEncoder->setRenderPipelineState(m_LightShader->GetRenderPipelineState());
+    m_RenderCommandEncoder->setRenderPipelineState(m_LightShader.GetRenderPipelineState());
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
     m_FragmentArgumentTable->setAddress(m_LightPositions[m_UniformBufferIndex]->gpuAddress(), 0);
@@ -336,26 +358,58 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
     ++m_UniformBufferIndex;
 }
 
-void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture* texture)
+void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent)
 {
     if (meshHandle >= m_RenderMeshes.size())
         return;
 
-    m_ModelMatrix = modelMatrix;
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, m_ModelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
-    m_LightUniforms = { m_LightComponent.m_Color , m_LightComponent.m_Position, m_Camera.GetPosition()};
+    m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
     
-    m_RenderCommandEncoder->setRenderPipelineState(texture ? m_TextureShader->GetRenderPipelineState() : m_UntexturedShader->GetRenderPipelineState());
+    m_RenderCommandEncoder->setRenderPipelineState(m_UntexturedShader.GetRenderPipelineState());
     
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers.at(m_UniformBufferIndex)->gpuAddress(), 1);
+    m_FragmentArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 0);
+    
 
-    if (texture)
+    m_RenderCommandEncoder->setArgumentTable(m_VertexArgumentTable, MTL::RenderStageVertex);
+    m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
+    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
+                                                  m_RenderMeshes[meshHandle].m_IndexCount,
+                                                  MTL::IndexTypeUInt16,
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+    
+    ++m_UniformBufferIndex;
+}
+
+void MetalRenderer::RenderMesh(const float4x4& modelMatrix,
+                               const MeshHandle meshHandle,
+                               const MetalTexture& texture,
+                               const LightComponent &lightComponent)
+{
+    if (meshHandle >= m_RenderMeshes.size())
+        return;
+
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
+    memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
+
+    m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
+    memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
+    
+    m_RenderCommandEncoder->setRenderPipelineState(texture.GetTextures().size() > 0 ? m_TextureShader.GetRenderPipelineState() : m_UntexturedShader.GetRenderPipelineState());
+    
+    m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
+    m_VertexArgumentTable->setAddress(m_UniformBuffers.at(m_UniformBufferIndex)->gpuAddress(), 1);
+    m_VertexArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 2);
+
+    if (texture.GetTextures().size() > 0)
     {
-        m_FragmentArgumentTable->setAddress(texture->GetArgumentBuffer()->gpuAddress(), 0);
+        m_FragmentArgumentTable->setAddress(texture.GetArgumentBuffer()->gpuAddress(), 0);
         m_FragmentArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 1);
     }
     else
@@ -370,6 +424,37 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
                                                   MTL::IndexTypeUInt16,
                                                   m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
                                                   m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+    
+    ++m_UniformBufferIndex;
+}
+
+void MetalRenderer::RenderSkybox(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture)
+{
+    if (!texture.GetArgumentBuffer() || !texture.GetCubeMap())
+        return;
+    
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
+    memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
+    m_RenderCommandEncoder->setRenderPipelineState(m_SkyboxShader.GetRenderPipelineState());
+    m_RenderCommandEncoder->setDepthStencilState(m_SkyboxDepthStencilState);
+    m_RenderCommandEncoder->setCullMode(MTL::CullModeFront);
+    
+    m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
+    m_VertexArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
+    m_FragmentArgumentTable->setAddress(texture.GetArgumentBuffer()->gpuAddress(), 0);
+    m_FragmentArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
+    
+    m_RenderCommandEncoder->setArgumentTable(m_VertexArgumentTable, MTL::RenderStageVertex);
+    m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
+    m_RenderCommandEncoder->drawIndexedPrimitives(MTL::PrimitiveTypeTriangle,
+                                                  m_RenderMeshes[meshHandle].m_IndexCount,
+                                                  MTL::IndexTypeUInt16,
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+    
+    m_RenderCommandEncoder->setDepthStencilState(m_DepthStencilState);
+    
+    m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
     
     ++m_UniformBufferIndex;
 }

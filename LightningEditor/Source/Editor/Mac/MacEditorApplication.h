@@ -16,11 +16,7 @@
 #include "Renderer/Metal/MetalFrameBuffer.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "MacEditorLayer.h"
-#include <simd/simd.h>
-
-class MetalRenderer;
-class MacEditorLayer;
-class MetalTexture;
+#include <imgui/imgui.h>
 
 namespace MTL4
 {
@@ -44,6 +40,7 @@ class MacEditorApplication
 {
 public:
     explicit MacEditorApplication(const float p_Width, const float p_Height, const char* p_Title = "Lightning Editor");
+    
     void DrawGameViewport();
     ~MacEditorApplication();
     void Update();
@@ -58,13 +55,13 @@ private:
     MTL4::RenderCommandEncoder*     m_ImGuiCommandEncoder   = nullptr;
     MTL::Drawable*                  m_Drawable              = nullptr;
     
-    MacEditorLayer      m_MacEditorLayer;
-    MetalRenderer       m_MetalRenderer;
+    MacEditorLayer       m_MacEditorLayer;
+    MetalRenderer        m_MetalRenderer;
+    MetalFrameBuffer     m_MetalFrameBuffer;
     
-    CA::MetalDrawable*  m_WindowDrawable = nullptr;
-    MetalFrameBuffer    m_MetalFrameBuffer;
+    CA::MetalDrawable*   m_WindowDrawable = nullptr;
     
-    simd::float2 m_ViewportSize;
+    ImVec2 m_ViewportSize;
     
     Camera m_Camera;
     
@@ -77,8 +74,7 @@ private:
     
     AppleController m_Controller;
     
-    Scene m_Scene;
-    
+    Scene  m_Scene;
     Entity m_CameraEntity;
     
     bool b_EnableWireframe = false;
@@ -86,3 +82,4 @@ private:
 };
 
 #endif /* EditorApplication_hpp */
+

@@ -9,6 +9,7 @@
 #define MetalTexture_hpp
 
 #include <vector>
+#include <array>
 
 struct TextureInfo
 {
@@ -24,6 +25,13 @@ namespace MTL
     class ResidencySet;
     class Buffer;
 }
+namespace MTL4
+{
+    class RenderCommandEncoder;
+    class ComputeCommandEncoder;
+    class CommandBuffer;
+    class CommandAllocator;
+};
 
 class MetalTexture
 {
@@ -32,11 +40,39 @@ public:
     explicit MetalTexture(const char* p_FilePath, MTL::Device* p_MetalDevice);
     
     explicit MetalTexture(const std::vector<const char*> &filePaths, MTL::Device* metalDevice);
+    
+    explicit MetalTexture(const std::array<const char*, 6> &faces, MTL::Device* metalDevice);
+    
     ~MetalTexture();
-
+    
+    /*
+    MetalTexture(MetalTexture&& other)
+    : m_Texture(other.m_Texture),
+      m_ArgumentBuffer(other.m_ArgumentBuffer)
+    {
+        other.m_Texture = nullptr;
+        other.m_ArgumentBuffer = nullptr;
+    }
+     */
+    
+    MetalTexture& operator=(MetalTexture&& other);
+    
+    MetalTexture(const MetalTexture&) = delete;
+    MetalTexture& operator=(const MetalTexture&) = delete;
+    
     inline const MTL::Texture* GetTexture() const
     {
         return m_Texture;
+    }
+
+    inline const std::vector<MTL::Texture*>& GetTextures() const
+    {
+        return m_Textures;
+    }
+    
+    inline const MTL::Texture* GetCubeMap() const
+    {
+        return m_CubeMap;
     }
     
     inline const MTL::Buffer* GetArgumentBuffer() const
@@ -45,15 +81,23 @@ public:
     }
     
 private:
-    MTL::Device*            m_MetalDevice       = nullptr;
-    MTL::TextureDescriptor* m_TextureDescriptor = nullptr;
-    MTL::Texture*           m_Texture           = nullptr;
-    MTL::Buffer*            m_ArgumentBuffer    = nullptr;
+    void LoadCubeMap(const std::array<const char*, 6> &faces);
+   
+private:
+    MTL::Device*                  m_MetalDevice               = nullptr;
+    MTL::Texture*                 m_Texture                   = nullptr;
+    MTL::Texture*                 m_CubeMap                   = nullptr;
+    std::vector<MTL::Texture*>    m_Textures;
+    MTL::Buffer*                  m_ArgumentBuffer            = nullptr;
+    MTL4::ComputeCommandEncoder*  m_ComputeCommandEncoder     = nullptr;
+    MTL4::CommandAllocator*       m_CommandAllocator          = nullptr;
     
-    const char*             m_Filepath          = nullptr;
+    const char*                   m_Filepath                  = nullptr;
     
     std::vector<int> m_Widths, m_Heights;
     std::vector<TextureInfo> m_TextureInfos;
+    
+    void GenerateMipmaps();
 };
 
 #endif /* MetalTexture_hpp */

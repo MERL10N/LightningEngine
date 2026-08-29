@@ -38,11 +38,31 @@ void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float as
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
     auto meshes = m_Registry.view<TransformComponent, MeshComponent>(entt::exclude<TextureComponent, LightComponent>);
+    auto skybox = m_Registry.view<TransformComponent, MeshComponent, TextureComponent, SkyboxComponent>();
     
-    for (const auto &entity : light_sources)
+    for (const auto &entity: skybox)
     {
-        const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-        renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
+        const auto &[transform, textures, mesh] = skybox.get<TransformComponent, TextureComponent, MeshComponent>(entity);
+        float4x4 scaleMatrix = transform.m_Scale;
+        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
+        float4x4 translationMatrix = transform.m_Translation;
+        
+        float4x4 sr = mul(scaleMatrix, rotationMatrix);
+        float4x4 modelMatrix = mul(sr, translationMatrix);
+        renderer.RenderSkybox(modelMatrix, mesh.m_MeshHandle, textures.texture);
+    }
+    
+    LightComponent lightsActive;
+    
+    if (m_Registry.storage<LightComponent>().size() != 0)
+    {
+        auto light_entity = light_sources.front();
+        lightsActive = light_sources.get<LightComponent>(light_entity);
+        for (const auto &entity : light_sources)
+        {
+            const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
+            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
+        }
     }
     
     for (const auto &entity : textured_meshes)
@@ -56,7 +76,7 @@ void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float as
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture);
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture, lightsActive);
     }
     
     for (const auto &entity : meshes)
@@ -70,8 +90,10 @@ void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float as
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, nullptr);
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, lightsActive);
     }
+    
+ 
     
     renderer.Commit();
 }

@@ -11,8 +11,6 @@
 #define HLSLPP_FEATURE_TRANSFORM
 #include <hlsl++.h>
 
-class MetalTexture;
-
 struct Uniforms
 {
     float4x4 projection;

@@ -25,12 +25,10 @@ namespace MTL4
     class RenderCommandEncoder;
 }
 
-#include <stdint.h>
-
 class MetalFrameBuffer
 {
 public:
-    MetalFrameBuffer(MTL::Device* p_MetalDevice);;
+    MetalFrameBuffer(MTL::Device* p_MetalDevice);
     ~MetalFrameBuffer();
     
     void Create(float p_Width, float p_Height);
@@ -48,10 +46,10 @@ private:
     
     
     
-    MTL::Device*    m_MetalDevice       = nullptr;
-    MTL::Texture*   m_AttachmentTexture = nullptr;
-    MTL::Texture*   m_MSAATargetTexture = nullptr;
-    MTL::Texture*   m_DepthTexture      = nullptr;
+    MTL::Device*          m_MetalDevice       = nullptr;
+    MTL::Texture*         m_AttachmentTexture = nullptr;
+    MTL::Texture*         m_MSAATargetTexture = nullptr;
+    MTL::Texture*         m_DepthTexture      = nullptr;
     
     MTL4::RenderPassDescriptor*  m_RenderPassDescriptor      = nullptr;
     MTL::TextureDescriptor*     m_TextureDescriptor         = nullptr;

@@ -52,7 +52,9 @@ MacWindow::MacWindow(const unsigned int p_Width, const unsigned int p_Height, co
 
 bool MacWindow::Update()
 {
+    NS::AutoreleasePool* pool = NS::AutoreleasePool::alloc()->init();
     glfwPollEvents();
+    pool->release();
     return !glfwWindowShouldClose(m_GlfwWindow);
 }
 

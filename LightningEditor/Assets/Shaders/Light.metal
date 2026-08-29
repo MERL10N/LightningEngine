@@ -27,8 +27,15 @@ struct Uniforms
     float4x4 model;
 };
 
+// Prepare for instanced rendering
+struct InstancedUniforms
+{
+    float4x4 model;
+};
+
 vertex VertexOut vertex_light(VertexIn in [[stage_in]],
-                              constant Uniforms &uniforms[[buffer(1)]])
+                              constant Uniforms &uniforms[[buffer(1)]],
+                              uint instanceID [[instance_id]])
 {
     VertexOut out;
     float3 pos = in.position;

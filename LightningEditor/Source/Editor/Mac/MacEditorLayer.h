@@ -10,35 +10,24 @@
 
 #include <filesystem>
 #include "Renderer/Metal/MetalTexture.h"
+#include "../EditorLayer.h"
+#include "../ContentBrowserPanel.h"
 
-namespace MTL
-{
-   class Device;
-}
-
-class MetalTexture;
-
-class MacEditorLayer
+class MacEditorLayer final : public EditorLayer
 {
 public:
     MacEditorLayer() = default;
-    MacEditorLayer(MTL::Device* p_MetalDevice);
+    MacEditorLayer(MTL::Device* metalDevice);
     ~MacEditorLayer();
     
-    void DrawStatsBar();
-    void DrawMenuBar();
-    void DrawContentBrowser();
-    
-    inline bool IsWireFrameEnabled() const { return b_EnableWireframe; }
+    virtual void DrawContentBrowser() override;
     
 private:
-    bool            b_showAnotherWindow             = false;
-    bool            b_EnableWireframe               = false;
-    const char*     s_AssetsPath                    = nullptr;
-    
+    const char*                m_AssetsPath         = nullptr;
     std::filesystem::path      m_CurrentDirectory;
-    MTL::Device*               m_MetalDevice        = nullptr;
     MetalTexture               m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
+    ContentBrowserPanel        m_ContentBrowserPanel;
+    
 };
 
 #endif /* MacEditorLayer_hpp */
