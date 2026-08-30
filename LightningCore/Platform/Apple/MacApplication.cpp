@@ -44,6 +44,16 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
         "Assets/Textures/brick-normal.png",
     };
     
+    std::array<const char*, 6> Skybox =
+    {
+        "Assets/Textures/skybox/px.png",
+        "Assets/Textures/skybox/nx.png",
+        "Assets/Textures/skybox/py.png",
+        "Assets/Textures/skybox/ny.png",
+        "Assets/Textures/skybox/pz.png",
+        "Assets/Textures/skybox/nz.png"
+    };
+    
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
     sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
@@ -68,6 +78,22 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     lightCube.AddComponent<TransformComponent>(float3(-1.0f, 1.0f, 2.0f), float3(0.2f,0.2f, 0.2f));
     lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
     lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
+    
+    Entity skybox = m_Scene.CreateEntity("Skybox");
+    skybox.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f), float3(1000.0f, 1000.0f, 1000.0f));
+    skybox.AddComponent<TextureComponent>(Skybox, m_MacWindow.GetDevice());
+    skybox.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
+    skybox.AddComponent<SkyboxComponent>();
+    
+    m_CameraEntity = m_Scene.CreateEntity("Camera Entity");
+    m_CameraEntity.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
+    m_CameraEntity.AddComponent<CameraComponent>();
+    m_CameraEntity.GetComponent<CameraComponent>().b_Primary = true;
+    
+    // This needs to be removed. Application classes should never have to worry about managing GPU residency.
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetArgumentBuffer());
+    
     m_MetalRenderer.CommitResidencySet();
 }
 
@@ -81,14 +107,10 @@ void MacApplication::Update(float p_DeltaTime)
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
         
-        if (m_Controller.IsWKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
-        if (m_Controller.IsSKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
-        if (m_Controller.IsAKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
-        if (m_Controller.IsDKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+        if (m_CameraEntity.GetComponent<CameraComponent>().b_Primary)
+        {
+            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().m_Camera, m_DeltaTime);
+        }
         
         m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
         
@@ -111,7 +133,7 @@ void MacApplication::Update(float p_DeltaTime)
         
         m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
         
-        m_Scene.RenderScene(m_MetalRenderer, m_Camera, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
+        m_Scene.RenderScene(m_MetalRenderer, m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight());
         
         m_WindowDrawable->present();
         m_Pool->release();

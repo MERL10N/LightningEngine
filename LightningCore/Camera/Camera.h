@@ -49,28 +49,26 @@ public:
     
 private:
     
+    float m_Yaw;
+    float m_Pitch;
+    float m_MovementSpeed, m_Velocity;
+    float m_MouseSensitivity;
+    float m_Zoom = 90.f;
+    
     float3 m_Position;
     float3 m_Front;
     float3 m_Up;
     float3 m_Right;
     float3 m_WorldUp;
     
-    float m_Yaw;
-    float m_Pitch;
-    
-    float m_MovementSpeed, m_Velocity;
-    
-    float m_MouseSensitivity;
-    float m_Zoom = 90.f;
-
     CAMERA_MOVEMENT m_CameraMovement;
     
+private:
     void UpdateCameraVectors();
     
     float Radians(float degrees) const;
     
     float4x4 LookAt(const float3 &eye, const float3 &center, const float3 &up) const;
-    
 };
 
 #endif /* Camera_hpp */

@@ -11,7 +11,9 @@
 #include "MacWindow.h"
 #include "Camera/Camera.h"
 #include "Input/AppleController.h"
+#include "Camera/CameraController.h"
 #include "Scene/Scene.h"
+#include "Entity/Entity.h"
 #include "Renderer/Metal/MetalRenderer.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
 
@@ -39,6 +41,11 @@ public:
     void Update(float p_DeltaTime);
 
 private:
+    
+    float m_CurrentFrame = 0.0f;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
+    
     MacWindow m_MacWindow;
     MetalRenderer m_MetalRenderer;
     MetalFrameBuffer m_MetalFrameBuffer;
@@ -46,10 +53,9 @@ private:
     CA::MetalDrawable* m_WindowDrawable = nullptr;
     Camera m_Camera;
     Scene m_Scene;
+    Entity m_CameraEntity;
     AppleController m_Controller;
-    float m_CurrentFrame = 0.0f;
-    float m_DeltaTime = 0.0f;
-    float m_LastFrame = 0.0f;
+    CameraController m_CameraController;
 };
 
 #endif /* MacApplication_hpp */

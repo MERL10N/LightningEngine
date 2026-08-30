@@ -9,7 +9,7 @@
 #define Entity_h
 
 #include "Scene/Scene.h"
-#include "entt/single_include/entt/entt.hpp"
+#include <entt/entt.hpp>
 
 class Entity
 {

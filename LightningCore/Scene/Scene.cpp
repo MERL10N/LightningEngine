@@ -9,7 +9,6 @@
 #include "Component.h"
 #include "Entity/Entity.h"
 #include "Renderer/Metal/MetalRenderer.h"
-#include "Camera/Camera.h"
 #include <hlsl++.h>
 
 Scene::Scene()
@@ -31,15 +30,32 @@ Entity Scene::CreateEntity(const char* p_Tag)
 }
 
 template <typename Renderer>
-void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float aspectRatio)
+void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
 {
-    renderer.Submit(camera, aspectRatio);
     
     auto textured_meshes = m_Registry.view<TransformComponent, MeshComponent, TextureComponent>();
     auto light_sources = m_Registry.view<TransformComponent, MeshComponent, LightComponent>();
     auto meshes = m_Registry.view<TransformComponent, MeshComponent>(entt::exclude<TextureComponent, LightComponent>);
     auto skybox = m_Registry.view<TransformComponent, MeshComponent, TextureComponent, SkyboxComponent>();
+    auto cameras = m_Registry.view<TransformComponent, CameraComponent>();
     
+    Camera* mainCamera = nullptr;
+    
+    for (const auto& entity : cameras)
+    {
+        const auto &[transform, camera] = cameras.get<TransformComponent, CameraComponent>(entity);
+        
+        if (camera.b_Primary)
+        {
+            mainCamera = &camera.m_Camera;
+            break;
+        }
+    }
+    
+    if (!mainCamera)
+        return;
+   
+    renderer.Submit(*mainCamera, aspectRatio);
     for (const auto &entity: skybox)
     {
         const auto &[transform, textures, mesh] = skybox.get<TransformComponent, TextureComponent, MeshComponent>(entity);
@@ -93,9 +109,7 @@ void Scene::RenderScene(Renderer &renderer, const Camera &camera, const float as
         renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, lightsActive);
     }
     
- 
-    
     renderer.Commit();
 }
 
-template void Scene::RenderScene<MetalRenderer>(MetalRenderer&, const Camera &, const float);
+template void Scene::RenderScene<MetalRenderer>(MetalRenderer&, const float);

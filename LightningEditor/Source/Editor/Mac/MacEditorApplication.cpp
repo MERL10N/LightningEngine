@@ -26,7 +26,7 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
   m_MetalFrameBuffer(m_MetalDevice),
   m_WindowPassDescriptor(MTL4::RenderPassDescriptor::alloc()->init()),
   m_ImGuiCommandAllocator(m_MetalDevice->newCommandAllocator()),
-  m_Camera(),
+  m_CameraController(p_Width / p_Height),
   m_Scene(),
   m_Width(p_Width),
   m_Height(p_Height)
@@ -113,6 +113,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     skybox.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
     skybox.AddComponent<SkyboxComponent>();
     
+    m_CameraEntity = m_Scene.CreateEntity("Camera Entity");
+    m_CameraEntity.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
+    m_CameraEntity.AddComponent<CameraComponent>();
+    m_CameraEntity.GetComponent<CameraComponent>().b_Primary = true;
+    
     
     // This needs to be removed. Application classes should never have to worry about managing GPU residency.
     m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
@@ -179,72 +184,66 @@ void MacEditorApplication::Update()
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
 
-        if (m_Controller.IsWKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::FORWARD, m_DeltaTime);
-        if (m_Controller.IsSKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::BACKWARD, m_DeltaTime);
-        if (m_Controller.IsAKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::LEFT, m_DeltaTime);
-        if (m_Controller.IsDKeyDown())
-            m_Camera.ProcessKeyboardInput(CAMERA_MOVEMENT::RIGHT, m_DeltaTime);
+        if (m_CameraEntity.GetComponent<CameraComponent>().b_Primary)
+        {
+            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().m_Camera, m_DeltaTime);
+        }
 
-        m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());
+      
+        ImGuiIO& io = ImGui::GetIO();
 
-        m_Camera.ProcessControllerRightThumbstickInput(m_Controller.RightThumbstickX(), m_Controller.RightThumbstickY());
-            ImGuiIO& io = ImGui::GetIO();
+        m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
 
-            m_WindowDrawable = m_MacWindow.GetMetalLayer()->nextDrawable();
+        m_WindowPassDescriptor->colorAttachments()->object(0)->setTexture(m_WindowDrawable->texture());
+        m_WindowPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionClear);
+        m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
+        m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
 
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setTexture(m_WindowDrawable->texture());
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setLoadAction(MTL::LoadActionClear);
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setClearColor(MTL::ClearColor::Make(0.15, 0.15, 0.15, 1));
-            m_WindowPassDescriptor->colorAttachments()->object(0)->setStoreAction(MTL::StoreActionStore);
+        m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
 
-            m_MetalRenderer.SetMetalDrawable(m_WindowDrawable);
+        ImGui_ImplMetal4_NewFrame(m_WindowPassDescriptor, 0);
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
-            ImGui_ImplMetal4_NewFrame(m_WindowPassDescriptor, 0);
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
+        ImGui::DockSpaceOverViewport();
 
-            ImGui::DockSpaceOverViewport();
+        DrawGameViewport();
 
-            DrawGameViewport();
+        m_MacEditorLayer.DrawContentBrowser();
+        m_MacEditorLayer.DrawMenuBar();
+        m_MacEditorLayer.DrawStatsBar();
 
-            m_MacEditorLayer.DrawContentBrowser();
-            m_MacEditorLayer.DrawMenuBar();
-            m_MacEditorLayer.DrawStatsBar();
+        b_EnableWireframe = m_MacEditorLayer.IsWireFrameEnabled();
 
-            b_EnableWireframe = m_MacEditorLayer.IsWireFrameEnabled();
+        m_MetalRenderer.SetWireframeMode(b_EnableWireframe);
+         
+        // Submit FrameBuffer To Renderer
+        m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
+        
+        float aspectRatio = m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight();
+        m_Scene.RenderScene(m_MetalRenderer, aspectRatio);
 
-            m_MetalRenderer.SetWireframeMode(b_EnableWireframe);
-             
-            // Submit FrameBuffer To Renderer
-            m_MetalRenderer.SetRenderPassDescriptor(m_MetalFrameBuffer.GetRenderPassDescriptor());
-            
-            float aspectRatio = m_MetalFrameBuffer.GetWidth() / m_MetalFrameBuffer.GetHeight();
-            m_Scene.RenderScene(m_MetalRenderer, m_Camera, aspectRatio);
-
-            // Rendering
-            ImGui::Render();
+        // Rendering
+        ImGui::Render();
 
 
-            // Render ImGui UI and Viewport
-            m_ImGuiCommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
-            m_ImGuiCommandAllocator->reset();
-            m_ImGuiCommandBuffer->beginCommandBuffer(m_ImGuiCommandAllocator);
-            m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
-            m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
-            ImGui_ImplMetal4_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);
-            
-            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-            {
-                ImGui::UpdatePlatformWindows();
-                ImGui::RenderPlatformWindowsDefault();
-            }
-            m_ImGuiCommandEncoder->endEncoding();
-            m_ImGuiCommandBuffer->endCommandBuffer();
-            m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
-            m_WindowDrawable->present();
+        // Render ImGui UI and Viewport
+        m_ImGuiCommandBuffer = m_MetalRenderer.GetMetalCommandBuffer();
+        m_ImGuiCommandAllocator->reset();
+        m_ImGuiCommandBuffer->beginCommandBuffer(m_ImGuiCommandAllocator);
+        m_ImGuiCommandEncoder = m_ImGuiCommandBuffer->renderCommandEncoder(m_WindowPassDescriptor);
+        m_MetalFrameBuffer.UpdateViewport(m_ImGuiCommandEncoder);
+        ImGui_ImplMetal4_RenderDrawData(ImGui::GetDrawData(), m_ImGuiCommandBuffer, m_ImGuiCommandEncoder);
+        
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+        }
+        m_ImGuiCommandEncoder->endEncoding();
+        m_ImGuiCommandBuffer->endCommandBuffer();
+        m_MetalRenderer.GetMetalCommandQueue()->commit(&m_ImGuiCommandBuffer, 1);
+        m_WindowDrawable->present();
         
         m_Pool->release();
     }
