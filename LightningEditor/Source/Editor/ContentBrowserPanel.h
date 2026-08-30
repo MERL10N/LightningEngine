@@ -18,7 +18,7 @@ public:
     ContentBrowserPanel();
     ~ContentBrowserPanel();
     
-    void Render(const std::array<ImTextureID, 4> &icons);
+    void Render(const std::array<ImTextureID, 5> &icons);
 private:
     std::filesystem::path m_CurrentDirectory;
 };

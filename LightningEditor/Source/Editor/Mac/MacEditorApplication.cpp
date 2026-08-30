@@ -48,6 +48,8 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     ImGui_ImplMetal4_Init(m_MacWindow.GetDevice(), m_MetalRenderer.GetMetalCommandQueue(), 3);
     io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono-Light.ttf", 15.0f);
     
+    m_MacEditorLayer.DarkModeTheme();
+    
     m_MetalFrameBuffer.Create(m_Width, m_Height);
     m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
     
