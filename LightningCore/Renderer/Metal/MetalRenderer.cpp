@@ -89,32 +89,6 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         m_DepthStencilDescriptor = nullptr;
     }
     
-    MetalVertexDescriptor vertexDescriptorBuilder;
-    
-    m_3DVertexDescriptor = vertexDescriptorBuilder
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Pos))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Color))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Normals))
-        .AddAttribute(MTL::VertexFormatFloat2, offsetof(Vertex3D, m_TexCoord))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Tangent))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Binormal))
-        .SetBufferLayout(sizeof(Vertex3D))
-        .BuildVertexDescriptor();
-    
-    
-    m_LightVertexDescriptor = vertexDescriptorBuilder
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Pos))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Color))
-        .AddAttribute(MTL::VertexFormatFloat3, offsetof(Vertex3D, m_Normals))
-        .SetBufferLayout(sizeof(Vertex3D))
-        .BuildVertexDescriptor();
-    
-    m_SkyboxVertexDescriptor = vertexDescriptorBuilder
-                                .AddAttribute(MTL::VertexFormatFloat3,  offsetof(Vertex3D, m_Pos))
-                                .AddAttribute(MTL::VertexFormatFloat3,  offsetof(Vertex3D, m_Normals))
-                                .SetBufferLayout(sizeof(Vertex3D))
-                                .BuildVertexDescriptor();
-    
     m_TextureShader = MetalShader("Assets/Shaders/Shader.metal",
                                   "vertex_main", "fragment_main",
                                   m_MetalDevice,
