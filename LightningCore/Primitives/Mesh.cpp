@@ -11,9 +11,9 @@
 #include <assimp/postprocess.h>
 #include <print>
 
-Mesh::Mesh(const std::vector<Vertex>  &vertices,
+Mesh::Mesh(const std::vector<MeshVertex>  &vertices,
            const std::vector<unsigned int> &indices,
-           const std::vector<Texture>      &textures)
+           const std::vector<MeshTexture>      &textures)
 : m_Vertices(vertices),
   m_Indices(indices),
   m_Textures(textures)

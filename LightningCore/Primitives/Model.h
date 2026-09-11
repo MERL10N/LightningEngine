@@ -22,12 +22,12 @@ public:
 private:
     std::vector<Mesh> m_Mesh;
     std::string m_Directory;
-    std::vector<Texture> textures_loaded; 
+    std::vector<MeshTexture> textures_loaded;
     
     void LoadModel(const char* path);
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
     void ProcessNode(aiNode *node, const aiScene *scene);
-    std::vector<Texture> LoadMaterialTextures(aiMaterial *mat,
+    std::vector<MeshTexture> LoadMaterialTextures(aiMaterial *mat,
                                               aiTextureType type,
                                               const char* typeName);
 };

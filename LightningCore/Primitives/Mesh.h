@@ -17,7 +17,7 @@ using namespace hlslpp;
 struct aiNode;
 struct aiScene;
 
-struct Vertex
+struct MeshVertex
 {
     float3 m_Position;
     float3 m_Normal;
@@ -26,7 +26,7 @@ struct Vertex
     float3 m_Bitangent;
 };
 
-struct Texture
+struct MeshTexture
 {
     std::string path;
     std::string type;
@@ -36,14 +36,14 @@ class Mesh
 {
 public:
     Mesh() = default;
-    explicit Mesh(const std::vector<Vertex>   &vertices,
+    explicit Mesh(const std::vector<MeshVertex>    &vertices,
                   const std::vector<unsigned int>  &indices,
-                  const std::vector<Texture>       &textures);
+                  const std::vector<MeshTexture>   &textures);
     ~Mesh();
 private:
-    std::vector<Vertex>         m_Vertices;
-    std::vector<unsigned int>   m_Indices;
-    std::vector<Texture>        m_Textures;
+    std::vector<MeshVertex>         m_Vertices;
+    std::vector<unsigned int>       m_Indices;
+    std::vector<MeshTexture>        m_Textures;
     
     void SetupMesh();
 };
