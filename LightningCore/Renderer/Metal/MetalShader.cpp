@@ -185,7 +185,6 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
     m_ColorAttachmentDescriptor->setDestinationAlphaBlendFactor(MTL::BlendFactorOneMinusSourceAlpha);
 
 
-    m_RenderPipelineDescriptor->setVertexDescriptor(vertexDescriptor);
     
     m_RenderPipelineState = m_Compiler->newRenderPipelineState(m_RenderPipelineDescriptor, (MTL4::CompilerTaskOptions*)nullptr, &error);
     
