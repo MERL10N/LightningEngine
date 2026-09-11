@@ -85,10 +85,10 @@ public:
     void CommitResidencySet();
     
     void Submit(const Camera &camera, const float aspectRatio);
-    void RenderLights(const float4x4 &p_ModelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
     void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
     void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
-    
+    void RenderModel(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
     void RenderSkybox(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture);
     
     void Commit();

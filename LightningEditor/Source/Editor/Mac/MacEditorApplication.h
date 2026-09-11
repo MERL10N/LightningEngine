@@ -10,7 +10,7 @@
 
 #include "Platform/Apple/MacWindow.h"
 #include "Input/AppleController.h"
-#include "Camera/Camera.h"
+#include "Camera/CameraController.h"
 #include "Scene/Scene.h"
 #include "Entity/Entity.h"
 #include "Renderer/Metal/MetalFrameBuffer.h"
@@ -63,7 +63,7 @@ private:
     
     ImVec2 m_ViewportSize;
     
-    Camera m_Camera;
+    CameraController m_CameraController;
     
     float m_AspectRatio = 0.0f;
     float m_CurrentFrame = 0.0f;

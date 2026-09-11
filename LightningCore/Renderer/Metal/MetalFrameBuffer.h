@@ -41,6 +41,8 @@ public:
     
     inline float GetWidth() const { return m_Width; }
     inline float GetHeight() const { return m_Height; }
+    
+    inline void SetMSAASampleCount(const int sampleCount) { m_SampleCount = sampleCount; }
 
 private:
     
@@ -52,14 +54,15 @@ private:
     MTL::Texture*         m_DepthTexture      = nullptr;
     
     MTL4::RenderPassDescriptor*  m_RenderPassDescriptor      = nullptr;
-    MTL::TextureDescriptor*     m_TextureDescriptor         = nullptr;
-    MTL::TextureDescriptor*     m_DepthTextureDescriptor    = nullptr;
-    MTL::TextureDescriptor*     m_MSAATextureDescriptor     = nullptr;
+    MTL::TextureDescriptor*      m_TextureDescriptor         = nullptr;
+    MTL::TextureDescriptor*      m_DepthTextureDescriptor    = nullptr;
+    MTL::TextureDescriptor*      m_MSAATextureDescriptor     = nullptr;
     
     MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor = nullptr;
     
     float m_Width, m_Height;
+    int m_SampleCount;
 };
 
 #endif /* MetalFrameBuffer_hpp */

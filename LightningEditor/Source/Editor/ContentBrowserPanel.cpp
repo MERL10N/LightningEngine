@@ -19,7 +19,7 @@ ContentBrowserPanel::~ContentBrowserPanel()
 {
 }
 
-void ContentBrowserPanel::Render(const std::array<ImTextureID, 4> &icons)
+void ContentBrowserPanel::Render(const std::array<ImTextureID, 5> &icons)
 {
     
     ImGui::Begin("Content Browser");
@@ -69,6 +69,10 @@ void ContentBrowserPanel::Render(const std::array<ImTextureID, 4> &icons)
             if (fileNameString.contains(".metal"))
             {
                 ImGui::ImageButton("##FileIconButton", icons[2], ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
+            }
+            else if (fileNameString.contains(".png") || fileNameString.contains(".jpg"))
+            {
+                ImGui::ImageButton("##FileImageIconButton", icons[4], ImVec2(96, 96),ImVec2(0,1), ImVec2(1, 0), ImVec4(0,0,0,0), ImVec4(1,1,1,1));
             }
             else
             {

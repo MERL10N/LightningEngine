@@ -25,7 +25,7 @@ public:
 private:
     const char*                m_AssetsPath         = nullptr;
     std::filesystem::path      m_CurrentDirectory;
-    MetalTexture               m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon;
+    MetalTexture               m_FolderIcon, m_FileIcon, m_ShaderIcon, m_ReturnIcon, m_FileImageIcon;
     ContentBrowserPanel        m_ContentBrowserPanel;
     
 };

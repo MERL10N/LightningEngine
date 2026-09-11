@@ -77,21 +77,22 @@ struct Material
 };
 
 // Vertex shader
-vertex VertexOut vertex_main(VertexIn in [[stage_in]],
+vertex VertexOut vertex_main(constant VertexIn* in[[buffer(0)]],
                              constant Uniforms &uniforms[[buffer(1)]],
                              constant LightUniforms &lightUniforms[[buffer(2)]],
+                             uint vertexID   [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
-    out.fragmentPosition = float3(uniforms.model * float4(in.aPosition, 1.0f));
-    out.normal           = in.aNormal;
-    out.color            = in.aColor;
-    out.texCoord         = in.aTexCoord;
+    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in[vertexID].aPosition, 1.0f);
+    out.fragmentPosition = float3(uniforms.model * float4(in[vertexID].aPosition, 1.0f));
+    out.normal           = in[vertexID].aNormal;
+    out.color            = in[vertexID].aColor;
+    out.texCoord         = in[vertexID].aTexCoord;
     
     
-    out.T               = normalize(float3(uniforms.model * float4(in.aTangent, 0.0f)));
-    out.N               = normalize(float3(uniforms.model * float4(in.aNormal, 0.0f)));
+    out.T               = normalize(float3(uniforms.model * float4(in[vertexID].aTangent, 0.0f)));
+    out.N               = normalize(float3(uniforms.model * float4(in[vertexID].aNormal, 0.0f)));
     out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
     out.B               = cross(out.N, out.T);
     
@@ -108,7 +109,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
                              constant Material& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, mip_filter::linear, max_anisotropy(16), address::clamp_to_edge);
     
     // Set the default values
     float4 diffuseMap  = float4(1.0f);
@@ -159,9 +160,9 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
     
     float spec = pow(max(specularTerm, 0.0f), 64.0f);
     
-    float nDotL = max(dot(normal, halfwayDir), 0.0f);
+    float nDotH = max(dot(normal, halfwayDir), 0.0f);
     
-    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotL * specularMap.xyz;
+    float3 specular = specularStrength * spec * lightUniforms.lightColor * nDotH * specularMap.xyz;
 
     float3 result = (ambient + diffuse + specular) * out.color;
     

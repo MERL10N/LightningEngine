@@ -132,12 +132,14 @@ struct SkyboxComponent
 struct CameraComponent
 {
     Camera m_Camera;
-    bool   b_Primary = true;
+    bool   b_Primary = false;
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
+    CameraComponent& operator= (const CameraComponent& other) = default;
     CameraComponent(const Camera &camera)
     : m_Camera(camera)
     {}
+    
 };
 
 #endif /* Component_h */
