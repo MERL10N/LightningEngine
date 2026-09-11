@@ -21,7 +21,11 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 >  This game engine is currently very primitive and is not intended for commercial use.
 
 ## Current Progress
-<img width="2560" height="1440" alt="Screenshot 2026-07-08 at 8 30 35 PM" src="https://github.com/user-attachments/assets/76aa21b4-1214-4919-9864-15ea1a9b107a" />
+<img width="1512" height="982" alt="Screenshot 2026-09-11 at 4 12 21 PM" src="https://github.com/user-attachments/assets/617a7ce2-086c-4b6c-8a96-9daf6a30798f" />
+Lightning Editor
+<img width="1512" height="982" alt="Screenshot 2026-09-11 at 4 11 53 PM" src="https://github.com/user-attachments/assets/4676b357-3ae8-44ef-9a02-dc8ae26c70a3" />
+Lightning Game
+
 
 
 ## Checklist (Revised)
@@ -35,7 +39,8 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 - [x] Argument Buffers
 - [x] Blinn-Phong Lighting
 - [x] Upgrade Renderer to Metal 4
-- [ ] Normal Mapping
+- [x] Normal Mapping
+- [ ] Model loading
 - [ ] ECS
 - [ ] Native Scripting System
 - [ ] Physics
