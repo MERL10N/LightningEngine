@@ -26,6 +26,11 @@ struct Uniforms
 {
     float4x4 projection;
     float4x4 view;
+};
+
+// Prepare for instanced rendering
+struct InstancedUniforms
+{
     float4x4 model;
 };
 
@@ -36,6 +41,7 @@ struct CubeMapArguments
 
 vertex VertexOut vertex_skybox(constant VertexIn* in [[buffer(0)]],
                              constant Uniforms &uniforms[[buffer(1)]],
+                             constant InstancedUniforms* instancedUniforms [[buffer(2)]],
                              uint vertexID [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
@@ -43,7 +49,7 @@ vertex VertexOut vertex_skybox(constant VertexIn* in [[buffer(0)]],
     float4 position = float4(in[vertexID].aPosition, 1.0f);
     
     VertexOut out;
-    out.position = uniforms.projection * uniforms.view * uniforms.model * position;
+    out.position = uniforms.projection * uniforms.view * instancedUniforms[instanceID].model * position;
     out.texCoords = position;
     
     return out;

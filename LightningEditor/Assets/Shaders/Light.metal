@@ -27,7 +27,6 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
-    float4x4 model;
 };
 
 // Prepare for instanced rendering
@@ -38,12 +37,13 @@ struct InstancedUniforms
 
 vertex VertexOut vertex_light(constant VertexIn* in [[buffer(0)]],
                               constant Uniforms &uniforms[[buffer(1)]],
+                              constant InstancedUniforms* instancedUniforms[[buffer(3)]],
                               uint vertexID [[vertex_id]],
                               uint instanceID [[instance_id]])
 {
     VertexOut out;
     float3 pos = in[vertexID].aPosition;
-    out.position = float4(uniforms.perspective * uniforms.view * uniforms.model * float4(pos, 1.0f));
+    out.position = float4(uniforms.perspective * uniforms.view * instancedUniforms[instanceID].model * float4(pos, 1.0f));
     return out;
 }
 

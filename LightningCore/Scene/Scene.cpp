@@ -106,7 +106,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, lightsActive);
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, lightsActive, mesh.m_InstanceCount);
     }
     
     renderer.Commit();
