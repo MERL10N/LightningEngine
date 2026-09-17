@@ -174,7 +174,7 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
-    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
+    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
 
     m_ColorAttachmentDescriptor->setBlendingState(MTL4::BlendStateEnabled);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
