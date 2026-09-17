@@ -41,7 +41,7 @@ public:
     MetalShader() = default;
     
     explicit MetalShader(const std::string &filePath, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat);
-    explicit MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat);
+    explicit MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat);
     
     MetalShader(MetalShader&& other)
     : m_RenderPipelineState(other.m_RenderPipelineState)

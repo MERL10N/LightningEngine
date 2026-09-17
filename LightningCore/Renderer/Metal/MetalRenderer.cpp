@@ -7,7 +7,6 @@
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
-#include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
 #include "Scene/Scene.h"
 #include "Camera/Camera.h"
@@ -95,46 +94,27 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     m_TextureShader = MetalShader("Assets/Shaders/Shader.metal",
                                   "vertex_main", "fragment_main",
                                   m_MetalDevice,
-                                  m_3DVertexDescriptor,
                                   m_MetalLayer->pixelFormat());
     
     m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal",
                                      "vertex_main",
                                      "fragment_main_untextured",
                                      m_MetalDevice,
-                                     m_3DVertexDescriptor,
                                      m_MetalLayer->pixelFormat());
     
     m_LightShader = MetalShader("Assets/Shaders/Light.metal",
                                 "vertex_light",
                                 "fragment_light",
                                 m_MetalDevice,
-                                m_LightVertexDescriptor,
                                 m_MetalLayer->pixelFormat());
     
     m_SkyboxShader = MetalShader("Assets/Shaders/Skybox.metal",
                                  "vertex_skybox",
                                  "fragment_skybox",
                                  m_MetalDevice,
-                                 m_SkyboxVertexDescriptor,
                                  m_MetalLayer->pixelFormat());
     
     
-    if (m_3DVertexDescriptor)
-    {
-        m_3DVertexDescriptor->release();
-        m_3DVertexDescriptor = nullptr;
-    }
-    if (m_LightVertexDescriptor)
-    {
-        m_LightVertexDescriptor->release();
-        m_LightVertexDescriptor = nullptr;
-    }
-    if (m_SkyboxVertexDescriptor)
-    {
-        m_SkyboxVertexDescriptor->release();
-        m_SkyboxVertexDescriptor = nullptr;
-    }
 }
 
 MetalRenderer::~MetalRenderer()

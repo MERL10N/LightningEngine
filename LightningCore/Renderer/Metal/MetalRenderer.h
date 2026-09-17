@@ -126,9 +126,6 @@ private:
     MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
     MTL::DepthStencilState*         m_SkyboxDepthStencilState   = nullptr;
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
-    MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
-    MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
-    MTL::VertexDescriptor*          m_SkyboxVertexDescriptor    = nullptr;
     const MTL::Drawable*            m_Drawable                  = nullptr;
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;

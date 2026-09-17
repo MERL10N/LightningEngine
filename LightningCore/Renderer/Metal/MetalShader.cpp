@@ -116,7 +116,7 @@ MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, 
 
 }
 
-MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat)
+MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat)
 : m_MetalDevice(metalDevice),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
