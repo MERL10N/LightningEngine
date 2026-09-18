@@ -77,7 +77,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         for (const auto &entity : light_sources)
         {
             const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
+            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights, mesh.m_InstanceCount);
         }
     }
     
@@ -92,7 +92,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
         
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture, lightsActive);
+        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture, lightsActive, mesh.m_InstanceCount);
     }
     
     for (const auto &entity : meshes)

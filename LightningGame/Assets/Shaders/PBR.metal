@@ -1,28 +1,12 @@
-//  Shader.metal
-//  LightningGame
-//  Based on GLSL code from LearnOpenGL and GetIntoGameDev tutorials
-//  Created by Kian Marvi on 5/7/25.
+//
+//  PBR.metal (WIP)
+//  LightningEditor
+//
+//  Created by Kian Marvi on 8/25/26.
+//  Based on LearnOpenGL article on PBR: https://learnopengl.com/PBR/Lighting
 
 #include <metal_stdlib>
 using namespace metal;
-/*
- 
- TODO:
- - [X] Implement Lightmaps
- - [X] Implement Normal Mapping
- - [X] Implement Instanced Rendering -> WIP
- - [] Implement Shadow Mapping
- - [] Implement Deferred Rendering
-*/
-
-struct Light
-{
-    float3 direction;
-    float3 ambient;
-    float3 diffuse;
-    float3 specular;
-    
-};
 
 struct VertexIn
 {
@@ -60,39 +44,69 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
-};
-
-
-// Prepare for instanced rendering
-struct InstancedUniforms
-{
     float4x4 model;
 };
 
-
 struct Material
 {
-    texture2d<float> textureMaps[[id(0)]] [4];
+    array<texture2d<float>, 6> textureMaps[[id(0)]];
 };
 
+float DistributionGGX(float3 N, float3 H, float roughness)
+{
+    float a = roughness * roughness;
+    float a2 = a * a;
+    float NDotH = max(dot(N,H), 0.0f);
+    float NDotH2 = NDotH * NDotH;
+    
+    float num   = a2;
+    float denom = (NDotH2 * (a2 - 1.0) + 1.0);
+    denom = 3.14159265359f * denom * denom;
+    
+    return num / denom;
+}
+
+float GeometrySchlickGGX(float NDotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float num   = NDotV;
+    float denom = NDotV * (1.0 - k) + k;
+    
+    return num / denom;
+}
+float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+float3 fresnelSchlick(float cosTheta, float3 F0)
+{
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
 // Vertex shader
-vertex VertexOut vertex_main(constant VertexIn* in[[buffer(0)]],
+vertex VertexOut vertex_main(VertexIn in [[stage_in]],
                              constant Uniforms &uniforms[[buffer(1)]],
                              constant LightUniforms &lightUniforms[[buffer(2)]],
-                             constant InstancedUniforms* instancedUniforms [[buffer(3)]],
-                             uint vertexID   [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    out.position         = uniforms.perspective * uniforms.view * instancedUniforms[instanceID].model * float4(in[vertexID].aPosition, 1.0f);
-    out.fragmentPosition = float3(instancedUniforms[instanceID].model * float4(in[vertexID].aPosition, 1.0f));
-    out.normal           = in[vertexID].aNormal;
-    out.color            = in[vertexID].aColor;
-    out.texCoord         = in[vertexID].aTexCoord;
+    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
+    out.fragmentPosition = float3(uniforms.model * float4(in.aPosition, 1.0f));
+    out.normal           = in.aNormal;
+    out.color            = in.aColor;
+    out.texCoord         = in.aTexCoord;
     
     
-    out.T               = normalize(float3(instancedUniforms[instanceID].model * float4(in[vertexID].aTangent, 0.0f)));
-    out.N               = normalize(float3(instancedUniforms[instanceID].model * float4(in[vertexID].aNormal, 0.0f)));
+    out.T               = normalize(float3(uniforms.model * float4(in.aTangent, 0.0f)));
+    out.N               = normalize(float3(uniforms.model * float4(in.aNormal, 0.0f)));
     out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
     out.B               = cross(out.N, out.T);
     
@@ -109,7 +123,7 @@ fragment float4 fragment_main(VertexOut out [[stage_in]],
                              constant Material& textureArgs[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, mip_filter::linear, max_anisotropy(16), address::clamp_to_edge);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::repeat);
     
     // Set the default values
     float4 diffuseMap  = float4(1.0f);

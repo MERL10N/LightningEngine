@@ -119,7 +119,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
 
 MetalRenderer::~MetalRenderer()
 {
-    for (uint8_t i = 0; i < s_MaxFramesInFlight; ++i)
+    for (int i = 0; i < s_MaxFramesInFlight; ++i)
     {
         m_LightPositions[i]->release();
         m_LightPositions[i] = nullptr;
@@ -127,20 +127,20 @@ MetalRenderer::~MetalRenderer()
     
     for (int i = 0; i < s_MaxEntities; ++i)
     {
-        if (m_UniformBuffers.at(i))
+        if (m_UniformBuffers[i])
         {
-            m_UniformBuffers.at(i)->release();
-            m_UniformBuffers.at(i) = nullptr;
+            m_UniformBuffers[i]->release();
+            m_UniformBuffers[i] = nullptr;
         }
-        if (m_LightUniformBufferPool.at(i))
+        if (m_LightUniformBufferPool[i])
         {
-            m_LightUniformBufferPool.at(i)->release();
-            m_LightUniformBufferPool.at(i) = nullptr;
+            m_LightUniformBufferPool[i]->release();
+            m_LightUniformBufferPool[i] = nullptr;
         }
-        if (m_InstanceBuffers.at(i))
+        if (m_InstanceBuffers[i])
         {
-            m_InstanceBuffers.at(i)->release();
-            m_InstanceBuffers.at(i) = nullptr;
+            m_InstanceBuffers[i]->release();
+            m_InstanceBuffers[i] = nullptr;
         }
     }
     
@@ -229,7 +229,6 @@ MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture &
             m_ResidencySet->addAllocation(texture);
         }
     }
-    
     
     m_RenderMeshes.emplace_back(meshAttributes);
     

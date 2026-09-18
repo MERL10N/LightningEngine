@@ -43,7 +43,7 @@ vertex VertexOut vertex_light(constant VertexIn* in [[buffer(0)]],
 {
     VertexOut out;
     float3 pos = in[vertexID].aPosition;
-    out.position = float4(uniforms.perspective * uniforms.view * instancedUniforms->model[instanceID] * float4(pos, 1.0f));
+    out.position = float4(uniforms.perspective * uniforms.view * instancedUniforms[instanceID].model * float4(pos, 1.0f));
     return out;
 }
 
