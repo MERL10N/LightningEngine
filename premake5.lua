@@ -75,7 +75,11 @@ project "LightningCore"
 
         libdirs
         {
-            "ThirdParty/assimp/libassimp.6.0.5.dylib"
+            "ThirdParty/assimp"
+        }
+
+        links{
+            "assimp.6.0.5"
         }
 
         buildoptions { "-std=c++23", "-stdlib=libc++"}
@@ -130,7 +134,7 @@ project "LightningGame"
             "Foundation.framework",
         }
 
-        linkoptions { "-FThirdParty/glfw/lib-universal", "-lglfw3" }
+        linkoptions { "-LThirdParty/glfw/lib-universal", "-lglfw3" }
 
         xcodebuildsettings
         {
@@ -141,14 +145,17 @@ project "LightningGame"
             ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
+        libdirs { "ThirdParty/glfw/lib-universal" }
+        links { "glfw3" }
+
+        -- LightningEditor
         postbuildcommands
         {
-            "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
+            'mkdir -p "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets"',
+            'cp -R "%{wks.location}/LightningGame/Assets/." "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets"'
         }
 
     filter {}
-    libdirs { "ThirdParty/glfw/lib-universal" }
-    links { "glfw3" }
 
     filter "configurations:Debug"
         defines { "DEBUG" }
@@ -219,7 +226,7 @@ project "LightningEditor"
             "Foundation.framework",
         }
 
-        linkoptions { "-FThirdParty/glfw/lib-universal", "-lglfw3" }
+        linkoptions { "-LThirdParty/glfw/lib-universal", "-lglfw3" }
 
         xcodebuildsettings
         {
@@ -233,9 +240,11 @@ project "LightningEditor"
         buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
 
+        -- LightningEditor
         postbuildcommands
         {
-            "cp -R ../LightningEditor/Assets/ %{cfg.buildtarget.directory}/%{cfg.buildtarget.name}/Contents/Resources/Assets",
+            'mkdir -p "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets"',
+            'cp -R "%{wks.location}/LightningEditor/Assets/." "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets"'
         }
     filter {}
 
