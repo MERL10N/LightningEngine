@@ -21,7 +21,8 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 >  This game engine is currently very primitive and is not intended for commercial use.
 
 ## Current Progress
-<img width="2560" height="1440" alt="Screenshot 2026-07-08 at 8 30 35 PM" src="https://github.com/user-attachments/assets/76aa21b4-1214-4919-9864-15ea1a9b107a" />
+<img width="1512" height="982" alt="Screenshot 2026-09-18 at 6 41 53 PM" src="https://github.com/user-attachments/assets/e3729dce-9cf5-4853-bba9-88e3edbc709e" />
+
 
 
 ## Checklist (Revised)
@@ -35,7 +36,8 @@ potential of Apple Silicon. As of right now, this project is being rebuilt to us
 - [x] Argument Buffers
 - [x] Blinn-Phong Lighting
 - [x] Upgrade Renderer to Metal 4
-- [ ] Normal Mapping
+- [X] Normal Mapping
+- [X] Instancing
 - [ ] ECS
 - [ ] Native Scripting System
 - [ ] Physics
