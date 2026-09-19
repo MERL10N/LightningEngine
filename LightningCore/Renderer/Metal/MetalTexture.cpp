@@ -230,6 +230,7 @@ void MetalTexture::GenerateMipmaps()
     MTL::SharedEvent*       signalEvent      = m_MetalDevice->newSharedEvent();
     uint64_t signalValue = 0;
     
+    commandQueue->addResidencySet(residencySet);
     commandBuffer->beginCommandBuffer(commandAllocator);
     
     MTL4::ComputeCommandEncoder* computeCommandEncoder =  commandBuffer->computeCommandEncoder();
@@ -252,7 +253,8 @@ void MetalTexture::GenerateMipmaps()
     signalEvent->release();
     commandBuffer->release();
     commandAllocator->release();
-    computeCommandEncoder->release();
+    residencySet->release();
+    commandQueue->release();
 }
 
 

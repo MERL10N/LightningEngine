@@ -56,17 +56,6 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         return;
    
     renderer.Submit(*mainCamera, aspectRatio);
-    for (const auto &entity: skybox)
-    {
-        const auto &[transform, textures, mesh] = skybox.get<TransformComponent, TextureComponent, MeshComponent>(entity);
-        float4x4 scaleMatrix = transform.m_Scale;
-        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
-        float4x4 translationMatrix = transform.m_Translation;
-        
-        float4x4 sr = mul(scaleMatrix, rotationMatrix);
-        float4x4 modelMatrix = mul(sr, translationMatrix);
-        renderer.RenderSkybox(modelMatrix, mesh.m_MeshHandle, textures.texture);
-    }
     
     LightComponent lightsActive;
     
@@ -77,36 +66,66 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         for (const auto &entity : light_sources)
         {
             const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights, mesh.m_InstanceCount);
+            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
         }
     }
+    
+    std::vector<float4x4> meshTransforms;
     
     for (const auto &entity : textured_meshes)
     {
         const auto &[transform, textures, mesh] = textured_meshes.get<TransformComponent, TextureComponent, MeshComponent>(entity);
         
-        float4x4 scaleMatrix = transform.m_Scale;
-        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
-        float4x4 translationMatrix = transform.m_Translation;
-        
-        float4x4 sr = mul(scaleMatrix, rotationMatrix);
-        float4x4 modelMatrix = mul(sr, translationMatrix);
-        
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, textures.texture, lightsActive, mesh.m_InstanceCount);
+        if (mesh.m_Transforms.empty())
+        {
+            meshTransforms.clear();
+            float4x4 scaleMatrix = transform.m_Scale;
+            float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
+            float4x4 translationMatrix = transform.m_Translation;
+            
+            float4x4 sr = mul(scaleMatrix, rotationMatrix);
+            float4x4 modelMatrix = mul(sr, translationMatrix);
+            meshTransforms.emplace_back(modelMatrix);
+            renderer.RenderMesh(meshTransforms, mesh.m_MeshHandle, textures.texture, lightsActive);
+        }
+        else
+        {
+            renderer.RenderMesh(mesh.m_Transforms, mesh.m_MeshHandle, textures.texture, lightsActive);
+        }
     }
     
     for (const auto &entity : meshes)
     {
         const auto &[transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
         
+        if (mesh.m_Transforms.empty())
+        {
+            meshTransforms.clear();
+            float4x4 scaleMatrix = transform.m_Scale;
+            float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
+            float4x4 translationMatrix = transform.m_Translation;
+            
+            float4x4 sr = mul(scaleMatrix, rotationMatrix);
+            float4x4 modelMatrix = mul(sr, translationMatrix);
+            meshTransforms.emplace_back(modelMatrix);
+            renderer.RenderMesh(meshTransforms, mesh.m_MeshHandle, lightsActive);
+        }
+        else
+        {
+            renderer.RenderMesh(mesh.m_Transforms, mesh.m_MeshHandle, lightsActive);
+        }
+    }
+    
+    for (const auto &entity: skybox)
+    {
+        const auto &[transform, textures, mesh] = skybox.get<TransformComponent, TextureComponent, MeshComponent>(entity);
         float4x4 scaleMatrix = transform.m_Scale;
         float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
         float4x4 translationMatrix = transform.m_Translation;
         
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
-        
-        renderer.RenderMesh(modelMatrix, mesh.m_MeshHandle, lightsActive, mesh.m_InstanceCount);
+        renderer.RenderSkybox(modelMatrix, mesh.m_MeshHandle, textures.texture);
     }
     
     renderer.Commit();

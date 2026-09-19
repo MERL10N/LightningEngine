@@ -194,4 +194,3 @@ fragment float4 fragment_main_untextured(VertexOut out [[stage_in]],
     
     return float4(finalColor, 1.0f);
 }
-

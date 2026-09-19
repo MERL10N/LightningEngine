@@ -85,11 +85,12 @@ public:
     void CommitResidencySet();
     
     void Submit(const Camera &camera, const float aspectRatio);
-    void RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent, const int instanceCount = 1);
-    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent, const int instanceCount = 1);
-    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent, const int instanceCount = 1);
+    void RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderMesh(const std::vector<float4x4> &modelMatrices, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderMesh(const std::vector<float4x4> &modelMatrices, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
+    
     void RenderModel(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
-    void RenderSkybox(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture, const int instanceCount = 1);
+    void RenderSkybox(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture);
     
     void Commit();
     
@@ -134,10 +135,11 @@ private:
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     MTL::Buffer*                    m_InstanceBuffer            = nullptr;
     MTL::Buffer*                    m_LightPositions[s_MaxFramesInFlight];
+    MTL::Buffer*                    m_InstanceBuffers[s_MaxFramesInFlight];
+    uint32_t                        m_InstanceWriteOffset       = 0;
     
     std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
-    std::vector<MTL::Buffer*>       m_InstanceBuffers;
     std::vector<MTLMeshAttributes>  m_RenderMeshes;
     std::vector<LightUniforms>      m_Lights;
 

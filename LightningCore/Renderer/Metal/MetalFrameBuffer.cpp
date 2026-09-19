@@ -70,13 +70,14 @@ MetalFrameBuffer::~MetalFrameBuffer()
  
 }
 
-void MetalFrameBuffer::Create(float p_Width, float p_Height)
+void MetalFrameBuffer::Create(float p_Width, float p_Height, MTL::PixelFormat pixelFormat)
 {
+    m_PixelFormat = pixelFormat;
     m_Width = p_Width;
     m_Height = p_Height;
     m_TextureDescriptor->setWidth(m_Width);
     m_TextureDescriptor->setHeight(m_Height);
-    m_TextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_TextureDescriptor->setPixelFormat(pixelFormat);
     m_TextureDescriptor->setTextureType(MTL::TextureType2D);
     m_TextureDescriptor->setStorageMode(MTL::StorageModePrivate);
     m_TextureDescriptor->setUsage(MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead);
@@ -84,7 +85,7 @@ void MetalFrameBuffer::Create(float p_Width, float p_Height)
     m_AttachmentTexture = m_MetalDevice->newTexture(m_TextureDescriptor);
     
     m_MSAATextureDescriptor->setTextureType(MTL::TextureType2DMultisample);
-    m_MSAATextureDescriptor->setPixelFormat(MTL::PixelFormatRGBA8Unorm);
+    m_MSAATextureDescriptor->setPixelFormat(pixelFormat);
     m_MSAATextureDescriptor->setWidth(m_Width);
     m_MSAATextureDescriptor->setHeight(m_Height);
     m_MSAATextureDescriptor->setSampleCount(4);
@@ -151,5 +152,5 @@ void MetalFrameBuffer::Resize(float p_Width, float p_Height)
     assert(p_Width >= 1);
     assert(p_Height >= 1);
 
-    Create(p_Width, p_Height);
+    Create(p_Width, p_Height, m_PixelFormat);
 }

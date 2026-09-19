@@ -8,19 +8,17 @@ using namespace metal;
 
 struct VertexIn
 {
-    float3 aPosition  [[attribute(0)]];
-    float3 aColor     [[attribute(1)]];
-    float3 aNormal    [[attribute(2)]];
-    float2 aTexCoord  [[attribute(3)]];
-    float3 aTangent   [[attribute(4)]];
-    float3 aBitangent [[attribute(5)]];
+    float3 aPosition;
+    float3 aColor;
+    float3 aNormal;
+    float2 aTexCoord;
+    float3 aTangent;
+    float3 aBitangent;
 };
 
 struct VertexOut
 {
     float4 position [[position]];
-    float3 normal;
-    float3 color;
 };
 
 struct Uniforms
@@ -35,9 +33,9 @@ struct InstancedUniforms
     float4x4 model;
 };
 
-vertex VertexOut vertex_light(constant VertexIn* in [[buffer(0)]],
+vertex VertexOut vertex_light(device const VertexIn* in [[buffer(0)]],
                               constant Uniforms &uniforms[[buffer(1)]],
-                              constant InstancedUniforms* instancedUniforms[[buffer(3)]],
+                              device const InstancedUniforms* instancedUniforms[[buffer(3)]],
                               uint vertexID [[vertex_id]],
                               uint instanceID [[instance_id]])
 {

@@ -25,13 +25,15 @@ namespace MTL4
     class RenderCommandEncoder;
 }
 
+#include <Metal/MTLPixelFormat.hpp>
+
 class MetalFrameBuffer
 {
 public:
     MetalFrameBuffer(MTL::Device* p_MetalDevice);
     ~MetalFrameBuffer();
     
-    void Create(float p_Width, float p_Height);
+    void Create(float p_Width, float p_Height, MTL::PixelFormat pixelFormat);
     void Resize(float p_Width, float p_Height);
     
     void UpdateViewport(MTL4::RenderCommandEncoder* p_Encoder);
@@ -60,6 +62,8 @@ private:
     
     MTL::RenderPassColorAttachmentDescriptor* m_ColorAttachmentDescriptor = nullptr;
     MTL::RenderPassDepthAttachmentDescriptor* m_DepthAttachmentDescriptor = nullptr;
+    
+    MTL::PixelFormat m_PixelFormat = MTL::PixelFormatBGRA8Unorm;
     
     float m_Width, m_Height;
     int m_SampleCount;

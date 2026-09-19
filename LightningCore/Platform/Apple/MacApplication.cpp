@@ -21,7 +21,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
 {
     MeshBuilder m_MeshBuilder;
     
-    m_MetalFrameBuffer.Create(p_Width, p_Height);
+    m_MetalFrameBuffer.Create(p_Width, p_Height, m_MacWindow.GetMetalLayer()->pixelFormat());
     
     std::vector<const char*> CubeTextures =
     {
@@ -29,6 +29,17 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
         nullptr,
         "Assets/Textures/brickwall_normal.jpg",
     };
+    
+    
+    std::vector<float4x4> cubePositions
+    {
+        float4x4::translation(float3(4.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(-2.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(-4.0f, 0.0f, 0.0f))
+    };
+     
     
     std::vector<const char*> PlaneTextures =
     {
@@ -54,17 +65,19 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
         "Assets/Textures/skybox/nz.png"
     };
     
+    /*
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
     sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
     
-    
+    */
     
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.AddComponent<TransformComponent>(float3(1.0f, 0.0f, 0.0f));
+    cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
-    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture),
+                                     cubePositions);
     
     
     Entity plane = m_Scene.CreateEntity("Plane");
