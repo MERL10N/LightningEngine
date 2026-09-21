@@ -10,12 +10,12 @@ using namespace metal;
 
 struct VertexIn
 {
-    float3 aPosition  [[attribute(0)]];
-    float3 aColor     [[attribute(1)]];
-    float3 aNormal    [[attribute(2)]];
-    float2 aTexCoord  [[attribute(3)]];
-    float3 aTangent   [[attribute(4)]];
-    float3 aBitangent [[attribute(5)]];
+    float3 aPosition;
+    float3 aColor;
+    float3 aNormal;
+    float2 aTexCoord;
+    float3 aTangent;
+    float3 aBitangent;
 };
 
 struct VertexOut
@@ -44,12 +44,17 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
+};
+
+struct InstancedUniforms
+{
     float4x4 model;
 };
 
+
 struct Material
 {
-    array<texture2d<float>, 6> textureMaps[[id(0)]];
+    texture2d<float> textureMaps[[id(0)]] [5];
 };
 
 float DistributionGGX(float3 N, float3 H, float roughness)
@@ -92,65 +97,81 @@ float3 fresnelSchlick(float cosTheta, float3 F0)
 }
 
 // Vertex shader
-vertex VertexOut vertex_main(VertexIn in [[stage_in]],
+vertex VertexOut vertex_main(constant VertexIn* in[[buffer(0)]],
                              constant Uniforms &uniforms[[buffer(1)]],
                              constant LightUniforms &lightUniforms[[buffer(2)]],
+                             constant InstancedUniforms* instancedUniforms [[buffer(3)]],
+                             uint vertexID   [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in.aPosition, 1.0f);
-    out.fragmentPosition = float3(uniforms.model * float4(in.aPosition, 1.0f));
-    out.normal           = in.aNormal;
-    out.color            = in.aColor;
-    out.texCoord         = in.aTexCoord;
-    
-    
-    out.T               = normalize(float3(uniforms.model * float4(in.aTangent, 0.0f)));
-    out.N               = normalize(float3(uniforms.model * float4(in.aNormal, 0.0f)));
-    out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
-    out.B               = cross(out.N, out.T);
-    
-    float3x3 TBN = transpose(float3x3(out.T, out.B, out.N));
-    out.TangentLightPos = TBN * lightUniforms.lightPosition;
-    out.TangentViewPos  = TBN * lightUniforms.cameraPosition;
-    out.TangentFragPos  = TBN * out.fragmentPosition;
-    
+    out.texCoords = in.aTexCoords;
+    out.position  = in.aPosition;
     return out;
 }
 
 // Fragment shader
 fragment float4 fragment_main(VertexOut out [[stage_in]],
-                             constant Material& textureArgs[[buffer(0)]],
+                             constant Material& material[[buffer(0)]],
                              constant LightUniforms &lightUniforms[[buffer(1)]])
 {
-    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, address::repeat);
+    constexpr sampler textureSampler (mag_filter::linear, min_filter::linear, mip_filter::linear, max_anisotropy(16), address::clamp_to_edge);
     
     // Set the default values
-    float4 diffuseMap  = float4(1.0f);
-    float4 specularMap = float4(1.0f);
-    float4 normalMap   = float4(1.0f);
-    float3 normal      = float3(0.0f, 0.0f, 1.0f);
+    float4 albedoMap    = float4(1.0f);
+    float4 normalMap    = float4(1.0f);
+    float4 metallicMap  = float4(1.0f);
+    float4 roughnessMap = float4(1.0f);
+    float4 aoMap        = float4(1.0f);
+    
+    float3 normal       = float3(0.0f, 0.0f, 1.0f);
+    float  metallic     = 1.0f;
+    float  roughness    = 1.0f;
+    float  ao           = 1.0f;
     
     // Check if the texture maps are nullptr
-    if (!is_null_texture(textureArgs.textureMaps[0]))
+    if (!is_null_texture(material.textureMaps[0]))
     {
-        diffuseMap  = textureArgs.textureMaps[0].sample(textureSampler, out.texCoord);
+        albedoMap  = material.albedoMap.sample(textureSampler, out.texCoord);
     }
     
-    if (!is_null_texture(textureArgs.textureMaps[1]))
+    if (!is_null_texture(material.textureMaps[1]))
     {
-        specularMap = textureArgs.textureMaps[1].sample(textureSampler, out.texCoord);
-    }
-    
-    if (!is_null_texture(textureArgs.textureMaps[2]))
-    {
-        normalMap   = textureArgs.textureMaps[2].sample(textureSampler, out.texCoord);
+        normalMap   = material.normalMap.sample(textureSampler, out.texCoord);
         
         // Transform normal vector to range [-1, 1]
         normal = normalize(normalMap.xyz * 2.0f - 1.0f); // This normal is in tangent space
+        
+        float3 Q1 = ddx(out.position);
+        float3 Q2 = ddy(out.position);
+        float2 st1 = ddx(out.texCoords);
+        float2 st2 = ddy(out.texCoords);
+        
+        float3 N = normal;
+        float3 T = normalize(Q1 * st2.t - Q2 * st1.t);
+        float3 B = -normalize(cross(N,T));
+        float3x3 TBN = float3x3(T, B, N);
+        
+        normal = normalize(TBN * normal);
     }
     
-    if (diffuseMap.a < 0.1)
+    if (!is_null_texture(material.metallicMap))
+    {
+        metallic = material.metallicMap.sample(textureSampler, out.texCoord).r;
+    }
+    
+    if (!is_null_texture(material.roughnessMap))
+    {
+        roughness = material.roughnessMap.sample(textureSampler, out.texCoord).r;
+    }
+    
+    if (!is_null_texture(material.aoMap))
+    {
+        ao = material.aoMap.sample(textureSampler, out.texCoord).r;
+    }
+    
+    
+    if (albedoMap.a < 0.1)
     {
         discard_fragment();
     }
