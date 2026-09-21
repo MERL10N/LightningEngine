@@ -26,12 +26,12 @@ struct Light
 
 struct VertexIn
 {
-    float3 aPosition  [[attribute(0)]];
-    float3 aColor     [[attribute(1)]];
-    float3 aNormal    [[attribute(2)]];
-    float2 aTexCoord  [[attribute(3)]];
-    float3 aTangent   [[attribute(4)]];
-    float3 aBitangent [[attribute(5)]];
+    float3 aPosition;
+    float3 aColor;
+    float3 aNormal;
+    float2 aTexCoord;
+    float3 aTangent;
+    float3 aBitangent;
 };
 
 struct VertexOut
@@ -62,8 +62,6 @@ struct Uniforms
     float4x4 view;
 };
 
-
-// Prepare for instanced rendering
 struct InstancedUniforms
 {
     float4x4 model;
