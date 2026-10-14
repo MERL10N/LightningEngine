@@ -70,8 +70,12 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
         float4x4::translation(float3(4.0f, 0.0f, 0.0f)),
         float4x4::translation(float3(2.0f, 0.0f, 0.0f)),
         float4x4::translation(float3(0.0f, 0.0f, 0.0f)),
-        float4x4::translation(float3(-2.0f, 0.0f, 0.0f)),
-        float4x4::translation(float3(-4.0f, 0.0f, 0.0f))
+        float4x4::translation(float3(4.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(4.0f, -2.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, -2.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, -2.0f, 0.0f))
     };
      
     
@@ -99,13 +103,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
         "Assets/Textures/skybox/nz.png"
     };
     
-    /*
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
     sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
     
-    */
     
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
@@ -118,7 +120,6 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));
     plane.AddComponent<TextureComponent>(PlaneTextures, m_MacWindow.GetDevice());
     plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GeneratePlane(), plane.GetComponent<TextureComponent>().texture));
-    
     
     
     Entity lightCube = m_Scene.CreateEntity("Light Cube");

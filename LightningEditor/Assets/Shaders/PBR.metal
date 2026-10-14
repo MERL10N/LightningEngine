@@ -81,6 +81,7 @@ float GeometrySchlickGGX(float NDotV, float roughness)
     
     return num / denom;
 }
+
 float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
