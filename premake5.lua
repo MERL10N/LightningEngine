@@ -33,8 +33,7 @@ project "LightningCore"
         "ThirdParty/entt/single_include",
         "ThirdParty/hlslpp/**.h",
         "ThirdParty/assimp/assimp/**.h",
-        "ThirdParty/box3d/**.h",
-        "ThirdParty/box3d/**.hpp",
+        "ThirdParty/box3d/include/**.h",
     }
 
     includedirs 
@@ -194,7 +193,7 @@ project "LightningEditor"
         "ThirdParty/metal-cpp",
         "ThirdParty/hlslpp/include",
         "ThirdParty/entt/single_include",
-        "ThirdParty/box3d"
+        "ThirdParty/box3d/include"
     }
 
     filter "system:macosx"
