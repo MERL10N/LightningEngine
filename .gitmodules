@@ -10,3 +10,6 @@
 [submodule "ThirdParty/metal-cpp"]
 	path = ThirdParty/metal-cpp
 	url = https://github.com/apple/metal-cpp.git
+[submodule "ThirdParty/box3d"]
+	path = ThirdParty/box3d
+	url = https://github.com/erincatto/box3d.git
