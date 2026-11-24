@@ -11,6 +11,7 @@ project "LightningCore"
     location "LightningCore"
     kind "StaticLib"
     language "C++"
+    cppdialect "C++23"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -34,6 +35,8 @@ project "LightningCore"
         "ThirdParty/hlslpp/**.h",
         "ThirdParty/assimp/assimp/**.h",
         "ThirdParty/box3d/include/**.h",
+        "ThirdParty/box3d/src/**.h",
+        "ThirdParty/box3d/src/**.c",
     }
 
     includedirs 
@@ -42,7 +45,6 @@ project "LightningCore"
     }
 
     filter "system:macosx"
-        cppdialect "C++23"
         staticruntime "On"
 
      
@@ -84,7 +86,6 @@ project "LightningCore"
             "assimp.6.0.5"
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
     filter {}
     filter {}
@@ -240,7 +241,6 @@ project "LightningEditor"
             ["OTHER_METALCOMPILER_FLAGS"] = "-I\"$(SRCROOT)/../../LightningCore\""
         }
 
-        buildoptions { "-std=c++23", "-stdlib=libc++"}
         linkoptions  { "-stdlib=libc++" }
 
         -- LightningEditor
