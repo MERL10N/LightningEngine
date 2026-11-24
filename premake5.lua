@@ -32,7 +32,9 @@ project "LightningCore"
         "ThirdParty/imgui/imgui_demo.cpp",
         "ThirdParty/entt/single_include",
         "ThirdParty/hlslpp/**.h",
-        "ThirdParty/assimp/assimp/**.h"
+        "ThirdParty/assimp/assimp/**.h",
+        "ThirdParty/box3d/**.h",
+        "ThirdParty/box3d/**.hpp",
     }
 
     includedirs 
@@ -70,7 +72,8 @@ project "LightningCore"
             "ThirdParty/stb",
             "ThirdParty/entt/single_include",
             "ThirdParty/metal-cpp",
-            "ThirdParty/assimp"
+            "ThirdParty/assimp",
+            "ThirdParty/box3d/include"
         }
 
         libdirs
@@ -190,7 +193,8 @@ project "LightningEditor"
         "ThirdParty/glfw/include", 
         "ThirdParty/metal-cpp",
         "ThirdParty/hlslpp/include",
-        "ThirdParty/entt/single_include"
+        "ThirdParty/entt/single_include",
+        "ThirdParty/box3d"
     }
 
     filter "system:macosx"

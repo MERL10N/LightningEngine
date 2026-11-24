@@ -9,7 +9,7 @@
 #define Component_h
 #include "Primitives/MeshBuilder.h"
 #include "Camera/Camera.h"
-#include <vector>
+#include <box3d/box3d.h>
 
 #ifdef __APPLE__
     #include "Renderer/Metal/MetalTexture.h"
@@ -144,6 +144,11 @@ struct CameraComponent
     CameraComponent(const Camera &camera)
     : m_Camera(camera)
     {}
+    
+};
+
+struct PhysicsComponent
+{
     
 };
 
