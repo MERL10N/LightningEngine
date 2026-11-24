@@ -32,6 +32,7 @@
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
 //  2026-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
+//  2026-09-15: [Docking] Fixed applying mouse cursor shapes to secondary viewports (broken in 1.92.6, 2025-12-10).
 //  2026-04-21: Added a Win32-specific implementation of ImGui_ImplGlfw_GetContentScaleXXXX functions for legacy GLFW 3.2.
 //  2026-03-25: Mouse cursor is properly restored if changed by user app/code while using glfwSetInputMode(..., GLFW_CURSOR_DISABLED) or ImGuiConfigFlags_NoMouseCursorChange. Amend change from 2025-12-10.
 //  2026-02-10: Try to set IMGUI_IMPL_GLFW_DISABLE_X11 / IMGUI_IMPL_GLFW_DISABLE_WAYLAND automatically if corresponding headers are not accessible. (#9225)
@@ -710,7 +711,7 @@ void ImGui_ImplGlfw_SetCallbacksChainForAllWindows(bool chain_for_all_windows)
 #if EMSCRIPTEN_USE_PORT_CONTRIB_GLFW3 >= 34020240817
 void ImGui_ImplGlfw_EmscriptenOpenURL(const char* url) { if (url) emscripten::glfw3::OpenURL(url); }
 #else
-EM_JS(void, ImGui_ImplGlfw_EmscriptenOpenURL, (const char* url), { url = url ? UTF8ToString(url) : null; if (url) window.open(url, '_blank'); });
+EM_JS(void, ImGui_ImplGlfw_EmscriptenOpenURL, (const char* url), { url = url ? UTF8ToString(url) : null; if (url) window.open(url, '_blank', 'noopener'); });
 #endif
 #endif
 
@@ -816,11 +817,13 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
 
     // Windows: register a WndProc hook so we can intercept some messages.
 #ifdef _WIN32
-    HWND hwnd = (HWND)main_viewport->PlatformHandleRaw;
-    ::SetPropA(hwnd, "IMGUI_BACKEND_DATA", bd);
-    bd->PrevWndProc = (WNDPROC)::GetWindowLongPtrW(hwnd, GWLP_WNDPROC);
-    IM_ASSERT(bd->PrevWndProc != nullptr);
-    ::SetWindowLongPtrW((HWND)main_viewport->PlatformHandleRaw, GWLP_WNDPROC, (LONG_PTR)ImGui_ImplGlfw_WndProc);
+    if (HWND hwnd = (HWND)main_viewport->PlatformHandleRaw)
+    {
+        ::SetPropA(hwnd, "IMGUI_BACKEND_DATA", bd);
+        bd->PrevWndProc = (WNDPROC)::GetWindowLongPtrW(hwnd, GWLP_WNDPROC);
+        IM_ASSERT(bd->PrevWndProc != nullptr);
+        ::SetWindowLongPtrW((HWND)main_viewport->PlatformHandleRaw, GWLP_WNDPROC, (LONG_PTR)ImGui_ImplGlfw_WndProc);
+    }
 #endif
 
 #if GLFW_HAS_X11
@@ -901,9 +904,12 @@ void ImGui_ImplGlfw_Shutdown()
     // Windows: restore our WndProc hook
 #ifdef _WIN32
     ImGuiViewport* main_viewport = ImGui::GetMainViewport();
-    ::SetPropA((HWND)main_viewport->PlatformHandleRaw, "IMGUI_BACKEND_DATA", nullptr);
-    ::SetWindowLongPtrW((HWND)main_viewport->PlatformHandleRaw, GWLP_WNDPROC, (LONG_PTR)bd->PrevWndProc);
-    bd->PrevWndProc = nullptr;
+    if (HWND hwnd = (HWND)main_viewport->PlatformHandleRaw)
+    {
+        ::SetPropA(hwnd, "IMGUI_BACKEND_DATA", nullptr);
+        ::SetWindowLongPtrW(hwnd, GWLP_WNDPROC, (LONG_PTR)bd->PrevWndProc);
+        bd->PrevWndProc = nullptr;
+    }
 #endif
 
 #if GLFW_HAS_X11
@@ -996,12 +1002,21 @@ static void ImGui_ImplGlfw_UpdateMouseCursor()
     ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
     if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange) || glfwGetInputMode(bd->Window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
     {
-        bd->LastMouseCursor = nullptr;  // Invalidate so that if user changes underlying cursor we will update it next time we can.
+        bd->LastMouseCursor = nullptr; // Invalidate so that if user changes underlying cursor we will update it next time we can.
         return;
     }
 
     ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
     ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
+
+#if GLFW_HAS_CREATECURSOR
+    GLFWcursor* set_mouse_cursor = bd->MouseCursors[imgui_cursor] ? bd->MouseCursors[imgui_cursor] : bd->MouseCursors[ImGuiMouseCursor_Arrow];
+    if (bd->LastMouseCursor == set_mouse_cursor)
+        set_mouse_cursor = NULL;
+    else
+        bd->LastMouseCursor = set_mouse_cursor;
+#endif
+
     for (int n = 0; n < platform_io.Viewports.Size; n++)
     {
         GLFWwindow* window = (GLFWwindow*)platform_io.Viewports[n]->PlatformHandle;
@@ -1019,12 +1034,8 @@ static void ImGui_ImplGlfw_UpdateMouseCursor()
             // Show OS mouse cursor
             // FIXME-PLATFORM: Unfocused windows seems to fail changing the mouse cursor with GLFW 3.2, but 3.3 works here.
 #if GLFW_HAS_CREATECURSOR
-            GLFWcursor* cursor = bd->MouseCursors[imgui_cursor] ? bd->MouseCursors[imgui_cursor] : bd->MouseCursors[ImGuiMouseCursor_Arrow];
-            if (bd->LastMouseCursor != cursor)
-            {
-                glfwSetCursor(window, cursor);
-                bd->LastMouseCursor = cursor;
-            }
+            if (set_mouse_cursor)
+                glfwSetCursor(window, set_mouse_cursor);
 #endif
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
@@ -1422,6 +1433,7 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
         glfwMakeContextCurrent(vd->Window);
         glfwSwapInterval(0);
     }
+    bd->LastMouseCursor = nullptr; // Invalidate so that cursor is set again
 }
 
 static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)

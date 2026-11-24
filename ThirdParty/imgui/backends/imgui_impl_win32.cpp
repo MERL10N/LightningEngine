@@ -23,6 +23,7 @@
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
 //  2026-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
+//  2026-11-03: [Viewports] Make windows appear with ::SetWindowPos() w/ SWP_NOOWNERZORDER instead of unparenting + ShowWindow(). Fixes missing taskbar icon for newly appearing windows that are parented and use ImGuiViewportFlags_NoFocusOnAppearing. (#7354, #8669)
 //  2026-05-19: DPI: ImGui_ImplWin32_EnableDpiAwareness() helper uses SetProcessDpiAwarenessContext() instead of SetThreadDpiAwarenessContext(), fixes DPI scaling issues with e.g. OpenGL. (#9403)
 //  2026-03-31: [Viewports] Fixed setting/getting size when viewports have OS decorations (e.g. io.ConfigViewportsNoDecoration = false) and process is running in Per-Monitor V2 DPI mode. (#8897)
 //  2026-01-28: Inputs: Minor optimization not submitting gamepad input if packet number has not changed (reworked from 2025-09-23 attempt). (#9202, #8556)
@@ -1246,20 +1247,12 @@ static void ImGui_ImplWin32_ShowWindow(ImGuiViewport* viewport)
     ImGui_ImplWin32_ViewportData* vd = (ImGui_ImplWin32_ViewportData*)viewport->PlatformUserData;
     IM_ASSERT(vd->Hwnd != 0);
 
-    // ShowParent() even with SW_SHOWNA also brings parent to front, which is not always desirable,
-    // so we temporarily disable parenting. (#7354, #8669)
-    bool avoid_bringing_parent_to_front = vd->HwndParent != NULL && (viewport->Flags & (ImGuiViewportFlags_NoFocusOnAppearing | ImGuiViewportFlags_NoTaskBarIcon)) != 0;
-    if (avoid_bringing_parent_to_front)
-        ::SetWindowLongPtr(vd->Hwnd, GWLP_HWNDPARENT, (LONG_PTR)nullptr);
-
+    // ShowWindow() even with SW_SHOWNA also brings parent to front, which is not always desirable. We previously temporarily disabled parenting. (#7354, #8669)
+    // Using SetWindowPos() directly w/ SWP_NOOWNERZORDER seems to solve things better and prevent situation where task bar icon does not appear. (#9568)
     if (viewport->Flags & ImGuiViewportFlags_NoFocusOnAppearing)
-        ::ShowWindow(vd->Hwnd, SW_SHOWNA);
+        ::SetWindowPos(vd->Hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW | SWP_NOACTIVATE);
     else
-        ::ShowWindow(vd->Hwnd, SW_SHOW);
-
-    // Restore
-    if (avoid_bringing_parent_to_front)
-        ::SetWindowLongPtr(vd->Hwnd, GWLP_HWNDPARENT, (LONG_PTR)vd->HwndParent);
+        ::SetWindowPos(vd->Hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW);
 }
 
 static void ImGui_ImplWin32_UpdateWindow(ImGuiViewport* viewport)
@@ -1421,22 +1414,6 @@ static float ImGui_ImplWin32_GetWindowDpiScale(ImGuiViewport* viewport)
     return ImGui_ImplWin32_GetDpiScaleForHwnd(vd->Hwnd);
 }
 
-// FIXME-DPI: Testing DPI related ideas
-static void ImGui_ImplWin32_OnChangedViewport(ImGuiViewport* viewport)
-{
-    (void)viewport;
-#if 0
-    ImGuiStyle default_style;
-    //default_style.WindowPadding = ImVec2(0, 0);
-    //default_style.WindowBorderSize = 0.0f;
-    //default_style.ItemSpacing.y = 3.0f;
-    //default_style.FramePadding = ImVec2(0, 0);
-    default_style.ScaleAllSizes(viewport->DpiScale);
-    ImGuiStyle& style = ImGui::GetStyle();
-    style = default_style;
-#endif
-}
-
 namespace ImGui { extern ImGuiIO& GetIO(ImGuiContext*); extern ImGuiPlatformIO& GetPlatformIO(ImGuiContext*); }
 
 static LRESULT CALLBACK ImGui_ImplWin32_WndProcHandler_PlatformWindow(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -1518,7 +1495,6 @@ static void ImGui_ImplWin32_InitMultiViewportSupport(bool platform_has_own_dc)
     platform_io.Platform_SetWindowAlpha = ImGui_ImplWin32_SetWindowAlpha;
     platform_io.Platform_UpdateWindow = ImGui_ImplWin32_UpdateWindow;
     platform_io.Platform_GetWindowDpiScale = ImGui_ImplWin32_GetWindowDpiScale; // FIXME-DPI
-    platform_io.Platform_OnChangedViewport = ImGui_ImplWin32_OnChangedViewport; // FIXME-DPI
 
     // Register main window handle (which is owned by the main application, not by us)
     // This is mostly for simplicity and consistency, so that our code (e.g. mouse handling etc.) can use same logic for main and secondary viewports.

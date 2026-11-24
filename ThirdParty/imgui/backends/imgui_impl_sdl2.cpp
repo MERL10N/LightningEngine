@@ -26,6 +26,10 @@
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
 //  2026-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
+//  2026-11-09: Inputs: iOS: restore SDL_StartTextInput()/SDL_StopTextInput() in IME handler for on-screen keyboard support. (#7636, #9474, #9617)
+//  2026-11-05: [Docking] macOS: fixed stuck down keys/buttons when they were held while the focused viewport gets destroyed. (#9121, #7853)
+//  2026-08-06: Fixed querying framebuffer scale when using Metal. (#5592)
+//  2026-07-15: Inputs: Android: restore SDL_StartTextInput()/SDL_StopTextInput() in IME handler for on-screen keyboard support. (#7636, #9474)
 //  2026-04-16: Made ImGui_ImplSDL2_GetContentScaleForWindow(), ImGui_ImplSDL2_GetContentScaleForDisplay() helpers return a minimum of 1.0f, as some Linux setup seems to report <1.0f value and this breaks scaling border size. (#9369)
 //  2026-03-09: [Docking] Fixed an issue dated 2025/04/09 (1.92 WIP) where a refactor+merge caused ImGuiBackendFlags_HasMouseHoveredViewport to never be set, causing foreign windows to be ignored when deciding of hovered viewport. (#9284)
 //  2026-02-13: Inputs: systems other than X11 are back to starting mouse capture on mouse down (reverts 2025-02-26 change). Only X11 requires waiting for a drag by default (not ideal, but a better default for X11 users). Added ImGui_ImplSDL2_SetMouseCaptureMode() for X11 debugger users. (#3650, #6410, #9235)
@@ -149,12 +153,20 @@
 #define SDL_HAS_PER_MONITOR_DPI             SDL_VERSION_ATLEAST(2,0,4)
 #define SDL_HAS_VULKAN                      SDL_VERSION_ATLEAST(2,0,6)
 #define SDL_HAS_DISPLAY_EVENT               SDL_VERSION_ATLEAST(2,0,9)
+#if defined(__APPLE__)
+#define SDL_HAS_METAL                       SDL_VERSION_ATLEAST(2,0,14)
+#else
+#define SDL_HAS_METAL                       0
+#endif
 #define SDL_HAS_OPEN_URL                    SDL_VERSION_ATLEAST(2,0,14)
 #define SDL_HAS_SHOW_WINDOW_ACTIVATION_HINT SDL_VERSION_ATLEAST(2,0,18)
 #if SDL_HAS_VULKAN
 #include <SDL_vulkan.h>
 #else
 static const Uint32 SDL_WINDOW_VULKAN = 0x10000000;
+#endif
+#if SDL_HAS_METAL
+#include <SDL_metal.h>
 #endif
 
 // SDL Data
@@ -169,6 +181,7 @@ struct ImGui_ImplSDL2_Data
     bool                    IsWayland;
     bool                    IsVulkan;
     bool                    WantUpdateMonitors;
+    ImVector<Uint32>        LastFrameDestroyedWindowIDs;
 
     // Mouse handling
     Uint32                  MouseWindowID;
@@ -231,6 +244,18 @@ static void ImGui_ImplSDL2_PlatformSetImeData(ImGuiContext*, ImGuiViewport* view
         r.w = 1;
         r.h = (int)data->InputLineHeight;
         SDL_SetTextInputRect(&r);
+
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+        // SDL_StartTextInput() is needed on Android and iOS to show the on-screen keyboard. (#7636, #9474, #6306)
+        // It was removed in a7703fe6 due to concerns about its relation to desktop IME, but is required on mobile.
+        SDL_StartTextInput();
+#endif
+    }
+    else
+    {
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+        SDL_StopTextInput();
+#endif
     }
 }
 
@@ -446,7 +471,8 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
         {
-            if (ImGui_ImplSDL2_GetViewportForWindowID(event->button.windowID) == nullptr)
+            ImGuiViewport* viewport = ImGui_ImplSDL2_GetViewportForWindowID(event->button.windowID);
+            if (viewport == nullptr && bd->LastFrameDestroyedWindowIDs.contains(event->key.windowID) == false)
                 return false;
             int mouse_button = -1;
             if (event->button.button == SDL_BUTTON_LEFT) { mouse_button = 0; }
@@ -472,7 +498,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
         case SDL_KEYUP:
         {
             ImGuiViewport* viewport = ImGui_ImplSDL2_GetViewportForWindowID(event->key.windowID);
-            if (viewport == nullptr)
+            if (viewport == nullptr && bd->LastFrameDestroyedWindowIDs.contains(event->key.windowID) == false)
                 return false;
             //IMGUI_DEBUG_LOG("SDL_KEY%s : key=0x%08X ('%s'), scancode=%d ('%s'), mod=%X, windowID=%d, viewport=%08X\n",
             //    (event->type == SDL_KEYDOWN) ? "DOWN" : "UP  ", event->key.keysym.sym, SDL_GetKeyName(event->key.keysym.sym), event->key.keysym.scancode, SDL_GetScancodeName(event->key.keysym.scancode), event->key.keysym.mod, event->key.windowID, viewport ? viewport->ID : 0);
@@ -537,7 +563,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
 }
 
 #ifdef __EMSCRIPTEN__
-EM_JS(void, ImGui_ImplSDL2_EmscriptenOpenURL, (char const* url), { url = url ? UTF8ToString(url) : null; if (url) window.open(url, '_blank'); });
+EM_JS(void, ImGui_ImplSDL2_EmscriptenOpenURL, (char const* url), { url = url ? UTF8ToString(url) : null; if (url) window.open(url, '_blank', 'noopener'); });
 #endif
 
 static bool ImGui_ImplSDL2_Init(SDL_Window* window, SDL_Renderer* renderer, void* sdl_gl_context)
@@ -1022,6 +1048,10 @@ static void ImGui_ImplSDL2_GetWindowSizeAndFramebufferScale(SDL_Window* window, 
     else if (SDL_GetWindowFlags(window) & SDL_WINDOW_VULKAN)
         SDL_Vulkan_GetDrawableSize(window, &display_w, &display_h);
 #endif
+#if SDL_HAS_METAL
+    else if (SDL_GetWindowFlags(window) & SDL_WINDOW_METAL)
+        SDL_Metal_GetDrawableSize(window, &display_w, &display_h);
+#endif
     else
         SDL_GL_GetDrawableSize(window, &display_w, &display_h);
     if (out_size != nullptr)
@@ -1074,6 +1104,8 @@ void ImGui_ImplSDL2_NewFrame()
 
     // Update game controllers (if enabled and available)
     ImGui_ImplSDL2_UpdateGamepads();
+
+    bd->LastFrameDestroyedWindowIDs.resize(0);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -1127,6 +1159,7 @@ static void ImGui_ImplSDL2_CreateWindow(ImGuiViewport* viewport)
     sdl_flags |= (viewport->Flags & ImGuiViewportFlags_TopMost) ? SDL_WINDOW_ALWAYS_ON_TOP : 0;
 #endif
     vd->Window = SDL_CreateWindow("No Title Yet", (int)viewport->Pos.x, (int)viewport->Pos.y, (int)viewport->Size.x, (int)viewport->Size.y, sdl_flags);
+    vd->WindowID = SDL_GetWindowID(vd->Window);
     vd->WindowOwned = true;
     if (use_opengl)
     {
@@ -1136,7 +1169,7 @@ static void ImGui_ImplSDL2_CreateWindow(ImGuiViewport* viewport)
     if (use_opengl && backup_context)
         SDL_GL_MakeCurrent(vd->Window, backup_context);
 
-    viewport->PlatformHandle = (void*)(intptr_t)SDL_GetWindowID(vd->Window);
+    viewport->PlatformHandle = (void*)(intptr_t)vd->WindowID;
     viewport->PlatformHandleRaw = nullptr;
     SDL_SysWMinfo info;
     SDL_VERSION(&info.version);
@@ -1154,6 +1187,8 @@ static void ImGui_ImplSDL2_DestroyWindow(ImGuiViewport* viewport)
 {
     if (ImGui_ImplSDL2_ViewportData* vd = (ImGui_ImplSDL2_ViewportData*)viewport->PlatformUserData)
     {
+        ImGui_ImplSDL2_Data* bd = ImGui_ImplSDL2_GetBackendData();
+        bd->LastFrameDestroyedWindowIDs.push_back(vd->WindowID);
         if (vd->GLContext && vd->WindowOwned)
             SDL_GL_DeleteContext(vd->GLContext);
         if (vd->Window && vd->WindowOwned)
