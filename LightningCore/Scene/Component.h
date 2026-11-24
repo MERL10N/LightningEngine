@@ -99,10 +99,15 @@ struct TextureComponent
 struct MeshComponent
 {
     MeshHandle m_MeshHandle;
+    std::vector<float4x4> m_Transforms;
     MeshComponent() = default;
     MeshComponent(const MeshComponent&) = default;
     MeshComponent(const MeshHandle mesh)
     : m_MeshHandle(mesh)
+    {}
+    MeshComponent(const MeshHandle mesh, const std::vector<float4x4> &m_Transforms)
+    : m_MeshHandle(mesh),
+     m_Transforms(std::move(m_Transforms))
     {}
 };
 

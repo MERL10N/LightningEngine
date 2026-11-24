@@ -116,7 +116,7 @@ MetalShader::MetalShader(const std::string& filePath, MTL::Device* metalDevice, 
 
 }
 
-MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::VertexDescriptor* vertexDescriptor, MTL::PixelFormat depthAttachmentPixelFormat)
+MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction, const char* fragmentFunction, MTL::Device* metalDevice, MTL::PixelFormat depthAttachmentPixelFormat)
 : m_MetalDevice(metalDevice),
   m_CompilerDescriptor(MTL4::CompilerDescriptor::alloc()->init()),
   m_Compiler(m_MetalDevice->newCompiler(m_CompilerDescriptor, nullptr)),
@@ -174,8 +174,6 @@ MetalShader::MetalShader(const std::string &filePath, const char* vertexFunction
     assert(m_RenderPipelineDescriptor);
     
     m_ColorAttachmentDescriptor = m_RenderPipelineDescriptor->colorAttachments()->object(0);
-    m_ColorAttachmentDescriptor->setPixelFormat(MTL::PixelFormatBGRA8Unorm);
-
     m_ColorAttachmentDescriptor->setBlendingState(MTL4::BlendStateEnabled);
     m_ColorAttachmentDescriptor->setRgbBlendOperation(MTL::BlendOperationAdd);
     m_ColorAttachmentDescriptor->setAlphaBlendOperation(MTL::BlendOperationAdd);

@@ -50,15 +50,34 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     
     m_MacEditorLayer.DarkModeTheme();
     
-    m_MetalFrameBuffer.Create(m_Width, m_Height);
+    m_MetalFrameBuffer.Create(m_Width, m_Height, m_MacWindow.GetMetalLayer()->pixelFormat());
     m_MetalRenderer.AddToResidencySet(m_MetalFrameBuffer.GetAttachmentTexture());
+    
+    MeshBuilder m_MeshBuilder;
+    
+    m_MetalFrameBuffer.Create(p_Width, p_Height, m_MacWindow.GetMetalLayer()->pixelFormat());
     
     std::vector<const char*> CubeTextures =
     {
-        "Assets/Textures/container2.png",
-        "Assets/Textures/container2_specular.png",
-        nullptr
+        "Assets/Textures/brickwall.jpg",
+        nullptr,
+        "Assets/Textures/brickwall_normal.jpg",
     };
+    
+    
+    std::vector<float4x4> cubePositions
+    {
+        float4x4::translation(float3(4.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, 0.0f, 0.0f)),
+        float4x4::translation(float3(4.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, 2.0f, 0.0f)),
+        float4x4::translation(float3(4.0f, -2.0f, 0.0f)),
+        float4x4::translation(float3(2.0f, -2.0f, 0.0f)),
+        float4x4::translation(float3(0.0f, -2.0f, 0.0f))
+    };
+     
     
     std::vector<const char*> PlaneTextures =
     {
@@ -90,11 +109,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
     
     
-    
     Entity cube = m_Scene.CreateEntity("Cube");
-    cube.AddComponent<TransformComponent>(float3(1.0f, 0.0f, 0.0f));
+    cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
-    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture));
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture),
+                                     cubePositions);
     
     
     Entity plane = m_Scene.CreateEntity("Plane");
@@ -108,7 +127,6 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     lightCube.AddComponent<LightComponent>(float3(1.0f, 1.0f, 1.0f));
     lightCube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube()));
     
-    
     Entity skybox = m_Scene.CreateEntity("Skybox");
     skybox.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f), float3(1000.0f, 1000.0f, 1000.0f));
     skybox.AddComponent<TextureComponent>(Skybox, m_MacWindow.GetDevice());
@@ -120,12 +138,10 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     m_CameraEntity.AddComponent<CameraComponent>();
     m_CameraEntity.GetComponent<CameraComponent>().b_Primary = true;
     
-    
     // This needs to be removed. Application classes should never have to worry about managing GPU residency.
     m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
     m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetArgumentBuffer());
     
-     
     m_MetalRenderer.CommitResidencySet();
 }
 

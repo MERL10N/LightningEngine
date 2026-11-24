@@ -9,12 +9,12 @@ using namespace metal;
 
 struct VertexIn
 {
-    float3 aPosition  [[attribute(0)]];
-    float3 aColor     [[attribute(1)]];
-    float3 aNormal    [[attribute(2)]];
-    float2 aTexCoord  [[attribute(3)]];
-    float3 aTangent   [[attribute(4)]];
-    float3 aBitangent [[attribute(5)]];
+    float3 aPosition;
+    float3 aColor;
+    float3 aNormal;
+    float2 aTexCoord;
+    float3 aTangent;
+    float3 aBitangent;
 };
 struct VertexOut
 {
@@ -26,6 +26,11 @@ struct Uniforms
 {
     float4x4 projection;
     float4x4 view;
+};
+
+// Prepare for instanced rendering
+struct InstancedUniforms
+{
     float4x4 model;
 };
 
@@ -36,6 +41,7 @@ struct CubeMapArguments
 
 vertex VertexOut vertex_skybox(constant VertexIn* in [[buffer(0)]],
                              constant Uniforms &uniforms[[buffer(1)]],
+                             constant InstancedUniforms* instancedUniforms [[buffer(2)]],
                              uint vertexID [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
@@ -43,7 +49,7 @@ vertex VertexOut vertex_skybox(constant VertexIn* in [[buffer(0)]],
     float4 position = float4(in[vertexID].aPosition, 1.0f);
     
     VertexOut out;
-    out.position = uniforms.projection * uniforms.view * uniforms.model * position;
+    out.position = uniforms.projection * uniforms.view * instancedUniforms[instanceID].model * position;
     out.texCoords = position;
     
     return out;

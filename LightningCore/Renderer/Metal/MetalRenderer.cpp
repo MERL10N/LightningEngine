@@ -7,7 +7,6 @@
 #include "QuartzCore/CAMetalLayer.hpp"
 #include "Primitives/MeshBuilder.h"
 #include "MetalTexture.h"
-#include "MetalVertexDescriptor.h"
 #include "Primitives/Sprite.h"
 #include "Scene/Scene.h"
 #include "Camera/Camera.h"
@@ -60,6 +59,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         metalCommandAllocators = m_MetalDevice->newCommandAllocator();
     }
     m_MetalCommandQueue->addResidencySet(m_ResidencySet);
+    m_MetalCommandQueue->addResidencySet(m_MetalLayer->residencySet());
     
     for (int i = 0; i < s_MaxEntities; ++i)
     {
@@ -67,6 +67,14 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
         m_LightUniformBufferPool.emplace_back(m_MetalDevice->newBuffer(sizeof(LightUniforms), MTL::ResourceStorageModeShared));
         m_ResidencySet->addAllocation(m_UniformBuffers[i]);
         m_ResidencySet->addAllocation(m_LightUniformBufferPool[i]);
+    }
+    
+    const uint64_t instanceBufferSize = sizeof(InstancedUniforms) * s_MaxInstances;
+    
+    for (auto& buffer : m_InstanceBuffers)
+    {
+        buffer = m_MetalDevice->newBuffer(instanceBufferSize, MTL::ResourceStorageModeShared);
+        m_ResidencySet->addAllocation(buffer);
     }
     
     for (uint8_t i = 0; i < s_MaxFramesInFlight; ++i)
@@ -79,7 +87,7 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     m_DepthStencilDescriptor->setDepthWriteEnabled(true);
     m_DepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
     
-    m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionAlways);
+    m_DepthStencilDescriptor->setDepthCompareFunction(MTL::CompareFunctionLessEqual);
     m_DepthStencilDescriptor->setDepthWriteEnabled(false);
     m_SkyboxDepthStencilState = m_MetalDevice->newDepthStencilState(m_DepthStencilDescriptor);
 
@@ -92,51 +100,32 @@ MetalRenderer::MetalRenderer(MTL::Device* p_MetalDevice, CA::MetalLayer* p_Metal
     m_TextureShader = MetalShader("Assets/Shaders/Shader.metal",
                                   "vertex_main", "fragment_main",
                                   m_MetalDevice,
-                                  m_3DVertexDescriptor,
                                   m_MetalLayer->pixelFormat());
     
     m_UntexturedShader = MetalShader("Assets/Shaders/Shader.metal",
                                      "vertex_main",
                                      "fragment_main_untextured",
                                      m_MetalDevice,
-                                     m_3DVertexDescriptor,
                                      m_MetalLayer->pixelFormat());
     
     m_LightShader = MetalShader("Assets/Shaders/Light.metal",
                                 "vertex_light",
                                 "fragment_light",
                                 m_MetalDevice,
-                                m_LightVertexDescriptor,
                                 m_MetalLayer->pixelFormat());
     
     m_SkyboxShader = MetalShader("Assets/Shaders/Skybox.metal",
                                  "vertex_skybox",
                                  "fragment_skybox",
                                  m_MetalDevice,
-                                 m_SkyboxVertexDescriptor,
                                  m_MetalLayer->pixelFormat());
     
     
-    if (m_3DVertexDescriptor)
-    {
-        m_3DVertexDescriptor->release();
-        m_3DVertexDescriptor = nullptr;
-    }
-    if (m_LightVertexDescriptor)
-    {
-        m_LightVertexDescriptor->release();
-        m_LightVertexDescriptor = nullptr;
-    }
-    if (m_SkyboxVertexDescriptor)
-    {
-        m_SkyboxVertexDescriptor->release();
-        m_SkyboxVertexDescriptor = nullptr;
-    }
 }
 
 MetalRenderer::~MetalRenderer()
 {
-    for (uint8_t i = 0; i < s_MaxFramesInFlight; ++i)
+    for (int i = 0; i < s_MaxFramesInFlight; ++i)
     {
         m_LightPositions[i]->release();
         m_LightPositions[i] = nullptr;
@@ -144,15 +133,15 @@ MetalRenderer::~MetalRenderer()
     
     for (int i = 0; i < s_MaxEntities; ++i)
     {
-        if (m_UniformBuffers.at(i))
+        if (m_UniformBuffers[i])
         {
-            m_UniformBuffers.at(i)->release();
-            m_UniformBuffers.at(i) = nullptr;
+            m_UniformBuffers[i]->release();
+            m_UniformBuffers[i] = nullptr;
         }
-        if (m_LightUniformBufferPool.at(i))
+        if (m_LightUniformBufferPool[i])
         {
-            m_LightUniformBufferPool.at(i)->release();
-            m_LightUniformBufferPool.at(i) = nullptr;
+            m_LightUniformBufferPool[i]->release();
+            m_LightUniformBufferPool[i] = nullptr;
         }
     }
     
@@ -242,7 +231,6 @@ MeshHandle MetalRenderer::Create3DMesh(const Mesh_3D &mesh, const MetalTexture &
         }
     }
     
-    
     m_RenderMeshes.emplace_back(meshAttributes);
     
     return m_RenderMeshes.size() - 1;
@@ -273,6 +261,7 @@ void MetalRenderer::Submit(const Camera &camera, const float aspectRatio)
         m_FrameAvailableSharedEvent->waitUntilSignaledValue(m_FrameNum - s_MaxFramesInFlight, 33);
     }
     
+    m_InstanceWriteOffset = 0;
     m_FrameIndex = m_FrameNum % s_MaxFramesInFlight;
     m_MetalCommandAllocators[m_FrameIndex]->reset();
     m_MetalCommandBuffer->beginCommandBuffer(m_MetalCommandAllocators[m_FrameIndex]);
@@ -306,21 +295,29 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
     if (meshHandle >= m_RenderMeshes.size())
         return;
     
+    if (m_InstanceWriteOffset + 1 > s_MaxInstances)
+        return;
     
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
     memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
+    
+    const InstancedUniforms instancedUniforms = {modelMatrix};
+    
+    const uint64_t stride = sizeof(InstancedUniforms);
+    const uint64_t byteOffset = m_InstanceWriteOffset * stride;
+    
+    memcpy(static_cast<uint8_t*>(m_InstanceBuffers[m_FrameIndex]->contents()) + byteOffset, &instancedUniforms, stride);
+    
+
     
     float3 color = lightComponent.m_Color;
     memcpy(m_LightPositions[m_UniformBufferIndex]->contents(), &color, sizeof(color));
-    
-    float3 position = float3(modelMatrix[3].x,
-                             modelMatrix[3].y,
-                             modelMatrix[3].z);
-    
+
 
     m_RenderCommandEncoder->setRenderPipelineState(m_LightShader.GetRenderPipelineState());
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
+    m_VertexArgumentTable->setAddress(m_InstanceBuffers[m_FrameIndex]->gpuAddress() + byteOffset, 3);
     m_FragmentArgumentTable->setAddress(m_LightPositions[m_UniformBufferIndex]->gpuAddress(), 0);
     m_RenderCommandEncoder->setArgumentTable(m_VertexArgumentTable, MTL::RenderStageVertex);
     m_RenderCommandEncoder->setArgumentTable(m_FragmentArgumentTable, MTL::RenderStageFragment);
@@ -328,25 +325,36 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
                                                   m_RenderMeshes[meshHandle].m_IndexCount,
                                                   MTL::IndexTypeUInt16,
                                                   m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
-                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length(),
+                                                  1);
     ++m_UniformBufferIndex;
+    ++m_InstanceWriteOffset;
 }
 
-void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent)
+void MetalRenderer::RenderMesh(const std::vector<float4x4> &modelMatrices, const MeshHandle meshHandle, const LightComponent &lightComponent)
 {
     if (meshHandle >= m_RenderMeshes.size())
         return;
+    
+    if (modelMatrices.size() + m_InstanceWriteOffset > s_MaxInstances)
+        return;
 
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
     m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
     
+    const uint64_t stride = sizeof(InstancedUniforms);
+    const uint64_t byteOffset = m_InstanceWriteOffset * stride;
+    
+    memcpy(static_cast<uint8_t*>(m_InstanceBuffers[m_FrameIndex]->contents()) + byteOffset, modelMatrices.data(), modelMatrices.size() * stride);
+    
     m_RenderCommandEncoder->setRenderPipelineState(m_UntexturedShader.GetRenderPipelineState());
     
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers.at(m_UniformBufferIndex)->gpuAddress(), 1);
+    m_VertexArgumentTable->setAddress(m_InstanceBuffers[m_FrameIndex]->gpuAddress() + byteOffset, 3);
     m_FragmentArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 0);
     
 
@@ -356,30 +364,42 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix, const MeshHandle mes
                                                   m_RenderMeshes[meshHandle].m_IndexCount,
                                                   MTL::IndexTypeUInt16,
                                                   m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
-                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length(),
+                                                  modelMatrices.size());
     
     ++m_UniformBufferIndex;
+    m_InstanceWriteOffset += modelMatrices.size();
 }
 
-void MetalRenderer::RenderMesh(const float4x4& modelMatrix,
+void MetalRenderer::RenderMesh(const std::vector<float4x4> &modelMatrices,
                                const MeshHandle meshHandle,
                                const MetalTexture& texture,
                                const LightComponent &lightComponent)
 {
     if (meshHandle >= m_RenderMeshes.size())
         return;
+    
+    if (modelMatrices.size() + m_InstanceWriteOffset > s_MaxInstances)
+        return;
 
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
-    memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
+    memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
     m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
+    
+    
+    const uint64_t stride = sizeof(InstancedUniforms);
+    const uint64_t byteOffset = m_InstanceWriteOffset * stride;
+    
+    memcpy(static_cast<uint8_t*>(m_InstanceBuffers[m_FrameIndex]->contents()) + byteOffset, modelMatrices.data(), modelMatrices.size() * stride);
     
     m_RenderCommandEncoder->setRenderPipelineState(texture.GetTextures().size() > 0 ? m_TextureShader.GetRenderPipelineState() : m_UntexturedShader.GetRenderPipelineState());
     
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers.at(m_UniformBufferIndex)->gpuAddress(), 1);
     m_VertexArgumentTable->setAddress(m_LightUniformBufferPool[m_UniformBufferIndex]->gpuAddress(), 2);
+    m_VertexArgumentTable->setAddress(m_InstanceBuffers[m_FrameIndex]->gpuAddress() + byteOffset, 3);
 
     if (texture.GetTextures().size() > 0)
     {
@@ -397,9 +417,11 @@ void MetalRenderer::RenderMesh(const float4x4& modelMatrix,
                                                   m_RenderMeshes[meshHandle].m_IndexCount,
                                                   MTL::IndexTypeUInt16,
                                                   m_RenderMeshes[meshHandle].m_IndexBuffer->gpuAddress(),
-                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length());
+                                                  m_RenderMeshes[meshHandle].m_IndexBuffer->length(),
+                                                  modelMatrices.size());
     
     ++m_UniformBufferIndex;
+    m_InstanceWriteOffset += modelMatrices.size();
 }
 
 void MetalRenderer::RenderSkybox(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture)
@@ -407,14 +429,25 @@ void MetalRenderer::RenderSkybox(const float4x4 &modelMatrix, const MeshHandle m
     if (!texture.GetArgumentBuffer() || !texture.GetCubeMap())
         return;
     
-    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix, modelMatrix};
+    if (m_InstanceWriteOffset + 1 > s_MaxInstances)
+        return;
+    
+    m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
+    
+    const uint64_t stride = sizeof(InstancedUniforms);
+    const uint64_t byteOffset = m_InstanceWriteOffset * stride;
+    
+    const InstancedUniforms instanceUniforms { modelMatrix };
+    memcpy(static_cast<uint8_t*>(m_InstanceBuffers[m_FrameIndex]->contents()) + byteOffset, &instanceUniforms, stride);
+    
     m_RenderCommandEncoder->setRenderPipelineState(m_SkyboxShader.GetRenderPipelineState());
     m_RenderCommandEncoder->setDepthStencilState(m_SkyboxDepthStencilState);
     m_RenderCommandEncoder->setCullMode(MTL::CullModeFront);
     
     m_VertexArgumentTable->setAddress(m_RenderMeshes[meshHandle].m_VertexBuffer->gpuAddress(), 0);
     m_VertexArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
+    m_VertexArgumentTable->setAddress(m_InstanceBuffers[m_FrameIndex]->gpuAddress() + byteOffset, 2);
     m_FragmentArgumentTable->setAddress(texture.GetArgumentBuffer()->gpuAddress(), 0);
     m_FragmentArgumentTable->setAddress(m_UniformBuffers[m_UniformBufferIndex]->gpuAddress(), 1);
     
@@ -431,6 +464,7 @@ void MetalRenderer::RenderSkybox(const float4x4 &modelMatrix, const MeshHandle m
     m_RenderCommandEncoder->setCullMode(MTL::CullModeBack);
     
     ++m_UniformBufferIndex;
+    ++m_InstanceWriteOffset;
 }
 
 void MetalRenderer::Commit()

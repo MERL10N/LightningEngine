@@ -10,7 +10,7 @@ using namespace metal;
  TODO:
  - [X] Implement Lightmaps
  - [X] Implement Normal Mapping
- - [] Implement Instanced Rendering
+ - [X] Implement Instanced Rendering -> WIP
  - [] Implement Shadow Mapping
  - [] Implement Deferred Rendering
 */
@@ -26,12 +26,12 @@ struct Light
 
 struct VertexIn
 {
-    float3 aPosition  [[attribute(0)]];
-    float3 aColor     [[attribute(1)]];
-    float3 aNormal    [[attribute(2)]];
-    float2 aTexCoord  [[attribute(3)]];
-    float3 aTangent   [[attribute(4)]];
-    float3 aBitangent [[attribute(5)]];
+    float3 aPosition;
+    float3 aColor;
+    float3 aNormal;
+    float2 aTexCoord;
+    float3 aTangent;
+    float3 aBitangent;
 };
 
 struct VertexOut
@@ -60,11 +60,8 @@ struct Uniforms
 {
     float4x4 perspective;
     float4x4 view;
-    float4x4 model; // <- Soon will be removed
 };
 
-
-// Prepare for instanced rendering
 struct InstancedUniforms
 {
     float4x4 model;
@@ -80,19 +77,20 @@ struct Material
 vertex VertexOut vertex_main(constant VertexIn* in[[buffer(0)]],
                              constant Uniforms &uniforms[[buffer(1)]],
                              constant LightUniforms &lightUniforms[[buffer(2)]],
+                             constant InstancedUniforms* instancedUniforms [[buffer(3)]],
                              uint vertexID   [[vertex_id]],
                              uint instanceID [[instance_id]])
 {
     VertexOut out;
-    out.position         = uniforms.perspective * uniforms.view * uniforms.model * float4(in[vertexID].aPosition, 1.0f);
-    out.fragmentPosition = float3(uniforms.model * float4(in[vertexID].aPosition, 1.0f));
+    out.position         = uniforms.perspective * uniforms.view * instancedUniforms[instanceID].model * float4(in[vertexID].aPosition, 1.0f);
+    out.fragmentPosition = float3(instancedUniforms[instanceID].model * float4(in[vertexID].aPosition, 1.0f));
     out.normal           = in[vertexID].aNormal;
     out.color            = in[vertexID].aColor;
     out.texCoord         = in[vertexID].aTexCoord;
     
     
-    out.T               = normalize(float3(uniforms.model * float4(in[vertexID].aTangent, 0.0f)));
-    out.N               = normalize(float3(uniforms.model * float4(in[vertexID].aNormal, 0.0f)));
+    out.T               = normalize(float3(instancedUniforms[instanceID].model * float4(in[vertexID].aTangent, 0.0f)));
+    out.N               = normalize(float3(instancedUniforms[instanceID].model * float4(in[vertexID].aNormal, 0.0f)));
     out.T               = normalize(out.T - dot(out.T,out.N) * out.N);
     out.B               = cross(out.N, out.T);
     
@@ -194,4 +192,3 @@ fragment float4 fragment_main_untextured(VertexOut out [[stage_in]],
     
     return float4(finalColor, 1.0f);
 }
-

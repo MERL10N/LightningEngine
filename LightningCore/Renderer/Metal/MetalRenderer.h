@@ -86,10 +86,11 @@ public:
     
     void Submit(const Camera &camera, const float aspectRatio);
     void RenderLights(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
-    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const LightComponent &lightComponent);
-    void RenderMesh(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
+    void RenderMesh(const std::vector<float4x4> &modelMatrices, const MeshHandle meshHandle, const LightComponent &lightComponent);
+    void RenderMesh(const std::vector<float4x4> &modelMatrices, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
+    
     void RenderModel(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture &texture, const LightComponent &lightComponent);
-    void RenderSkybox(const float4x4& modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture);
+    void RenderSkybox(const float4x4 &modelMatrix, const MeshHandle meshHandle, const MetalTexture& texture);
     
     void Commit();
     
@@ -126,9 +127,6 @@ private:
     MTL::DepthStencilState*         m_DepthStencilState         = nullptr;
     MTL::DepthStencilState*         m_SkyboxDepthStencilState   = nullptr;
     MTL::DepthStencilDescriptor*    m_DepthStencilDescriptor    = nullptr;
-    MTL::VertexDescriptor*          m_3DVertexDescriptor        = nullptr;
-    MTL::VertexDescriptor*          m_LightVertexDescriptor     = nullptr;
-    MTL::VertexDescriptor*          m_SkyboxVertexDescriptor    = nullptr;
     const MTL::Drawable*            m_Drawable                  = nullptr;
     
     MTL::SharedEvent*               m_FrameAvailableSharedEvent = nullptr;
@@ -137,6 +135,8 @@ private:
     MTL::Buffer*                    m_LightUniformBuffer        = nullptr;
     MTL::Buffer*                    m_InstanceBuffer            = nullptr;
     MTL::Buffer*                    m_LightPositions[s_MaxFramesInFlight];
+    MTL::Buffer*                    m_InstanceBuffers[s_MaxFramesInFlight];
+    uint32_t                        m_InstanceWriteOffset       = 0;
     
     std::vector<MTL::Buffer*>       m_UniformBuffers;
     std::vector<MTL::Buffer*>       m_LightUniformBufferPool;
@@ -163,5 +163,6 @@ private:
     
     LightUniforms   m_LightUniforms;
     Uniforms        m_Uniforms;
+    InstancedUniforms m_InstanceUniforms;
 };
 #endif //METALRENDERER_H
