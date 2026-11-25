@@ -29,6 +29,14 @@ Entity Scene::CreateEntity(const char* p_Tag)
     return entity;
 }
 
+void Scene::OnRuntimeStart()
+{
+    m_PhysicsWorld = b3DefaultWorldDef();
+    m_PhysicsWorld.gravity = (b3Vec3){ 0.0f, -9.8f, 0.0f };
+    
+    m_WorldId = b3CreateWorld(&m_PhysicsWorld);
+}
+
 template <typename Renderer>
 void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
 {

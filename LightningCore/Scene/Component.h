@@ -9,17 +9,11 @@
 #define Component_h
 #include "Primitives/MeshBuilder.h"
 #include "Camera/Camera.h"
-#include <box3d/box3d.h>
 
 #ifdef __APPLE__
     #include "Renderer/Metal/MetalTexture.h"
     using Texture = MetalTexture;
 #endif
-/*
-#elif __WIN32__
-    // using Texture = VulkanTexture;
-#endif
- */
 
 #include <hlsl++/vector_float_type.h>
 #include <hlsl++/matrix_float_type.h>
@@ -147,8 +141,18 @@ struct CameraComponent
     
 };
 
-struct PhysicsComponent
+class RigidBody3DComponent
 {
+public:
+    enum class BodyType { Static = 0, Dynamic, Kinematic };
+    
+    BodyType GetRigidBodyType() const { return m_Type; }
+    
+    
+private:
+    BodyType m_Type = BodyType::Static;
+    float    m_Mass = 1.0f;
+    float    m_LinearDamping = 1.0f;
     
 };
 
