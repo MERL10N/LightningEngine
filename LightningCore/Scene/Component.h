@@ -107,8 +107,9 @@ struct MeshComponent
 
 struct LightComponent
 {
-    float3 m_Color = float3(1.0f, 1.0f, 1.0f);
-    float3 m_Position = float3(0.0f, 0.0f, 0.0f);
+    float3 m_Color      = float3(1.0f, 1.0f, 1.0f);
+    float3 m_Position   = float3(0.0f, 0.0f, 0.0f);
+    
     LightComponent() = default;
     LightComponent(const LightComponent&) = default;
     LightComponent(const float3& color)
@@ -148,12 +149,23 @@ public:
     
     BodyType GetRigidBodyType() const { return m_Type; }
     
+    bool IsFixedRotation() const { return b_FixedRotation; }
+    
+    RigidBody3DComponent() = default;
+    RigidBody3DComponent(const RigidBody3DComponent&) = default;
+    
     
 private:
-    BodyType m_Type = BodyType::Static;
-    float    m_Mass = 1.0f;
-    float    m_LinearDamping = 1.0f;
+    BodyType m_Type             = BodyType::Static;
+    float    m_Mass             = 1.0f;
+    float    m_LinearDamping    = 1.0f;
+    bool     b_FixedRotation    = false;
     
 };
+
+class BoxCollider3DComponent
+{
+    
+}
 
 #endif /* Component_h */

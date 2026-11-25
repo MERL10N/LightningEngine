@@ -37,6 +37,16 @@ void Scene::OnRuntimeStart()
     m_WorldId = b3CreateWorld(&m_PhysicsWorld);
 }
 
+void Scene::OnUpdateRuntime(float dt)
+{
+    
+}
+
+void Scene::OnRuntimeStop()
+{
+
+}
+
 template <typename Renderer>
 void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
 {
