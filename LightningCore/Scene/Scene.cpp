@@ -11,12 +11,28 @@
 #include "Renderer/Metal/MetalRenderer.h"
 #include <hlsl++.h>
 
+static b3BodyType LightningRigidBody3DTypeToBox3D(RigidBody3DComponent::BodyType bodyType)
+{
+    switch (bodyType)
+    {
+        case RigidBody3DComponent::BodyType::Static:
+            return b3_staticBody;
+        case RigidBody3DComponent::BodyType::Dynamic:
+            return b3_dynamicBody;
+        case RigidBody3DComponent::BodyType::Kinematic:
+            return b3_kinematicBody;
+        default:
+            return b3_staticBody;
+    }
+}
+
 Scene::Scene()
 {
 }
 
 Scene::~Scene()
 {
+    //b3DestroyWorld(m_WorldId);
 }
 
 Entity Scene::CreateEntity(const char* p_Tag)
@@ -35,6 +51,17 @@ void Scene::OnRuntimeStart()
     m_PhysicsWorld.gravity = (b3Vec3){ 0.0f, -9.8f, 0.0f };
     
     m_WorldId = b3CreateWorld(&m_PhysicsWorld);
+    
+    auto view = m_Registry.view<RigidBody3DComponent>();
+    for (const auto& e: view)
+    {
+        Entity entity {e , this};
+        auto &transform = entity.GetComponent<TransformComponent>();
+        auto &rb3d      = entity.GetComponent<RigidBody3DComponent>();
+        
+        b3BodyDef bodyDef;
+        bodyDef.type = LightningRigidBody3DTypeToBox3D(rb3d.GetRigidBodyType());
+    }
 }
 
 void Scene::OnUpdateRuntime(float dt)
@@ -44,7 +71,6 @@ void Scene::OnUpdateRuntime(float dt)
 
 void Scene::OnRuntimeStop()
 {
-
 }
 
 template <typename Renderer>

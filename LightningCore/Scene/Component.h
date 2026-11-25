@@ -145,7 +145,7 @@ struct CameraComponent
 class RigidBody3DComponent
 {
 public:
-    enum class BodyType { Static = 0, Dynamic, Kinematic };
+    enum class BodyType { Static = 0, Dynamic, Kinematic, None };
     
     BodyType GetRigidBodyType() const { return m_Type; }
     
@@ -166,6 +166,6 @@ private:
 class BoxCollider3DComponent
 {
     
-}
+};
 
 #endif /* Component_h */
