@@ -100,7 +100,7 @@ MacApplication::MacApplication(unsigned int p_Width, unsigned int p_Height, cons
     m_CameraEntity = m_Scene.CreateEntity("Camera Entity");
     m_CameraEntity.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     m_CameraEntity.AddComponent<CameraComponent>();
-    m_CameraEntity.GetComponent<CameraComponent>().b_Primary = true;
+    m_CameraEntity.GetComponent<CameraComponent>().SetAsPrimaryCamera(true);
     
     // This needs to be removed. Application classes should never have to worry about managing GPU residency.
     m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
@@ -119,9 +119,11 @@ void MacApplication::Update(float p_DeltaTime)
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
         
-        if (m_CameraEntity.GetComponent<CameraComponent>().b_Primary)
+        auto cameraComponent = m_CameraEntity.GetComponent<CameraComponent>();
+        
+        if (cameraComponent.GetPrimaryCamera())
         {
-            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().m_Camera, m_DeltaTime);
+            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().GetCamera(), m_DeltaTime);
         }
         
         m_Camera.ProcessControllerLeftThumbstickInput(m_DeltaTime, m_Controller.LeftThumbstickX(), m_Controller.LeftThumbstickY());

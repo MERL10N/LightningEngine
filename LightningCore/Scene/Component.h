@@ -20,8 +20,9 @@
 using namespace hlslpp;
 
 
-struct TagComponent
+class TagComponent
 {
+public:
     const char* m_Tag;
     
     TagComponent() = default;
@@ -65,8 +66,9 @@ public:
     inline const float3&   GetRotation()       const { return m_Rotation; }
 };
 
-struct TextureComponent
+class TextureComponent
 {
+public:
     Texture texture;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
@@ -98,8 +100,9 @@ struct TextureComponent
     }
 };
 
-struct MeshComponent
+class MeshComponent
 {
+public:
     MeshHandle m_MeshHandle;
     std::vector<float4x4> m_Transforms;
     MeshComponent() = default;
@@ -109,15 +112,17 @@ struct MeshComponent
     {}
     MeshComponent(const MeshHandle mesh, const std::vector<float4x4> &m_Transforms)
     : m_MeshHandle(mesh),
-     m_Transforms(std::move(m_Transforms))
+      m_Transforms(std::move(m_Transforms))
     {}
 };
 
-struct LightComponent
+class LightComponent
 {
+private:
     float3 m_Color      = float3(1.0f, 1.0f, 1.0f);
     float3 m_Position   = float3(0.0f, 0.0f, 0.0f);
-    
+  
+public:
     LightComponent() = default;
     LightComponent(const LightComponent&) = default;
     LightComponent(const float3& color)
@@ -130,6 +135,9 @@ struct LightComponent
       m_Position(position)
     {
     }
+    
+    float3 GetColor()    const { return m_Color; }
+    float3 GetPosition() const { return m_Position; }
 };
 
 struct SkyboxComponent
@@ -137,16 +145,23 @@ struct SkyboxComponent
     bool m_Active = true;
 };
 
-struct CameraComponent
+class CameraComponent
 {
+private:
     Camera m_Camera;
     bool   b_Primary = false;
+public:
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
     CameraComponent& operator= (const CameraComponent& other) = default;
     CameraComponent(const Camera &camera)
     : m_Camera(camera)
     {}
+    
+    Camera& GetCamera() { return m_Camera; }
+    
+    inline bool GetPrimaryCamera() const { return b_Primary; }
+    inline void SetAsPrimaryCamera(const bool primary) { b_Primary = primary; }
     
 };
 

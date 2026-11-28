@@ -83,23 +83,23 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
     auto skybox = m_Registry.view<TransformComponent, MeshComponent, TextureComponent, SkyboxComponent>();
     auto cameras = m_Registry.view<TransformComponent, CameraComponent>();
     
-    Camera* mainCamera = nullptr;
+    Camera mainCamera;
     
     for (const auto& entity : cameras)
     {
         const auto &[transform, camera] = cameras.get<TransformComponent, CameraComponent>(entity);
         
-        if (camera.b_Primary)
+        if (camera.GetPrimaryCamera())
         {
-            mainCamera = &camera.m_Camera;
+            mainCamera = camera.GetCamera();
             break;
         }
     }
     
-    if (!mainCamera)
-        return;
+   // if (!mainCamera)
+    //    return;
    
-    renderer.Submit(*mainCamera, aspectRatio);
+    renderer.Submit(mainCamera, aspectRatio);
     
     LightComponent lightsActive;
     
