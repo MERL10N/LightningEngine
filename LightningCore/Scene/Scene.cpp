@@ -21,9 +21,8 @@ static b3BodyType LightningRigidBody3DTypeToBox3D(RigidBody3DComponent::BodyType
             return b3_dynamicBody;
         case RigidBody3DComponent::BodyType::Kinematic:
             return b3_kinematicBody;
-        default:
-            return b3_staticBody;
     }
+    return b3_staticBody;
 }
 
 Scene::Scene()
@@ -49,7 +48,6 @@ void Scene::OnRuntimeStart()
 {
     m_PhysicsWorld = b3DefaultWorldDef();
     m_PhysicsWorld.gravity = (b3Vec3){ 0.0f, -9.8f, 0.0f };
-    
     m_WorldId = b3CreateWorld(&m_PhysicsWorld);
     
     auto view = m_Registry.view<RigidBody3DComponent>();
@@ -61,6 +59,9 @@ void Scene::OnRuntimeStart()
         
         b3BodyDef bodyDef;
         bodyDef.type = LightningRigidBody3DTypeToBox3D(rb3d.GetRigidBodyType());
+       // bodyDef.position = (b3Vec3)(transform.x );
+       // bodyDef.rotation = transform.m_Rotation
+        b3BodyId bodyID = b3CreateBody(m_WorldId, &bodyDef);
     }
 }
 

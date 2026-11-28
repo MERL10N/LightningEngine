@@ -9,10 +9,10 @@
 #define Scene_h
 
 #include <entt/entt.hpp>
+#include <box3d/box3d.h>
 
 class Entity;
 class Camera;
-#include <box3d/box3d.h>
 
 class Scene
 {
