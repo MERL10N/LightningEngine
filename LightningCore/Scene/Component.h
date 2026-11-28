@@ -31,13 +31,16 @@ struct TagComponent
     {}
 };
 
-struct TransformComponent
+class TransformComponent
 {
+private:
     float4x4 m_Translation  = float4x4::identity();
     float3   m_Rotation     = float3(0.0f, 1.0f, 0.0f);
     float4x4 m_Scale        = float4x4::scale(1.0f, 1.0f, 1.0f);
     
     float m_RotationAngle = 0.0f;
+    
+public:
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
     TransformComponent(const float3 &transform)
@@ -55,6 +58,11 @@ struct TransformComponent
       m_Rotation(rotationAxis)
     {
     }
+    
+    inline const float     GetRotationAngle()  const { return m_RotationAngle; }
+    inline const float4x4& GetTranslation()    const { return m_Translation; }
+    inline const float4x4& GetScale()          const { return m_Scale; }
+    inline const float3&   GetRotation()       const { return m_Rotation; }
 };
 
 struct TextureComponent
@@ -145,7 +153,7 @@ struct CameraComponent
 class RigidBody3DComponent
 {
 public:
-    enum class BodyType { Static = 0, Dynamic, Kinematic, None };
+    enum class BodyType { Static = 0, Dynamic, Kinematic };
     
     BodyType GetRigidBodyType() const { return m_Type; }
     

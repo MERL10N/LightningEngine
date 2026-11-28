@@ -110,7 +110,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         for (const auto &entity : light_sources)
         {
             const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-            renderer.RenderLights(mul(transform.m_Scale, transform.m_Translation), mesh.m_MeshHandle, lights);
+            renderer.RenderLights(mul(transform.GetScale(), transform.GetTranslation()), mesh.m_MeshHandle, lights);
         }
     }
     
@@ -123,9 +123,9 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         if (mesh.m_Transforms.empty())
         {
             meshTransforms.clear();
-            float4x4 scaleMatrix = transform.m_Scale;
-            float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
-            float4x4 translationMatrix = transform.m_Translation;
+            float4x4 scaleMatrix = transform.GetScale();
+            float4x4 rotationMatrix = float4x4::rotation_axis(transform.GetRotation(), transform.GetRotationAngle());
+            float4x4 translationMatrix = transform.GetTranslation();
             
             float4x4 sr = mul(scaleMatrix, rotationMatrix);
             float4x4 modelMatrix = mul(sr, translationMatrix);
@@ -145,9 +145,9 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         if (mesh.m_Transforms.empty())
         {
             meshTransforms.clear();
-            float4x4 scaleMatrix = transform.m_Scale;
-            float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
-            float4x4 translationMatrix = transform.m_Translation;
+            float4x4 scaleMatrix = transform.GetScale();
+            float4x4 rotationMatrix = float4x4::rotation_axis(transform.GetRotation(), transform.GetRotationAngle());
+            float4x4 translationMatrix = transform.GetTranslation();
             
             float4x4 sr = mul(scaleMatrix, rotationMatrix);
             float4x4 modelMatrix = mul(sr, translationMatrix);
@@ -163,9 +163,9 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
     for (const auto &entity: skybox)
     {
         const auto &[transform, textures, mesh] = skybox.get<TransformComponent, TextureComponent, MeshComponent>(entity);
-        float4x4 scaleMatrix = transform.m_Scale;
-        float4x4 rotationMatrix = float4x4::rotation_axis(transform.m_Rotation, transform.m_RotationAngle);
-        float4x4 translationMatrix = transform.m_Translation;
+        float4x4 scaleMatrix = transform.GetScale();
+        float4x4 rotationMatrix = float4x4::rotation_axis(transform.GetRotation(), transform.GetRotationAngle());
+        float4x4 translationMatrix = transform.GetTranslation();
         
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
