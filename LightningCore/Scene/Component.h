@@ -34,13 +34,6 @@ public:
 
 class TransformComponent
 {
-private:
-    float4x4 m_Translation  = float4x4::identity();
-    float3   m_Rotation     = float3(0.0f, 1.0f, 0.0f);
-    float4x4 m_Scale        = float4x4::scale(1.0f, 1.0f, 1.0f);
-    
-    float m_RotationAngle = 0.0f;
-    
 public:
     TransformComponent() = default;
     TransformComponent(const TransformComponent&) = default;
@@ -64,12 +57,19 @@ public:
     inline const float4x4& GetTranslation()    const { return m_Translation; }
     inline const float4x4& GetScale()          const { return m_Scale; }
     inline const float3&   GetRotation()       const { return m_Rotation; }
+    
+private:
+    float4x4 m_Translation  = float4x4::identity();
+    float3   m_Rotation     = float3(0.0f, 1.0f, 0.0f);
+    float4x4 m_Scale        = float4x4::scale(1.0f, 1.0f, 1.0f);
+    
+    float m_RotationAngle = 0.0f;
+    
 };
 
 class TextureComponent
 {
 public:
-    Texture texture;
     TextureComponent() = default;
     TextureComponent(const TextureComponent&) = delete;
     TextureComponent& operator=(const TextureComponent&) = delete;
@@ -98,13 +98,17 @@ public:
     ~TextureComponent()
     {
     }
+    
+    const Texture& GetTexture() const { return texture; }
+    
+private:
+    Texture texture;
 };
 
 class MeshComponent
 {
 public:
-    MeshHandle m_MeshHandle;
-    std::vector<float4x4> m_Transforms;
+
     MeshComponent() = default;
     MeshComponent(const MeshComponent&) = default;
     MeshComponent(const MeshHandle mesh)
@@ -114,13 +118,17 @@ public:
     : m_MeshHandle(mesh),
       m_Transforms(std::move(m_Transforms))
     {}
+    
+    inline const MeshHandle& GetMeshHandle() const { return m_MeshHandle; }
+    inline const std::vector<float4x4>& GetTransforms() const { return m_Transforms; }
+    
+private:
+    MeshHandle m_MeshHandle;
+    std::vector<float4x4> m_Transforms;
 };
 
 class LightComponent
 {
-private:
-    float3 m_Color      = float3(1.0f, 1.0f, 1.0f);
-    float3 m_Position   = float3(0.0f, 0.0f, 0.0f);
   
 public:
     LightComponent() = default;
@@ -136,8 +144,12 @@ public:
     {
     }
     
-    float3 GetColor()    const { return m_Color; }
-    float3 GetPosition() const { return m_Position; }
+    inline const float3& GetColor()    const { return m_Color; }
+    inline const float3& GetPosition() const { return m_Position; }
+    
+private:
+    float3 m_Color      = float3(1.0f, 1.0f, 1.0f);
+    float3 m_Position   = float3(0.0f, 0.0f, 0.0f);
 };
 
 struct SkyboxComponent
@@ -147,9 +159,6 @@ struct SkyboxComponent
 
 class CameraComponent
 {
-private:
-    Camera m_Camera;
-    bool   b_Primary = false;
 public:
     CameraComponent() = default;
     CameraComponent(const CameraComponent&) = default;
@@ -163,6 +172,10 @@ public:
     inline bool GetPrimaryCamera() const { return b_Primary; }
     inline void SetAsPrimaryCamera(const bool primary) { b_Primary = primary; }
     
+private:
+    Camera m_Camera;
+    bool   b_Primary = false;
+    
 };
 
 class RigidBody3DComponent
@@ -170,9 +183,9 @@ class RigidBody3DComponent
 public:
     enum class BodyType { Static = 0, Dynamic, Kinematic };
     
-    BodyType GetRigidBodyType() const { return m_Type; }
+    inline BodyType GetRigidBodyType() const { return m_Type; }
     
-    bool IsFixedRotation() const { return b_FixedRotation; }
+    inline bool IsFixedRotation() const { return b_FixedRotation; }
     
     RigidBody3DComponent() = default;
     RigidBody3DComponent(const RigidBody3DComponent&) = default;

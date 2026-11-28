@@ -111,7 +111,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         for (const auto &entity : light_sources)
         {
             const auto &[transform, lights, mesh] = light_sources.get<TransformComponent, LightComponent, MeshComponent>(entity);
-            renderer.RenderLights(mul(transform.GetScale(), transform.GetTranslation()), mesh.m_MeshHandle, lights);
+            renderer.RenderLights(mul(transform.GetScale(), transform.GetTranslation()), mesh.GetMeshHandle(), lights);
         }
     }
     
@@ -121,7 +121,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
     {
         const auto &[transform, textures, mesh] = textured_meshes.get<TransformComponent, TextureComponent, MeshComponent>(entity);
         
-        if (mesh.m_Transforms.empty())
+        if (mesh.GetTransforms().empty())
         {
             meshTransforms.clear();
             float4x4 scaleMatrix = transform.GetScale();
@@ -131,11 +131,11 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
             float4x4 sr = mul(scaleMatrix, rotationMatrix);
             float4x4 modelMatrix = mul(sr, translationMatrix);
             meshTransforms.emplace_back(modelMatrix);
-            renderer.RenderMesh(meshTransforms, mesh.m_MeshHandle, textures.texture, lightsActive);
+            renderer.RenderMesh(meshTransforms, mesh.GetMeshHandle(), textures.GetTexture(), lightsActive);
         }
         else
         {
-            renderer.RenderMesh(mesh.m_Transforms, mesh.m_MeshHandle, textures.texture, lightsActive);
+            renderer.RenderMesh(mesh.GetTransforms(), mesh.GetMeshHandle(), textures.GetTexture(), lightsActive);
         }
     }
     
@@ -143,7 +143,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
     {
         const auto &[transform, mesh] = meshes.get<TransformComponent, MeshComponent>(entity);
         
-        if (mesh.m_Transforms.empty())
+        if (mesh.GetTransforms().empty())
         {
             meshTransforms.clear();
             float4x4 scaleMatrix = transform.GetScale();
@@ -153,11 +153,11 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
             float4x4 sr = mul(scaleMatrix, rotationMatrix);
             float4x4 modelMatrix = mul(sr, translationMatrix);
             meshTransforms.emplace_back(modelMatrix);
-            renderer.RenderMesh(meshTransforms, mesh.m_MeshHandle, lightsActive);
+            renderer.RenderMesh(meshTransforms, mesh.GetMeshHandle(), lightsActive);
         }
         else
         {
-            renderer.RenderMesh(mesh.m_Transforms, mesh.m_MeshHandle, lightsActive);
+            renderer.RenderMesh(mesh.GetTransforms(), mesh.GetMeshHandle(), lightsActive);
         }
     }
     
@@ -170,7 +170,7 @@ void Scene::RenderScene(Renderer &renderer, const float aspectRatio)
         
         float4x4 sr = mul(scaleMatrix, rotationMatrix);
         float4x4 modelMatrix = mul(sr, translationMatrix);
-        renderer.RenderSkybox(modelMatrix, mesh.m_MeshHandle, textures.texture);
+        renderer.RenderSkybox(modelMatrix, mesh.GetMeshHandle(), textures.GetTexture());
     }
     
     renderer.Commit();

@@ -106,20 +106,20 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     Entity sphere = m_Scene.CreateEntity("Sphere");
     sphere.AddComponent<TransformComponent>(float3(-3.0f, 0.0f, 0.0f));
     sphere.AddComponent<TextureComponent>(SphereTextures, m_MacWindow.GetDevice());
-    sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().texture));
+    sphere.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateSphere(32, 32, float3(1.0f, 1.0f, 1.0f)), sphere.GetComponent<TextureComponent>().GetTexture()));
     
     
     Entity cube = m_Scene.CreateEntity("Cube");
     cube.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     cube.AddComponent<TextureComponent>(CubeTextures, m_MacWindow.GetDevice());
-    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().texture),
+    cube.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GenerateCube(), cube.GetComponent<TextureComponent>().GetTexture()),
                                      cubePositions);
     
     
     Entity plane = m_Scene.CreateEntity("Plane");
     plane.AddComponent<TransformComponent>(float3(-1.0f, -1.0f, -1.0f), -90.f, float3(1.0f, 0.0f, 0.0f));
     plane.AddComponent<TextureComponent>(PlaneTextures, m_MacWindow.GetDevice());
-    plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GeneratePlane(), plane.GetComponent<TextureComponent>().texture));
+    plane.AddComponent<MeshComponent>(m_MetalRenderer.Create3DMesh(MeshBuilder::GeneratePlane(), plane.GetComponent<TextureComponent>().GetTexture()));
     
     
     Entity lightCube = m_Scene.CreateEntity("Light Cube");
@@ -136,11 +136,11 @@ MacEditorApplication::MacEditorApplication(const float p_Width, const float p_He
     m_CameraEntity = m_Scene.CreateEntity("Camera Entity");
     m_CameraEntity.AddComponent<TransformComponent>(float3(0.0f, 0.0f, 0.0f));
     m_CameraEntity.AddComponent<CameraComponent>();
-    m_CameraEntity.GetComponent<CameraComponent>().b_Primary = true;
+    m_CameraEntity.GetComponent<CameraComponent>().SetAsPrimaryCamera(true);
     
     // This needs to be removed. Application classes should never have to worry about managing GPU residency.
-    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetCubeMap());
-    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().texture.GetArgumentBuffer());
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().GetTexture().GetCubeMap());
+    m_MetalRenderer.AddToResidencySet(skybox.GetComponent<TextureComponent>().GetTexture().GetArgumentBuffer());
     
     m_MetalRenderer.CommitResidencySet();
 }
@@ -202,9 +202,9 @@ void MacEditorApplication::Update()
         m_DeltaTime = m_CurrentFrame - m_LastFrame;
         m_LastFrame = m_CurrentFrame;
 
-        if (m_CameraEntity.GetComponent<CameraComponent>().b_Primary)
+        if (m_CameraEntity.GetComponent<CameraComponent>().GetPrimaryCamera())
         {
-            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().m_Camera, m_DeltaTime);
+            m_CameraController.Update(m_CameraEntity.GetComponent<CameraComponent>().GetCamera(), m_DeltaTime);
         }
 
       
