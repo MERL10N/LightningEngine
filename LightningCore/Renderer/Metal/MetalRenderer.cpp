@@ -310,7 +310,7 @@ void MetalRenderer::RenderLights(const float4x4 &modelMatrix, const MeshHandle m
     
 
     
-    float3 color = lightComponent.m_Color;
+    float3 color = lightComponent.GetColor();
     memcpy(m_LightPositions[m_UniformBufferIndex]->contents(), &color, sizeof(color));
 
 
@@ -342,7 +342,7 @@ void MetalRenderer::RenderMesh(const std::vector<float4x4> &modelMatrices, const
     m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
     memcpy(m_UniformBuffers.at(m_UniformBufferIndex)->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
-    m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
+    m_LightUniforms = { lightComponent.GetColor() , lightComponent.GetPosition(), m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
     
     const uint64_t stride = sizeof(InstancedUniforms);
@@ -385,7 +385,7 @@ void MetalRenderer::RenderMesh(const std::vector<float4x4> &modelMatrices,
     m_Uniforms  = {m_ProjectionMatrix, m_ViewMatrix};
     memcpy(m_UniformBuffers[m_UniformBufferIndex]->contents(), &m_Uniforms, sizeof(m_Uniforms));
 
-    m_LightUniforms = { lightComponent.m_Color , lightComponent.m_Position, m_CameraPosition};
+    m_LightUniforms = { lightComponent.GetColor() , lightComponent.GetPosition(), m_CameraPosition};
     memcpy(m_LightUniformBufferPool.at(m_UniformBufferIndex)->contents(), &m_LightUniforms, sizeof(m_LightUniforms));
     
     
